@@ -1,0 +1,51 @@
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('7','1','','4');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('7','1','','4');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('7','1','','85');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('8','1','','85');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('9','1','','207');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('9','1','','183');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('9','1','','152');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('9','1','','45');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('9','1','','128');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('10','1','','207');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('37','1','','223');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('72','1','','85');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('72','1','','85');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('72','1','','85');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('73','1','','46');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('80','1','','242');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('80','1','','44');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('91','1','','46');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('103','1','','170');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('103','1','','180');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('146','1','adf','53');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('146','1','','180');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('146','1','','44');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('144','1','','170');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('308','1','','1');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('308','1','','274');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('569','1','','4');
+
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('569','1','','67');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('605','1','','67');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('605','1','','274');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('600','1','','1');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('600','1','','67');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('600','1','','207');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('610','1','','67');
+INSERT INTO amc_operativos_personal (id_operativo,asistencia,observaciones,id_member) values('733','1','','153');

@@ -1,0 +1,17 @@
+.denunciasweb-icon { background-image: url(images/denunciasweb.png) !important; }
+.x-btn-large .denunciasweb-icon { background-image: url(images/denunciasweb32.png) !important; }
+.denunciasweb-shortcut { background-image: url(images/denunciasweb48.png) !important; }
+#denunciasweb-nav-panel li { margin-bottom:5px; }
+.save-icon{background:transparent url(images/add.png) 0 0 no-repeat !important;}
+.delete-icon{background:transparent url(images/delete.png) 0 0 no-repeat !important;}
+.print-icon{background:transparent url(images/printer.png) 0 0 no-repeat !important;}
+.send-icon{background:transparent url(images/email_go.png) 0 0 no-repeat !important;}
+.negrilla {font-weight: bolder;}
+.disabled { color: #000000 !important; opacity: 1; background-image: none !important; border: none !important; font-weight: bold !important;}
+.gold  { background-color: bisque !important;}
+
+.margen10 .x-panel-body {padding: 10px}
+
+.fondogris .x-panel-body { background-color: #e0eaee !important; height: -webkit-fill-available; padding: 10px}
+.fondogris .x-form-field{ background-color: #e0eaee !important; }
+.x-combo-list-inner, .x-combo-list {min-width: 220px !important;}

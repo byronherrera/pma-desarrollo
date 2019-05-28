@@ -1,0 +1,68 @@
+{
+  "id": "resolucion",
+  "type": "desktop/resolucion",
+  "about": {
+    "author": "",
+    "description": "AMC Resolucion.",
+    "name": "Resolucion",
+    "url": "",
+    "version": "1.0"
+  },
+
+  "dependencies": [
+    { "id": "checkbox", "type": "library" }
+  ],
+  "server": {
+    "methods": [
+      { "name": "accesosAdministradorOpe", "description": "Administrador resolucion" },
+      { "name": "accesosAdministradorIns", "description": "Administrador resolucion solo inspeccion" },
+      { "name": "accesosResolucion", "description": "Usuario opeativos" },
+      { "name": "accesosRecepcionOpe", "description": "Recepcion resolucion" }
+    ],
+    "class": "QoResolucion",
+    "file": "desktop/resolucion/resolucion.php"
+  },
+  "client": {
+    "class": "QoDesk.ResolucionWindow",
+    "css": [
+      {
+        "directory": "desktop/resolucion/client/resources/",
+        "files": [ "styles.css" ]
+      },
+      {
+        "directory": "common/libraries/",
+        "files": [ "datetime/date-time-ux.css", "Spinner/Spinner.css", "MultiSelect.css", "fileuploadfield/FileUploadField.css" ]
+      }
+    ],
+    "javascript": [
+      {
+        "directory": "common/libraries/",
+        "files": [ "AppMsg.js","datetime/date-time-ux.js","CheckColumn.js", "Spinner/SpinnerField.js", "Spinner/Spinner.js","MultiSelect.js", "fileuploadfield/FileUploadField.js"  ]
+      },
+      {
+        "directory": "desktop/resolucion/client/",
+        "files": [  "resolucion-win.js" ]
+      },
+
+      {
+        "directory": "qwiki/admin/client/",
+        "files": [ "QoAdmin.js" ]
+      },
+      {
+        "directory": "qwiki/admin/client/lib/",
+        "files": [ "ActiveColumn.js", "ColumnNodeUI.js", "Nav.js", "SearchField.js", "TooltipEditor.js" ]
+      }
+    ],
+    "launcher": {
+      "config": {
+        "iconCls": "resolucion-icon",
+        "shortcutIconCls": "resolucion-shortcut",
+        "text": "Resolucion",
+        "tooltip": "<b>Resolucion - AMC</b>"
+      },
+      "paths": {
+        "startmenu": "/"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+.denunciasinspeccion-icon { background-image: url(images/denunciasinspeccion.png) !important; }
+.x-btn-large .denunciasinspeccion-icon { background-image: url(images/denunciasinspeccion32.png) !important; }
+.denunciasinspeccion-shortcut { background-image: url(images/denunciasinspeccion48.png) !important; }
+#denunciasinspeccion-nav-panel li { margin-bottom:5px; }
+.save-icon{background:transparent url(images/add.png) 0 0 no-repeat !important;}
+.delete-icon{background:transparent url(images/delete.png) 0 0 no-repeat !important;}
+.print-icon{background:transparent url(images/printer.png) 0 0 no-repeat !important;}
+.send-icon{background:transparent url(images/email_go.png) 0 0 no-repeat !important; overflow: hidden; width: 120px }
+
+.sololectura {
+    border: 0;
+    color: #990000;
+}
