@@ -12,6 +12,7 @@ QoDesk.DenunciasWindow = Ext.extend(Ext.app.Module, {
     },
 
 
+
     createWindow: function () {
         var accesosAdministrador = this.app.isAllowedTo('accesosAdministrador', this.id);
         var accesosSecretaria = this.app.isAllowedTo('accesosSecretaria', this.id);
