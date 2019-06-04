@@ -286,7 +286,7 @@ function getmensaje($nombre = '', $inspecciones = '', $fecha = '')
                  ' . $inspecciones . '
                  <br>
                  <br>
-                 Favor ingresar en Matis AMC, para verificar las inspecciones <a href="http://172.20.136.60/procesos-amc">aquí</a> .
+                 Favor ingresar en PMA, para verificar las inspecciones <a href="http://172.20.136.60/procesos-amc">aquí</a> .
                 <br>	
                 <br>	
                 Se les recuerda acercarse a la Secretaría de Inspección para retirar sus trámites, además que el tiempo para realizar los mismos se contabilizarán a partir del envío de este correo

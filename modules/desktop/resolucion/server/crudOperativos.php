@@ -548,7 +548,7 @@ function getmensaje($nombre = '', $operativos = '', $fecha = '')
                  ' . $operativos . '
                  <br>
                  <br>
-                 Favor ingresar en Matis AMC, para verificar el operativo asignado <a href="http://172.20.136.60/procesos-amc">aquí</a> .
+                 Favor ingresar en PMA, para verificar el operativo asignado <a href="http://172.20.136.60/procesos-amc">aquí</a> .
                 <br>	
                 <br>	
                 <p>De conformidad con el Memorando No. AMC-SM-JA-2018-003, del 4 de enero de 2018, mediente el cual la 

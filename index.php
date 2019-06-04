@@ -19,7 +19,7 @@ if (!class_exists('os')) {
             <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
             <meta http-equiv="EXPIRES" content="-1">
 
-            <title>Matis AMC</title>
+            <title>PMA</title>
 
             <!-- EXT JS LIBRARY -->
             <!-- Using cachefly -->

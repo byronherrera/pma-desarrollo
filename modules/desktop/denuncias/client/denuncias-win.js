@@ -2067,12 +2067,12 @@ QoDesk.DenunciasWindow = Ext.extend(Ext.app.Module, {
                         }
                     ]
                 })
-                , text: 'Inspeccion'
+                , text: 'Otra pestaña'
             });
             this.targetFieldBtn = targetFieldBtn;
             win = desktop.createWindow({
                 id: 'grid-win-denuncias',
-                title: 'Recepción Documentos',
+                title: 'Contribuciones',
                 width: winWidth,
                 height: winHeight,
                 iconCls: 'denuncias-icon',
