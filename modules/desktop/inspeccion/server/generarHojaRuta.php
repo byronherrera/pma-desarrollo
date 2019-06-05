@@ -556,10 +556,10 @@ function imprimeActa($filaTitulo1, $funcionario, $reimpresion = false, $acta = 0
 //echo date('H:i:s') , " Set document properties" , PHP_EOL;
     $objPHPExcel->getProperties()->setCreator("Byron Herrera")
         ->setLastModifiedBy("Byron Herrera")
-        ->setTitle("AMC reporte")
+        ->setTitle("PMA reporte")
         ->setSubject("")
-        ->setDescription("AMC reporte, generated using PHP classes.")
-        ->setKeywords("AMC reporte")
+        ->setDescription("PMA reporte, generated using PHP classes.")
+        ->setKeywords("PMA reporte")
         ->setCategory("Archivo");
 
 

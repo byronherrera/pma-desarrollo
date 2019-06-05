@@ -3,7 +3,7 @@
   "type": "desktop/resolucion",
   "about": {
     "author": "",
-    "description": "AMC Resolucion.",
+    "description": "PMA Resolucion.",
     "name": "Resolucion",
     "url": "",
     "version": "1.0"
@@ -58,7 +58,7 @@
         "iconCls": "resolucion-icon",
         "shortcutIconCls": "resolucion-shortcut",
         "text": "Resolucion",
-        "tooltip": "<b>Resolucion - AMC</b>"
+        "tooltip": "<b>Resolucion - PMA</b>"
       },
       "paths": {
         "startmenu": "/"

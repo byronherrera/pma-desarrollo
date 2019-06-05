@@ -1,5 +1,5 @@
 /*
- * AMC Desktop 1.0
+ * PMA Desktop 1.0
  * Copyright(c) 2007-2010, Murdock Technologies, Inc.
  * licensing@qwikioffice.com
  * 
@@ -48,8 +48,8 @@ QoDesk.QoAdmin = Ext.extend(Ext.app.Module, {
             ]
             , layout: 'fit'
             , shim: false
-            , taskbuttonTooltip: '<b>Administrador :: AMC</b><br />Permite administrar tu escritorio'
-            , title: 'Administrador :: AMC'
+            , taskbuttonTooltip: '<b>Administrador :: PMA</b><br />Permite administrar tu escritorio'
+            , title: 'Administrador :: PMA'
             , width: winWidth
          });
       }

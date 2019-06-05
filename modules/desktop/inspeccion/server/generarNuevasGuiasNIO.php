@@ -203,10 +203,10 @@ while ($rowdetalle = $result->fetch(PDO::FETCH_ASSOC)) {
 //echo date('H:i:s') , " Set document properties" , PHP_EOL;
 $objPHPExcel->getProperties()->setCreator("Carlos Cevallos")
     ->setLastModifiedBy("Carlos Cevallos")
-    ->setTitle("AMC reporte NIO")
+    ->setTitle("PMA reporte NIO")
     ->setSubject("")
-    ->setDescription("AMC reporte NIO, generated using PHP classes.")
-    ->setKeywords("AMC reporte NIO")
+    ->setDescription("PMA reporte NIO, generated using PHP classes.")
+    ->setKeywords("PMA reporte NIO")
     ->setCategory("Archivo");
 
 

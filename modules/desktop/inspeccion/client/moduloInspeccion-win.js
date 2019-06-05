@@ -979,7 +979,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             autoLoad: true,
             data: {
                 datos: [
-                    {"id": 1, "nombre": "No es competencia de AMC (humedad)"},
+                    {"id": 1, "nombre": "No es competencia de PMA (humedad)"},
                     {"id": 2, "nombre": "Requisitos incompletos"},
                     {"id": 3, "nombre": "Inicio de trámite en otra dependencia"},
                 ]
@@ -2747,7 +2747,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteModuloInspeccion,
                 store: storeModuloInspeccion,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "No existen trámites que mostrar"
             })
         });
@@ -2843,7 +2843,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: 100,
                 store: this.storeInspeccionActa,
                 displayInfo: true,
-                displayMsg: 'Mostrando actas {0} - {1} de {2} AMC',
+                displayMsg: 'Mostrando actas {0} - {1} de {2} PMA',
                 emptyMsg: "No existen nada  que mostrar"
             }),
         });
@@ -3128,7 +3128,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteDetalleInspeccion,
                 store: storeDetalleInspeccion,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             }),
             listeners: {
@@ -3298,7 +3298,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteDetalleInspeccionLarge,
                 store: storeDetalleTodasInspecciones,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             })
         });
@@ -3457,7 +3457,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteModuloInspeccion,
                 store: this.storeListadoInspeccion,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             })
         });
@@ -3614,7 +3614,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteModuloInspeccion,
                 store: this.storeListadoTodosInspectores,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             })
         });
@@ -3812,7 +3812,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteDetalleInspeccionLarge,
                 store: this.storeControlProgramadoInspeccion,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             }),
             listeners: {
@@ -3970,7 +3970,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteDetalleInspeccionLarge,
                 store: this.storeControlProgramadoAsignacion,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             })
         });
@@ -4174,7 +4174,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteModuloInspeccion,
                 store: this.storeListadoControlProgramado,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             })
         });
@@ -4378,7 +4378,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteModuloInspeccion,
                 store: this.storeListadoControlProgramadoTodos,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             })
         });
@@ -4485,7 +4485,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteDetalleInspeccionLarge,
                 store: this.storeCCFInspeccion,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             })
         });
@@ -4526,7 +4526,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteDetalleInspeccionLarge,
                 store: this.storeNIOInspeccion,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             })
         });
@@ -4646,7 +4646,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteModuloInspeccion,
                 store: this.storeListadoCCFInspeccion,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             })
         });
@@ -4766,7 +4766,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteModuloInspeccion,
                 store: this.storeListadoCCFInspeccionTodos,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "Seleccione un trámite"
             })
         });

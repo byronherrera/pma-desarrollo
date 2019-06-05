@@ -1,7 +1,7 @@
 {
    "launcher": {
-   	"text": "MatizAMC preferencias"
-      , "tooltip": "<b>MatizAMC Preferencias</b><br />Permite configurar el escritorio"
+   	"text": "PMA preferencias"
+      , "tooltip": "<b>PMA Preferencias</b><br />Permite configurar el escritorio"
    }
    , "button": {
    	"back": {
@@ -94,6 +94,6 @@
       , "background": "Desktop Background"
       , "quickstart": "Quick Start"
       , "shortcuts": "Shortcuts"
-      , "window": "MatizAMC preferencias"
+      , "window": "PMA preferencias"
    }
 }

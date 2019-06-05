@@ -1,6 +1,6 @@
 <?php
 /**
- * AMC
+ * PMA
  *
  * Copyright (C)  2017
  *

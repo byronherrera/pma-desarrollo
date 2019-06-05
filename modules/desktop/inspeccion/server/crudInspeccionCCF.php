@@ -126,7 +126,7 @@ function insertDetalleInspecciones()
     $data = json_decode(stripslashes($_POST["data"]));
     $data->id = generaCodigoProcesoOrdenanza();
     //$data->id_inspeccion = generaNuevoCodigoInspeccion();
-    $data->id_ccf = 'AMC-CCF-' . date("y") . '-' . generaNuevoCodigoConstrucciones() . '_C';
+    $data->id_ccf = 'PMA-CCF-' . date("y") . '-' . generaNuevoCodigoConstrucciones() . '_C';
     $data->fecha_recepcion_documento = date('Y-m-d H:i:s');
 
     //genero el listado de nombre de campos

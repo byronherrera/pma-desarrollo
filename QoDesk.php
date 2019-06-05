@@ -167,7 +167,7 @@ $os = new os();
 $qo_desk = new QoDesk($os);
 ?>
 /*
- * AMC Desktop 1.0
+ * PMA Desktop 1.0
  * Copyright(c) 2007-2010, Murdock Technologies, Inc.
  * licensing@qwikioffice.com
  *

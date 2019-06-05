@@ -150,7 +150,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitemantenimiento,
                 store: storeOrdenanzas,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "No existen trámites que mostrar"
             })
         });
@@ -274,7 +274,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitemantenimiento,
                 store: storeUnidades,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "No existen trámites que mostrar"
             })
         });
@@ -364,7 +364,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitemantenimiento,
                 store: storeUnidades,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "No existen trámites que mostrar"
             })
         });
@@ -448,7 +448,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitemantenimiento,
                 store: storeUnidades,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "No existen trámites que mostrar"
             })
         });
@@ -537,7 +537,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitemantenimiento,
                 store: storeTiposOperativos,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "No existen trámites que mostrar"
             })
         });
@@ -626,7 +626,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitemantenimiento,
                 store: storeEntidades,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - AMC',
+                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
                 emptyMsg: "No existen trámites que mostrar"
             })
         });

@@ -345,10 +345,10 @@ if (!is_null($rowdetalle['zona'])&& $rowdetalle['zona']!= ''){
 //echo date('H:i:s') , " Set document properties" , PHP_EOL;
     $objPHPExcel->getProperties()->setCreator("Carlos Cevallos")
         ->setLastModifiedBy("Carlos Cevallos")
-        ->setTitle("AMC reporte Controles programados")
+        ->setTitle("PMA reporte Controles programados")
         ->setSubject("")
-        ->setDescription("AMC reporte Controles programados, generated using PHP classes.")
-        ->setKeywords("AMC reporte Controles programados")
+        ->setDescription("PMA reporte Controles programados, generated using PHP classes.")
+        ->setKeywords("PMA reporte Controles programados")
         ->setCategory("Archivo");
 
 
