@@ -27,7 +27,7 @@ function selectDetalleInspecciones()
     $orderby = 'ORDER BY id DESC';
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM amc_contribuciones_detalle WHERE $where  $orderby ";
+    $sql = "SELECT * FROM pma_contribuciones_detalle WHERE $where  $orderby ";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -71,7 +71,7 @@ function    selectDetalleTodasInspecciones()
 
     $os->db->conn->query("SET NAMES 'utf8'");
 
-    $sql = "SELECT * FROM amc_inspeccion $where $orderby LIMIT $start, $limit";
+    $sql = "SELECT * FROM pma_contribuciones_detalle $where $orderby LIMIT $start, $limit";
     //$sql = "SELECT * FROM amc_inspeccion";
     $result = $os->db->conn->query($sql);
     $data = array();
