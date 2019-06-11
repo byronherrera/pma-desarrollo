@@ -92,7 +92,7 @@ function insertDetalleInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
     $data->id = generaCodigoProcesoOrdenanza();
-    $data->id_inspeccion = generaNuevoCodigoInspeccion();
+    // $data->id_inspeccion = generaNuevoCodigoInspeccion();
     $data->fecha_recepcion_documento = date('Y-m-d H:i:s');
     //genero el listado de nombre de campos
 
@@ -118,7 +118,7 @@ function insertDetalleInspecciones()
     $cadenaCampos = substr($cadenaCampos, 0, -1);
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    $sql1 = "INSERT INTO amc_inspeccion($cadenaCampos)
+    $sql1 = "INSERT INTO pma_contribuciones_detalle($cadenaCampos)
 	values($cadenaDatos);";
     $sql = $os->db->conn->prepare($sql1);
 
@@ -134,7 +134,7 @@ function insertDetalleInspecciones()
             "data" => array($data)
         ));
         // para el caso que ya se haya procesado o sea reinspeccion
-        actualizar_estado_tramite_usado($data->id_denuncia);
+        actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
     } else {
         echo json_encode(array(
             "success" => false,
@@ -144,14 +144,6 @@ function insertDetalleInspecciones()
     }
 }
 
-function actualizar_estado_tramite_usado($id_tramite)
-{
-    global $os;
-    // 8755
-    $sql = "UPDATE  `amc_denuncias` SET `despacho_secretaria_insp` = 0 WHERE `id` = $id_tramite";
-    $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
-}
 
 function generaCodigoProcesoOrdenanza()
 {
@@ -159,7 +151,7 @@ function generaCodigoProcesoOrdenanza()
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id) AS maximo FROM amc_inspeccion";
+    $sql = "SELECT MAX(id) AS maximo FROM pma_contribuciones_detalle";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     if (isset($row['maximo'])) {
@@ -168,7 +160,7 @@ function generaCodigoProcesoOrdenanza()
     } else {
         // valor inicial proceso
 
-        return 10759;
+        return 1;
 
     }
 }
@@ -179,25 +171,25 @@ function updateDetalleInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
 
-    if (isset($data->despacho_secretaria)) {
-        if (!$data->despacho_secretaria)
-            $data->despacho_secretaria = 'false';
-        else
-            $data->despacho_secretaria = 'true';
-    }
+    // if (isset($data->despacho_secretaria)) {
+    //     if (!$data->despacho_secretaria)
+    //         $data->despacho_secretaria = 'false';
+    //     else
+    //         $data->despacho_secretaria = 'true';
+    // }
 
     $message = '';
-    if (isset($data->id_tipo_documento)) {
-        if ($data->id_tipo_documento == '1')
-            if (validarCedulaCorreo($data->id)) {
-                $message = 'Ingresar número de cédula y correo electrónico';
-            }
-    }
+    // if (isset($data->id_tipo_documento)) {
+    //     if ($data->id_tipo_documento == '1')
+    //         if (validarCedulaCorreo($data->id)) {
+    //             $message = 'Ingresar número de cédula y correo electrónico';
+    //         }
+    // }
 
     // genero el listado de valores a insertar
     $cadenaDatos = '';
     foreach ($data as $clave => $valor) {
-        if (($clave == 'funcionario_reasignacion') OR ($clave == 'guia') OR ($clave == 'acta_verificacion') OR ($clave == 'id_zona') OR ($clave == 'fecha_memo_oficio') OR ($clave == 'id_actividad') OR ($clave == 'id_ordenanza') OR ($clave == 'infraccion')) {
+        if (($clave == 'year') OR ($clave == 'total_grant_q1') OR ($clave == 'total_grant_q2') OR ($clave == 'total_grant_q3') OR ($clave == 'total_grant_q4') OR ($clave == 'total_grant_prog_doc') OR ($clave == 'total_grant_prog_dsc') OR ($clave == 'total_pr_po_doc')) {
             if ($valor == '') {
                 $valor = 'NULL';
             }
@@ -212,10 +204,10 @@ function updateDetalleInspecciones()
     }
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    cambioEstadoAsignacion ($data->funcionario_entrega, $data->id);
-    cambioEstadoReasignacion ($data->funcionario_reasignacion, $data->id);
+    // cambioEstadoAsignacion ($data->funcionario_entrega, $data->id);
+    // cambioEstadoReasignacion ($data->funcionario_reasignacion, $data->id);
 
-    $sql = "UPDATE amc_inspeccion SET  $cadenaDatos  WHERE amc_inspeccion.id = '$data->id' ";
+    $sql = "UPDATE pma_contribuciones_detalle SET  $cadenaDatos  WHERE pma_contribuciones_detalle.id = '$data->id' ";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 

@@ -67,8 +67,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         //Ubicación de la carpeta de Inspeccion
         var urlInspeccion = "modules/desktop/inspeccion/server/";
         // todasInspecciones = todosInspectores;
-        var textField = new Ext.form.TextField({allowBlank: false, readOnly: accesosSupervision});
-        var textFieldDetalle = new Ext.form.TextField({allowBlank: true, readOnly: accesosSupervision});
+        var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
+        var textFieldDetalle = new Ext.form.TextField({allowBlank: true, readOnly: false});
 
         //Definición del formato de fecha
         function formatDate(value) {
@@ -79,10 +79,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         //Definición de url CRUD
         var proxyModuloInspeccion = new Ext.data.HttpProxy({
             api: {
-                create: urlInspeccion + "crudModuloInspeccion.php?operation=insert",
+                create: urlInspeccion + "crudContribuciones.php?operation=insert",
                 read: urlInspeccion + "crudContribuciones.php?operation=select",
-                update: urlInspeccion + "crudModuloInspeccion.php?operation=update",
-                destroy: urlInspeccion + "crudModuloInspeccion.php?operation=delete"
+                update: urlInspeccion + "crudContribuciones.php?operation=update",
+                destroy: urlInspeccion + "crudContribuciones.php?operation=delete"
             }
         });
 
@@ -106,27 +106,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
               {name: 'grant_specific', allowBlank: true},
               {name: 'activity', allowBlank: true},
               {name: 'year_contribution', allowBlank: true}
-                // {name: 'codigo_tramite', readOnly: true, allowBlank: true},
-                // {name: 'recepcion_documento', readOnly: true, allowBlank: true},
-                // //{name: 'id_ordenanza', readOnly: true, allowBlank: true},
-                // {name: 'id_tipo_documento', readOnly: true, allowBlank: false},
-                // {name: 'razon_devolucion', readOnly: true, allowBlank: true},
-                // {name: 'num_documento', readOnly: true, allowBlank: true},
-                // {name: 'remitente', readOnly: true, allowBlank: true},
-                // {name: 'cedula', readOnly: true, allowBlank: true},
-                // {name: 'email', readOnly: true, allowBlank: true},
-                // {name: 'institucion', readOnly: true, allowBlank: true},
-                // {name: 'asunto', readOnly: true, allowBlank: true},
-                // //{name: 'descripcion_anexos', readOnly: true, allowBlank: true},
-                // {name: 'id_caracter_tramite', readOnly: true, allowBlank: false},
-                // {name: 'cantidad_fojas', readOnly: true, allowBlank: true},
-                // {name: 'procesado_inspeccion', allowBlank: true},
-                // {name: 'id_planificacion', allowBlank: true},
-                // {name: 'id_tipo', allowBlank: true}
-                /*
-                {name: 'despacho_secretaria', allowBlank: true},
-                {name: 'email', allowBlank: true},
-                {name: 'observacion', allowBlank: true}*/
             ]
 
         });
@@ -141,10 +120,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         //Definición de url CRUD
         var proxyDetalleInspeccion = new Ext.data.HttpProxy({
             api: {
-                create: urlInspeccion + "crudDetalleInspeccion.php?operation=insert",
+                create: urlInspeccion + "crudDetalleContribuciones.php?operation=insert",
                 read: urlInspeccion + "crudDetalleContribuciones.php?operation=select",
-                update: urlInspeccion + "crudDetalleInspeccion.php?operation=update",
-                destroy: urlInspeccion + "crudDetalleInspeccion.php?operation=delete"
+                update: urlInspeccion + "crudDetalleContribuciones.php?operation=update",
+                destroy: urlInspeccion + "crudDetalleContribuciones-.php?operation=delete"
             }
         });
 
@@ -156,32 +135,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                // {name: 'id_denuncia', readOnly: false, allowBlank: true},
-                // {name: 'id_inspeccion', readOnly: false, allowBlank: true},
-                // //{name: 'codificacion', readOnly: false, allowBlank: true},
-                // {name: 'nombre_denunciado', readOnly: false, allowBlank: true},
-                // {name: 'fecha_asignacion', type: 'date', dateFormat: 'c', allowBlank: true},
-                // {name: 'id_actividad', readOnly: false, allowBlank: true},
-                // {name: 'funcionario_entrega', readOnly: false, allowBlank: true},
-                // //{name: 'respuesta', readOnly: false, allowBlank: true},
-                // {name: 'guia', readOnly: false, allowBlank: true},
-                // {name: 'fecha_despacho', readOnly: false, allowBlank: true},
-                // {name: 'id_zona', readOnly: false, allowBlank: true},
-                // {name: 'predio', readOnly: false, allowBlank: true},
-                // {name: 'id_acta', readOnly: false, allowBlank: true},
-                // {name: 'prioridad', readOnly: false, allowBlank: true},
-                // {name: 'funcionario_reasignacion', readOnly: false, allowBlank: true},
-                // {name: 'acta_verificacion', readOnly: false, allowBlank: true},
-                // {name: 'fecha_memo_oficio', type: 'date', dateFormat: 'c', allowBlank: true},
-                // {name: 'observaciones', readOnly: false, allowBlank: true},
-                // {name: 'numero_informe', readOnly: false, allowBlank: true},
-                // {name: 'institucion_recibe', readOnly: false, allowBlank: true},
-                // {name: 'cargo_enviado', readOnly: false, allowBlank: true},
-                // {name: 'numero_memo_oficio', readOnly: false, allowBlank: true},
-                // {name: 'numero_acta', readOnly: false, allowBlank: true},
-                // {name: 'id_ordenanza', readOnly: false, allowBlank: true},
-                // {name: 'infraccion', readOnly: false, allowBlank: true}
-
+                {name: 'year', allowBlank: true},
                 {name: 'total_grant_q1', allowBlank: true},
                 {name: 'total_grant_q2', allowBlank: true},
                 {name: 'total_grant_q3', allowBlank: true},
@@ -189,12 +143,11 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {name: 'total_grant_prog_doc', allowBlank: true},
                 {name: 'total_grant_prog_dsc', allowBlank: true},
                 {name: 'total_pr_po_doc', allowBlank: true},
-                {name: 'total_actuals_doc', type: 'date', dateFormat: 'c', allowBlank: true},
-                {name: 'total_balance_doc', type: 'date', dateFormat: 'c', allowBlank: true},
+                {name: 'total_actuals_doc', allowBlank: true},
+                {name: 'total_balance_doc', allowBlank: true},
                 {name: 'total_pr_po_dsc', allowBlank: true},
                 {name: 'total_actuals_dsc', allowBlank: true},
                 {name: 'total_grant_balance_dsc', allowBlank: true}
-
             ]
         });
 
@@ -222,43 +175,32 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                // {name: 'codigo_tramite', readOnly: false, allowBlank: true},
-                // {name: 'id_denuncia', readOnly: false, allowBlank: true},
-                // {name: 'id_inspeccion', readOnly: false, allowBlank: true},
-                // //{name: 'codificacion', readOnly: false, allowBlank: true},
-                // {name: 'nombre_denunciado', readOnly: false, allowBlank: true},
-                // {name: 'id_ordenanza', readOnly: true, allowBlank: true},
-                // {name: 'fecha_despacho', type: 'date', dateFormat: 'c', allowBlank: true},
-                // {name: 'id_actividad', readOnly: false, allowBlank: true},
-                // //{name: 'respuesta', readOnly: false, allowBlank: true},
-                // {name: 'funcionario_entrega', readOnly: false, allowBlank: true},
-                // {name: 'funcionario_reasignacion', readOnly: false, allowBlank: true},
-                // {name: 'guia', readOnly: false, allowBlank: true},
-                // {name: 'id_zona', readOnly: false, allowBlank: true},
-                // {name: 'predio', readOnly: false, allowBlank: true},
-                // {name: 'id_control_programado', readOnly: false, allow: true},
-                // {name: 'id_motivo_acta', readOnly: false, allow: true},
-                // {name: 'id_tipo_acta', readOnly: false, allow: true},
-                // {name: 'id_acta', readOnly: false, allow: true},
-                // {name: 'num_fojas', readOnly: false, allowBlank: true},
-                // {name: 'acta_verificacion', readOnly: false, allowBlank: true},
-                // {name: 'prioridad', readOnly: false, allowBlank: true},
-                // {name: 'fecha_acta', type: 'date', dateFormat: 'c', allowBlank: true},
-                // {name: 'inspeccion_finalizada', readOnly: false, allowBlank: true},
-                // {name: 'infraccion', readOnly: false, allowBlank: true},
-                // {name: 'observaciones', readOnly: false, allowBlank: true}
-                {name: 'total_grant_q1', readOnly: false, allowBlank: true},
-                {name: 'total_grant_q2', allowBlank: true},
-                {name: 'total_grant_q3', allowBlank: true},
-                {name: 'total_grant_q4', allowBlank: true},
-                {name: 'total_grant_prog_doc', allowBlank: true},
-                {name: 'total_grant_prog_dsc', allowBlank: true},
-                {name: 'total_pr_po_doc', allowBlank: true},
-                {name: 'total_actuals_doc', type: 'date', dateFormat: 'c', allowBlank: true},
-                {name: 'total_balance_doc', type: 'date', dateFormat: 'c', allowBlank: true},
-                {name: 'total_pr_po_dsc', allowBlank: true},
-                {name: 'total_actuals_dsc', allowBlank: true},
-                {name: 'total_grant_balance_dsc', allowBlank: true}
+                {name: 'codigo_tramite', readOnly: false, allowBlank: true},
+                {name: 'id_denuncia', readOnly: false, allowBlank: true},
+                {name: 'id_inspeccion', readOnly: false, allowBlank: true},
+                //{name: 'codificacion', readOnly: false, allowBlank: true},
+                {name: 'nombre_denunciado', readOnly: false, allowBlank: true},
+                {name: 'id_ordenanza', readOnly: true, allowBlank: true},
+                {name: 'fecha_despacho', type: 'date', dateFormat: 'c', allowBlank: true},
+                {name: 'id_actividad', readOnly: false, allowBlank: true},
+                //{name: 'respuesta', readOnly: false, allowBlank: true},
+                {name: 'funcionario_entrega', readOnly: false, allowBlank: true},
+                {name: 'funcionario_reasignacion', readOnly: false, allowBlank: true},
+                {name: 'guia', readOnly: false, allowBlank: true},
+                {name: 'id_zona', readOnly: false, allowBlank: true},
+                {name: 'predio', readOnly: false, allowBlank: true},
+                {name: 'id_control_programado', readOnly: false, allow: true},
+                {name: 'id_motivo_acta', readOnly: false, allow: true},
+                {name: 'id_tipo_acta', readOnly: false, allow: true},
+                {name: 'id_acta', readOnly: false, allow: true},
+                {name: 'num_fojas', readOnly: false, allowBlank: true},
+                {name: 'acta_verificacion', readOnly: false, allowBlank: true},
+                {name: 'prioridad', readOnly: false, allowBlank: true},
+                {name: 'fecha_acta', type: 'date', dateFormat: 'c', allowBlank: true},
+                {name: 'inspeccion_finalizada', readOnly: false, allowBlank: true},
+                {name: 'infraccion', readOnly: false, allowBlank: true},
+                {name: 'observaciones', readOnly: false, allowBlank: true}
+
             ]
         });
 
@@ -1329,9 +1271,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         checked: true,
                         checkHandler: checkHandler,
                         group: 'filterField',
-                        key: 'codigo_tramite',
+                        key: 'grant_number',
                         scope: this,
-                        text: 'Código trámite'
+                        text: 'Grant Number'
                     }
                     , {
                         checked: false,
@@ -1483,8 +1425,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             , text: 'Código trámite'
         });
 
-        //this.storeModuloInspeccion.load();
-        //this.storeDetalleInspeccion.load();
+        this.storeModuloInspeccion.load();
+        this.storeDetalleInspeccion.load();
 
         // if (todosInspectores == true) {
             this.storeListadoInspeccion.load();
@@ -1517,13 +1459,15 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     header: 'Grant Number CSP',
                     dataIndex: 'grant_number',
                     sortable: true,
-                    width: 38
+                    width: 38,
+                    editor: textField
                 },
                 {
                     header: 'Estado',
                     dataIndex: 'estado',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -1531,6 +1475,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'crn',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -1538,6 +1483,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'donor',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -1545,6 +1491,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'comments',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -1552,6 +1499,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'year_contribution',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -1559,6 +1507,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'isc',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -1566,6 +1515,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'total_grant',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -1595,6 +1545,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'grant_specific',
                     sortable: true,
                     width: 25,
+                    editor: textField
                     // editor: comboGrant, renderer: personaTipoDocumento
                 },
                 {
@@ -1602,6 +1553,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'activity',
                     sortable: true,
                     width: 22,
+                    editor: textField
                     // editor: new Ext.form.TextField({allowBlank: false})
                 },
 
@@ -1879,22 +1831,23 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             height: winHeight * 0.37,
             //Calculo de tamaño horizontal frame inferior de pestaña Trámites pendientes
             width: winWidth - 16,
-            readOnly: accesosSupervision,
+            readOnly: false,
             store: this.storeDetalleInspeccion,
             columns: [
                 new Ext.grid.RowNumberer(),
-                {header: 'Total Grant Value Programmed I Quarter', dataIndex: 'total_grant_q1', hidden: true},
-                {header: 'Total Grant Value Programmed II Quarter', dataIndex: 'total_grant_q2', hidden: true},
-                {header: 'Total Grant Value Programmed III Quarter', dataIndex: 'total_grant_q3', hidden: true},
-                {header: 'Total Grant Value Programmed IV Quarter', dataIndex: 'total_grant_q4', hidden: true},
-                {header: 'Total Grant Value Programmed DOC ', dataIndex: 'total_grant_prog_doc', hidden: true},
-                {header: 'Total Grant Value Programmed DSC', dataIndex: 'total_grant_prog_dsc', hidden: true},
-                {header: 'Total PR and PO linked to programmed amount DOC', dataIndex: 'total_pr_po_doc', hidden: true},
-                {header: 'Total Actuals DOC', dataIndex: 'total_actuals_doc', hidden: true},
-                {header: 'Total Grant Value Balance DOC (programmed -actuals - PR - PO)', dataIndex: 'total_balance_doc', hidden: true},
-                {header: 'Total PR and PO linked to programmed amount DSC', dataIndex: 'total_pr_po_dsc', hidden: true},
-                {header: 'Total Actuals DSC ', dataIndex: 'total_actuals_dsc', hidden: true},
-                {header: 'Total Grant Value Balance DSC (programmed -actuals - PR - PO)', dataIndex: 'total_grant_balance_dsc', hidden: true}
+                {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textFieldDetalle},
+                {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant V. II Quarter', dataIndex: 'total_grant_q2', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant V. III Quarter', dataIndex: 'total_grant_q3', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant V. IV Quarter', dataIndex: 'total_grant_q4', hidden: false, width: 140, editor: textFieldDetalle},
+                {header: 'Total Grant V. DOC ', dataIndex: 'total_grant_prog_doc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant V. DSC', dataIndex: 'total_grant_prog_dsc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total PR and PO - DOC', dataIndex: 'total_pr_po_doc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Actuals DOC', dataIndex: 'total_actuals_doc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant Value Balance DOC', dataIndex: 'total_balance_doc', hidden: false, width: 170, editor: textFieldDetalle},
+                {header: 'Total PR and PO - DSC', dataIndex: 'total_pr_po_dsc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Actuals DSC ', dataIndex: 'total_actuals_dsc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant Value Balance DSC', dataIndex: 'total_grant_balance_dsc', hidden: false, width: 170, editor: textFieldDetalle}
             ],
             viewConfig: {
                 forceFit: false
@@ -1999,7 +1952,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             win = desktop.createWindow({
                 id: 'grid-win-moduloInspeccion',
                 //Definición del título de la ventana
-                title: 'Inspección',
+                title: 'Contribuciones',
                 //Definición de tamaños de la ventana
                 width: winWidth,
                 height: winHeight,
@@ -2017,7 +1970,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         //Pestaña Inspección
                         {
                             autoScroll: true,
-                            title: 'Trámites pendientes',
+                            title: 'Registro de Contribuciones',
                             closable: false,
                             //layout: 'fit',
                             //height: winHeight-70,
@@ -2121,7 +2074,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                         cls: 'no-border',
                                         items: [
                                             {
-                                                title: 'Asignación inspección',
+                                                title: 'Detalle anual',
                                                 autoScroll: true,
                                                 height: winHeight * 0.41,
                                                 tbar: [
@@ -2394,6 +2347,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addDetalleInspeccion: function () {
         var inspeccion = new this.storeDetalleInspeccion.recordType({
+            year: '',
             total_grant_q1: '0',
             total_grant_q2: '0',
             total_grant_q3: '0',
