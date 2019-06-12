@@ -30,7 +30,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
 
 
         function formatDate(value) {
-            return value ? value.dateFormat('Y-m-d H:i:s') : '';
+            return value ? value.dateFormat('Y-m-d') : '';
         }
 
 // inicio combos secretaria
@@ -888,9 +888,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 40,
                     renderer: formatDate,
-                    editor: new Ext.ux.form.DateTimeField({
-                        dateFormat: 'Y-m-d',
-                        timeFormat: 'H:i:s'
+                    editor: new Ext.form.DateField({
+                        format: 'Y-m-d'
                     })
                 },
                 {
@@ -899,9 +898,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 40,
                     renderer: formatDate,
-                    editor: new Ext.ux.form.DateTimeField({
-                        dateFormat: 'Y-m-d',
-                        timeFormat: 'H:i:s'
+                    editor: new Ext.form.DateField({
+                        format: 'Y-m-d'
                     })
                 },
                 {
