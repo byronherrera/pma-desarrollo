@@ -1061,8 +1061,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitecontribuciones,
                 store: storeContribuciones,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites  {0} - {1} of {2}',
-                emptyMsg: "No existen trámites que mostrar"
+                displayMsg: 'Mostrando contribuciones  {0} - {1} of {2}',
+                emptyMsg: "No existen contribuciones que mostrar"
                 //filter: Ext.getCmp('tb_seleccionarUnidad').getValue()
 
             }),
@@ -1728,7 +1728,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                                 ]
                                             }
                                         ]
-                                    },
+                                    }
+/*                                    ,
                                     {
                                         title: 'Inspección',
                                         layout: 'column',
@@ -1860,7 +1861,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                             }
                                         ]
                                     }
-
+*/
                                 ]
                             }
 
@@ -2143,7 +2144,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             this.targetFieldBtn = targetFieldBtn;
             win = desktop.createWindow({
                 id: 'grid-win-contribuciones',
-                title: 'Recepción Documentos',
+                title: 'Contribuciones',
                 width: winWidth,
                 height: winHeight,
                 iconCls: 'contribuciones-icon',
@@ -2266,10 +2267,11 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                             ],
                             items: this.formContribucionesDetalle
                         }
-                        , {
+/*                        , {
                             title: 'Guías',
                             closable: true,
                             layout: 'border',
+                            hidden: 'true', //TODO eliminar pestaña
                             tbar: [
                                 {
                                     iconCls: 'reload-icon',
@@ -2316,7 +2318,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
 
                             //this.gridContribucionesGuia
                         }
-
+*/
                         , {
                             title: 'Reportes',
                             closable: true,
@@ -2371,12 +2373,12 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                             //this.gridReportes
                         }
 
-
+/*
                         , {
                             autoScroll: true,
                             title: 'Geolocalización',
                             closable: true,
-
+                            hidden: 'true', //TODO eliminar pestaña
                             items: [{
                                 region: 'center',
                                 xtype: 'gmappanel',
@@ -2414,7 +2416,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                 }]
                             }]
                         }
-                    ]
+ */                   ]
                 })
             });
 
