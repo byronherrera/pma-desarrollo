@@ -873,6 +873,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'isc',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -880,7 +881,12 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'total_grant',
                     sortable: true,
                     width: 28,
-                    // renderer: personaReceptaDenuncia
+                    renderer: 'usMoney',
+                    editor: new Ext.form.NumberField({
+                        allowBlank: false,
+                        allowNegative: false,
+                        maxValue: 100000000
+                    })
                 },
                 {
                     header: 'Grant TOD',
