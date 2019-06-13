@@ -1,49 +1,45 @@
 {
-  "id": "resolucion",
-  "type": "desktop/resolucion",
+  "id": "inspeccion",
+  "type": "desktop/inspeccion",
   "about": {
     "author": "",
-    "description": "PMA Resolucion.",
-    "name": "Resolucion",
+    "description": "Inspeccion de Inspeccion.",
+    "name": "Ventana Inspeccion",
     "url": "",
     "version": "1.0"
   },
-
-  "dependencies": [
-    { "id": "checkbox", "type": "library" }
-  ],
   "server": {
     "methods": [
-      { "name": "accesosAdministradorOpe", "description": "Administrador resolucion" },
-      { "name": "accesosAdministradorIns", "description": "Administrador resolucion solo inspeccion" },
-      { "name": "accesosResolucion", "description": "Usuario opeativos" },
-      { "name": "accesosRecepcionOpe", "description": "Recepcion resolucion" }
+      { "name": "accesosAdministrador", "description": "Full acceso con vista de todos los tramites" },
+      { "name": "accesosSecretaria", "description": "Full acceso con vista de tramites pendientes" },
+      { "name": "accesosInspeccion", "description": "Personal de inspeccion" },
+      { "name": "accesosSupervision", "description": "Personal de supervision" }
+
     ],
-    "class": "QoResolucion",
-    "file": "desktop/resolucion/resolucion.php"
+    "class": "QoDenuncias",
+    "file": "desktop/inspeccion/denuncias.php"
   },
   "client": {
-    "class": "QoDesk.ResolucionWindow",
+    "class": "QoDesk.InspeccionWindow",
     "css": [
       {
-        "directory": "desktop/resolucion/client/resources/",
+        "directory": "desktop/inspeccion/client/resources/",
         "files": [ "styles.css" ]
       },
       {
         "directory": "common/libraries/",
-        "files": [ "datetime/date-time-ux.css", "Spinner/Spinner.css", "MultiSelect.css", "fileuploadfield/FileUploadField.css" ]
+        "files": [  "datetime/date-time-ux.css", "Spinner/Spinner.css", "MultiSelect.css"   ]
       }
     ],
     "javascript": [
       {
         "directory": "common/libraries/",
-        "files": [ "AppMsg.js","datetime/date-time-ux.js","CheckColumn.js", "Spinner/SpinnerField.js", "Spinner/Spinner.js","MultiSelect.js", "fileuploadfield/FileUploadField.js"  ]
+        "files": [ "AppMsg.js","datetime/date-time-ux.js","CheckColumn.js", "Spinner/SpinnerField.js", "Spinner/Spinner.js","MultiSelect.js"  ]
       },
       {
-        "directory": "desktop/resolucion/client/",
-        "files": [  "resolucion-win.js" ]
+        "directory": "desktop/inspeccion/client/",
+        "files": [  "moduloInspeccion-win.js" ]
       },
-
       {
         "directory": "qwiki/admin/client/",
         "files": [ "QoAdmin.js" ]
@@ -55,10 +51,10 @@
     ],
     "launcher": {
       "config": {
-        "iconCls": "resolucion-icon",
-        "shortcutIconCls": "resolucion-shortcut",
-        "text": "Resolucion",
-        "tooltip": "<b>Resolucion - PMA</b>"
+        "iconCls": "inspeccion-icon",
+        "shortcutIconCls": "inspeccion-shortcut",
+        "text": "Planificacion",
+        "tooltip": "<b>Planificacion</b>"
       },
       "paths": {
         "startmenu": "/"
