@@ -831,13 +831,15 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     header: 'Grant Number CSP',
                     dataIndex: 'grant_number',
                     sortable: true,
-                    width: 38
+                    width: 38,
+                    editor: textField
                 },
                 {
                     header: 'Estado',
                     dataIndex: 'estado',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -845,6 +847,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'crn',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -852,6 +855,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'donor',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -859,6 +863,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'comments',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -866,6 +871,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'year_contribution',
                     sortable: true,
                     width: 28,
+                    editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -913,6 +919,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'grant_specific',
                     sortable: true,
                     width: 25,
+                    editor: textField
                     // editor: comboGrant, renderer: personaTipoDocumento
                 },
                 {
@@ -920,6 +927,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'activity',
                     sortable: true,
                     width: 22,
+                    editor: textField
                     // editor: new Ext.form.TextField({allowBlank: false})
                 },
                 // {
