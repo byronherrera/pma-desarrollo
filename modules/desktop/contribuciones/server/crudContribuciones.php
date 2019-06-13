@@ -158,6 +158,26 @@ function selectContribuciones()
     );
 }
 
+function generaCodigoProcesoContribuciones()
+{
+    global $os;
+
+    $usuario = $os->get_member_id();
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT MAX(id) AS maximo FROM pma_contribuciones";
+    $result = $os->db->conn->query($sql);
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+    if (isset($row['maximo'])) {
+        $nuevoCodogo = $row['maximo'] + 1;
+        return $nuevoCodogo;
+    } else {
+        // valor inicial proceso
+
+        return 1;
+
+    }
+}
+
 function insertDenuncias()
 {
     global $os;
@@ -165,7 +185,7 @@ function insertDenuncias()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
     // $data->despacho_secretaria = 'false';
-    // $data->codigo_tramite = generaCodigoProcesoDenuncia();
+    $data->id = generaCodigoProcesoContribuciones();
     // $data->id_persona = $os->get_member_id();
     // $data->id_zonal_origen = $os->get_zonal_id();
     //genero el listado de nombre de campos
@@ -181,29 +201,30 @@ function insertDenuncias()
     $cadenaCampos = substr($cadenaCampos, 0, -1);
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    $sql = "INSERT INTO amc_denuncias($cadenaCampos)
+    $sql = "INSERT INTO pma_contribuciones($cadenaCampos)
 	values($cadenaDatos);";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
     $data->id = $os->db->conn->lastInsertId();
+    // $data->id = $os->db->conn->generaCodigoProcesoContribuciones();
     // genero el nuevo codigo de proceso
 
     $message = '';
-    if (isset($data->id_tipo_documento)) {
-        if ($data->id_tipo_documento == '1') {
-            if ((isset($data->cedula)) and (isset($data->email)) and (strlen($data->id_tipo) > 0)) {
-                $success = true;
-                $message = 'Datos correctos';
-            } else {
-                $success = false;
-                $message = 'Falta cedula / email / tipo';
-            }
-        } else {
-            $success = true;
-            $message = 'Datos ok';
-        }
-    }
+    // if (isset($data->id_tipo_documento)) {
+    //     if ($data->id_tipo_documento == '1') {
+    //         if ((isset($data->cedula)) and (isset($data->email)) and (strlen($data->id_tipo) > 0)) {
+    //             $success = true;
+    //             $message = 'Datos correctos';
+    //         } else {
+    //             $success = false;
+    //             $message = 'Falta cedula / email / tipo';
+    //         }
+    //     } else {
+    //         $success = true;
+    //         $message = 'Datos ok';
+    //     }
+    // }
 
     echo json_encode(array(
         "success" => $success,
@@ -286,24 +307,24 @@ function updateDenuncias()
     // }
 }
 
-function validarCedulaCorreo($id)
-{
-    // true en caso que no exista ni correo ni cedula
-    // false  en caso que exista correo y cedula
-    //return false;
-
-    global $os;
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT cedula, email, id_tipo FROM amc_denuncias WHERE id = $id";
-    $result = $os->db->conn->query($sql);
-
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if ((strlen($row['cedula']) == 0) or (strlen($row['email']) == 0) or (strlen($row['id_tipo']) == 0)) {
-        return true;
-    } else {
-        return false;
-    }
-}
+// function validarCedulaCorreo($id)
+// {
+//     // true en caso que no exista ni correo ni cedula
+//     // false  en caso que exista correo y cedula
+//     //return false;
+//
+//     global $os;
+//     $os->db->conn->query("SET NAMES 'utf8'");
+//     $sql = "SELECT cedula, email, id_tipo FROM amc_denuncias WHERE id = $id";
+//     $result = $os->db->conn->query($sql);
+//
+//     $row = $result->fetch(PDO::FETCH_ASSOC);
+//     if ((strlen($row['cedula']) == 0) or (strlen($row['email']) == 0) or (strlen($row['id_tipo']) == 0)) {
+//         return true;
+//     } else {
+//         return false;
+//     }
+// }
 
 
 function selectContribucionesForm()
@@ -431,12 +452,12 @@ function deleteDenuncias()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM amc_denuncias WHERE id = $id";
+    $sql = "DELETE FROM pma_contribuciones WHERE id = $id";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en amc_denuncias, eliminado exitosamente" : $sql->errorCode()
+        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_contribuciones, eliminado exitosamente" : $sql->errorCode()
     ));
 }
 
