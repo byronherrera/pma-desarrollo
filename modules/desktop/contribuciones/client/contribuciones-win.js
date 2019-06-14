@@ -1036,6 +1036,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     , width: 18
                     , xtype: 'booleancolumn'
                     , hidden: true
+
+
                 }
             ],
             viewConfig: {
