@@ -26,7 +26,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         var win = desktop.getWindow('grid-win-contribuciones');
         var urlContribuciones = "modules/desktop/contribuciones/server/";
 
-        var textField = new Ext.form.TextField({allowBlank: false});
+        var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
 
 
         function formatDate(value) {
@@ -759,7 +759,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     }
 
                     if (operation == 'create') {
-                        AppMsg.setAlert("Requisito obligatorio", "Faltan datos");
+                        // AppMsg.setAlert("Requisito obligatorio", "Faltan datos");
                     }
                 },
             }
@@ -823,7 +823,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         };
 
         this.gridContribuciones = new Ext.grid.EditorGridPanel({
-            height: 200,
+            height: 495,
             store: this.storeContribuciones,
             columns: [
                 new Ext.grid.RowNumberer(),
@@ -1123,26 +1123,26 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 15
                 },
-                {
-                    header: 'Estado',
-                    dataIndex: 'estado',
-                    sortable: true,
-                    width: 35,
-                    renderer: personaReceptaDenuncia
-                }, {
-                    header: 'Recepción documento',
-                    dataIndex: 'recepcion_documento',
-                    sortable: true,
-                    width: 45,
-                    renderer: formatDate
-                },
-                {
-                    header: 'Tipo documento',
-                    dataIndex: 'id_tipo_documento',
-                    sortable: true,
-                    width: 30,
-                    renderer: personaTipoDocumento
-                },
+                // {
+                //     header: 'Estado',
+                //     dataIndex: 'estado',
+                //     sortable: true,
+                //     width: 35,
+                //     renderer: personaReceptaDenuncia
+                // }, {
+                //     header: 'Recepción documento',
+                //     dataIndex: 'recepcion_documento',
+                //     sortable: true,
+                //     width: 45,
+                //     renderer: formatDate
+                // },
+                // {
+                //     header: 'Tipo documento',
+                //     dataIndex: 'id_tipo_documento',
+                //     sortable: true,
+                //     width: 30,
+                //     renderer: personaTipoDocumento
+                // },
 
                 // {
                 //     header: 'N. documento',
@@ -1397,488 +1397,488 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                         autoScroll: true,
                         layout: 'column'
                     },
-                    {
-                        split: true,
-                        flex: 2,
-                        bodyStyle: 'padding:0; background: #DFE8F6',
-                        layout: 'column',
-
-                        items: [
-                            {
-                                xtype: 'tabpanel',
-
-                                activeTab: 0,
-                                width: winWidth - 14 ,
-                                cls: 'no-border',
-                                items: [
-                                    {
-                                        title: 'Contribución',
-                                        layout: 'column',
-                                        height: winHeight - 321,
-                                        width: winWidth - 14 ,
-                                        autoScroll: true,
-                                        tbar: [
-                                            {
-                                                text: 'Grabar Recepción Detalle',
-                                                scope: this,
-                                                handler: this.grabarcontribuciones,
-                                                iconCls: 'save-icon',
-                                                disabled: true,
-                                                id: 'tb_grabarcontribuciones'
-                                                , formBind: true
-                                            },
-                                            '->',
-                                            {
-                                                text: 'Contribuciones anteriores:'
-                                                , xtype: 'tbtext',
-                                                id: 'textRecepcionAnteriores'
-                                            }
-                                        ],
-                                        items: [
-                                            {
-                                                columnWidth: 1 / 3,
-                                                layout: 'form',
-                                                monitorValid: true,
-                                                defaultType: 'textfield',
-                                                items: [
-                                                    {
-                                                        xtype: 'hidden',
-                                                        fieldLabel: 'Id',
-                                                        name: 'id'
-                                                    },
-                                                    {
-                                                        fieldLabel: 'Grant number',
-                                                        name: 'grant_number',
-                                                        anchor: '95%',
-                                                        readOnly: false,
-                                                        cls: 'sololectura'
-                                                    },
-                                                    {
-                                                        xtype: 'combo',
-                                                        fieldLabel: 'Estado',
-                                                        name: 'estado',
-                                                        id: 'estado',
-                                                        anchor: '95%',
-                                                        hiddenName: 'estado',
-                                                        readOnly: false,
-                                                        store: storePRD,
-                                                        valueField: 'id',
-                                                        displayField: 'nombre',
-                                                        typeAhead: true,
-                                                        triggerAction: 'all',
-                                                        mode: 'local'
-
-                                                    },
-                                                    {
-                                                        xtype: 'datetimefield',
-                                                        fieldLabel: 'Fecha recepción',
-                                                        id: 'recepcion_documento',
-                                                        name: 'recepcion_documento',
-                                                        anchor: '95%',
-                                                        readOnly: false,
-                                                        dateFormat: 'Y-m-d',
-                                                        timeFormat: 'H:i:s'
-                                                    },
-                                                    {
-                                                        xtype: 'combo',
-                                                        fieldLabel: 'Tipo documento',
-                                                        id: 'id_tipo_documento',
-                                                        name: 'id_tipo_documento',
-                                                        anchor: '95%',
-
-                                                        hiddenName: 'id_tipo_documento',
-                                                        store: storeGrant,
-                                                        valueField: 'id',
-                                                        displayField: 'nombre',
-                                                        typeAhead: true,
-                                                        triggerAction: 'all',
-                                                        mode: 'local'
-                                                    },
-                                                    // {
-                                                    //     fieldLabel: 'Núm documento',
-                                                    //     id: 'num_documento',
-                                                    //     name: 'num_documento',
-                                                    //     anchor: '95%'
-                                                    // },
-                                                    // {
-                                                    //     fieldLabel: 'Remitente/ Denunciante',
-                                                    //     id: 'remitente',
-                                                    //     name: 'remitente',
-                                                    //     anchor: '95%'
-                                                    // },
-                                                    {
-                                                        fieldLabel: 'CI denunciante',
-                                                        id: 'cedula',
-                                                        name: 'cedula',
-                                                        allowBlank: true,
-                                                        anchor: '95%'
-                                                    },
-                                                    // {
-                                                    //     fieldLabel: 'Email denunciante',
-                                                    //     id: 'email',
-                                                    //     name: 'email',
-                                                    //     anchor: '95%',
-                                                    //     allowBlank: true
-                                                    //     , vtype: 'email'
-                                                    // },
-                                                    {
-                                                        fieldLabel: 'Dirección denuncia',
-                                                        id: 'direccion_denuncia',
-                                                        name: 'direccion_denuncia',
-                                                        anchor: '95%'
-                                                    },
-                                                    {
-                                                        fieldLabel: 'Georeferencia',
-                                                        id: 'georeferenciaSecretaria',
-                                                        name: 'georeferencia',
-                                                        anchor: '95%',
-                                                        allowBlank: true,
-                                                        handleMouseEvents: true,
-                                                        readOnly: true,
-                                                        listeners: {
-                                                            render: function (c) {
-                                                                //evento click sobre el campo de geo referenciacion
-                                                                c.getEl().on('click', function () {
-                                                                    Ext.getCmp('panelPrincipal').setActiveTab(3);
-                                                                }, c);
-                                                            }
-                                                        }
-                                                    }
-                                                ]
-                                            },
-                                            // {
-                                            //     columnWidth: 1 / 3,
-                                            //     layout: 'form',
-                                            //     items: [
-                                            //         {
-                                            //             xtype: 'combo',
-                                            //             fieldLabel: 'Ordenanza',
-                                            //             id: 'id_ordenanza',
-                                            //             name: 'id_ordenanza',
-                                            //             anchor: '95%',
-                                            //
-                                            //             hiddenName: 'id_ordenanza',
-                                            //             store: storeDETIORD,
-                                            //             valueField: 'id',
-                                            //             displayField: 'nombre',
-                                            //             typeAhead: true,
-                                            //             triggerAction: 'all',
-                                            //             mode: 'local'
-                                            //         },
-                                            //         {
-                                            //             xtype: 'textfield',
-                                            //             fieldLabel: 'Descripción anexo',
-                                            //             id: 'descripcion_anexos',
-                                            //             name: 'descripcion_anexos',
-                                            //             anchor: '95%'
-                                            //         },
-                                            //         {
-                                            //             xtype: 'spinnerfield',
-                                            //             fieldLabel: 'Cantidad de fojas',
-                                            //             id: 'cantidad_fojas',
-                                            //             name: 'cantidad_fojas',
-                                            //             minValue: 0,
-                                            //             maxValue: 200,
-                                            //             anchor: '95%'
-                                            //         },
-                                            //         {
-                                            //             xtype: 'textarea',
-                                            //             fieldLabel: 'Asunto',
-                                            //             id: 'asunto',
-                                            //             name: 'asunto',
-                                            //             height: 45,
-                                            //             anchor: '95%'
-                                            //         },
-                                            //         {
-                                            //             xtype: 'textfield',
-                                            //             fieldLabel: 'Institución',
-                                            //             id: 'institucion',
-                                            //             name: 'institucion',
-                                            //             anchor: '95%'
-                                            //         },
-                                            //         {
-                                            //             xtype: 'combo',
-                                            //             fieldLabel: 'Caracter del trámite',
-                                            //             id: 'id_caracter_tramite',
-                                            //             name: 'id_caracter_tramite',
-                                            //             anchor: '95%',
-                                            //
-                                            //             hiddenName: 'id_caracter_tramite',
-                                            //             store: storeCDT,
-                                            //             valueField: 'id',
-                                            //             displayField: 'nombre',
-                                            //             typeAhead: true,
-                                            //             triggerAction: 'all',
-                                            //             mode: 'local'
-                                            //         },
-                                            //         {
-                                            //             xtype: 'textarea',
-                                            //             fieldLabel: 'Observaciones secretaria',
-                                            //             id: 'observacion_secretaria',
-                                            //             name: 'observacion_secretaria',
-                                            //             height: 45,
-                                            //             anchor: '95%'
-                                            //         },
-                                            //         {
-                                            //             xtype: 'displayfield',
-                                            //             fieldLabel: 'Total documentos anteriores:',
-                                            //             name: 'totaldocumentos',
-                                            //             anchor: '95%'
-                                            //         }
-                                            //     ]
-                                            // },
-                                            {
-                                                columnWidth: 1 / 3,
-                                                layout: 'form',
-                                                defaults: {
-                                                    listeners: {
-                                                        change: function (field, newVal, oldVal) {
-                                                            if (field.getName() == 'despacho_secretaria') {
-                                                                if (oldVal == 'true') {
-                                                                    if (newVal == 'false') {
-                                                                        Ext.getCmp('tb_grabarcontribuciones').setDisabled(false);
-                                                                        Ext.getCmp('reasignacion').enable();
-                                                                    }
-                                                                }
-                                                            }
-                                                            if (field.getName() == 'guia') {
-                                                                if (oldVal != newVal) {
-                                                                    Ext.getCmp('tb_grabarcontribuciones').setDisabled(false);
-//                                                                        Ext.getCmp('reasignacion').enable();
-                                                                }
-                                                            }
-                                                        }
-                                                    },
-                                                },
-                                                items: [
-                                                    /* {
-                                                     xtype: 'combo',
-                                                     fieldLabel: 'Reasignado a',
-                                                     name: 'reasignacion',
-                                                     anchor: '95%',
-
-                                                     hiddenName: 'reasignacion',
-                                                     store: storeREA,
-                                                     valueField: 'id',
-                                                     displayField: 'nombre',
-                                                     typeAhead: true,
-                                                     triggerAction: 'all',
-                                                     mode: 'local'
-                                                     },*/
-                                                    // {
-                                                    //     xtype: 'multiselect',
-                                                    //     fieldLabel: 'Reasignado a:<br />(Para seleccion<br /> multiple mantenga<br /> pulsada la tecla Ctrl)',
-                                                    //     id: 'reasignacion',
-                                                    //     name: 'reasignacion',
-                                                    //     width: 300,
-                                                    //     height: 130,
-                                                    //     allowBlank: false, store: storeREA,
-                                                    //     hiddenName: 'reasignacion',
-                                                    //     displayField: 'nombre',
-                                                    //     valueField: 'id',
-                                                    //     ddReorder: true
-                                                    // },
-                                                    {
-                                                        xtype: 'combo',
-                                                        fieldLabel: 'Guía',
-                                                        name: 'guia',
-                                                        id: 'guia',
-                                                        anchor: '95%',
-
-                                                        hiddenName: 'guia',
-                                                        store: storeREAGUIA,
-                                                        valueField: 'id',
-                                                        displayField: 'nombre',
-                                                        typeAhead: true,
-                                                        triggerAction: 'all',
-                                                        mode: 'local'
-                                                    },
-                                                    {
-                                                        xtype: 'combo',
-                                                        fieldLabel: 'Despachado',
-                                                        name: 'despacho_secretaria',
-                                                        id: 'despacho_secretaria',
-                                                        anchor: '95%',
-                                                        hiddenName: 'despacho_secretaria',
-                                                        store: storeOFAC,
-                                                        valueField: 'id',
-                                                        displayField: 'nombre',
-                                                        typeAhead: true,
-                                                        triggerAction: 'all',
-                                                        mode: 'local'
-                                                    },
-                                                    {
-                                                        xtype: 'combo',
-                                                        fieldLabel: 'Tipo respuesta',
-                                                        name: 'tipo_respuesta_devolucion',
-                                                        id: 'tipo_respuesta_devolucion',
-                                                        anchor: '95%',
-                                                        hiddenName: 'tipo_respuesta_devolucion',
-                                                        store: storeTIPPES,
-                                                        valueField: 'id',
-                                                        displayField: 'nombre',
-                                                        typeAhead: true,
-                                                        triggerAction: 'all',
-                                                        mode: 'local'
-                                                    },
-                                                    {
-                                                        xtype: 'textarea',
-                                                        fieldLabel: 'Respuesta devolución',
-                                                        id: 'respuesta_devolucion',
-                                                        name: 'respuesta_devolucion',
-                                                        height: 45,
-                                                        anchor: '95%'
-                                                    },
-                                                    {
-                                                        xtype: 'displayfield',
-                                                        fieldLabel: 'Fecha respuesta devolución',
-                                                        name: 'fecha_respuesta_devolucion',
-                                                        anchor: '95%'
-                                                    }
-
-
-                                                ]
-                                            }
-                                        ]
-                                    }
-/*                                    ,
-                                    {
-                                        title: 'Inspección',
-                                        layout: 'column',
-                                        autoScroll: true,
-                                        items: [
-                                            {
-                                                type: 'container',
-                                                columnWidth: 1 / 2,
-                                                layout: 'form',
-                                                items: [
-                                                    {
-                                                        bodyStyle: 'padding:0; background: #ebfaeb',
-                                                        xtype: 'combo',
-                                                        fieldLabel: 'Estado Recepcion Información',
-                                                        name: 'estado_recepcion_informacion',
-                                                        anchor: '95%',
-                                                        hiddenName: 'estado_recepcion_informacion',
-
-                                                        store: storeESREA,
-                                                        valueField: 'id',
-                                                        displayField: 'nombre',
-                                                        typeAhead: true,
-                                                        triggerAction: 'all',
-                                                        mode: 'local',
-                                                        readOnly: true,
-                                                        cls: 'sololectura'
-                                                    },
-                                                    {
-                                                        xtype: 'combo',
-                                                        fieldLabel: 'Actividad',
-                                                        name: 'actividad',
-                                                        anchor: '95%',
-                                                        hiddenName: 'actividad',
-
-                                                        store: storeACTA,
-                                                        valueField: 'id',
-                                                        displayField: 'nombre',
-                                                        typeAhead: true,
-                                                        triggerAction: 'all',
-                                                        mode: 'local',
-                                                        readOnly: true,
-                                                        cls: 'sololectura'
-                                                    },
-                                                    {
-                                                        xtype: 'combo',
-                                                        fieldLabel: 'Persona asignada',
-                                                        name: 'persona_asignada',
-                                                        anchor: '95%',
-                                                        hiddenName: 'persona_asignada',
-
-                                                        store: storePRASA,
-                                                        valueField: 'id',
-                                                        displayField: 'nombre',
-                                                        typeAhead: true,
-                                                        triggerAction: 'all',
-                                                        mode: 'local',
-                                                        readOnly: true,
-                                                        cls: 'sololectura'
-                                                    },
-
-                                                    {
-                                                        xtype: 'textfield',
-                                                        fieldLabel: 'Cod inspección',
-                                                        name: 'codigo_inspeccion',
-                                                        anchor: '95%',
-                                                        readOnly: true,
-                                                        cls: 'sololectura'
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                type: 'container',
-                                                columnWidth: 1 / 2,
-                                                layout: 'form',
-                                                items: [
-                                                    {
-                                                        xtype: 'textfield',
-                                                        fieldLabel: 'Cod procedimiento',
-                                                        name: 'codigo_procedimiento',
-                                                        anchor: '95%',
-                                                        readOnly: true,
-                                                        cls: 'sololectura'
-                                                    },
-                                                    {
-                                                        xtype: 'combo',
-                                                        fieldLabel: 'Zona',
-                                                        name: 'id_zona',
-                                                        anchor: '95%',
-                                                        hiddenName: 'id_zona',
-
-                                                        store: storeZONA,
-                                                        valueField: 'id',
-                                                        displayField: 'nombre',
-                                                        typeAhead: true,
-                                                        triggerAction: 'all',
-                                                        mode: 'local',
-                                                        readOnly: true,
-                                                        cls: 'sololectura'
-                                                    },
-                                                    {
-                                                        xtype: 'textfield',
-                                                        fieldLabel: 'Predio',
-                                                        name: 'predio',
-                                                        anchor: '95%',
-                                                        readOnly: true,
-                                                        cls: 'sololectura'
-                                                    }
-                                                    ,
-                                                    {
-                                                        xtype: 'textfield',
-                                                        fieldLabel: 'Observación',
-                                                        name: 'observacion',
-                                                        anchor: '95%',
-                                                        readOnly: true,
-                                                        cls: 'sololectura'
-                                                    },
-
-                                                    {
-
-                                                        xtype: 'textarea',
-                                                        fieldLabel: 'Procedimiento',
-                                                        name: 'procedimientosdetalle',
-                                                        anchor: '95%',
-                                                        readOnly: true,
-                                                        cls: 'sololectura'
-
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-*/
-                                ]
-                            }
-
-                        ]
-                    }
+//                     {
+//                         split: true,
+//                         flex: 2,
+//                         bodyStyle: 'padding:0; background: #DFE8F6',
+//                         layout: 'column',
+//
+//                         items: [
+//                             {
+//                                 xtype: 'tabpanel',
+//
+//                                 activeTab: 0,
+//                                 width: winWidth - 14 ,
+//                                 cls: 'no-border',
+//                                 items: [
+//                                     {
+//                                         title: 'Contribución',
+//                                         layout: 'column',
+//                                         height: winHeight - 321,
+//                                         width: winWidth - 14 ,
+//                                         autoScroll: true,
+//                                         tbar: [
+//                                             {
+//                                                 text: 'Grabar Recepción Detalle',
+//                                                 scope: this,
+//                                                 handler: this.grabarcontribuciones,
+//                                                 iconCls: 'save-icon',
+//                                                 disabled: true,
+//                                                 id: 'tb_grabarcontribuciones'
+//                                                 , formBind: true
+//                                             },
+//                                             '->',
+//                                             {
+//                                                 text: 'Contribuciones anteriores:'
+//                                                 , xtype: 'tbtext',
+//                                                 id: 'textRecepcionAnteriores'
+//                                             }
+//                                         ],
+//                                         items: [
+//                                             {
+//                                                 columnWidth: 1 / 3,
+//                                                 layout: 'form',
+//                                                 monitorValid: true,
+//                                                 defaultType: 'textfield',
+//                                                 items: [
+//                                                     {
+//                                                         xtype: 'hidden',
+//                                                         fieldLabel: 'Id',
+//                                                         name: 'id'
+//                                                     },
+//                                                     {
+//                                                         fieldLabel: 'Grant number',
+//                                                         name: 'grant_number',
+//                                                         anchor: '95%',
+//                                                         readOnly: false,
+//                                                         cls: 'sololectura'
+//                                                     },
+//                                                     {
+//                                                         xtype: 'combo',
+//                                                         fieldLabel: 'Estado',
+//                                                         name: 'estado',
+//                                                         id: 'estado',
+//                                                         anchor: '95%',
+//                                                         hiddenName: 'estado',
+//                                                         readOnly: false,
+//                                                         store: storePRD,
+//                                                         valueField: 'id',
+//                                                         displayField: 'nombre',
+//                                                         typeAhead: true,
+//                                                         triggerAction: 'all',
+//                                                         mode: 'local'
+//
+//                                                     },
+//                                                     {
+//                                                         xtype: 'datetimefield',
+//                                                         fieldLabel: 'Fecha recepción',
+//                                                         id: 'recepcion_documento',
+//                                                         name: 'recepcion_documento',
+//                                                         anchor: '95%',
+//                                                         readOnly: false,
+//                                                         dateFormat: 'Y-m-d',
+//                                                         timeFormat: 'H:i:s'
+//                                                     },
+//                                                     {
+//                                                         xtype: 'combo',
+//                                                         fieldLabel: 'Tipo documento',
+//                                                         id: 'id_tipo_documento',
+//                                                         name: 'id_tipo_documento',
+//                                                         anchor: '95%',
+//
+//                                                         hiddenName: 'id_tipo_documento',
+//                                                         store: storeGrant,
+//                                                         valueField: 'id',
+//                                                         displayField: 'nombre',
+//                                                         typeAhead: true,
+//                                                         triggerAction: 'all',
+//                                                         mode: 'local'
+//                                                     },
+//                                                     // {
+//                                                     //     fieldLabel: 'Núm documento',
+//                                                     //     id: 'num_documento',
+//                                                     //     name: 'num_documento',
+//                                                     //     anchor: '95%'
+//                                                     // },
+//                                                     // {
+//                                                     //     fieldLabel: 'Remitente/ Denunciante',
+//                                                     //     id: 'remitente',
+//                                                     //     name: 'remitente',
+//                                                     //     anchor: '95%'
+//                                                     // },
+//                                                     {
+//                                                         fieldLabel: 'CI denunciante',
+//                                                         id: 'cedula',
+//                                                         name: 'cedula',
+//                                                         allowBlank: true,
+//                                                         anchor: '95%'
+//                                                     },
+//                                                     // {
+//                                                     //     fieldLabel: 'Email denunciante',
+//                                                     //     id: 'email',
+//                                                     //     name: 'email',
+//                                                     //     anchor: '95%',
+//                                                     //     allowBlank: true
+//                                                     //     , vtype: 'email'
+//                                                     // },
+//                                                     {
+//                                                         fieldLabel: 'Dirección denuncia',
+//                                                         id: 'direccion_denuncia',
+//                                                         name: 'direccion_denuncia',
+//                                                         anchor: '95%'
+//                                                     },
+//                                                     {
+//                                                         fieldLabel: 'Georeferencia',
+//                                                         id: 'georeferenciaSecretaria',
+//                                                         name: 'georeferencia',
+//                                                         anchor: '95%',
+//                                                         allowBlank: true,
+//                                                         handleMouseEvents: true,
+//                                                         readOnly: true,
+//                                                         listeners: {
+//                                                             render: function (c) {
+//                                                                 //evento click sobre el campo de geo referenciacion
+//                                                                 c.getEl().on('click', function () {
+//                                                                     Ext.getCmp('panelPrincipal').setActiveTab(3);
+//                                                                 }, c);
+//                                                             }
+//                                                         }
+//                                                     }
+//                                                 ]
+//                                             },
+//                                             // {
+//                                             //     columnWidth: 1 / 3,
+//                                             //     layout: 'form',
+//                                             //     items: [
+//                                             //         {
+//                                             //             xtype: 'combo',
+//                                             //             fieldLabel: 'Ordenanza',
+//                                             //             id: 'id_ordenanza',
+//                                             //             name: 'id_ordenanza',
+//                                             //             anchor: '95%',
+//                                             //
+//                                             //             hiddenName: 'id_ordenanza',
+//                                             //             store: storeDETIORD,
+//                                             //             valueField: 'id',
+//                                             //             displayField: 'nombre',
+//                                             //             typeAhead: true,
+//                                             //             triggerAction: 'all',
+//                                             //             mode: 'local'
+//                                             //         },
+//                                             //         {
+//                                             //             xtype: 'textfield',
+//                                             //             fieldLabel: 'Descripción anexo',
+//                                             //             id: 'descripcion_anexos',
+//                                             //             name: 'descripcion_anexos',
+//                                             //             anchor: '95%'
+//                                             //         },
+//                                             //         {
+//                                             //             xtype: 'spinnerfield',
+//                                             //             fieldLabel: 'Cantidad de fojas',
+//                                             //             id: 'cantidad_fojas',
+//                                             //             name: 'cantidad_fojas',
+//                                             //             minValue: 0,
+//                                             //             maxValue: 200,
+//                                             //             anchor: '95%'
+//                                             //         },
+//                                             //         {
+//                                             //             xtype: 'textarea',
+//                                             //             fieldLabel: 'Asunto',
+//                                             //             id: 'asunto',
+//                                             //             name: 'asunto',
+//                                             //             height: 45,
+//                                             //             anchor: '95%'
+//                                             //         },
+//                                             //         {
+//                                             //             xtype: 'textfield',
+//                                             //             fieldLabel: 'Institución',
+//                                             //             id: 'institucion',
+//                                             //             name: 'institucion',
+//                                             //             anchor: '95%'
+//                                             //         },
+//                                             //         {
+//                                             //             xtype: 'combo',
+//                                             //             fieldLabel: 'Caracter del trámite',
+//                                             //             id: 'id_caracter_tramite',
+//                                             //             name: 'id_caracter_tramite',
+//                                             //             anchor: '95%',
+//                                             //
+//                                             //             hiddenName: 'id_caracter_tramite',
+//                                             //             store: storeCDT,
+//                                             //             valueField: 'id',
+//                                             //             displayField: 'nombre',
+//                                             //             typeAhead: true,
+//                                             //             triggerAction: 'all',
+//                                             //             mode: 'local'
+//                                             //         },
+//                                             //         {
+//                                             //             xtype: 'textarea',
+//                                             //             fieldLabel: 'Observaciones secretaria',
+//                                             //             id: 'observacion_secretaria',
+//                                             //             name: 'observacion_secretaria',
+//                                             //             height: 45,
+//                                             //             anchor: '95%'
+//                                             //         },
+//                                             //         {
+//                                             //             xtype: 'displayfield',
+//                                             //             fieldLabel: 'Total documentos anteriores:',
+//                                             //             name: 'totaldocumentos',
+//                                             //             anchor: '95%'
+//                                             //         }
+//                                             //     ]
+//                                             // },
+//                                             {
+//                                                 columnWidth: 1 / 3,
+//                                                 layout: 'form',
+//                                                 defaults: {
+//                                                     listeners: {
+//                                                         change: function (field, newVal, oldVal) {
+//                                                             if (field.getName() == 'despacho_secretaria') {
+//                                                                 if (oldVal == 'true') {
+//                                                                     if (newVal == 'false') {
+//                                                                         Ext.getCmp('tb_grabarcontribuciones').setDisabled(false);
+//                                                                         Ext.getCmp('reasignacion').enable();
+//                                                                     }
+//                                                                 }
+//                                                             }
+//                                                             if (field.getName() == 'guia') {
+//                                                                 if (oldVal != newVal) {
+//                                                                     Ext.getCmp('tb_grabarcontribuciones').setDisabled(false);
+// //                                                                        Ext.getCmp('reasignacion').enable();
+//                                                                 }
+//                                                             }
+//                                                         }
+//                                                     },
+//                                                 },
+//                                                 items: [
+//                                                     /* {
+//                                                      xtype: 'combo',
+//                                                      fieldLabel: 'Reasignado a',
+//                                                      name: 'reasignacion',
+//                                                      anchor: '95%',
+//
+//                                                      hiddenName: 'reasignacion',
+//                                                      store: storeREA,
+//                                                      valueField: 'id',
+//                                                      displayField: 'nombre',
+//                                                      typeAhead: true,
+//                                                      triggerAction: 'all',
+//                                                      mode: 'local'
+//                                                      },*/
+//                                                     // {
+//                                                     //     xtype: 'multiselect',
+//                                                     //     fieldLabel: 'Reasignado a:<br />(Para seleccion<br /> multiple mantenga<br /> pulsada la tecla Ctrl)',
+//                                                     //     id: 'reasignacion',
+//                                                     //     name: 'reasignacion',
+//                                                     //     width: 300,
+//                                                     //     height: 130,
+//                                                     //     allowBlank: false, store: storeREA,
+//                                                     //     hiddenName: 'reasignacion',
+//                                                     //     displayField: 'nombre',
+//                                                     //     valueField: 'id',
+//                                                     //     ddReorder: true
+//                                                     // },
+//                                                     {
+//                                                         xtype: 'combo',
+//                                                         fieldLabel: 'Guía',
+//                                                         name: 'guia',
+//                                                         id: 'guia',
+//                                                         anchor: '95%',
+//
+//                                                         hiddenName: 'guia',
+//                                                         store: storeREAGUIA,
+//                                                         valueField: 'id',
+//                                                         displayField: 'nombre',
+//                                                         typeAhead: true,
+//                                                         triggerAction: 'all',
+//                                                         mode: 'local'
+//                                                     },
+//                                                     {
+//                                                         xtype: 'combo',
+//                                                         fieldLabel: 'Despachado',
+//                                                         name: 'despacho_secretaria',
+//                                                         id: 'despacho_secretaria',
+//                                                         anchor: '95%',
+//                                                         hiddenName: 'despacho_secretaria',
+//                                                         store: storeOFAC,
+//                                                         valueField: 'id',
+//                                                         displayField: 'nombre',
+//                                                         typeAhead: true,
+//                                                         triggerAction: 'all',
+//                                                         mode: 'local'
+//                                                     },
+//                                                     {
+//                                                         xtype: 'combo',
+//                                                         fieldLabel: 'Tipo respuesta',
+//                                                         name: 'tipo_respuesta_devolucion',
+//                                                         id: 'tipo_respuesta_devolucion',
+//                                                         anchor: '95%',
+//                                                         hiddenName: 'tipo_respuesta_devolucion',
+//                                                         store: storeTIPPES,
+//                                                         valueField: 'id',
+//                                                         displayField: 'nombre',
+//                                                         typeAhead: true,
+//                                                         triggerAction: 'all',
+//                                                         mode: 'local'
+//                                                     },
+//                                                     {
+//                                                         xtype: 'textarea',
+//                                                         fieldLabel: 'Respuesta devolución',
+//                                                         id: 'respuesta_devolucion',
+//                                                         name: 'respuesta_devolucion',
+//                                                         height: 45,
+//                                                         anchor: '95%'
+//                                                     },
+//                                                     {
+//                                                         xtype: 'displayfield',
+//                                                         fieldLabel: 'Fecha respuesta devolución',
+//                                                         name: 'fecha_respuesta_devolucion',
+//                                                         anchor: '95%'
+//                                                     }
+//
+//
+//                                                 ]
+//                                             }
+//                                         ]
+//                                     }
+// /*                                    ,
+//                                     {
+//                                         title: 'Inspección',
+//                                         layout: 'column',
+//                                         autoScroll: true,
+//                                         items: [
+//                                             {
+//                                                 type: 'container',
+//                                                 columnWidth: 1 / 2,
+//                                                 layout: 'form',
+//                                                 items: [
+//                                                     {
+//                                                         bodyStyle: 'padding:0; background: #ebfaeb',
+//                                                         xtype: 'combo',
+//                                                         fieldLabel: 'Estado Recepcion Información',
+//                                                         name: 'estado_recepcion_informacion',
+//                                                         anchor: '95%',
+//                                                         hiddenName: 'estado_recepcion_informacion',
+//
+//                                                         store: storeESREA,
+//                                                         valueField: 'id',
+//                                                         displayField: 'nombre',
+//                                                         typeAhead: true,
+//                                                         triggerAction: 'all',
+//                                                         mode: 'local',
+//                                                         readOnly: true,
+//                                                         cls: 'sololectura'
+//                                                     },
+//                                                     {
+//                                                         xtype: 'combo',
+//                                                         fieldLabel: 'Actividad',
+//                                                         name: 'actividad',
+//                                                         anchor: '95%',
+//                                                         hiddenName: 'actividad',
+//
+//                                                         store: storeACTA,
+//                                                         valueField: 'id',
+//                                                         displayField: 'nombre',
+//                                                         typeAhead: true,
+//                                                         triggerAction: 'all',
+//                                                         mode: 'local',
+//                                                         readOnly: true,
+//                                                         cls: 'sololectura'
+//                                                     },
+//                                                     {
+//                                                         xtype: 'combo',
+//                                                         fieldLabel: 'Persona asignada',
+//                                                         name: 'persona_asignada',
+//                                                         anchor: '95%',
+//                                                         hiddenName: 'persona_asignada',
+//
+//                                                         store: storePRASA,
+//                                                         valueField: 'id',
+//                                                         displayField: 'nombre',
+//                                                         typeAhead: true,
+//                                                         triggerAction: 'all',
+//                                                         mode: 'local',
+//                                                         readOnly: true,
+//                                                         cls: 'sololectura'
+//                                                     },
+//
+//                                                     {
+//                                                         xtype: 'textfield',
+//                                                         fieldLabel: 'Cod inspección',
+//                                                         name: 'codigo_inspeccion',
+//                                                         anchor: '95%',
+//                                                         readOnly: true,
+//                                                         cls: 'sololectura'
+//                                                     }
+//                                                 ]
+//                                             },
+//                                             {
+//                                                 type: 'container',
+//                                                 columnWidth: 1 / 2,
+//                                                 layout: 'form',
+//                                                 items: [
+//                                                     {
+//                                                         xtype: 'textfield',
+//                                                         fieldLabel: 'Cod procedimiento',
+//                                                         name: 'codigo_procedimiento',
+//                                                         anchor: '95%',
+//                                                         readOnly: true,
+//                                                         cls: 'sololectura'
+//                                                     },
+//                                                     {
+//                                                         xtype: 'combo',
+//                                                         fieldLabel: 'Zona',
+//                                                         name: 'id_zona',
+//                                                         anchor: '95%',
+//                                                         hiddenName: 'id_zona',
+//
+//                                                         store: storeZONA,
+//                                                         valueField: 'id',
+//                                                         displayField: 'nombre',
+//                                                         typeAhead: true,
+//                                                         triggerAction: 'all',
+//                                                         mode: 'local',
+//                                                         readOnly: true,
+//                                                         cls: 'sololectura'
+//                                                     },
+//                                                     {
+//                                                         xtype: 'textfield',
+//                                                         fieldLabel: 'Predio',
+//                                                         name: 'predio',
+//                                                         anchor: '95%',
+//                                                         readOnly: true,
+//                                                         cls: 'sololectura'
+//                                                     }
+//                                                     ,
+//                                                     {
+//                                                         xtype: 'textfield',
+//                                                         fieldLabel: 'Observación',
+//                                                         name: 'observacion',
+//                                                         anchor: '95%',
+//                                                         readOnly: true,
+//                                                         cls: 'sololectura'
+//                                                     },
+//
+//                                                     {
+//
+//                                                         xtype: 'textarea',
+//                                                         fieldLabel: 'Procedimiento',
+//                                                         name: 'procedimientosdetalle',
+//                                                         anchor: '95%',
+//                                                         readOnly: true,
+//                                                         cls: 'sololectura'
+//
+//                                                     }
+//                                                 ]
+//                                             }
+//                                         ]
+//                                     }
+// */
+//                                 ]
+//                             }
+//
+//                         ]
+//                     }
                 ],
                 defaults: {
                     /*  listeners: {
@@ -2061,29 +2061,29 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                         // }
                         //
                         // ,
-                        {
-                            checked: false,
-                            checkHandler: checkHandler,
-                            group: 'filterField',
-                            key: 'recepcion_documento',
-                            scope: this,
-                            text: 'Fecha'
-                        }, {
-                            checked: false,
-                            checkHandler: checkHandler,
-                            group: 'filterField',
-                            key: 'cedula',
-                            scope: this,
-                            text: 'Cédula'
-                        },
-                        {
-                            checked: false,
-                            checkHandler: checkHandler,
-                            group: 'filterField',
-                            key: 'guia',
-                            scope: this,
-                            text: 'Guía'
-                        },
+                        // {
+                        //     checked: false,
+                        //     checkHandler: checkHandler,
+                        //     group: 'filterField',
+                        //     key: 'recepcion_documento',
+                        //     scope: this,
+                        //     text: 'Fecha'
+                        // }, {
+                        //     checked: false,
+                        //     checkHandler: checkHandler,
+                        //     group: 'filterField',
+                        //     key: 'cedula',
+                        //     scope: this,
+                        //     text: 'Cédula'
+                        // },
+                        // {
+                        //     checked: false,
+                        //     checkHandler: checkHandler,
+                        //     group: 'filterField',
+                        //     key: 'guia',
+                        //     scope: this,
+                        //     text: 'Guía'
+                        // },
                         // {
                         //     checked: false,
                         //     checkHandler: checkHandler,
@@ -2154,6 +2154,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 , text: 'Otra pestaña'
             });
             this.targetFieldBtn = targetFieldBtn;
+            storeContribuciones.load();
             win = desktop.createWindow({
                 id: 'grid-win-contribuciones',
                 title: 'Contribuciones',
@@ -2198,61 +2199,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                     scope: this,
                                     text: 'Recargar Datos',
                                     tooltip: 'Recargar datos'
-                                },
-                                '-',
-                                {
-                                    xtype: 'checkbox',
-                                    boxLabel: 'No despachados -- ',
-                                    id: 'checkNoEnviados',
-                                    name: 'noenviados',
-                                    checked: false,
-                                    inputValue: '1',
-                                    tooltip: 'Recargar datos',
-                                    disabled: !acceso,
-                                    cls: 'barramenu',
-                                    handler: function (checkbox, isChecked) {
-                                        Ext.getCmp('tb_repoteContribuciones').setDisabled(!this.checked);
-                                        //Ext.getCmp('tb_seleccionarUnidad').setDisabled(!this.checked);
-                                        //Ext.getCmp('tb_seleccionarUnidad').getValue();
-                                        //storeContribuciones.load({params: {noenviados: isChecked}});
-                                        storeContribuciones.baseParams = {
-                                            noenviados: isChecked
-                                        };
-                                        storeContribuciones.load();
-                                        // if (!this.checked) {
-                                        Ext.getCmp('tb_seleccionarUnidad').setValue('Seleccionar Unidad');
-                                        //}
-                                    }
-                                }, /*this.targetFieldBtn,*/
-                                {
-                                    xtype: 'combo',
-
-                                    fieldLabel: 'Reasignado a',
-                                    name: 'tb_reasignacion',
-                                    anchor: '95%',
-                                    id: 'tb_seleccionarUnidad',
-                                    /* disabled: true,*/
-                                    hiddenName: 'tb_reasignacion',
-                                    store: storeREATOT,
-                                    valueField: 'id',
-                                    displayField: 'nombre',
-                                    typeAhead: true,
-                                    triggerAction: 'all',
-                                    mode: 'local',
-                                    width: 250,
-                                    value: 'Seleccionar Unidad',
-                                    listeners: {
-                                        'select': function (t) {
-                                            isChecked = (Ext.getCmp('checkNoEnviados').getValue());
-                                            storeContribuciones.baseParams = {
-                                                noenviados: isChecked,
-                                                unidadfiltro: t.value
-                                            };
-                                            storeContribuciones.load();
-                                        }
-
-                                    }
-
                                 },
                                 {
                                     iconCls: 'excel-icon',
@@ -2469,22 +2415,22 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             }
 
             // Ext.getCmp('estado').setReadOnly(activar2);
-            Ext.getCmp('recepcion_documento').setReadOnly(activar);
-            Ext.getCmp('id_tipo_documento').setReadOnly(activar);
+            // Ext.getCmp('recepcion_documento').setReadOnly(activar);
+            // Ext.getCmp('id_tipo_documento').setReadOnly(activar);
             // Ext.getCmp('num_documento').setReadOnly(activar);
             // Ext.getCmp('remitente').setReadOnly(activar);
-            Ext.getCmp('cedula').setReadOnly(activar);
+            // Ext.getCmp('cedula').setReadOnly(activar);
             // Ext.getCmp('email').setReadOnly(activar);
             // Ext.getCmp('descripcion_anexos').setReadOnly(activar);
             // Ext.getCmp('cantidad_fojas').setReadOnly(activar);
             // Ext.getCmp('asunto').setReadOnly(activar);
             // Ext.getCmp('institucion').setReadOnly(activar);
             // Ext.getCmp('id_caracter_tramite').setReadOnly(activar);
-            Ext.getCmp('observacion_secretaria').setReadOnly(activar);
+            // Ext.getCmp('observacion_secretaria').setReadOnly(activar);
 
 
-            Ext.getCmp('despacho_secretaria').setReadOnly(!acceso);
-            Ext.getCmp('guia').setReadOnly(!acceso);
+            // Ext.getCmp('despacho_secretaria').setReadOnly(!acceso);
+            // Ext.getCmp('guia').setReadOnly(!acceso);
 
 
             if (accesosZonales)
