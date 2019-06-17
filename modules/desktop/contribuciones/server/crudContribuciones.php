@@ -15,49 +15,60 @@ function selectContribuciones()
     $columnaBusqueda = 'grant_number';
     $where = '';
 
-    // if (isset($_POST['filterField'])) {
-    //     $columnaBusqueda = $_POST['filterField'];
-    //
-    // }
-    //
-    // if (isset($_POST['filterText'])) {
-    //     $campo = $_POST['filterText'];
-    //     $campo = str_replace(" ", "%", $campo);
-    //
-    //     //para el caso de busqueda por guia, recuperamos el id de la guia
-    //     if ($columnaBusqueda == 'guia') {
-    //         // $sql = "SELECT id FROM pma_contribuciones WHERE numero = '$campo'";
-    //         $sql = "SELECT id FROM pma_contribuciones";
-    //         $numguia = $os->db->conn->query($sql);
-    //         if ($numguia) {
-    //             $row = $numguia->fetch(PDO::FETCH_ASSOC);
-    //             if ($row) {
-    //                 $campo = $row['id'];
-    //             }
-    //         }
-    //         // $where = " WHERE $columnaBusqueda LIKE '%$campo%'";
-    //     } else
-    //         // $where = " WHERE $columnaBusqueda LIKE '%$campo%'";
-    // }
-    //
-    // if (isset($_POST['unidadfiltro'])) {
-    //     $unidad = $_POST['unidadfiltro'];
-    //     if ($where == '') {
-    //         $where = "WHERE reasignacion = $unidad ";
-    //     } else {
-    //         $where = " AND reasignacion = $unidad ";
-    //     }
-    // }
-    //
-    // if (isset($_POST['noenviados'])) {
-    //     if ($_POST['noenviados'] == 'true') {
-    //         if ($where == '') {
-    //             $where = " WHERE despacho_secretaria <> 'true'";
-    //         } else {
-    //             $where = $where . " AND despacho_secretaria <> 'true' ";
-    //         }
-    //     }
-    // }
+     if (isset($_POST['filterField'])) {
+         $columnaBusqueda = $_POST['filterField'];
+
+     }
+
+     if (isset($_POST['filterText'])) {
+         $campo = $_POST['filterText'];
+         $campo = str_replace(" ", "%", $campo);
+
+         //para el caso de busqueda por guia, recuperamos el id de la guia
+        /* if ($columnaBusqueda == 'guia') {
+             // $sql = "SELECT id FROM pma_contribuciones WHERE numero = '$campo'";
+             $sql = "SELECT id FROM pma_contribuciones";
+             $numguia = $os->db->conn->query($sql);
+             if ($numguia) {
+                 $row = $numguia->fetch(PDO::FETCH_ASSOC);
+                 if ($row) {
+                     $campo = $row['id'];
+                 }
+             }
+              $where = " WHERE $columnaBusqueda LIKE '%$campo%'";
+         } else */
+              $where = " WHERE $columnaBusqueda LIKE '%$campo%' OR 
+                                estado LIKE '%$campo%' OR 
+                                crn  LIKE '%$campo%' OR 
+                                donor LIKE '%$campo%' OR 
+                                comments LIKE '%$campo%' OR 
+                                year_contribution LIKE '%$campo%' OR 
+                                isc LIKE '%$campo%' OR 
+                                total_grant LIKE '%$campo%' OR 
+                                grant_tod LIKE '%$campo%' OR 
+                                grant_tdd LIKE '%$campo%' OR 
+                                grant_specific LIKE '%$campo%' OR 
+                                activity LIKE '%$campo%' ";
+     }
+
+/*     if (isset($_POST['unidadfiltro'])) {
+         $unidad = $_POST['unidadfiltro'];
+         if ($where == '') {
+             $where = "WHERE reasignacion = $unidad ";
+         } else {
+             $where = " AND reasignacion = $unidad ";
+         }
+     }
+
+     if (isset($_POST['noenviados'])) {
+         if ($_POST['noenviados'] == 'true') {
+             if ($where == '') {
+                 $where = " WHERE despacho_secretaria <> 'true'";
+             } else {
+                 $where = $where . " AND despacho_secretaria <> 'true' ";
+             }
+         }
+     }*/
 
     if (isset ($_POST['start']))
         $start = $_POST['start'];
@@ -69,10 +80,10 @@ function selectContribuciones()
     else
         $limit = 100;
 
-    // $orderby = 'ORDER BY recepcion_documento DESC, codigo_tramite DESC';
-    // if (isset($_POST['sort'])) {
-    //     $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
-    // }
+    $orderby = 'ORDER BY recepcion_documento DESC';
+    if (isset($_POST['sort'])) {
+         $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
+     }
 
     // para los reportes
     // if (isset($_POST['busqueda_tipo_documento']) and ($_POST['busqueda_tipo_documento'] != '')) {
@@ -136,8 +147,8 @@ function selectContribuciones()
 
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    // $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
-    $sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
+     $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
+    //$sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {

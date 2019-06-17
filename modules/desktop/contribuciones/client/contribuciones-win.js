@@ -1056,12 +1056,12 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                             /*cargar el formulario*/
                             // cargaDetalle(rec.id, this.formContribucioneswebDetalle, rec);
 
-                            cargaDetalle(rec.id, this.formContribucionesDetalle, rec.get("despacho_secretaria"));
+                            //cargaDetalle(rec.id, this.formContribucionesDetalle, rec.get("despacho_secretaria"));
                             if (acceso) {
-                                if (rec.get("despacho_secretaria"))
+                               /* if (rec.get("despacho_secretaria"))
                                     Ext.getCmp('tb_grabarcontribuciones').setDisabled(true);
                                 else
-                                    Ext.getCmp('tb_grabarcontribuciones').setDisabled(false);
+                                    Ext.getCmp('tb_grabarcontribuciones').setDisabled(false);*/
                             }
                             ;
                             storeINST.load();
@@ -2394,7 +2394,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         win.show();
 
         function cargaDetalle(contribuciones, forma, bloqueo) {
-            forma = Ext.getCmp('formContribucionesDetalle');
+            /*forma = Ext.getCmp('formContribucionesDetalle');
             forma.getForm().load({
                 url: urlContribuciones + 'crudContribuciones.php?operation=selectForm',
                 params: {
@@ -2408,7 +2408,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                         mensaje.setText('')
                 }
             });
-            bloquearLectura(forma, bloqueo);
+            bloquearLectura(forma, bloqueo);*/
         };
 
 
@@ -2462,7 +2462,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 params: {
                     start: 0,
                     limit: limitecontribuciones,
-                    noenviados: Ext.getCmp('checkNoEnviados').getValue()
+                   // noenviados: Ext.getCmp('checkNoEnviados').getValue()
                 }
             });
         }, 500);
