@@ -204,7 +204,7 @@ function insertDenuncias()
     $sql = "INSERT INTO pma_contribuciones($cadenaCampos)
 	values($cadenaDatos);";
     $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
+    $success = $sql->execute();
 
     $data->id = $os->db->conn->lastInsertId();
     // $data->id = $os->db->conn->generaCodigoProcesoContribuciones();
@@ -226,6 +226,7 @@ function insertDenuncias()
     //     }
     // }
 
+    // $success = true;
     echo json_encode(array(
         "success" => $success,
         "msg" => $sql->errorCode() == 0 ? $message : $sql->errorCode(),

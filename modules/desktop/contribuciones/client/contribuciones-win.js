@@ -772,23 +772,23 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'grant_number', allowBlank: true},
-                {name: 'estado', allowBlank: true},
-                {name: 'crn', allowBlank: true},
-                {name: 'donor', allowBlank: true},
-                {name: 'comments', allowBlank: true},
-                {name: 'isc', allowBlank: true},
+                {name: 'grant_number', allowBlank: false},
+                {name: 'estado', allowBlank: false},
+                {name: 'crn', allowBlank: false},
+                {name: 'donor', allowBlank: false},
+                {name: 'comments', allowBlank: false},
+                {name: 'isc', allowBlank: false},
                 {name: 'total_grant', allowBlank: true},
                 {name: 'grant_tod', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_tdd', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_specific', allowBlank: true},
                 {name: 'activity', allowBlank: true},
                 {name: 'year_contribution', allowBlank: true},
-                {name: 'recepcion_documento', type: 'date', dateFormat: 'c', allowBlank: true},
-                {name: 'id_tipo_documento', allowBlank: true},
+                {name: 'recepcion_documento', type: 'date', dateFormat: 'c', allowBlank: true}
+                //{name: 'id_tipo_documento', allowBlank: true},
                 // {name: 'id_ordenanza', allowBlank: true},
                 // {name: 'id_tipo', allowBlank: true},
-                {name: 'cedula', allowBlank: true},
+                //{name: 'cedula', allowBlank: true},
                 // {name: 'email', allowBlank: true},
                 // {name: 'num_documento', allowBlank: false},
                 // {name: 'remitente', allowBlank: false},
@@ -799,7 +799,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 // {name: 'id_caracter_tramite', allowBlank: false},
                 // {name: 'cantidad_fojas', allowBlank: false},
                 // {name: 'id_zonal_origen', allowBlank: true},
-                {name: 'despacho_secretaria', type: 'boolean', allowBlank: false}
+                //{name: 'despacho_secretaria', type: 'boolean', allowBlank: false}
             ]
         });
         var writerContribuciones = new Ext.data.JsonWriter({
@@ -1387,18 +1387,28 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             this.seleccionDepar = 3;
 
             this.formContribucionesDetalle = new Ext.FormPanel({
-                id: 'formContribucionesDetalle',
+//                id: 'formContribucionesDetalle',
                 cls: 'no-border',
-                items: [
-                    {
-                        id: 'formcabeceracontribuciones',
-                        items: this.gridContribuciones,
-                        titleCollapse: true,
-                        split: true,
-                        flex: 1,
-                        autoScroll: true,
-                        layout: 'column'
-                    },
+                id: 'formcabeceracontribuciones',
+                items: this.gridContribuciones,
+//                titleCollapse: true,
+//                split: true,
+//                flex: 1,
+//                autoScroll: true,
+//                layout: 'column',
+                layout: 'fit',
+                height: winHeight - 90,
+
+ //               items: [
+ //                   {
+ //                       id: 'formcabeceracontribuciones',
+ //                       items: this.gridContribuciones,
+ //                        titleCollapse: true,
+ //                        split: true,
+ //                        flex: 1,
+ //                        autoScroll: true,
+ //                        layout: 'column'
+ //                    },
 //                     {
 //                         split: true,
 //                         flex: 2,
@@ -1881,7 +1891,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
 //
 //                         ]
 //                     }
-                ],
+//                ],
                 defaults: {
                     /*  listeners: {
                           change: function (field, newVal, oldVal) {
@@ -2192,7 +2202,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                     handler: this.deletecontribuciones,
                                     iconCls: 'delete-icon',
                                     //disabled: this.app.isAllowedTo('accesosAdministrador', this.id) ? false : true
-                                    disabled: true
+                                    disabled: false
                                 },
                                 '-',
                                 {
@@ -2478,21 +2488,21 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
     },
     addcontribuciones: function () {
         var contribuciones = new this.storeContribuciones.recordType({
-            grant_number: ' ',
-            estado: ' ',
-            donor: ' ',
-            comments: ' ',
-            isc: ' ',
-            total_grant: ' ',
-            activity: ' ',
+            grant_number: null,
+            estado: '',
+            donor: '',
+            comments: '',
+            isc: 0,
+            total_grant: 0,
+            activity: '',
             grant_tod: (new Date()),
             grant_tdd: (new Date()),
             grant_specific: ' ',
-            year_contribution: ' ',
+            year_contribution: (new Date().getFullYear()),
             // id_tipo: '',
             crn: ' ',
             recepcion_documento: (new Date()),
-            id_tipo_documento: '2',
+            //id_tipo_documento: '2',
             // num_documento: 'S/N',
             // descripcion_anexos: '-',
             // institucion: '',
@@ -2501,7 +2511,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             // asunto: '',
             // id_caracter_tramite: '1',
             // cantidad_fojas: '0',
-            despacho_secretaria: false
+            //despacho_secretaria: false
             // id_zonal_origen:' '
 
         });
