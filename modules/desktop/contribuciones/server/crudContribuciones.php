@@ -141,6 +141,7 @@ function selectContribuciones()
              $where = "WHERE grant_tod between '$fechainicio' and '$fechafin'  ";
          } else {
              $where = $where . " AND grant_tod between '$fechainicio' and '$fechafin' ";
+
          }
      }
 
