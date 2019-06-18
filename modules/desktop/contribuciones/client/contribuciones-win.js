@@ -42,8 +42,9 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             autoLoad: true,
             data: {
                 documento: [
-                    {"id": 2, "nombre": "No"},
-                    {"id": 1, "nombre": "Si"}
+                    {"id": 'Cerrada', "nombre": "Cerrada"},
+                    {"id": 'Vigente', "nombre": "Vigente"},
+                    {"id": 'Pendiente', "nombre": "Pendiente"}
                 ]
             }
         });
@@ -241,10 +242,15 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
 
         //inicio combo guia  REAGUIA
         storeREAGUIA = new Ext.data.JsonStore({
-            root: 'data',
+            root: 'datos',
             fields: ['id', 'nombre'],
             autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=guia'
+            data: {
+                datos: [
+                    {"id": "Yes", "nombre": "Yes"},
+                    {"id": "No", "nombre": "No"}
+                ]
+            }
         });
 
 
@@ -268,15 +274,10 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
 
         //inicio combo caracter del tramite CDT
         storeCDT = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
+            root: 'data',
+            fields: ['nombre'],
             autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 1, "nombre": "Ordinario"},
-                    {"id": 2, "nombre": "Urgente"}
-                ]
-            }
+            url: 'modules/common/combos/combos.php?tipo=yearcontribution'
         });
 
         var comboCDT = new Ext.form.ComboBox({
@@ -289,16 +290,17 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         });
 
         function caracterTramite(id) {
-            var index = storeCDT.find('id', id);
-            if (index > -1) {
-                var record = storeCDT.getAt(index);
-                // return record.get('nombre');
-                if (record.get('nombre') == 'Ordinario') {
-                    return '<span style="color:green;">' + record.get('nombre') + '</span>';
-                } else {
-                    return '<span style="color:red;">' + record.get('nombre') + '</span>';
-                }
-            }
+            return id;
+            //var index = storeCDT.find('id', id);
+            //if (index > -1) {
+               // var record = storeCDT.getAt(index);
+               //   return record.get('nombre');
+                //if (record.get('nombre') == 'Ordinario') {
+                //    return '<span style="color:green;">' + record.get('nombre') + '</span>';
+                //} else {
+                //    return '<span style="color:red;">' + record.get('nombre') + '</span>';
+                //}
+            //}
         }
         //inicio combo caracter del tramite CDT
 
@@ -439,8 +441,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             root: 'data',
             fields: ['nombre'],
             autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=instituciones'
-
+            url: 'modules/common/combos/combos.php?tipo=donor'
         });
 
         var comboINST = new Ext.form.ComboBox({
@@ -1341,7 +1342,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 store: this.storeDocumentosReporte,
                 displayInfo: true,
                 displayMsg: 'Mostrando guías {0} - {1} of {2}',
-                emptyMsg: "No existen guías que mostrar"
+                emptyMsg: "No existen contribuciones que mostrar"
             }),
         });
         // fin datastore and datagrid in Guia
@@ -1878,33 +1879,33 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             });
             this.formConsultaDocumentos = new Ext.FormPanel({
                 layout: 'column',
-                title: 'Ingrese los parámetros',
+                title: 'Ingrese los parámetros para la búsqueda',
                 frame: true,
-                bodyStyle: 'padding:5px 5px 0',
+
                 items: [
                     {
                         columnWidth: 1 / 3,
                         layout: 'form',
                         items: [
                             {
-                                xtype: 'datetimefield',
-                                fieldLabel: 'Fecha Inicio',
+                                xtype: 'datefield',
+                                fieldLabel: 'Fecha Inicio TOD',
                                 id: 'busqueda_fecha_inicio',
                                 anchor: '95%',
-                                dateFormat: 'Y-m-d',
-                                timeFormat: 'H:i:s'
+                                format: 'Y-m-d',
+                                submitFormat: 'Y-m-d'
                             },
                             {
-                                xtype: 'datetimefield',
-                                fieldLabel: 'Fecha Fin',
+                                xtype: 'datefield',
+                                fieldLabel: 'Fecha Fin TOD',
                                 id: 'busqueda_fecha_fin',
                                 anchor: '95%',
-                                dateFormat: 'Y-m-d',
-                                timeFormat: 'H:i:s'
+                                format: 'Y-m-d',
+                                submitFormat: 'Y-m-d',
                             },
                             {
                                 xtype: 'combo',
-                                fieldLabel: 'Tipo documento',
+                                fieldLabel: 'Estado',
                                 id: 'busqueda_tipo_documento',
                                 name: 'busqueda_tipo_documento',
                                 hiddenName: 'busqueda_tipo_documento',
@@ -1916,7 +1917,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                 typeAhead: true,
                                 triggerAction: 'all',
                                 mode: 'local'
-
                             }
                         ]
                     },
@@ -1926,11 +1926,12 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                         items: [
                             {
                                 xtype: 'combo',
-                                fieldLabel: 'Institución',
+                                fieldLabel: 'Donor',
                                 id: 'busqueda_institucion',
                                 name: 'busqueda_institucion',
                                 hiddenName: 'busqueda_institucion',
                                 anchor: '95%',
+
                                 store: storeINST,
                                 valueField: 'nombre',
                                 displayField: 'nombre',
@@ -1940,13 +1941,14 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                             },
                             {
                                 xtype: 'combo',
-                                fieldLabel: 'Caracter',
+                                fieldLabel: 'Year Contributión',
                                 id: 'busqueda_caracter_tramite',
                                 name: 'busqueda_caracter_tramite',
                                 anchor: '95%',
                                 hiddenName: 'busqueda_caracter_tramite',
+
                                 store: storeCDT,
-                                valueField: 'id',
+                                valueField: 'nombre',
                                 displayField: 'nombre',
                                 typeAhead: true,
                                 triggerAction: 'all',
@@ -1954,11 +1956,12 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                             },
                             {
                                 xtype: 'combo',
-                                fieldLabel: 'Guía',
+                                fieldLabel: 'Grant specific',
                                 name: 'busqueda_guia',
                                 id: 'busqueda_guia',
                                 anchor: '95%',
                                 hiddenName: 'busqueda_guia',
+
                                 store: storeREAGUIA,
                                 valueField: 'id',
                                 displayField: 'nombre',
@@ -1972,19 +1975,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                         columnWidth: 1 / 3,
                         layout: 'form',
                         items: [
-                            {
-                                xtype: 'multiselect',
-                                fieldLabel: 'Unidades',
-                                id: 'busqueda_reasignacion',
-                                name: 'busqueda_reasignacion',
-                                width: 300,
-                                height: 100,
-                                allowBlank: false, store: storeREA,
-                                hiddenName: 'busqueda_reasignacion',
-                                displayField: 'nombre',
-                                valueField: 'id',
-                                ddReorder: true
-                            }
+
                         ]
                     }
                 ]
@@ -2291,10 +2282,11 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                             items: [
                                 {
                                     region: 'north',
-                                    height: 145,
+                                    height: 'auto',
                                     minSize: 100,
                                     maxSize: 150,
                                     closable: true,
+                                    border: false,
                                     autoScroll: false,
                                     items: this.formConsultaDocumentos
                                 },

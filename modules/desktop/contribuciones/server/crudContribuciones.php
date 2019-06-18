@@ -89,34 +89,34 @@ function selectContribuciones()
      if (isset($_POST['busqueda_tipo_documento']) and ($_POST['busqueda_tipo_documento'] != '')) {
          $tipo = $_POST['busqueda_tipo_documento'];
          if ($where == '') {
-             $where = "WHERE id_tipo_documento = $tipo ";
+             $where = "WHERE estado = '$tipo' ";
          } else {
-             $where = $where . " AND id_tipo_documento = $tipo ";
+             $where = $where . " AND estado = '$tipo' ";
          }
      }
      if (isset($_POST['busqueda_institucion']) and ($_POST['busqueda_institucion'] != '')) {
          $tipo = $_POST['busqueda_institucion'];
          if ($where == '') {
-             $where = "WHERE institucion = '$tipo' ";
+             $where = "WHERE donor = '$tipo' ";
          } else {
-             $where = $where . " AND institucion = '$tipo' ";
+             $where = $where . " AND donor = '$tipo' ";
          }
      }
      if (isset($_POST['busqueda_caracter_tramite']) and ($_POST['busqueda_caracter_tramite'] != '')) {
          $tipo = $_POST['busqueda_caracter_tramite'];
          if ($where == '') {
-             $where = "WHERE id_caracter_tramite = '$tipo' ";
+             $where = "WHERE year_contribution = '$tipo' ";
          } else {
-             $where = $where . " AND id_caracter_tramite = '$tipo' ";
+             $where = $where . " AND year_contribution = '$tipo' ";
          }
      }
 
      if (isset($_POST['busqueda_guia']) and ($_POST['busqueda_guia'] != '')) {
          $tipo = $_POST['busqueda_guia'];
          if ($where == '') {
-             $where = "WHERE guia = '$tipo' ";
+             $where = "WHERE grant_specific = '$tipo' ";
          } else {
-             $where = $where . " AND guia = '$tipo' ";
+             $where = $where . " AND grant_specific = '$tipo' ";
          }
      }
 
@@ -135,16 +135,14 @@ function selectContribuciones()
          if (isset($_POST['busqueda_fecha_fin']) and ($_POST['busqueda_fecha_fin'] != '')) {
              $fechafin = $_POST['busqueda_fecha_fin'];
          } else {
-             $fechafin = date("Y-m-d H:i:s");;
+             $fechafin = date("Y-m-d");;
          }
-
          if ($where == '') {
-             $where = "WHERE recepcion_documento between '$fechainicio' and '$fechafin'  ";
+             $where = "WHERE grant_tod between '$fechainicio' and '$fechafin'  ";
          } else {
-             $where = $where . " AND recepcion_documento between '$fechainicio' and '$fechafin' ";
+             $where = $where . " AND grant_tod between '$fechainicio' and '$fechafin' ";
          }
      }
-
 
     $os->db->conn->query("SET NAMES 'utf8'");
      $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
@@ -152,7 +150,6 @@ function selectContribuciones()
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-
         $data[] = $row;
     };
 

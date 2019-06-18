@@ -525,6 +525,39 @@ function comboInstituciones()
     );
 }
 
+function comboDonor()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT DISTINCT  donor AS nombre FROM pma_contribuciones WHERE length(donor) > 0 ORDER BY donor";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
+function comboYearContribution()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT DISTINCT  year_contribution AS nombre FROM pma_contribuciones WHERE length(year_contribution) > 0 ORDER BY year_contribution";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
+
 function comboRemitente()
 {
     global $os;
@@ -700,6 +733,14 @@ switch ($_GET['tipo']) {
 
     case 'instituciones' :
         comboInstituciones();
+        break;
+
+    case 'donor' :
+        comboDonor();
+        break;
+
+    case 'yearcontribution' :
+        comboYearContribution();
         break;
 
     case 'remitente' :
