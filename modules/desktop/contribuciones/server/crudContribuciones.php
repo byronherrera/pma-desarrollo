@@ -85,65 +85,65 @@ function selectContribuciones()
          $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
      }
 
-    // para los reportes
-    // if (isset($_POST['busqueda_tipo_documento']) and ($_POST['busqueda_tipo_documento'] != '')) {
-    //     $tipo = $_POST['busqueda_tipo_documento'];
-    //     if ($where == '') {
-    //         $where = "WHERE id_tipo_documento = $tipo ";
-    //     } else {
-    //         $where = $where . " AND id_tipo_documento = $tipo ";
-    //     }
-    // }
-    // if (isset($_POST['busqueda_institucion']) and ($_POST['busqueda_institucion'] != '')) {
-    //     $tipo = $_POST['busqueda_institucion'];
-    //     if ($where == '') {
-    //         $where = "WHERE institucion = '$tipo' ";
-    //     } else {
-    //         $where = $where . " AND institucion = '$tipo' ";
-    //     }
-    // }
-    // if (isset($_POST['busqueda_caracter_tramite']) and ($_POST['busqueda_caracter_tramite'] != '')) {
-    //     $tipo = $_POST['busqueda_caracter_tramite'];
-    //     if ($where == '') {
-    //         $where = "WHERE id_caracter_tramite = '$tipo' ";
-    //     } else {
-    //         $where = $where . " AND id_caracter_tramite = '$tipo' ";
-    //     }
-    // }
-    //
-    // if (isset($_POST['busqueda_guia']) and ($_POST['busqueda_guia'] != '')) {
-    //     $tipo = $_POST['busqueda_guia'];
-    //     if ($where == '') {
-    //         $where = "WHERE guia = '$tipo' ";
-    //     } else {
-    //         $where = $where . " AND guia = '$tipo' ";
-    //     }
-    // }
-    //
-    // if (isset($_POST['busqueda_reasignacion']) and ($_POST['busqueda_reasignacion'] != '')) {
-    //     $tipo = $_POST['busqueda_reasignacion'];
-    //     if ($where == '') {
-    //         $where = "WHERE reasignacion in ($tipo) ";
-    //     } else {
-    //         $where = $where . " AND reasignacion in ($tipo) ";
-    //     }
-    // }
-    //
-    //
-    // if (isset($_POST['busqueda_fecha_inicio']) and ($_POST['busqueda_fecha_inicio'] != '')) {
-    //     $fechainicio = $_POST['busqueda_fecha_inicio'];
-    //     if (isset($_POST['busqueda_fecha_fin']) and ($_POST['busqueda_fecha_fin'] != '')) {
-    //         $fechafin = $_POST['busqueda_fecha_fin'];
-    //     } else {
-    //         $fechafin = date("Y-m-d H:i:s");;
-    //     }
-    //
-    //     if ($where == '') {
-    //         $where = "WHERE recepcion_documento between '$fechainicio' and '$fechafin'  ";
-    //     } else {
-    //         $where = $where . " AND recepcion_documento between '$fechainicio' and '$fechafin' ";
-    //     }
-    // }
+//     para los reportes
+     if (isset($_POST['busqueda_tipo_documento']) and ($_POST['busqueda_tipo_documento'] != '')) {
+         $tipo = $_POST['busqueda_tipo_documento'];
+         if ($where == '') {
+             $where = "WHERE id_tipo_documento = $tipo ";
+         } else {
+             $where = $where . " AND id_tipo_documento = $tipo ";
+         }
+     }
+     if (isset($_POST['busqueda_institucion']) and ($_POST['busqueda_institucion'] != '')) {
+         $tipo = $_POST['busqueda_institucion'];
+         if ($where == '') {
+             $where = "WHERE institucion = '$tipo' ";
+         } else {
+             $where = $where . " AND institucion = '$tipo' ";
+         }
+     }
+     if (isset($_POST['busqueda_caracter_tramite']) and ($_POST['busqueda_caracter_tramite'] != '')) {
+         $tipo = $_POST['busqueda_caracter_tramite'];
+         if ($where == '') {
+             $where = "WHERE id_caracter_tramite = '$tipo' ";
+         } else {
+             $where = $where . " AND id_caracter_tramite = '$tipo' ";
+         }
+     }
+
+     if (isset($_POST['busqueda_guia']) and ($_POST['busqueda_guia'] != '')) {
+         $tipo = $_POST['busqueda_guia'];
+         if ($where == '') {
+             $where = "WHERE guia = '$tipo' ";
+         } else {
+             $where = $where . " AND guia = '$tipo' ";
+         }
+     }
+
+     if (isset($_POST['busqueda_reasignacion']) and ($_POST['busqueda_reasignacion'] != '')) {
+         $tipo = $_POST['busqueda_reasignacion'];
+         if ($where == '') {
+             $where = "WHERE reasignacion in ($tipo) ";
+         } else {
+             $where = $where . " AND reasignacion in ($tipo) ";
+         }
+     }
+
+
+     if (isset($_POST['busqueda_fecha_inicio']) and ($_POST['busqueda_fecha_inicio'] != '')) {
+         $fechainicio = $_POST['busqueda_fecha_inicio'];
+         if (isset($_POST['busqueda_fecha_fin']) and ($_POST['busqueda_fecha_fin'] != '')) {
+             $fechafin = $_POST['busqueda_fecha_fin'];
+         } else {
+             $fechafin = date("Y-m-d H:i:s");;
+         }
+
+         if ($where == '') {
+             $where = "WHERE recepcion_documento between '$fechainicio' and '$fechafin'  ";
+         } else {
+             $where = $where . " AND recepcion_documento between '$fechainicio' and '$fechafin' ";
+         }
+     }
 
 
     $os->db->conn->query("SET NAMES 'utf8'");

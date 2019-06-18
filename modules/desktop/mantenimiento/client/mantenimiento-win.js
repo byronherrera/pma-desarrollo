@@ -4,7 +4,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
 
     init: function () {
         this.launcher = {
-            text: 'Recepción documentos',
+            text: 'Ingreso contribuciones',
             iconCls: 'mantenimiento-icon',
             handler: this.createWindow,
             scope: this
@@ -18,6 +18,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
         var acceso = (accesosAdministrador || accesosSecretaria || accesosZonales) ? true : false
         var desktop = this.app.getDesktop();
         var AppMsg = new Ext.AppMsg({});
+
         var win = desktop.getWindow('grid-win-mantenimiento');
 
         //Ubicación de la carpeta de mantenimiento

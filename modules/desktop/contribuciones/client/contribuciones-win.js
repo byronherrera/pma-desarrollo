@@ -1241,6 +1241,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         });
 
         storeDocumentosReporte = this.storeDocumentosReporte
+
         this.gridDocumentosReporte = new Ext.grid.EditorGridPanel({
 
             height: desktop.getWinHeight() - 238,
@@ -1250,110 +1251,79 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'Grant number',
+                    header: 'Grant Number CSP',
                     dataIndex: 'grant_number',
                     sortable: true,
-                    width: 15
+                    width: 38
                 },
                 {
                     header: 'Estado',
                     dataIndex: 'estado',
                     sortable: true,
-                    width: 35,
-                    renderer: personaReceptaDenuncia
-                }, {
-                    header: 'Recepción documento',
-                    dataIndex: 'recepcion_documento',
+                    width: 28
+                },
+                {
+                    header: 'CRN',
+                    dataIndex: 'crn',
                     sortable: true,
-                    width: 45,
+                    width: 28
+                },
+                {
+                    header: 'Donor',
+                    dataIndex: 'donor',
+                    sortable: true,
+                    width: 28
+                },
+                {
+                    header: 'Comments',
+                    dataIndex: 'comments',
+                    sortable: true,
+                    width: 28
+                },
+                {
+                    header: 'Year contribution',
+                    dataIndex: 'year_contribution',
+                    sortable: true,
+                    width: 28
+                },
+                {
+                    header: 'ISC',
+                    dataIndex: 'isc',
+                    sortable: true,
+                    width: 28
+                },
+                {
+                    header: 'Total Grant Value without ISC',
+                    dataIndex: 'total_grant',
+                    sortable: true,
+                    width: 28,
+                    renderer: 'usMoney'
+                },
+                {
+                    header: 'Grant TOD',
+                    dataIndex: 'grant_tod',
+                    sortable: true,
+                    width: 40,
                     renderer: formatDate
                 },
                 {
-                    header: 'Tipo documento',
-                    dataIndex: 'id_tipo_documento',
+                    header: 'Grant TDD',
+                    dataIndex: 'grant_tdd',
                     sortable: true,
-                    width: 30,
-                    renderer: personaTipoDocumento
+                    width: 40,
+                    renderer: formatDate
                 },
-                // {
-                //     header: 'Ordenanza',
-                //     dataIndex: 'id_ordenanza',
-                //     sortable: true,
-                //     width: 28,
-                //     renderer: denunciasListaOrdenanza
-                //
-                // },
-                // {
-                //     header: 'Tipo',
-                //     dataIndex: 'id_tipo',
-                //     sortable: true,
-                //     width: 28,
-                //     renderer: crolProgramado
-                //
-                // },
-                // {
-                //     header: 'N. documento',
-                //     dataIndex: 'num_documento',
-                //     sortable: true,
-                //     width: 40
-                // },
-                // {
-                //     header: 'Remitente/ Denunciante',
-                //     dataIndex: 'remitente',
-                //     sortable: true,
-                //     width: 60
-                // },
-                // {
-                //     header: 'Institución',
-                //     dataIndex: 'institucion',
-                //     sortable: true,
-                //     width: 60
-                // },
-                // {
-                //     header: 'Asunto',
-                //     dataIndex: 'asunto',
-                //     sortable: true,
-                //     width: 55
-                // },
-                // {
-                //     header: 'GDoc / Desc. anexos',
-                //     dataIndex: 'descripcion_anexos',
-                //     sortable: true,
-                //     width: 55
-                // }
-                // // ,
-                // {
-                //     header: 'Caracter trámite',
-                //     dataIndex: 'id_caracter_tramite',
-                //     sortable: true,
-                //     width: 30,
-                //     renderer: caracterTramite
-                // },
-                // {
-                //     header: 'Fojas',
-                //     dataIndex: 'cantidad_fojas',
-                //     sortable: true,
-                //     width: 20
-                // }
-                // ,
-                // {
-                //     header: 'Reasignación',
-                //     dataIndex: 'reasignacion',
-                //     sortable: true,
-                //     width: 60,
-                //     renderer: departamentoReasignacion
-                // }
-                // ,
                 {
-                    header: 'Despachado'
-                    , dataIndex: 'despacho_secretaria'
-                    , align: 'center'
-                    , falseText: 'No'
-                    , menuDisabled: true
-                    , trueText: 'Si'
-                    , sortable: true
-                    , width: 20
-                    , xtype: 'booleancolumn'
+                    header: 'Grant Specific',
+                    dataIndex: 'grant_specific',
+                    sortable: true,
+                    width: 25
+                },
+                {
+                    header: 'Activity',
+                    dataIndex: 'activity',
+                    sortable: true,
+                    width: 22
                 }
             ],
             viewConfig: {
