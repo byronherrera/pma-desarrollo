@@ -1245,7 +1245,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
 
         this.gridDocumentosReporte = new Ext.grid.EditorGridPanel({
 
-            height: desktop.getWinHeight() - 238,
+            height: desktop.getWinHeight() - 215,
             autoScroll: true,
             store: this.storeDocumentosReporte,
 

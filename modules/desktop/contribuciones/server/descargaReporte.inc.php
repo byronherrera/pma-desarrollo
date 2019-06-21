@@ -32,20 +32,20 @@ $today = date("Y-n-j-H-i-s");
 
 // para los reportes
 $where = '';
-if (isset($data->busqueda_fecha_inicio) and ($data->busqueda_tipo_documento != '')) {
+if (isset($data->busqueda_tipo_documento) and ($data->busqueda_tipo_documento != '')) {
     $tipo = $data->busqueda_tipo_documento;
     if ($where == '') {
-        $where = "WHERE id_tipo_documento = $tipo ";
+        $where = "WHERE estado = '$tipo' ";
     } else {
-        $where = $where . " AND id_tipo_documento = $tipo ";
+        $where = $where . " AND estado = '$tipo' ";
     }
 }
 if (isset($data->busqueda_institucion) and ($data->busqueda_institucion != '')) {
     $tipo = $data->busqueda_institucion;
     if ($where == '') {
-        $where = "WHERE institucion = '$tipo' ";
+        $where = "WHERE donor = '$tipo' ";
     } else {
-        $where = $where . " AND institucion = '$tipo' ";
+        $where = $where . " AND donor = '$tipo' ";
     }
 }
 if (isset($data->busqueda_caracter_tramite) and ($data->busqueda_caracter_tramite != '')) {
@@ -92,8 +92,8 @@ if (isset($data->busqueda_fecha_inicio) and ($data->busqueda_fecha_inicio != '')
 
 $os->db->conn->query("SET NAMES 'utf8'");
 //$sql = "SELECT * FROM amc_denuncias $where ORDER BY codigo_tramite DESC ";
-$sql = "SELECT *, (select nombre FROM amc_unidades as a WHERE a.id in (b.reasignacion) LIMIT 1) as nombre_unidad  
-        FROM amc_denuncias as b $where ORDER BY b.codigo_tramite DESC";
+$sql = "SELECT * 
+        FROM pma_contribuciones as b $where ORDER BY b.grant_tod DESC";
 
 $result = $os->db->conn->query($sql);
 $number_of_rows = $result->rowCount();
@@ -120,8 +120,8 @@ $styleArray = array(
 $objPHPExcel->getActiveSheet()->mergeCells('A' . $filaTitulo1 . ':M' . $filaTitulo1);
 $objPHPExcel->getActiveSheet()->mergeCells('A' . $filaTitulo2 . ':M' . $filaTitulo2);
 
-$objPHPExcel->getActiveSheet()->setCellValue('A' . $filaTitulo1, "LISTADO DOCUMENTOS RECIBIDOS");
-$objPHPExcel->getActiveSheet()->setCellValue('A' . $filaTitulo2, 'Secretaría General');
+$objPHPExcel->getActiveSheet()->setCellValue('A' . $filaTitulo1, "PMA title ");
+$objPHPExcel->getActiveSheet()->setCellValue('A' . $filaTitulo2, 'PMA CONTRIBU');
 
 
 $os->db->conn->query("SET NAMES 'utf8'");
@@ -138,7 +138,7 @@ $objPHPExcel->getActiveSheet()->mergeCells('C' . ($filascabecera + 2) . ':D' . (
 
 $objPHPExcel->getActiveSheet()->setCellValue('C' . $filascabecera, '__________________');
 $objPHPExcel->getActiveSheet()->setCellValue('C' . ($filascabecera + 1), $nombreUsuario);
-$objPHPExcel->getActiveSheet()->setCellValue('C' . ($filascabecera + 2), "SECRETARIA GENERAL");
+$objPHPExcel->getActiveSheet()->setCellValue('C' . ($filascabecera + 2), "PMA");
 
 $objPHPExcel->getActiveSheet()->mergeCells('F' . ($filascabecera + 1) . ':I' . ($filascabecera + 2));
 //$objPHPExcel->getActiveSheet()->setCellValue('F' . ($filascabecera + 1), $nombreUnidad);
@@ -147,48 +147,48 @@ $objPHPExcel->getActiveSheet()->setCellValue('F' . $filascabecera, '____________
 
 $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('A')->setAutoSize(false);
 $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(6.86);
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('B')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('C')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(11.50);
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('D')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(16.71);
-
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('E')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(23);
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('F')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(18);
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('G')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(16);
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('H')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(8.71);
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('H')->setAutoSize(false);
-
-$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(8.71);
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('I')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(16);
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('J')->setAutoSize(false);
-
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('K')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(16.30);
-
-$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('M')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(16.30);
-
-
-$objPHPExcel->getActiveSheet()->setCellValue('A' . $filacabecera, 'Codigo');
-$objPHPExcel->getActiveSheet()->setCellValue('B' . $filacabecera, 'Fecha y hora de recepcion');
-$objPHPExcel->getActiveSheet()->setCellValue('C' . $filacabecera, 'Tipo de documento');
-$objPHPExcel->getActiveSheet()->setCellValue('D' . $filacabecera, 'N. de documento');
-$objPHPExcel->getActiveSheet()->setCellValue('E' . $filacabecera, 'Remitente');
-$objPHPExcel->getActiveSheet()->setCellValue('F' . $filacabecera, 'Asunto');
-$objPHPExcel->getActiveSheet()->setCellValue('G' . $filacabecera, 'Descripción del anexo');
-$objPHPExcel->getActiveSheet()->setCellValue('H' . $filacabecera, 'Carácter de trámite');
-$objPHPExcel->getActiveSheet()->setCellValue('I' . $filacabecera, 'Cantidad de fojas');
-$objPHPExcel->getActiveSheet()->setCellValue('J' . $filacabecera, 'Unidad');
-$objPHPExcel->getActiveSheet()->setCellValue('K' . $filacabecera, 'Observaciones');
-$objPHPExcel->getActiveSheet()->setCellValue('L' . $filacabecera, 'Ordenanza');
-$objPHPExcel->getActiveSheet()->setCellValue('M' . $filacabecera, 'Tipo');
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('B')->setAutoSize(false);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('C')->setAutoSize(false);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(11.50);
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('D')->setAutoSize(false);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(16.71);
+//
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('E')->setAutoSize(false);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(23);
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('F')->setAutoSize(false);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(18);
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('G')->setAutoSize(false);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(16);
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('H')->setAutoSize(false);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(8.71);
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('H')->setAutoSize(false);
+//
+//$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(8.71);
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('I')->setAutoSize(false);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(16);
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('J')->setAutoSize(false);
+//
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('K')->setAutoSize(false);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(16.30);
+//
+//$objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('M')->setAutoSize(false);
+//$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(16.30);
+//
+//
+//$objPHPExcel->getActiveSheet()->setCellValue('A' . $filacabecera, 'Codigo');
+//$objPHPExcel->getActiveSheet()->setCellValue('B' . $filacabecera, 'Fecha y hora de recepcion');
+//$objPHPExcel->getActiveSheet()->setCellValue('C' . $filacabecera, 'Tipo de documento');
+//$objPHPExcel->getActiveSheet()->setCellValue('D' . $filacabecera, 'N. de documento');
+//$objPHPExcel->getActiveSheet()->setCellValue('E' . $filacabecera, 'Remitente');
+//$objPHPExcel->getActiveSheet()->setCellValue('F' . $filacabecera, 'Asunto');
+//$objPHPExcel->getActiveSheet()->setCellValue('G' . $filacabecera, 'Descripción del anexo');
+//$objPHPExcel->getActiveSheet()->setCellValue('H' . $filacabecera, 'Carácter de trámite');
+//$objPHPExcel->getActiveSheet()->setCellValue('I' . $filacabecera, 'Cantidad de fojas');
+//$objPHPExcel->getActiveSheet()->setCellValue('J' . $filacabecera, 'Unidad');
+//$objPHPExcel->getActiveSheet()->setCellValue('K' . $filacabecera, 'Observaciones');
+//$objPHPExcel->getActiveSheet()->setCellValue('L' . $filacabecera, 'Ordenanza');
+//$objPHPExcel->getActiveSheet()->setCellValue('M' . $filacabecera, 'Tipo');
 
 $noExistenFilas = true;
 
@@ -197,7 +197,7 @@ while ($rowdetalle = $result->fetch(PDO::FETCH_ASSOC)) {
 
 
     $noExistenFilas = false;
-    switch ($rowdetalle['id_tipo_documento']) {
+  /*  switch ($rowdetalle['id_tipo_documento']) {
         case 1:
             $rowdetalle['id_tipo_documento'] = 'Denuncias';
             break;
@@ -213,9 +213,9 @@ while ($rowdetalle = $result->fetch(PDO::FETCH_ASSOC)) {
         case 2:
             $rowdetalle['id_caracter_tramite'] = 'Urgente';
             break;
-    }
+    }*/
 
-    $objPHPExcel->getActiveSheet()->setCellValue('A' . $filaInicio, $rowdetalle['codigo_tramite']);
+/*    $objPHPExcel->getActiveSheet()->setCellValue('A' . $filaInicio, $rowdetalle['codigo_tramite']);
     $objPHPExcel->getActiveSheet()->setCellValue('B' . $filaInicio, $rowdetalle['recepcion_documento']);
     $objPHPExcel->getActiveSheet()->setCellValue('C' . $filaInicio, $rowdetalle['id_tipo_documento']);
     $objPHPExcel->getActiveSheet()->setCellValue('D' . $filaInicio, $rowdetalle['num_documento']);
@@ -231,7 +231,7 @@ while ($rowdetalle = $result->fetch(PDO::FETCH_ASSOC)) {
     $objPHPExcel->getActiveSheet()->setCellValue('M' . $filaInicio, regresaTipoControl($rowdetalle['id_tipo']));
 
     $objPHPExcel->getActiveSheet()->getStyle('A' . $filaInicio . ':M' . $filaInicio)->applyFromArray($styleArray);
-    $filaInicio++;
+  */  $filaInicio++;
 }
 
 
