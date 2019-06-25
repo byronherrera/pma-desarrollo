@@ -137,6 +137,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             fields: [
                 {name: 'year', allowBlank: true},
                 {name: 'id_cost', allowBlank: true},
+                {name: 'id_cost_detail', allowBlank: true},
+
                 {name: 'total_grant_q1', allowBlank: true},
                 {name: 'total_grant_q2', allowBlank: true},
                 {name: 'total_grant_q3', allowBlank: true},
@@ -1863,7 +1865,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textFieldDetalle},
-                {header: 'Cost Code', dataIndex: 'parent', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
+                {header: 'Cost Code', dataIndex: 'id_cost', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
+                {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
                 {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
                 {header: 'Total Grant V. II Quarter', dataIndex: 'total_grant_q2', hidden: false, width: 130, editor: textFieldDetalle},
                 {header: 'Total Grant V. III Quarter', dataIndex: 'total_grant_q3', hidden: false, width: 130, editor: textFieldDetalle},
@@ -2377,6 +2380,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var inspeccion = new this.storeDetalleInspeccion.recordType({
             year: '',
             id_cost: '',
+            id_cost_detail: '',
             total_grant_q1: '0',
             total_grant_q2: '0',
             total_grant_q3: '0',
@@ -2388,8 +2392,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             total_balance_doc: '0',
             total_pr_po_dsc: '0',
             total_actuals_dsc: '0',
-            total_grant_balance_dsc: '0',
-
+            total_grant_balance_dsc: '0'
         });
         this.gridDetalleInspeccion.stopEditing();
         this.storeDetalleInspeccion.insert(0, inspeccion);
