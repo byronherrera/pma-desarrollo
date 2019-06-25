@@ -10,6 +10,18 @@ function selectOrdenanzas()
 {
     global $os;
 
+    //Se inicializa el parámetro de búsqueda de código trámite
+    $columnaBusqueda = 'id';
+    if (isset($_POST['filterText'])) {
+        $campo = $_POST['filterText'];
+        $campo = str_replace(" ", "%", $campo);
+        if (isset($_POST['filterField'])) {
+            $columnaBusqueda = $_POST['filterField'];
+        }
+        $where = " WHERE $columnaBusqueda LIKE '%$campo%'";
+    }
+
+
     //$columnaBusqueda = 'busqueda_todos';
     $where = '';
 
@@ -22,11 +34,21 @@ function selectOrdenanzas()
         $limit = $_POST['limit'];
     else
         $limit = 100;
-    $orderby = 'ORDER BY id ASC';
+
+    $orderby = 'ORDER BY CONVERT( id,UNSIGNED INTEGER) ASC';
+    if (isset($_POST['sort'])) {
+        if ($_POST['sort'] == 'id') {
+            $orderby = 'ORDER BY CONVERT( id,UNSIGNED INTEGER) ASC';
+        } else {
+            $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
+        }
+    }
+
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT * FROM pma_cost_category $where $orderby LIMIT $start, $limit";
     $result = $os->db->conn->query($sql);
+
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $row;

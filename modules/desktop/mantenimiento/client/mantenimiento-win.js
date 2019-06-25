@@ -34,31 +34,130 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
         //Inicio ventana mantenimiento ordenanzas
 
         //inicio combo ZONAL
-        storeZONALM = new Ext.data.JsonStore({
+        storeCOSTPARENT = new Ext.data.JsonStore({
             root: 'data',
-            fields: ['id', 'nombre'],
+            fields: ['id', 'cost'],
             autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=zonas'
+            url: 'modules/common/combos/combos.php?tipo=costparent'
         });
 
-        var comboZONALM = new Ext.form.ComboBox({
-            id: 'comboZONALM',
-            store: storeZONALM,
+        var comboCOSTPARENT = new Ext.form.ComboBox({
+            id: 'comboCOSTPARENT',
+            store: storeCOSTPARENT,
             valueField: 'id',
-            displayField: 'nombre',
+            displayField: 'cost',
             triggerAction: 'all',
             mode: 'local'
         });
 
-        function zonaAdmMantenimi(id) {
-            var index = storeZONALM.findExact('id', id);
+        function costparentAdmMantenimi(id) {
+            var index = storeCOSTPARENT.findExact('id', id);
             if (index > -1) {
-                var record = storeZONALM.getAt(index);
-                return record.get('nombre');
+                var record = storeCOSTPARENT.getAt(index);
+                return record.get('cost');
             }
         }
         //fin combo ZONA
+        //Definición de url CRUD
+        var proxyCostcategory = new Ext.data.HttpProxy({
+            api: {
+                create: urlMantenimiento + "crudCostcategory.php?operation=insert",
+                read: urlMantenimiento + "crudCostcategory.php?operation=select",
+                update: urlMantenimiento + "crudCostcategory.php?operation=update",
+                destroy: urlMantenimiento + "crudCostcategory.php?operation=delete"
+            }
+        });
 
+        //Definición de lectura de campos bdd Costcategory
+        var readerCostcategory = new Ext.data.JsonReader({
+            totalProperty: 'total',
+            successProperty: 'success',
+            messageProperty: 'message',
+            idProperty: 'id',
+            root: 'data',
+            fields: [
+                {name: 'id', allowBlank: false},
+                {name: 'cost', allowBlank: false},
+                {name: 'description', allowBlank: false},
+                {name: 'active', allowBlank: true},
+                {name: 'parent', allowBlank: true}
+            ]
+        });
+
+        //Definición de escritura en campos bdd Costcategory
+        var writerCostcategory = new Ext.data.JsonWriter({
+            encode: true,
+            writeAllFields: true
+        });
+
+        //Definición de store para módulo Costcategory
+        this.storeCostcategory = new Ext.data.Store({
+            id: "id",
+            proxy: proxyCostcategory,
+            reader: readerCostcategory,
+            writer: writerCostcategory,
+            autoSave: acceso, // dependiendo de si se tiene acceso para grabar
+            remoteSort: true,
+            autoSave: true,
+            baseParams: {}
+        });
+        storeCostcategory = this.storeCostcategory;
+        limitemantenimiento = 100;
+        storeCostcategory.baseParams = {
+            limit: limitemantenimiento
+        };
+
+        this.storeCostcategory.load();
+
+        //Inicio formato grid Costcategory
+        this.gridCostcategory = new Ext.grid.EditorGridPanel({
+            height: '100%',
+            store: this.storeCostcategory,
+            columns: [
+                //Definición de campos bdd Costcategory
+                new Ext.grid.RowNumberer(),
+                {header: 'ID', dataIndex: 'id', sortable: true, width: 10},
+                {header: 'Cost Code', dataIndex: 'cost', sortable: true, width: 40, editor: textField},
+                {
+                    header: 'Description',
+                    dataIndex: 'description',
+                    sortable: true,
+                    width: 200,
+                    editor: textField
+                },
+                {header: 'Parent Cost Code', dataIndex: 'parent', sortable: true, width: 100, editor: comboCOSTPARENT, renderer: costparentAdmMantenimi },
+
+
+                {
+                    header: 'Active'
+                    , dataIndex: 'active'
+                    , editor: {
+                        xtype: 'checkbox'
+                    }
+                    , falseText: 'No'
+                    , menuDisabled: true
+                    , trueText: 'Si'
+                    , sortable: true
+                    , width: 50
+                    , xtype: 'booleancolumn'
+                }
+            ],
+            viewConfig: {
+                forceFit: true
+            },
+            sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
+            border: false,
+            stripeRows: true,
+            //Definición de barra de paginado
+            bbar: new Ext.PagingToolbar({
+                pageSize: limitemantenimiento,
+                store: storeCostcategory,
+                displayInfo: true,
+                displayMsg: 'Mostrando: {0} - {1} de {2} - PMA',
+                emptyMsg: "No existen trámites que mostrar"
+            })
+        });
+        //Fin formato grid Costcategory
         //Definición de url CRUD
         var proxyOrdenanzas = new Ext.data.HttpProxy({
             api: {
@@ -107,6 +206,8 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
         storeOrdenanzas.baseParams = {
             limit: limitemantenimiento
         };
+
+        this.storeOrdenanzas.load();
 
         //Inicio formato grid Ordenanzas
         this.gridOrdenanzas = new Ext.grid.EditorGridPanel({
@@ -260,7 +361,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 //     , xtype: 'booleancolumn'
                 // } ,
                 //
-                // {header: 'Zonal', dataIndex: 'id_zonal', sortable: true, width: 100, editor: comboZONALM, renderer: zonaAdmMantenimi },
+                // {header: 'Zonal', dataIndex: 'id_zonal', sortable: true, width: 100, editor: comboCOSTPARENT, renderer: zonaAdmMantenimi },
                 // {header: 'Prefijo', dataIndex: 'prefijo', sortable: true, width: 100, editor: textField },
                 // {header: 'Orden', dataIndex: 'orden', sortable: true, width: 100, editor: textField}
             ],
@@ -810,7 +911,46 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                             ],
                             //Llamado a función que arma la tabla de datos
                             items: this.gridUnidades
+                        },
+
+                        //Pestaña Costcategory
+                        {
+                            autoScroll: true,
+                            title: 'Cost Category',
+                            closable: true,
+                            layout: 'fit',
+                            height: winHeight - 65,
+                            //Barra de botones
+                            tbar: [
+                                //Definición de botón nuevo
+                                {
+                                    text: 'Nuevo',
+                                    scope: this,
+                                    handler: this.addCostcategory,
+                                    iconCls: 'save-icon'
+                                },
+                                '-',
+                                {
+                                    //Definición de botón eliminar
+                                    text: "Eliminar",
+                                    scope: this,
+                                    handler: this.deleteCostcategory,
+                                    iconCls: 'delete-icon'
+                                },
+                                '-',
+                                //Definición de botón regargar datos
+                                {
+                                    iconCls: 'demo-grid-add',
+                                    handler: this.requestGridDataCostcategory,
+                                    scope: this,
+                                    text: 'Recargar Datos'
+                                }
+                            ]
+                            //Llamado a función que arma la tabla de datos
+                            , items: this.gridCostcategory
                         }
+
+
                         //Pestaña Zonas
                         // , {
                         //     autoScroll: true,
@@ -962,15 +1102,67 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             });
         }
         //Llamado a función que muestra la ventana en pantalla
+        // TODO verificar que se carga
         win.show();
-        setTimeout(function () {
+        /*setTimeout(function () {
             this.storeOrdenanzas.load({
                 params: {
                     start: 0,
                     limit: limitemantenimiento
                 }
             });
-        }, 10);
+        }, 10);*/
+    },
+
+    //Función para eliminación de registros de Costcategory
+    deleteCostcategory: function () {
+        //Popup de confirmación
+        Ext.Msg.show({
+            title: 'Confirmación',
+            msg: 'Está seguro de borrar el registro seleccionado?',
+            scope: this,
+            buttons: Ext.Msg.YESNO,
+            //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
+            fn: function (btn) {
+                if (btn == 'yes') {
+                    var rows = this.gridCostcategory.getSelectionModel().getSelections();
+                    if (rows.length === 0) {
+                        return false;
+                    }
+                    this.storeCostcategory.remove(rows);
+                }
+            }
+        });
+    },
+
+    //Función para inserción de registros de Costcategory
+    addCostcategory: function () {
+        var operativos = new this.storeCostcategory.recordType({
+            id: '',
+            nombre: '',
+            nombre_completo: '',
+            activo: '',
+            orden: '',
+        });
+        this.gridCostcategory.stopEditing();
+        this.storeCostcategory.insert(0, operativos);
+        this.gridCostcategory.startEditing(0, 0);
+    },
+
+    //Función para actualizar los datos mostrados en pantalla de la pestaña de Costcategory
+    requestGridDataCostcategory: function () {
+        this.storeCostcategory.load();
+    },
+
+    //Función para carga de datos
+    requestGridData: function () {
+        this.storeCostcategory.load({
+            params:
+                {
+                    start: 0,
+                    limit: limitemantenimiento
+                }
+        });
     },
 
     //Función para eliminación de registros de Ordenanzas
