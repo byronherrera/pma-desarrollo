@@ -1984,7 +1984,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                     text: 'Nuevo',
                                     scope: this,
                                     handler: this.addModuloInspeccion,
-                                    disabled: !creacionTramites,
+                                    disabled: false,
                                     iconCls: 'save-icon'
                                 },
                                 '-',

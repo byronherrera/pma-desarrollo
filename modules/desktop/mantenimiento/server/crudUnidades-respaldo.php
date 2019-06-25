@@ -11,7 +11,7 @@ function selectDenunciasReasignacion()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_activities";
+    $sql = "SELECT * FROM amc_unidades ORDER BY orden";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -44,7 +44,7 @@ function selectDenunciasReasignacion()
         $cadenaCampos = substr($cadenaCampos, 0, -1);
         $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-        $sql = "INSERT INTO pma_activities($cadenaCampos)
+        $sql = "INSERT INTO amc_unidades($cadenaCampos)
 	    values($cadenaDatos);";
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();
@@ -70,13 +70,13 @@ function updateDenunciasReasignacion()
 
     if ($data->secretaria) $data->secretaria = 1; else $data->secretaria = 0;
 
-    $sql = "UPDATE pma_activities SET
+    $sql = "UPDATE amc_unidades SET
             nombre='$data->nombre',
             nombre_completo='$data->nombre_completo',
             orden=$data->orden,
             secretaria=$data->secretaria,
             activo='$data->activo'
-	  WHERE pma_activities.id = '$data->id' ";
+	  WHERE amc_unidades.id = '$data->id' ";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
     echo json_encode(array(
@@ -90,7 +90,7 @@ function deleteDenunciasReasignacion()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM pma_activities WHERE id=$id";
+    $sql = "DELETE FROM amc_unidades WHERE id=$id";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
     echo json_encode(array(
@@ -105,7 +105,7 @@ function generaCodigoProcesoUnidades()
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id) AS maximo FROM pma_activities";
+    $sql = "SELECT MAX(id) AS maximo FROM amc_unidades";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     if (isset($row['maximo'])) {

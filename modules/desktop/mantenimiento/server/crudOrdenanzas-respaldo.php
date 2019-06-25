@@ -25,14 +25,14 @@ function selectOrdenanzas()
     $orderby = 'ORDER BY id ASC';
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_so_categories $where $orderby LIMIT $start, $limit";
+    $sql = "SELECT * FROM amc_ordenanzas $where $orderby LIMIT $start, $limit";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $row;
     };
 
-    $sql = "SELECT count(*) AS total FROM pma_so_categories $where";
+    $sql = "SELECT count(*) AS total FROM amc_ordenanzas $where";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     $total = $row['total'];
@@ -65,7 +65,7 @@ function insertOrdenanzas()
     $cadenaCampos = substr($cadenaCampos, 0, -1);
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    $sql = "INSERT INTO pma_so_categories($cadenaCampos)
+    $sql = "INSERT INTO amc_ordenanzas($cadenaCampos)
 	values($cadenaDatos);";
      $sql = $os->db->conn->prepare($sql);
     $sql->execute();
@@ -87,7 +87,7 @@ function generaCodigoProcesoOrdenanza()
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id) AS maximo FROM pma_so_categories";
+    $sql = "SELECT MAX(id) AS maximo FROM amc_ordenanzas";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     if (isset($row['maximo'])) {
@@ -129,13 +129,13 @@ function updateOrdenanzas()
     }
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    $sql = "UPDATE pma_so_categories SET  $cadenaDatos  WHERE pma_so_categories.id = '$data->id' ";
+    $sql = "UPDATE amc_ordenanzas SET  $cadenaDatos  WHERE amc_ordenanzas.id = '$data->id' ";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_so_categories actualizado exitosamente" : $sql->errorCode(),
+        "msg" => $sql->errorCode() == 0 ? "Ubicación en amc_ordenanzas actualizado exitosamente" : $sql->errorCode(),
         "message" => $message
     ));
 }
@@ -148,7 +148,7 @@ function validarCedulaCorreo($id)
 
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT cedula, email FROM pma_so_categories WHERE id = $id";
+    $sql = "SELECT cedula, email FROM amc_ordenanzas WHERE id = $id";
     $result = $os->db->conn->query($sql);
 
     $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -165,7 +165,7 @@ function selectOrdenanzasForm()
     global $os;
     $id = (int)$_POST ['id'];
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT *, (SELECT numero FROM amc_guias WHERE amc_guias.id = a.guia ) as guianumero, (SELECT COUNT(*) FROM pma_so_categories  b WHERE a.cedula = b.cedula and b.cedula <> '') as totaldocumentos FROM pma_so_categories as a  WHERE a.id = $id";
+    $sql = "SELECT *, (SELECT numero FROM amc_guias WHERE amc_guias.id = a.guia ) as guianumero, (SELECT COUNT(*) FROM amc_ordenanzas  b WHERE a.cedula = b.cedula and b.cedula <> '') as totaldocumentos FROM amc_ordenanzas as a  WHERE a.id = $id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -234,14 +234,14 @@ function updateOrdenanzasForm()
 
     }
     /*codigo_tramite='$codigo_tramite',*/
-    $sql = "UPDATE pma_so_categories SET
+    $sql = "UPDATE amc_ordenanzas SET 
             id = '$id',
             nombre = $nombre,
             nombre_completo = $nombre_completo,
             activo = $activo,
             orden = $orden
-
-
+            
+         
           WHERE id = '$id' ";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
@@ -255,12 +255,12 @@ function deleteOrdenanzas()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM pma_so_categories WHERE id = $id";
+    $sql = "DELETE FROM amc_ordenanzas WHERE id = $id";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_so_categories, eliminado exitosamente" : $sql->errorCode()
+        "msg" => $sql->errorCode() == 0 ? "Ubicación en amc_ordenanzas, eliminado exitosamente" : $sql->errorCode()
     ));
 }
 
