@@ -1948,8 +1948,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textFieldDetalle},
-<<<<<<< HEAD
                 {header: 'Cost Code', dataIndex: 'parent', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
+                {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
                 {header: 'Strategic Objectives', dataIndex: 'parent', sortable: true, width: 100, editor: comboSO, renderer: costSO },
                 {header: 'Activities', dataIndex: 'parent', sortable: true, width: 100, editor: comboActivities, renderer: costActivities },
                 // {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
@@ -1964,22 +1964,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 // {header: 'Total PR and PO - DSC', dataIndex: 'total_pr_po_dsc', hidden: false, width: 130, editor: textFieldDetalle},
                 // {header: 'Total Actuals DSC ', dataIndex: 'total_actuals_dsc', hidden: false, width: 130, editor: textFieldDetalle},
                 // {header: 'Total Grant Value Balance DSC', dataIndex: 'total_grant_balance_dsc', hidden: false, width: 170, editor: textFieldDetalle}
-=======
-                {header: 'Cost Code', dataIndex: 'id_cost', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
-                {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
-                {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
-                {header: 'Total Grant V. II Quarter', dataIndex: 'total_grant_q2', hidden: false, width: 130, editor: textFieldDetalle},
-                {header: 'Total Grant V. III Quarter', dataIndex: 'total_grant_q3', hidden: false, width: 130, editor: textFieldDetalle},
-                {header: 'Total Grant V. IV Quarter', dataIndex: 'total_grant_q4', hidden: false, width: 140, editor: textFieldDetalle},
-                {header: 'Total Grant V. DOC ', dataIndex: 'total_grant_prog_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                {header: 'Total Grant V. DSC', dataIndex: 'total_grant_prog_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                {header: 'Total PR and PO - DOC', dataIndex: 'total_pr_po_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                {header: 'Total Actuals DOC', dataIndex: 'total_actuals_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                {header: 'Total Grant Value Balance DOC', dataIndex: 'total_balance_doc', hidden: false, width: 170, editor: textFieldDetalle},
-                {header: 'Total PR and PO - DSC', dataIndex: 'total_pr_po_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                {header: 'Total Actuals DSC ', dataIndex: 'total_actuals_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                {header: 'Total Grant Value Balance DSC', dataIndex: 'total_grant_balance_dsc', hidden: false, width: 170, editor: textFieldDetalle}
->>>>>>> 416f0d281ae575be8f83b6ff50ee994ee5d90143
             ],
             viewConfig: {
                 forceFit: false
@@ -2481,7 +2465,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var inspeccion = new this.storeDetalleInspeccion.recordType({
             year: '',
             id_cost: '',
-<<<<<<< HEAD
+            id_cost_detail: '',
             category_name: '',
             subcategory_name: '',
             // total_grant_q1: '0',
@@ -2497,21 +2481,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             // total_actuals_dsc: '0',
             // total_grant_balance_dsc: '0',
 
-=======
-            id_cost_detail: '',
-            total_grant_q1: '0',
-            total_grant_q2: '0',
-            total_grant_q3: '0',
-            total_grant_q4: '0',
-            total_grant_prog_doc: '0',
-            total_grant_prog_dsc: '0',
-            total_pr_po_doc: '0',
-            total_actuals_doc: '0',
-            total_balance_doc: '0',
-            total_pr_po_dsc: '0',
-            total_actuals_dsc: '0',
-            total_grant_balance_dsc: '0'
->>>>>>> 416f0d281ae575be8f83b6ff50ee994ee5d90143
         });
         this.gridDetalleInspeccion.stopEditing();
         this.storeDetalleInspeccion.insert(0, inspeccion);
