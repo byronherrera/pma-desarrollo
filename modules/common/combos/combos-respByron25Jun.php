@@ -105,40 +105,6 @@ function comboCost()
             "data" => $data)
     );
 }
-}
-
-function comboSO()
-{
-    global $os;
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id,category_name FROM pma_so_categories ORDER BY id";
-    $result = $os->db->conn->query($sql);
-    $data = array();
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $row;
-    }
-    echo json_encode(array(
-            "success" => true,
-            "data" => $data)
-    );
-}
-}
-
-function comboActivities()
-{
-    global $os;
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id,subcategory_name cost FROM pma_activities ORDER BY id";
-    $result = $os->db->conn->query($sql);
-    $data = array();
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $row;
-    }
-    echo json_encode(array(
-            "success" => true,
-            "data" => $data)
-    );
-}
 
 
 function comboSecretariaTramites()
@@ -294,7 +260,7 @@ function comboPersonalSecretaria()
             FROM
             qo_members a,qo_groups_has_members b
             WHERE
-                a.id = b.qo_members_id AND a.active = 1
+                a.id = b.qo_members_id AND a.active = 1 
             ORDER BY
                 a.last_name ASC,a.first_name ASC";
     $result = $os->db->conn->query($sql);
@@ -332,7 +298,7 @@ function comboPersonalOperativos()
             FROM
             qo_members a,qo_groups_has_members b
             WHERE
-                a.id = b.qo_members_id AND a.active = 1 $todos
+                a.id = b.qo_members_id AND a.active = 1 $todos   
             ORDER BY
                 a.last_name ASC,a.first_name ASC";
 
@@ -373,7 +339,7 @@ function comboPersonalInstruccion()
             FROM
             qo_members a,qo_groups_has_members b
             WHERE
-                a.id = b.qo_members_id AND a.active = 1 $todos
+                a.id = b.qo_members_id AND a.active = 1 $todos   
             ORDER BY
                 a.last_name ASC,a.first_name ASC";
 
@@ -469,7 +435,7 @@ function comboUnidadesTotal()
 
     $zonal_funcionario = $os->get_zonal_id();
     //$sql = "SELECT amc_unidades.id, CONCAT(amc_unidades.nombre, 'SSSS') AS nombre FROM amc_unidades WHERE activo = 1 ORDER BY id";
-    $sql = "SELECT
+    $sql = "SELECT 
                 b.id, IF((SELECT COUNT(*) FROM amc_denuncias as  a WHERE a.reasignacion = b.id AND despacho_secretaria <> 'true' ) = 0,b.nombre,
                 (CONCAT(b.nombre, ' ( ',(SELECT COUNT(*) FROM amc_denuncias as  a WHERE a.reasignacion = b.id AND despacho_secretaria <> 'true' ), ' ) '))) AS nombre
                 FROM amc_unidades b
@@ -815,11 +781,7 @@ switch ($_GET['tipo']) {
     case 'cost' :
         comboCost();
         break;
-    case 'so' :
-        comboSO();
-        break;
-    case 'activities' :
-        comboActivities();
-        break;
 }
 ?>
+
+

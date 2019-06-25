@@ -137,20 +137,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             fields: [
                 {name: 'year', allowBlank: true},
                 {name: 'id_cost', allowBlank: true},
-                {name: 'category_name', allowBlank: true},
-                {name: 'subcategory_name', allowBlank: true},
-                // {name: 'total_grant_q1', allowBlank: true},
-                // {name: 'total_grant_q2', allowBlank: true},
-                // {name: 'total_grant_q3', allowBlank: true},
-                // {name: 'total_grant_q4', allowBlank: true},
-                // {name: 'total_grant_prog_doc', allowBlank: true},
-                // {name: 'total_grant_prog_dsc', allowBlank: true},
-                // {name: 'total_pr_po_doc', allowBlank: true},
-                // {name: 'total_actuals_doc', allowBlank: true},
-                // {name: 'total_balance_doc', allowBlank: true},
-                // {name: 'total_pr_po_dsc', allowBlank: true},
-                // {name: 'total_actuals_dsc', allowBlank: true},
-                // {name: 'total_grant_balance_dsc', allowBlank: true}
+                {name: 'total_grant_q1', allowBlank: true},
+                {name: 'total_grant_q2', allowBlank: true},
+                {name: 'total_grant_q3', allowBlank: true},
+                {name: 'total_grant_q4', allowBlank: true},
+                {name: 'total_grant_prog_doc', allowBlank: true},
+                {name: 'total_grant_prog_dsc', allowBlank: true},
+                {name: 'total_pr_po_doc', allowBlank: true},
+                {name: 'total_actuals_doc', allowBlank: true},
+                {name: 'total_balance_doc', allowBlank: true},
+                {name: 'total_pr_po_dsc', allowBlank: true},
+                {name: 'total_actuals_dsc', allowBlank: true},
+                {name: 'total_grant_balance_dsc', allowBlank: true}
             ]
         });
 
@@ -294,89 +292,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             }
         }
         //fin combo COSTPARENTDET
-
-        //inicio combo ACTIVITIES
-        // storeSO = new Ext.data.JsonStore({
-        //     root: 'data',
-        //     fields: ['id', 'category_name'],
-        //     autoLoad: true,
-        //     url: 'modules/common/combos/combos.php?tipo=so'
-        // });
-        storeActivities = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'subcategory_name'],
-            autoLoad: true,
-            data: {
-                datos: [
-                  {"id": 1, "subcategory_name": "Activity 1"},
-                  {"id": 2, "subcategory_name": "Activity 3"},
-                  {"id": 3, "subcategory_name": "Activity 4"},
-                  {"id": 4, "subcategory_name": "Activity 5"},
-                  {"id": 5, "subcategory_name": "Activity 6"},
-                  {"id": 6, "subcategory_name": "Activity 7"},
-                  {"id": 7, "subcategory_name": "Activity 8"}
-                ]
-            }
-        });
-
-        var comboActivities = new Ext.form.ComboBox({
-            id: 'comboActivities',
-            store: storeActivities,
-            valueField: 'id',
-            displayField: 'subcategory_name',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-
-        function costActivities(id) {
-            var index = storeActivities.findExact('id', id);
-            if (index > -1) {
-                var record = storeActivities.getAt(index);
-                return record.get('subcategory_name');
-            }
-        }
-        //fin combo ACTIVITIES
-
-        //inicio combo SO
-        // storeSO = new Ext.data.JsonStore({
-        //     root: 'data',
-        //     fields: ['id', 'category_name'],
-        //     autoLoad: true,
-        //     url: 'modules/common/combos/combos.php?tipo=so'
-        // });
-        storeSO = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'category_name'],
-            autoLoad: true,
-            data: {
-                datos: [
-                  {"id": 1, "category_name": "SO1"},
-                  {"id": 2, "category_name": "SO2"},
-                  {"id": 3, "category_name": "SO3"},
-                  {"id": 4, "category_name": "SO4"}
-                ]
-            }
-        });
-
-        var comboSO = new Ext.form.ComboBox({
-            id: 'comboSO',
-            store: storeSO,
-            valueField: 'id',
-            displayField: 'category_name',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-
-        function costSO(id) {
-            var index = storeSO.findExact('id', id);
-            if (index > -1) {
-                var record = storeSO.getAt(index);
-                return record.get('category_name');
-            }
-        }
-        //fin combo SO
-
-
+        
         //inicio combo tipo documento  TID
         storeTID = new Ext.data.JsonStore({
             root: 'datos',
@@ -1948,20 +1864,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 new Ext.grid.RowNumberer(),
                 {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textFieldDetalle},
                 {header: 'Cost Code', dataIndex: 'parent', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
-                {header: 'Strategic Objectives', dataIndex: 'parent', sortable: true, width: 100, editor: comboSO, renderer: costSO },
-                {header: 'Activities', dataIndex: 'parent', sortable: true, width: 100, editor: comboActivities, renderer: costActivities },
-                // {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. II Quarter', dataIndex: 'total_grant_q2', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. III Quarter', dataIndex: 'total_grant_q3', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. IV Quarter', dataIndex: 'total_grant_q4', hidden: false, width: 140, editor: textFieldDetalle},
-                // {header: 'Total Grant V. DOC ', dataIndex: 'total_grant_prog_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. DSC', dataIndex: 'total_grant_prog_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total PR and PO - DOC', dataIndex: 'total_pr_po_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Actuals DOC', dataIndex: 'total_actuals_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant Value Balance DOC', dataIndex: 'total_balance_doc', hidden: false, width: 170, editor: textFieldDetalle},
-                // {header: 'Total PR and PO - DSC', dataIndex: 'total_pr_po_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Actuals DSC ', dataIndex: 'total_actuals_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant Value Balance DSC', dataIndex: 'total_grant_balance_dsc', hidden: false, width: 170, editor: textFieldDetalle}
+                {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant V. II Quarter', dataIndex: 'total_grant_q2', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant V. III Quarter', dataIndex: 'total_grant_q3', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant V. IV Quarter', dataIndex: 'total_grant_q4', hidden: false, width: 140, editor: textFieldDetalle},
+                {header: 'Total Grant V. DOC ', dataIndex: 'total_grant_prog_doc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant V. DSC', dataIndex: 'total_grant_prog_dsc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total PR and PO - DOC', dataIndex: 'total_pr_po_doc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Actuals DOC', dataIndex: 'total_actuals_doc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant Value Balance DOC', dataIndex: 'total_balance_doc', hidden: false, width: 170, editor: textFieldDetalle},
+                {header: 'Total PR and PO - DSC', dataIndex: 'total_pr_po_dsc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Actuals DSC ', dataIndex: 'total_actuals_dsc', hidden: false, width: 130, editor: textFieldDetalle},
+                {header: 'Total Grant Value Balance DSC', dataIndex: 'total_grant_balance_dsc', hidden: false, width: 170, editor: textFieldDetalle}
             ],
             viewConfig: {
                 forceFit: false
@@ -2463,20 +2377,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var inspeccion = new this.storeDetalleInspeccion.recordType({
             year: '',
             id_cost: '',
-            category_name: '',
-            subcategory_name: '',
-            // total_grant_q1: '0',
-            // total_grant_q2: '0',
-            // total_grant_q3: '0',
-            // total_grant_q4: '0',
-            // total_grant_prog_doc: '0',
-            // total_grant_prog_dsc: '0',
-            // total_pr_po_doc: '0',
-            // total_actuals_doc: '0',
-            // total_balance_doc: '0',
-            // total_pr_po_dsc: '0',
-            // total_actuals_dsc: '0',
-            // total_grant_balance_dsc: '0',
+            total_grant_q1: '0',
+            total_grant_q2: '0',
+            total_grant_q3: '0',
+            total_grant_q4: '0',
+            total_grant_prog_doc: '0',
+            total_grant_prog_dsc: '0',
+            total_pr_po_doc: '0',
+            total_actuals_doc: '0',
+            total_balance_doc: '0',
+            total_pr_po_dsc: '0',
+            total_actuals_dsc: '0',
+            total_grant_balance_dsc: '0',
 
         });
         this.gridDetalleInspeccion.stopEditing();
