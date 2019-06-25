@@ -94,7 +94,7 @@ function comboCost()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id, CONCAT(cost,' -',description) cost FROM pma_cost_category WHERE active = 1   ORDER BY id";
+    $sql = "SELECT id, CONCAT(cost,' -',description) cost FROM pma_cost_category WHERE active = 1 ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {

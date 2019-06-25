@@ -136,6 +136,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             root: 'data',
             fields: [
                 {name: 'year', allowBlank: true},
+                {name: 'id_cost', allowBlank: true},
                 {name: 'total_grant_q1', allowBlank: true},
                 {name: 'total_grant_q2', allowBlank: true},
                 {name: 'total_grant_q3', allowBlank: true},
@@ -266,6 +267,32 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             }
         };
 
+        //inicio combo COSTPARENTDET
+        storeCOSTPARENTDET = new Ext.data.JsonStore({
+            root: 'data',
+            fields: ['id', 'cost'],
+            autoLoad: true,
+            url: 'modules/common/combos/combos.php?tipo=costparent'
+        });
+
+        var comboCOSTPARENTDET = new Ext.form.ComboBox({
+            id: 'comboCOSTPARENTDET',
+            store: storeCOSTPARENTDET,
+            valueField: 'id',
+            displayField: 'cost',
+            triggerAction: 'all',
+            mode: 'local'
+        });
+
+        function costparentAdmDet(id) {
+            var index = storeCOSTPARENTDET.findExact('id', id);
+            if (index > -1) {
+                var record = storeCOSTPARENTDET.getAt(index);
+                return record.get('cost');
+            }
+        }
+        //fin combo COSTPARENTDET
+        
         //inicio combo tipo documento  TID
         storeTID = new Ext.data.JsonStore({
             root: 'datos',
@@ -1836,6 +1863,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textFieldDetalle},
+                {header: 'Cost Code', dataIndex: 'parent', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
                 {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
                 {header: 'Total Grant V. II Quarter', dataIndex: 'total_grant_q2', hidden: false, width: 130, editor: textFieldDetalle},
                 {header: 'Total Grant V. III Quarter', dataIndex: 'total_grant_q3', hidden: false, width: 130, editor: textFieldDetalle},
@@ -2348,6 +2376,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     addDetalleInspeccion: function () {
         var inspeccion = new this.storeDetalleInspeccion.recordType({
             year: '',
+            id_cost: '',
             total_grant_q1: '0',
             total_grant_q2: '0',
             total_grant_q3: '0',

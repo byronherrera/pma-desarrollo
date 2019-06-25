@@ -33,7 +33,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
 
         //Inicio ventana mantenimiento ordenanzas
 
-        //inicio combo ZONAL
+        //inicio combo COSTPARENT
         storeCOSTPARENT = new Ext.data.JsonStore({
             root: 'data',
             fields: ['id', 'cost'],
@@ -57,7 +57,9 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 return record.get('cost');
             }
         }
-        //fin combo ZONA
+        //fin combo COSTPARENT
+
+
         //Definición de url CRUD
         var proxyCostcategory = new Ext.data.HttpProxy({
             api: {
