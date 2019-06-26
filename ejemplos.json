@@ -1,10 +1,10 @@
 {
-  "id": "inspeccion",
-  "type": "desktop/inspeccion",
+  "id": "planificacionmicro",
+  "type": "desktop/planificacionmicro",
   "about": {
     "author": "",
-    "description": "Inspeccion de Inspeccion.",
-    "name": "Ventana Inspeccion",
+    "description": "Planificacionmicro de Planificacionmicro.",
+    "name": "Ventana Planificacionmicro",
     "url": "",
     "version": "1.0"
   },
@@ -12,18 +12,18 @@
     "methods": [
       { "name": "accesosAdministrador", "description": "Full acceso con vista de todos los tramites" },
       { "name": "accesosSecretaria", "description": "Full acceso con vista de tramites pendientes" },
-      { "name": "accesosInspeccion", "description": "Personal de inspeccion" },
+      { "name": "accesosPlanificacionmicro", "description": "Personal de planificacionmicro" },
       { "name": "accesosSupervision", "description": "Personal de supervision" }
 
     ],
     "class": "QoDenuncias",
-    "file": "desktop/inspeccion/denuncias.php"
+    "file": "desktop/planificacionmicro/denuncias.php"
   },
   "client": {
-    "class": "QoDesk.InspeccionWindow",
+    "class": "QoDesk.PlanificacionmicroWindow",
     "css": [
       {
-        "directory": "desktop/inspeccion/client/resources/",
+        "directory": "desktop/planificacionmicro/client/resources/",
         "files": [ "styles.css" ]
       },
       {
@@ -37,8 +37,8 @@
         "files": [ "AppMsg.js","datetime/date-time-ux.js","CheckColumn.js", "Spinner/SpinnerField.js", "Spinner/Spinner.js","MultiSelect.js"  ]
       },
       {
-        "directory": "desktop/inspeccion/client/",
-        "files": [  "moduloInspeccion-win.js" ]
+        "directory": "desktop/planificacionmicro/client/",
+        "files": [  "moduloPlanificacionmicro-win.js" ]
       },
       {
         "directory": "qwiki/admin/client/",
@@ -51,8 +51,8 @@
     ],
     "launcher": {
       "config": {
-        "iconCls": "inspeccion-icon",
-        "shortcutIconCls": "inspeccion-shortcut",
+        "iconCls": "planificacionmicro-icon",
+        "shortcutIconCls": "planificacionmicro-shortcut",
         "text": "Planificacion",
         "tooltip": "<b>Planificacion</b>"
       },
