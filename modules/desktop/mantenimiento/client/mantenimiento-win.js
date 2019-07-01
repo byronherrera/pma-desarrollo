@@ -117,20 +117,31 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             store: this.storeCostcategory,
             columns: [
                 //Definición de campos bdd Costcategory
-                new Ext.grid.RowNumberer(),
-                {header: 'ID', dataIndex: 'id', sortable: true, width: 10},
-                {header: 'Cost Code', dataIndex: 'cost', sortable: true, width: 40, editor: textField},
-                {
+                new Ext.grid.RowNumberer()
+                ,{header: 'ID', dataIndex: 'id', sortable: true, width: 10}
+                ,{header: 'Cost Code', dataIndex: 'cost', sortable: true, width: 40, editor: textField}
+                ,{
                     header: 'Description',
                     dataIndex: 'description',
                     sortable: true,
                     width: 200,
                     editor: textField
-                },
-                {header: 'Parent Cost Code', dataIndex: 'parent', sortable: true, width: 100, editor: comboCOSTPARENT, renderer: costparentAdmMantenimi },
-
-
-                {
+                }
+                ,{header: 'Parent Cost Code', dataIndex: 'parent', sortable: true, width: 100, editor: comboCOSTPARENT, renderer: costparentAdmMantenimi }
+                ,{
+                    header: 'Type Cost'
+                    , dataIndex: 'typecost'
+                    , editor: {
+                        xtype: 'checkbox'
+                    }
+                    , falseText: 'No'
+                    , menuDisabled: true
+                    , trueText: 'Si'
+                    , sortable: true
+                    , width: 50
+                    , xtype: 'booleancolumn'
+                }
+                ,{
                     header: 'Active'
                     , dataIndex: 'active'
                     , editor: {

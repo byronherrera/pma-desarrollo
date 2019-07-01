@@ -105,7 +105,7 @@ function comboCost()
             "data" => $data)
     );
 }
-}
+
 
 function comboSO()
 {
@@ -122,7 +122,7 @@ function comboSO()
             "data" => $data)
     );
 }
-}
+
 
 function comboActivities()
 {
@@ -702,9 +702,6 @@ switch ($_GET['tipo']) {
     case 'procedimiento' :
         comboProcedimiento();
         break;
-    case 'zonas' :
-        comboZonas();
-        break;
     case 'tiposexpedientesinstruccion' :
         comboTiposExpedientesInstruccion();
         break;
@@ -822,4 +819,3 @@ switch ($_GET['tipo']) {
         comboActivities();
         break;
 }
-?>
