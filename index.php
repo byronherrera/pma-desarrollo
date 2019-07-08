@@ -28,6 +28,12 @@ if (!class_exists('os')) {
             <script type="text/javascript" src="ext-3.4.1/adapter/ext/ext-base.js"></script>
             <script type="text/javascript" src="ext-3.4.1/ext-all.js"></script>
 
+            <script type="text/javascript" src="ext-3.4.1/examples/ux/treegrid/TreeGridSorter.js"></script>
+            <script type="text/javascript" src="ext-3.4.1/examples/ux/treegrid/TreeGridColumnResizer.js"></script>
+            <script type="text/javascript" src="ext-3.4.1/examples/ux/treegrid/TreeGridNodeUI.js"></script>
+            <script type="text/javascript" src="ext-3.4.1/examples/ux/treegrid/TreeGridLoader.js"></script>
+            <script type="text/javascript" src="ext-3.4.1/examples/ux/treegrid/TreeGridColumns.js"></script>
+            <script type="text/javascript" src="ext-3.4.1/examples/ux/treegrid/TreeGrid.js"></script>
 
 
             <!-- DESKTOP CSS -->
