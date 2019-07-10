@@ -2064,7 +2064,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             win = desktop.createWindow({
                 id: 'grid-win-moduloPlanificacionmicro',
                 //Definición del título de la ventana
-                title: 'Contribuciones',
+                title: 'PLANIFICACION MICRO',
                 //Definición de tamaños de la ventana
                 width: winWidth,
                 height: winHeight,

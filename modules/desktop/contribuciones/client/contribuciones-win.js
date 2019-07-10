@@ -780,6 +780,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 {name: 'comments', allowBlank: false},
                 {name: 'isc', allowBlank: false},
                 {name: 'total_grant', allowBlank: true},
+                {name: 'total_programmed', allowBlank: true},
+                {name: 'total_unprogrammed', allowBlank: true},
                 {name: 'grant_tod', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_tdd', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_specific', allowBlank: true},
@@ -886,6 +888,30 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 {
                     header: 'Total Grant Value without ISC',
                     dataIndex: 'total_grant',
+                    sortable: true,
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: new Ext.form.NumberField({
+                        allowBlank: false,
+                        allowNegative: false,
+                        maxValue: 100000000
+                    })
+                },
+                {
+                    header: 'Programmed',
+                    dataIndex: 'total_programmed',
+                    sortable: true,
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: new Ext.form.NumberField({
+                        allowBlank: false,
+                        allowNegative: false,
+                        maxValue: 100000000
+                    })
+                },
+                {
+                    header: 'Unprogrammed',
+                    dataIndex: 'total_unprogrammed',
                     sortable: true,
                     width: 28,
                     renderer: 'usMoney',
@@ -1296,6 +1322,20 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 {
                     header: 'Total Grant Value without ISC',
                     dataIndex: 'total_grant',
+                    sortable: true,
+                    width: 28,
+                    renderer: 'usMoney'
+                },
+                {
+                    header: 'Programmed',
+                    dataIndex: 'total_programmed',
+                    sortable: true,
+                    width: 28,
+                    renderer: 'usMoney'
+                },
+                {
+                    header: 'Unprogrammed',
+                    dataIndex: 'total_unprogrammed',
                     sortable: true,
                     width: 28,
                     renderer: 'usMoney'
@@ -2456,6 +2496,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             comments: '',
             isc: 0,
             total_grant: 0,
+            total_programmed: 0,
+            total_unprogrammed: 0,
             activity: '',
             grant_tod: (new Date()),
             grant_tdd: (new Date()),

@@ -1,0 +1,3 @@
+INSERT INTO pma_desarrollo.pma_contribuciones_detalle (id,id_pma_contribuciones_detalle,`year`,so,activity,total,fecha_registro,total_grant_q1,total_grant_q2,total_grant_q3,total_grant_q4,total_grant_prog_doc,total_grant_prog_dsc,total_pr_po_doc,total_actuals_doc,total_balance_doc,total_pr_po_dsc,total_actuals_dsc,total_grant_balance_dsc) VALUES 
+(1,1,2017,'2','2',245000,'2019-07-01',1001,1002,1003,1004,1005,0,0,0,0,0,0,0)
+;

@@ -98,10 +98,11 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {name: 'comments', allowBlank: true},
                 {name: 'isc', allowBlank: true},
                 {name: 'total_grant', allowBlank: true},
+                {name: 'total_programmed', allowBlank: true},
+                {name: 'total_unprogrammed', allowBlank: true},
                 {name: 'grant_tod', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_tdd', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_specific', allowBlank: true},
-                // {name: 'activity', allowBlank: true},
                 {name: 'year_contribution', allowBlank: true}
             ]
 
@@ -134,11 +135,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             fields: [
                 {name: 'year', allowBlank: true},
                 {name: 'id_cost', allowBlank: true},
-                // {name: 'id_cost_detail', allowBlank: true},
-                {name: 'category_name', allowBlank: true},
-                {name: 'subcategory_name', allowBlank: true},
                 {name: 'so', allowBlank: true},
                 {name: 'activity', allowBlank: true},
+                {name: 'category_name', allowBlank: true},
                 {name: 'total', allowBlank: true},
                 {name: 'fecha_registro', allowBlank: true},
                 // {name: 'total_grant_q1', allowBlank: true},
@@ -1632,8 +1631,36 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'total_grant',
                     sortable: true,
                     width: 28,
-                    editor: textField
-                    // renderer: personaReceptaDenuncia
+                    renderer: 'usMoney',
+                    editor: new Ext.form.NumberField({
+                        allowBlank: false,
+                        allowNegative: false,
+                        maxValue: 100000000
+                    })
+                },
+                {
+                    header: 'Programmed',
+                    dataIndex: 'total_programmed',
+                    sortable: true,
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: new Ext.form.NumberField({
+                        allowBlank: false,
+                        allowNegative: false,
+                        maxValue: 100000000
+                    })
+                },
+                {
+                    header: 'Unprogrammed',
+                    dataIndex: 'total_unprogrammed',
+                    sortable: true,
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: new Ext.form.NumberField({
+                        allowBlank: false,
+                        allowNegative: false,
+                        maxValue: 100000000
+                    })
                 },
                 {
                     header: 'Grant TOD',
@@ -1962,7 +1989,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     renderer: costSO
                 },
                 {
-                    header: 'Activities',
+                    header: 'Activity',
                     dataIndex: 'activity',
                     sortable: true,
                     width: 100,
@@ -2270,17 +2297,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                         cls: 'no-border',
                                         items: [
                                             {
-                                                title: 'Detalle anual',
+                                                title: 'Detalle anual1',
                                                 autoScroll: true,
                                                 height: winHeight * 0.42,
                                                 flex: 1,
                                                 autoScroll: true,
                                                 layout: 'column',
                                                 items: [
+                                                    //{
+                                                    //    columnWidth: 1 / 4,
+                                                  //      items: this.tree
+                                                  //  },
                                                     {
-                                                        columnWidth: 1 / 4,
-                                                        items: this.tree
-                                                    }, {
                                                         columnWidth: 3 / 4,
                                                         tbar: [
                                                             //Definición de botón nuevo
@@ -2326,8 +2354,54 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                             }*/
                                                         ],
                                                         items: this.gridDetalleInspeccion
+                                                    },
+                                                    {
+                                                        columnWidth: 1 / 4,
+                                                        tbar: [
+                                                            //Definición de botón nuevo
+                                                            {
+                                                                id: 'btnNuevoDetalleInspeccionR',
+                                                                text: 'Nuevo',
+                                                                scope: this,
+                                                                handler: this.addDetalleInspeccionR,
+                                                                disabled: false,
+                                                                iconCls: 'save-icon'
+                                                            },
+                                                            '-',
+                                                            //Definición de botón eliminar
+                                                            {
+                                                                id: 'btnEliminarDetalleInspeccionR',
+                                                                text: "Eliminar",
+                                                                scope: this,
+                                                                handler: this.deleteDetalleInspeccionR,
+                                                                disabled: true,
+                                                                iconCls: 'delete-icon'
+                                                            },
+                                                            '-',
+                                                            //Definición de botón Recargar datos
+                                                            {
+                                                                id: 'btnRecargarDatosDetalleInspeccionR',
+                                                                iconCls: 'reload-icon',
+                                                                handler: this.requestGridDataDetalleInspeccionR,
+                                                                disabled: false,
+                                                                scope: this,
+                                                                text: 'Recargar'
+                                                            }
+                                                            /*,
+                                                            '-',
+                                                            //Definición de botón guardar datos
+                                                            {
+                                                                text: 'Guardar datos Inspección',
+                                                                scope: this,
+                                                                handler: this.grabardenuncias,
+                                                                iconCls: 'save-icon',
+                                                                disabled: !acceso,
+                                                                id: 'tb_grabardenuncias'
+                                                                , formBind: true
+                                                            }*/
+                                                        ],
+                                                        // items: this.gridDetalleInspeccion
                                                     }
-
                                                 ]
                                             }
                                         ]
@@ -2485,8 +2559,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             donor: ' ',
             comments: ' ',
             isc: ' ',
-            total_grant: ' ',
-            // activity: ' ',
+            total_grant: 0,
+            total_programmed: 0,
+            total_unprogrammed: 0,
             grant_tod: (new Date()),
             grant_tdd: (new Date()),
             grant_specific: ' ',
@@ -2556,12 +2631,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     addDetalleInspeccion: function () {
         var inspeccion = new this.storeDetalleInspeccion.recordType({
             year: '',
+            so: 1,
+            activity: 1,
             id_cost: '',
-            // id_cost_detail: '',
             category_name: '',
-            subcategory_name: '',
-            so: '',
-            activity: '',
             total: '',
             // total_grant_q1: '0',
             // total_grant_q2: '0',

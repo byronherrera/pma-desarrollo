@@ -37,17 +37,17 @@ function selectContribuciones()
              }
               $where = " WHERE $columnaBusqueda LIKE '%$campo%'";
          } else */
-              $where = " WHERE $columnaBusqueda LIKE '%$campo%' OR 
-                                estado LIKE '%$campo%' OR 
-                                crn  LIKE '%$campo%' OR 
-                                donor LIKE '%$campo%' OR 
-                                comments LIKE '%$campo%' OR 
-                                year_contribution LIKE '%$campo%' OR 
-                                isc LIKE '%$campo%' OR 
-                                total_grant LIKE '%$campo%' OR 
-                                grant_tod LIKE '%$campo%' OR 
-                                grant_tdd LIKE '%$campo%' OR 
-                                grant_specific LIKE '%$campo%' OR 
+              $where = " WHERE $columnaBusqueda LIKE '%$campo%' OR
+                                estado LIKE '%$campo%' OR
+                                crn  LIKE '%$campo%' OR
+                                donor LIKE '%$campo%' OR
+                                comments LIKE '%$campo%' OR
+                                year_contribution LIKE '%$campo%' OR
+                                isc LIKE '%$campo%' OR
+                                total_grant LIKE '%$campo%' OR
+                                grant_tod LIKE '%$campo%' OR
+                                grant_tdd LIKE '%$campo%' OR
+                                grant_specific LIKE '%$campo%' OR
                                 activity LIKE '%$campo%' ";
      }
 
@@ -80,7 +80,7 @@ function selectContribuciones()
     else
         $limit = 100;
 
-    $orderby = 'ORDER BY recepcion_documento DESC';
+    $orderby = 'ORDER BY id DESC';
     if (isset($_POST['sort'])) {
          $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
      }
@@ -147,6 +147,7 @@ function selectContribuciones()
 
     $os->db->conn->query("SET NAMES 'utf8'");
      $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
+     // $sql = "SELECT * FROM pma_contribuciones $where LIMIT $start, $limit";
     //$sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
     $result = $os->db->conn->query($sql);
     $data = array();
