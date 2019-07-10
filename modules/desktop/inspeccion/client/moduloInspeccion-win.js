@@ -2050,13 +2050,13 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             enableDD: true,
 
             columns:[{
-                header: 'Task',
-                dataIndex: 'task',
+                header: 'Description',
+                dataIndex: 'description',
                 width: 230
             },{
                 header: 'Duration',
                 width: 100,
-                dataIndex: 'duration',
+                dataIndex: 'active',
                 align: 'center',
                 sortType: 'asFloat',
                 tpl: new Ext.XTemplate('{duration:this.formatHours}', {
@@ -2072,9 +2072,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     }
                 })
             },{
-                header: 'Assigned To',
+                header: 'Cost',
                 width: 150,
-                dataIndex: 'user'
+                dataIndex: 'cost'
             }],
 
             dataUrl: urlInspeccion + 'treegrid-data.php'

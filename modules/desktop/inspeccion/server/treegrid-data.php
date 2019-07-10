@@ -1,165 +1,38 @@
-[{
-"task":"Project: Shopping",
-"duration":13.25,
-"user":"Tommy Maintz",
-"iconCls":"task-folder",
-"expanded": true,
-"children":[{
-"task":"Housewares",
-"duration":1.25,
-"user":"Tommy Maintz",
-"iconCls":"task-folder",
-"children":[{
-"task":"Kitchen supplies",
-"duration":0.25,
-"user":"Tommy Maintz",
-"leaf":true,
-"iconCls":"task"
-},{
-"task":"Groceries",
-"duration":0.4,
-"user":"Tommy Maintz",
-"leaf":true,
-"iconCls":"task"
-},{
-"task":"Cleaning supplies",
-"duration":0.4,
-"user":"Tommy Maintz",
-"leaf":true,
-"iconCls":"task"
-},{
-"task": "Office supplies",
-"duration":0.2,
-"user": "Tommy Maintz",
-"leaf": true,
-"iconCls": "task"
-}]
-}, {
-"task":"Remodeling",
-"duration":12,
-"user":"Tommy Maintz",
-"iconCls":"task-folder",
-"expanded": true,
-"children":[{
-"task":"Retile kitchen",
-"duration":6.5,
-"user":"Tommy Maintz",
-"leaf":true,
-"iconCls":"task"
-},{
-"task":"Paint bedroom",
-"duration": 2.75,
-"user":"Tommy Maintz",
-"iconCls":"task-folder",
-"children": [{
-"task": "Ceiling",
-"duration": 1.25,
-"user": "Tommy Maintz",
-"iconCls": "task",
-"leaf": true
-}, {
-"task": "Walls",
-"duration": 1.5,
-"user": "Tommy Maintz",
-"iconCls": "task",
-"leaf": true
-}]
-},{
-"task":"Decorate living room",
-"duration":2.75,
-"user":"Tommy Maintz",
-"leaf":true,
-"iconCls":"task"
-},{
-"task": "Fix lights",
-"duration": 0.75,
-"user": "Tommy Maintz",
-"leaf": true,
-"iconCls": "task"
-}, {
-"task": "Reattach screen door",
-"duration": 2,
-"user": "Tommy Maintz",
-"leaf": true,
-"iconCls": "task"
-}]
-}]
-},{
-"task":"Project: Testing",
-"duration":2,
-"user":"Core Team",
-"iconCls":"task-folder",
-"children":[{
-"task": "Mac OSX",
-"duration": 0.75,
-"user": "Tommy Maintz",
-"iconCls": "task-folder",
-"children": [{
-"task": "FireFox",
-"duration": 0.25,
-"user": "Tommy Maintz",
-"iconCls": "task",
-"leaf": true
-}, {
-"task": "Safari",
-"duration": 0.25,
-"user": "Tommy Maintz",
-"iconCls": "task",
-"leaf": true
-}, {
-"task": "Chrome",
-"duration": 0.25,
-"user": "Tommy Maintz",
-"iconCls": "task",
-"leaf": true
-}]
-},{
-"task": "Windows",
-"duration": 3.75,
-"user": "Darrell Meyer",
-"iconCls": "task-folder",
-"children": [{
-"task": "FireFox",
-"duration": 0.25,
-"user": "Darrell Meyer",
-"iconCls": "task",
-"leaf": true
-}, {
-"task": "Safari",
-"duration": 0.25,
-"user": "Darrell Meyer",
-"iconCls": "task",
-"leaf": true
-}, {
-"task": "Chrome",
-"duration": 0.25,
-"user": "Darrell Meyer",
-"iconCls": "task",
-"leaf": true
-},{
-"task": "Internet Exploder",
-"duration": 3,
-"user": "Darrell Meyer",
-"iconCls": "task",
-"leaf": true
-}]
-},{
-"task": "Linux",
-"duration": 0.5,
-"user": "Aaron Conran",
-"iconCls": "task",
-"children": [{
-"task": "FireFox",
-"duration": 0.25,
-"user": "Aaron Conran",
-"iconCls": "task",
-"leaf": true
-}, {
-"task": "Chrome",
-"duration": 0.25,
-"user": "Aaron Conran",
-"iconCls": "task",
-"leaf": true
-}]
-}]
-}]
+<?php
+require_once '../../../../server/os.php';
+require_once '../../../common/Classes/funciones.php';
+
+$os = new os();
+if (!$os->session_exists()) {
+    die('No existe sesión!');
+}
+
+$data = array();
+
+$tree = buildTree($data);
+
+$tree = json_encode($tree);
+echo $tree;
+
+function buildTree(array $elements, $parentId = NULL) {
+    global $os;
+    $branch = array();
+    $os->db->conn->query("SET NAMES 'utf8'");
+    if (is_null($parentId))
+    $sql = "SELECT * FROM pma_cost_category WHERE ISNULL(parent)";
+    else
+        $sql = "SELECT * FROM pma_cost_category WHERE parent = $parentId";
+
+    $result = $os->db->conn->query($sql);
+    while ($element = $result->fetch(PDO::FETCH_ASSOC)) {
+        if ($element['parent'] == $parentId) {
+            $children = buildTree($elements, $element['id']);
+            if ($children) {
+                $element['children'] = $children;
+            }
+            $branch[] = $element;
+        }
+    }
+    return $branch;
+}
+
