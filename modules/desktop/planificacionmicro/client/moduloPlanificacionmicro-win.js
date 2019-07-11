@@ -2240,6 +2240,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                 autoScroll: true,
                                                 height: winHeight * 0.41,
                                                 // aca Carlos Cevallos
+
  /*                                               tbar: [
                                                     //Definición de botón nuevo
                                                     {
