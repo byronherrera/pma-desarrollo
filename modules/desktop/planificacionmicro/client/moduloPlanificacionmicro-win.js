@@ -2005,6 +2005,104 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         //Fin formato grid detalle planificacionmicro
 
+        //inicio mantenimiento Planificacionmicrodet
+        var proxyPlanificacionmicrodet = new Ext.data.HttpProxy({
+            api: {
+                create: urlPlanificacionmicro + "crudPlanificacionmicrodet.php?operation=insert",
+                read: urlPlanificacionmicro + "crudPlanificacionmicrodet.php?operation=select",
+                update: urlPlanificacionmicro + "crudPlanificacionmicrodet.php?operation=update",
+                destroy: urlPlanificacionmicro + "crudPlanificacionmicrodet.php?operation=delete"
+            }
+        });
+
+        var readerPlanificacionmicrodet = new Ext.data.JsonReader({
+            successProperty: 'success',
+            messageProperty: 'message',
+            idProperty: 'id',
+            root: 'data',
+            fields: [
+                {name: 'id', allowBlank: false},
+                {name: 'numero', allowBlank: false},
+                {name: 'unidad', allowBlank: false},
+                {name: 'id_member', allowBlank: false},
+                {name: 'creado', allowBlank: false}
+            ]
+        });
+
+        var writerPlanificacionmicrodet = new Ext.data.JsonWriter({
+            encode: true,
+            writeAllFields: true
+        });
+
+        this.storePlanificacionmicrodet = new Ext.data.Store({
+            id: "id",
+            proxy: proxyPlanificacionmicrodet,
+            reader: readerPlanificacionmicrodet,
+            writer: writerPlanificacionmicrodet,
+            autoSave: true
+        });
+        this.storePlanificacionmicrodet.load();
+
+        this.gridPlanificacionmicrodet = new Ext.grid.EditorGridPanel({
+            id: 'gridPlanificacionmicrodet',
+            xtype: "grid",
+            height: winHeight * 0.37,
+            store: this.storePlanificacionmicrodet,
+            columns: [
+                new Ext.grid.RowNumberer(),
+                {
+                    header: 'id',
+                    dataIndex: 'id',
+                    sortable: true,
+                    width: 5
+                }, {
+                    header: 'Número',
+                    dataIndex: 'numero',
+                    sortable: true,
+                    width: 30
+                },
+                {
+                    header: 'Unidad Enviada',
+                    dataIndex: 'unidad',
+                    sortable: true,
+                    width: 40
+                },
+                {
+                    header: 'Fecha',
+                    dataIndex: 'creado',
+                    sortable: true,
+                    width: 30
+                },
+                {
+                    header: 'Encargado',
+                    dataIndex: 'id_member',
+                    sortable: true,
+                    width: 40
+                }
+            ],
+            viewConfig: {forceFit: true},
+            sm: new Ext.grid.RowSelectionModel({
+                singleSelect: false,
+                listeners: {
+                    rowselect: function (sm, row, rec) {
+                        //storePlanificacionmicrodetSimple.load({params: {filterField: 'guia', filterText: rec.get("numero")}})
+                    }
+                }
+            }),
+            border: false,
+            stripeRows: true,
+            bbar: new Ext.PagingToolbar({
+                pageSize: 100,
+                store: this.storePlanificacionmicrodet,
+                displayInfo: true,
+                displayMsg: 'Mostrando pmicro {0} - {1} de {2} PMA',
+                emptyMsg: "No existen nada  que mostrar"
+            }),
+        });
+
+        //fin mantenimiento Planificacionmicrodet
+
+
         //Inicio pestaña planificacionmicroes
         this.gridListadoPlanificacionmicro = new Ext.grid.EditorGridPanel({
             id: 'gridListadoPlanificacionmicro',
@@ -2241,7 +2339,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                 height: winHeight * 0.41,
                                                 // aca Carlos Cevallos
 
- /*                                               tbar: [
+                                                tbar: [
                                                     //Definición de botón nuevo
                                                     {
                                                         id: 'btnNuevoDetallePlanificacionmicro',
@@ -2271,7 +2369,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                         scope: this,
                                                         text: 'Recargar'
                                                     }
-                                                    /!*,
+                                                    ,
                                                     '-',
                                                     //Definición de botón guardar datos
                                                     {
@@ -2279,12 +2377,12 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                         scope: this,
                                                         handler: this.grabardenuncias,
                                                         iconCls: 'save-icon',
-                                                        disabled: !acceso,
+                                                        //disabled: !acceso,
                                                         id: 'tb_grabardenuncias'
                                                         , formBind: true
-                                                    }*!/
+                                                    }
                                                 ],
-                                                items: [this.gridDetallePlanificacionmicro]*/
+                                                items: [this.gridPlanificacionmicrodet]
                                             }
                                         ]
                                     }

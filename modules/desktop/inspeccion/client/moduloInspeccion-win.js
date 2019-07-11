@@ -1836,6 +1836,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         //fin mantenimiento InspeccionActa
 
+
+
+
         // Inicio mantenimiento InspeccionActa simple
         this.storeInspeccionActaSimple = new Ext.data.Store({
             id: "id",
