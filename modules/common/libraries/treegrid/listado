@@ -1,0 +1,9 @@
+TreeGrid.js, TreeGridColumnResizer.js, TreeGridColumns.js, TreeGridLoader.js, TreeGridNodeUI.js, TreeGridSorter.js
+
+
+"TreeGrid.js", "TreeGridColumnResizer.js", "TreeGridColumns.js", "TreeGridLoader.js", "TreeGridNodeUI.js", "TreeGridSorter.js"
+
+{
+        "directory": "../ext-3.4.1/examples/ux/treegrid/",
+        "files": [ "TreeGridColumnResizer.js", "TreeGridColumns.js", "TreeGridLoader.js", "TreeGridNodeUI.js", "TreeGridSorter.js", "TreeGrid.js"]
+      },
