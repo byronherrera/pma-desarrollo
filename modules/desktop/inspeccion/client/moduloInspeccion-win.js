@@ -2258,7 +2258,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                 },
                                 '-',
                                 //bh boton generar
-                                {
+                             /*   {
                                     iconCls: 'excel-icon',
                                     handler: this.botonGenerarActa,
                                     scope: this,
@@ -2266,8 +2266,48 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                     tooltip: 'Se genera acta con las ',
                                     id: 'tb_repoteDenuncias',
                                     disabled: false
+                                },*/
+
+                                //bh boton migrar Wings
+
+                                {
+                                    xtype: 'form',
+                                    fileUpload: true,
+                                    width: 300,
+                                    frame: true,
+                                    autoHeight: 50,
+                                    defaults: {
+                                        anchor: '100%',
+                                        allowBlank: false
+                                    },
+                                    id: "fp",
+                                    items: [
+                                        {
+                                            xtype: 'fileuploadfield',
+                                            id: 'form-file',
+                                            emptyText: 'Seleccione archivo a importar',
+                                            fieldLabel: 'Archivo Excel',
+                                            name: 'photo-path',
+                                            regex: /^.*.(xls|XLS|xlsx|XLSX)$/,
+                                            regexText: 'Solo Excel',
+                                            buttonText: '',
+                                            //buttonOnly: true,
+                                            buttonCfg: {
+                                                iconCls: 'ux-start-menu-submenu'
+                                            }
+                                        }
+                                    ]
                                 },
                                 '-',
+                                {
+                                    text: "Subir Excel",
+                                    scope: this,
+                                    handler:this.botonImportarWings,
+                                    id: 'subirimagen',
+                                    iconCls: 'subir-icon',
+                                    //disabled: this.app.isAllowedTo('accesosAdministradorOpe', this.id) ? false : true
+                                    disabled: false
+                                },
                                 '->'
                                 , {
                                     text: 'Buscar por:'
@@ -2692,6 +2732,53 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
                         storeModuloInspeccion.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
                     }, 1500);
+                }
+            }
+        });
+    },
+
+
+    // bh boton migrar informacion wings
+    botonImportarWings: function () {
+
+
+
+        Ext.Msg.show({
+            title: 'Advertencia',
+            msg: 'La migración sobrescribirá la información anterior<br><br>¿Desea continuar?',
+            scope: this,
+            icon: Ext.Msg.WARNING,
+            buttons: Ext.Msg.YESNO,
+            fn: function (btn) {
+                if (btn == 'yes') {
+    //                window.location.href = 'modules/desktop/inspeccion/server/migrarWings.php';
+    //                setTimeout(function () {
+    //                    AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
+    //                    storeModuloInspeccion.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
+    //                }, 1500);
+                    if (Ext.getCmp('fp').getForm().isValid()) {
+                        Ext.getCmp('fp').getForm().submit({
+                            url: urlOperativos + 'file-upload.php',
+                            params: {data: selectOperativos},
+                            waitMsg: 'Subiendo Imagen...',
+                            success: function (fp, o) {
+
+                                storeOperativosImagenes.load({params: {id_operativo: selectOperativos}});
+                                Ext.getCmp('fp').getForm().reset();
+                            },
+                            failure: function (form, action) {
+                                var errorJson = JSON.parse(action.response.responseText);
+                                Ext.Msg.show({
+                                    title: 'Error '
+                                    , msg: errorJson.msg
+                                    , modal: true
+                                    , icon: Ext.Msg.ERROR
+                                    , buttons: Ext.Msg.OK
+                                });
+                            }
+                        });
+                    }
+
                 }
             }
         });
