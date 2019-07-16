@@ -58,6 +58,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var winHeight = desktop.getWinHeight();
         var winWidth = desktop.getWinWidth();
 
+        this.selectPlanificaion = 0;
+        selectPlanificaion = 0;
+
         var AppMsg = new Ext.AppMsg({});
         var win = desktop.getWindow('grid-win-moduloInspeccion');
 
@@ -2740,9 +2743,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
     // bh boton migrar informacion wings
     botonImportarWings: function () {
-
-
-
         Ext.Msg.show({
             title: 'Advertencia',
             msg: 'La migración sobrescribirá la información anterior<br><br>¿Desea continuar?',
@@ -2758,24 +2758,26 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     //                }, 1500);
                     if (Ext.getCmp('fp').getForm().isValid()) {
                         Ext.getCmp('fp').getForm().submit({
-                            url: urlOperativos + 'file-upload.php',
-                            params: {data: selectOperativos},
-                            waitMsg: 'Subiendo Imagen...',
+                            url: 'modules/desktop/inspeccion/server/migrarWings.php',
+                            waitMsg: 'Subiendo archivo...',
+                            //params: {data: selectOperativos},
                             success: function (fp, o) {
 
-                                storeOperativosImagenes.load({params: {id_operativo: selectOperativos}});
-                                Ext.getCmp('fp').getForm().reset();
+                             //   storeModuloInspeccion.load();
+                                //storeOperativosImagenes.load({params: {id_operativo: selectPlanificaion}});
+                                //Ext.getCmp('fp').getForm().reset();
                             },
                             failure: function (form, action) {
-                                var errorJson = JSON.parse(action.response.responseText);
-                                Ext.Msg.show({
+                                //var errorJson = JSON.parse(action.response.responseText);
+                                /*Ext.Msg.show({
                                     title: 'Error '
                                     , msg: errorJson.msg
                                     , modal: true
                                     , icon: Ext.Msg.ERROR
                                     , buttons: Ext.Msg.OK
-                                });
+                                });*/
                             }
+
                         });
                     }
 
