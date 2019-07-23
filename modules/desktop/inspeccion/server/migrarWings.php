@@ -24,7 +24,7 @@ if (isset($_FILES)) {
 
     $original_file_name = $_FILES['photo-path']['name'];
     //$uploaddir = __DIR__ . "/../../../../migrar/";
-    $uploaddir = __DIR__ ;
+    $uploaddir = __DIR__ . "\\" ;
 
     $nombreArchivo = $_FILES['photo-path']['name'];
 

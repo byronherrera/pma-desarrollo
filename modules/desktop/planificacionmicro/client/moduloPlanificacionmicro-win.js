@@ -2544,7 +2544,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
           grant_tod: (new Date()),
           grant_tdd: (new Date()),
           grant_specific: ' ',
-          year_contribution: ' '
+          year_contribution: (new Date().getFullYear()),
             // codigo_tramite: '',
             // recepción_documento: '',
             // //id_ordenanza: '0',

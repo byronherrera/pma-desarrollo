@@ -232,7 +232,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {name: 'id_inspeccion', readOnly: false, allowBlank: true},
                 //{name: 'codificacion', readOnly: false, allowBlank: true},
                 {name: 'nombre_denunciado', readOnly: false, allowBlank: true},
-                {name: 'id_ordenanza', readOnly: true, allowBlank: true},
+               // {name: 'id_ordenanza', readOnly: true, allowBlank: true},
                 {name: 'fecha_despacho', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'id_actividad', readOnly: false, allowBlank: true},
                 //{name: 'respuesta', readOnly: false, allowBlank: true},
@@ -2001,13 +2001,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 150
                 },
-                {
-                    header: 'Ordenanza aplicada',
-                    dataIndex: 'id_ordenanza',
-                    sortable: true,
-                    width: 180,
-                    renderer: listaOrdenanzas
-                },
+
                 {header: 'Infraccion', dataIndex: 'infraccion', sortable: true, width: 150},
                 {
                     header: 'Observaciones',
@@ -2764,7 +2758,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             grant_number: ' ',
             crn: ' ',
             donor: ' ',
-            year_contribution: ' ',
+            year_contribution: (new Date().getFullYear()),
             // isc: ' ',
             // total_grant: 0,
             // total_programmed: 0,
@@ -2928,7 +2922,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
                              //   storeModuloInspeccion.load();
                                 //storeOperativosImagenes.load({params: {id_operativo: selectPlanificaion}});
-                                //Ext.getCmp('fp').getForm().reset();
+                                Ext.getCmp('fp').getForm().reset();
                             },
                             failure: function (form, action) {
                                 //var errorJson = JSON.parse(action.response.responseText);
