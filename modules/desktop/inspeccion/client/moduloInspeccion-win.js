@@ -24,6 +24,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var accesosInspectores = this.app.isAllowedTo('accesosInspeccion', this.id); //Sin acceso a pestaña trámites pendientes, acceso a inspecciones asignadas
         var accesosSupervision = this.app.isAllowedTo('accesosSupervision', this.id); //Solo modo lectura
 
+        this.selectContribuciones = 0;
+
         //Control en caso de tener asignado el perfil de administrador
         if (accesosCoordinadorInspeccion && accesosSecretaria && accesosInspectores && accesosSupervision == true) {
             accesosSecretaria = false;
@@ -136,12 +138,13 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'year', allowBlank: true},
-                {name: 'id_cost', allowBlank: true},
+                {name: 'id_pma_contribuciones_detalle', allowBlank: true},
+                {name: 'year', allowBlank: false},
+                //{name: 'id_cost', allowBlank: true},
                 {name: 'so', allowBlank: true},
                 {name: 'activity', allowBlank: true},
-                {name: 'category_name', allowBlank: true},
-                {name: 'total', allowBlank: true},
+                //{name: 'category_name', allowBlank: true},
+                //{name: 'total', allowBlank: true},
                 {name: 'fecha_registro', allowBlank: true},
                 // {name: 'total_grant_q1', allowBlank: true},
                 // {name: 'total_grant_q2', allowBlank: true},
@@ -389,7 +392,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
         function costActivities(id) {
-            var index = storeActivities.findExact('id', id);
+         //   var index = storeActivities.findExact('id', id);
+            var index = storeActivities.find('id', id);
             if (index > -1) {
                 var record = storeActivities.getAt(index);
                 return record.get('subcategory_name');
@@ -429,7 +433,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
         function costSO(id) {
-            var index = storeSO.findExact('id', id);
+            var index = storeSO.find('id', id);
             if (index > -1) {
                 var record = storeSO.getAt(index);
                 return record.get('category_name');
@@ -1772,6 +1776,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     rowselect: function (sm, row, rec) {
                         // recuperamos la informacion de personal asignado a ese operativo
                         //select_codigo_tramite = rec.id;
+                        selectContribuciones = rec.id;
                         storeDetalleInspeccion.load({params: {id: rec.id}});
                         tramiteSeleccionado = rec.id;
                         inspeccionSeleccionada = rec.id_denuncia;
@@ -2126,6 +2131,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textFieldDetalle},
+                {header: 'id_pma_contribuciones_detalle', dataIndex: 'id_pma_contribuciones_detalle', hidden: true, width: 50},
                 {
                     header: 'Strategic Objectives',
                     dataIndex: 'so',
@@ -2182,9 +2188,12 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     rowselect: function (sm, row, rec) {
                         // recuperamos la informacion de personal asignado a ese operativo
                         //select_codigo_tramite = rec.id;
+                       
+
                         storeDetalleAjustes.load({params: {id: rec.id}});
-                        tramiteSeleccionado = rec.id;
-                        inspeccionSeleccionada = rec.id_denuncia;
+
+                        //tramiteSeleccionado = rec.id;
+                        //inspeccionSeleccionada = rec.id_denuncia;
                         //storeDetalleInspeccion.load({params: {filterText: rec.data.codigo_tramite}});
                         if (creacionDatosInspeccion) {
                             Ext.getCmp('btnNuevoDetalleInspeccion').setDisabled(false);
@@ -2837,7 +2846,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             so: 1,
             activity: 1,
             id_cost: '',
-            category_name: '',
+            id_pma_contribuciones_detalle : selectContribuciones,
+            //category_name: '',
             total: '',
             // total_grant_q1: '0',
             // total_grant_q2: '0',
