@@ -1,8 +1,8 @@
 <?php
-
-require_once '../../../common/Classes/PhpSpreadsheet/autoload.php';
-
 //require __DIR__ . "/PhpSpreadsheet/autoload.php";
+
+//libreria de lectura de
+require_once '../../../common/Classes/PhpSpreadsheet/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -14,40 +14,56 @@ if (!$os->session_exists()) {
 
 
 ///////////////
-///
-///
 
-//if(isset($_POST['data'])){
-//    if($_POST['data']!= '0'){
-if (isset($_FILES)) {
-    $temp_file_name = $_FILES['photo-path']['tmp_name'];
+if (isset($_POST['data'])) {
+    if ($_POST['data'] != '0') {
+        if (isset($_FILES)) {
+            $temp_file_name = $_FILES['photo-path']['tmp_name'];
 
-    $original_file_name = $_FILES['photo-path']['name'];
-    //$uploaddir = __DIR__ . "/../../../../migrar/";
-    $uploaddir = __DIR__ . "\\" ;
+            $original_file_name = $_FILES['photo-path']['name'];
+            $uploaddir = __DIR__ . "/../../../../migrar/";
 
-    $nombreArchivo = $_FILES['photo-path']['name'];
+            $nombreArchivo = $_FILES['photo-path']['name'];
 
-    $vowels = array("[", "]");
-    $nombreArchivo = str_replace($vowels, "", $nombreArchivo);
+//            . date('-Y-m-d-h-i-s')
+            $vowels = array("[", "]");
+            $nombreArchivo = str_replace($vowels, "", $nombreArchivo );
 
-    $uploadfile = $uploaddir . basename( $nombreArchivo );
-    if (move_uploaded_file($temp_file_name, $uploadfile)) {
-        // en caso de ser exito el ingreso entonces se inserta un registro en la base de datos
+            $uploadfile = $uploaddir . basename($nombreArchivo);
 
-        $origen = $uploadfile;
-        $destino = $uploadfile;
-        $destino_temporal = tempnam("tmp/", "tmp");
+            if (move_uploaded_file($temp_file_name, $uploadfile)) {
+                echo "subido";
 
-        // guardamos la imagen
+                /*$inputFileName = $uploadfile;
 
-        $fp = fopen($destino, "w");
-        fputs($fp, fread(fopen($destino_temporal, "r"), filesize($destino_temporal)));
-        fclose($fp);
-        //insertParticipantes('imagenes/operativos/' .$_POST['data']. '-' . $_FILES['photo-path']['name'], $_POST['data']);
+                $spreadsheet = IOFactory::load($inputFileName);
+                $data = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+                $total = 0;
+                echo json_encode(array(
+                        "total" => $total,
+                        "success" => true,
+                        "data" => $data)
+                );*/
+
+                // en caso de ser exito el ingreso entonces se inserta un registro en la base de datos
+
+//        $destino_temporal = tempnam("tmp/", "tmp");
+//        $origen = $uploadfile;
+//
+//
+//        $fp = fopen($uploadfile, "w");
+//        fputs($fp, fread(fopen($destino_temporal, "r"), filesize($destino_temporal)));
+//        fclose($fp);
+                //insertParticipantes('imagenes/operativos/' .$_POST['data']. '-' . $_FILES['photo-path']['name'], $_POST['data']);
+            } else {
+                echo json_encode(array(
+                        "total" => 0,
+                        "success" => false,
+                        "data" => "")
+                );
+            }
+        }
     }
-    //       }
-    //   }
 }
 
 
@@ -79,20 +95,3 @@ function insertParticipantes($url, $idOper)
         "message" => "error"
     ));
 }
-
-
-//////////////
-///
-///
-///
-
-$inputFileName = 'example1.xls';
-
-$spreadsheet = IOFactory::load($inputFileName);
-$data = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-$total = 0;
-echo json_encode(array(
-        "total" => $total,
-        "success" => true,
-        "data" => $data)
-);
