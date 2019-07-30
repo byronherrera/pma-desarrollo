@@ -25,6 +25,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var accesosSupervision = this.app.isAllowedTo('accesosSupervision', this.id); //Solo modo lectura
 
         this.selectContribuciones = 0;
+        this.select_SO = 0;
 
         //Control en caso de tener asignado el perfil de administrador
         if (accesosCoordinadorInspeccion && accesosSecretaria && accesosInspectores && accesosSupervision == true) {
@@ -167,47 +168,36 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             writeAllFields: true
         });
 
-        var proxyDetalleAjustes = new Ext.data.HttpProxy({
+        var proxyCostoMacro = new Ext.data.HttpProxy({
             api: {
-                create: urlInspeccion + "crudDetalleContribuciones.php?operation=insert",
-                read: urlInspeccion + "crudDetalleContribuciones.php?operation=select",
-                update: urlInspeccion + "crudDetalleContribuciones.php?operation=update",
-                destroy: urlInspeccion + "crudDetalleContribuciones-.php?operation=delete"
+                create: urlInspeccion + "crudCostosMacro.php?operation=insert",
+                read: urlInspeccion + "crudCostosMacro.php?operation=select",
+                update: urlInspeccion + "crudCostosMacro.php?operation=update",
+                destroy: urlInspeccion + "crudCostosMacro.php?operation=delete"
             }
         });
 
         //Definición de lectura de campos bdd Inspeccion
-        var readerDetalleAjustes = new Ext.data.JsonReader({
+        var readerCostoMacro = new Ext.data.JsonReader({
             //totalProperty: 'total',
             successProperty: 'success',
             messageProperty: 'message',
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'year', allowBlank: true},
-                {name: 'id_cost', allowBlank: true},
-                {name: 'so', allowBlank: true},
-                {name: 'activity', allowBlank: true},
-                {name: 'category_name', allowBlank: true},
+                {name: 'cost_code', allowBlank: true},
                 {name: 'total', allowBlank: true},
+                {name: 'doc', allowBlank: true},
+                {name: 'dsc', allowBlank: true},
+                {name: 'adjust', allowBlank: true},
+                {name: 'comment', allowBlank: true},
+                {name: 'total_adjusted', allowBlank: true},
                 {name: 'fecha_registro', allowBlank: true},
-                // {name: 'total_grant_q1', allowBlank: true},
-                // {name: 'total_grant_q2', allowBlank: true},
-                // {name: 'total_grant_q3', allowBlank: true},
-                // {name: 'total_grant_q4', allowBlank: true},
-                // {name: 'total_grant_prog_doc', allowBlank: true},
-                // {name: 'total_grant_prog_dsc', allowBlank: true},
-                // {name: 'total_pr_po_doc', allowBlank: true},
-                // {name: 'total_actuals_doc', allowBlank: true},
-                // {name: 'total_balance_doc', allowBlank: true},
-                // {name: 'total_pr_po_dsc', allowBlank: true},
-                // {name: 'total_actuals_dsc', allowBlank: true},
-                // {name: 'total_grant_balance_dsc', allowBlank: true}
             ]
         });
 
         //Definición de escritura en campos bdd Inspeccion
-        var writerDetalleAjustes = new Ext.data.JsonWriter({
+        var writerCostoMacro = new Ext.data.JsonWriter({
             encode: true,
             writeAllFields: true
         });
@@ -288,11 +278,11 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             //baseParams: {}
         });
 
-        this.storeDetalleAjustes = new Ext.data.Store({
+        this.storeCostoMacro = new Ext.data.Store({
             id: "id",
-            proxy: proxyDetalleAjustes,
-            reader: readerDetalleAjustes,
-            writer: writerDetalleAjustes,
+            proxy: proxyCostoMacro,
+            reader: readerCostoMacro,
+            writer: writerCostoMacro,
             autoSave: true, // dependiendo de si se tiene acceso para grabar
             //remoteSort: true,
             //baseParams: {}
@@ -1605,7 +1595,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         this.storeModuloInspeccion.load();
         this.storeDetalleInspeccion.load();
-        this.storeDetalleAjustes.load();
+        this.storeCostoMacro.load();
 
         // if (todosInspectores == true) {
         this.storeListadoInspeccion.load();
@@ -1616,7 +1606,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         storeModuloInspeccion = this.storeModuloInspeccion;
         limiteModuloInspeccion = 100;
         storeDetalleInspeccion = this.storeDetalleInspeccion;
-        storeDetalleAjustes = this.storeDetalleAjustes;
+        storeCostoMacro = this.storeCostoMacro;
         limiteDetalleInspeccion = 10;
         limiteDetalleInspeccionLarge = 100;
         storeModuloInspeccion.baseParams = {
@@ -2031,14 +2021,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         // Inicio mantenimiento InspeccionActa simple
 
 
-        this.gridDetalleAjustes = new Ext.grid.EditorGridPanel({
-            id: 'gridDetalleAjustes',
+        this.gridCostoMacro = new Ext.grid.EditorGridPanel({
+            id: 'gridCostoMacro',
             //Calculo de tamaño vertical frame inferior de pestaña Trámites pendientes
             height: winHeight * 0.34,
             //Calculo de tamaño horizontal frame inferior de pestaña Trámites pendientes
             width: winWidth - 16,
             readOnly: false,
-            store: this.storeDetalleAjustes,
+            store: this.storeCostoMacro,
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
@@ -2056,7 +2046,11 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'fecha_registro',
                     hidden: false,
                     width: 120,
-                    editor: textFieldDetalle
+                    renderer: formatDate,
+                    editor: new Ext.ux.form.DateTimeField({
+                        dateFormat: 'Y-m-d',
+                        timeFormat: 'H:i:s'
+                    })
                 },
                 {header: 'Direct Operational Cost', dataIndex: 'doc', hidden: false, width: 150, renderer: 'usMoney', editor: textFieldDetalle},
                 {header: 'Direct Support Cost', dataIndex: 'dsc', hidden: false, width: 150, renderer: 'usMoney', editor: textFieldDetalle},
@@ -2091,10 +2085,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             //Definición de barra de paginado
             bbar: new Ext.PagingToolbar({
                 pageSize: limiteDetalleInspeccion,
-                store: storeDetalleAjustes,
+                store: storeCostoMacro,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
-                emptyMsg: "Seleccione un trámite"
+                displayMsg: 'Mostrando costos macro: {0} - {1} de {2} - PMA',
+                emptyMsg: "Seleccione un costo macro"
             }),
             listeners: {
                 beforeedit: function (e) {
@@ -2187,10 +2181,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 listeners: {
                     rowselect: function (sm, row, rec) {
                         // recuperamos la informacion de personal asignado a ese operativo
-                        //select_codigo_tramite = rec.id;
-                       
+                        select_SO = rec.id;
 
-                        storeDetalleAjustes.load({params: {id: rec.id}});
+
+                        storeCostoMacro.load({params: {id: rec.id}});
 
                         //tramiteSeleccionado = rec.id;
                         //inspeccionSeleccionada = rec.id_denuncia;
@@ -2200,7 +2194,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                             Ext.getCmp('btnEliminarDetalleInspeccion').setDisabled(false);
                             // Ext.getCmp('checkTodasInspecciones').setValue(false);
                             // Ext.getCmp('gridDetalleTodasInspecciones').setVisible(false);
-                            Ext.getCmp('gridDetalleAjustes').setVisible(true);
+                            Ext.getCmp('gridCostoMacro').setVisible(true);
                         }
                     }
                 }
@@ -2570,29 +2564,29 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                         tbar: [
                                                             //Definición de botón nuevo
                                                             {
-                                                                id: 'btnNuevoDetalleInspeccionR',
+                                                                id: 'btnNuevoCostoMacro',
                                                                 text: 'Nuevo',
                                                                 scope: this,
-                                                                handler: this.addDetalleInspeccionR,
+                                                                handler: this.addCostoMacro,
                                                                 disabled: false,
                                                                 iconCls: 'save-icon'
                                                             },
                                                             '-',
                                                             //Definición de botón eliminar
                                                             {
-                                                                id: 'btnEliminarDetalleInspeccionR',
+                                                                id: 'btnEliminarCostoMacro',
                                                                 text: "Eliminar",
                                                                 scope: this,
-                                                                handler: this.deleteDetalleInspeccionR,
+                                                                handler: this.deleteCostoMacro,
                                                                 disabled: true,
                                                                 iconCls: 'delete-icon'
                                                             },
                                                             '-',
                                                             //Definición de botón Recargar datos
                                                             {
-                                                                id: 'btnRecargarDatosDetalleInspeccionR',
+                                                                id: 'btnRecargarDatosCostoMacro',
                                                                 iconCls: 'reload-icon',
-                                                                handler: this.requestGridDataDetalleInspeccionR,
+                                                                handler: this.requestGridDataCostoMacro,
                                                                 disabled: false,
                                                                 scope: this,
                                                                 text: 'Recargar'
@@ -2610,7 +2604,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                                 , formBind: true
                                                             }*/
                                                         ],
-                                                        items: this.gridDetalleAjustes
+                                                        items: this.gridCostoMacro
                                                     }
                                                 ]
                                             }
@@ -2887,6 +2881,82 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 }
         });
     },
+
+    //Función para eliminación de registros de Inspeccion
+    deleteCostoMacro: function () {
+        //Popup de confirmación
+        Ext.Msg.show({
+            title: 'Confirmación',
+            msg: 'Está seguro de borrar el registro seleccionado?',
+            scope: this,
+            buttons: Ext.Msg.YESNO,
+            //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
+            fn: function (btn) {
+                if (btn == 'yes') {
+                    var rows = this.gridCostoMacro.getSelectionModel().getSelections();
+                    if (rows.length === 0) {
+                        return false;
+                    }
+                    this.storeCostoMacro.remove(rows);
+                }
+            }
+        });
+    },
+
+    //Función para inserción de registros de detalle de inspeccion
+    addCostoMacro: function () {
+        var inspeccion = new this.storeCostoMacro.recordType({
+            cost_code: '',
+            total: '',
+            doc: '',
+            dsc: '',
+            adjust: '',
+            comment: '',
+            total_adjusted: '',
+            activity: 1,
+            id_cost: '',
+            id_pma_costos_macro : select_SO,
+
+            // total_grant_q1: '0',
+            // total_grant_q2: '0',
+            // total_grant_q3: '0',
+            // total_grant_q4: '0',
+            // total_grant_prog_doc: '0',
+            // total_grant_prog_dsc: '0',
+            // total_pr_po_doc: '0',
+            // total_actuals_doc: '0',
+            // total_balance_doc: '0',
+            // total_pr_po_dsc: '0',
+            // total_actuals_dsc: '0',
+            // total_grant_balance_dsc: '0',
+
+        });
+        this.gridCostoMacro.stopEditing();
+        this.storeCostoMacro.insert(0, inspeccion);
+        this.gridCostoMacro.startEditing(0, 0);
+    },
+
+    //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle inspeccion
+    requestGridDataCostoMacro: function () {
+        this.storeCostoMacro.load({
+            params: {
+                id: select_SO
+            }
+        });
+    },
+
+    //Función para carga de datos
+    requestGridData: function () {
+        this.storeModuloInspeccion.load({
+            params:
+                {
+                    start: 0,
+                    limit: limiteModuloInspeccion
+                }
+        });
+    },
+
+
     // bh boton generar nueva guía
     botonGenerarActa: function () {
         Ext.Msg.show({
