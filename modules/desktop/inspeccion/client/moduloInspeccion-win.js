@@ -75,7 +75,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         //Definición del formato de fecha
         function formatDate(value) {
-            return value ? value.dateFormat('Y-m-d H:i') : '';
+            // return value ? value.dateFormat('Y-m-d H:i') : '';
+            return value ? value.dateFormat('Y-m-d') : '';
         }
 
         //Inicio ventana inspeccion
@@ -100,6 +101,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {name: 'grant_number', allowBlank: true},
                 {name: 'estado', allowBlank: true},
                 {name: 'crn', allowBlank: true},
+                {name: 'fund', allowBlank: true},
                 {name: 'donor', allowBlank: true},
                 {name: 'comments', allowBlank: true},
                 {name: 'isc', allowBlank: true},
@@ -146,7 +148,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {name: 'activity', allowBlank: true},
                 //{name: 'category_name', allowBlank: true},
                 //{name: 'total', allowBlank: true},
-                {name: 'fecha_registro', allowBlank: true},
+                // {name: 'fecha_registro', allowBlank: true},
                 // {name: 'total_grant_q1', allowBlank: true},
                 // {name: 'total_grant_q2', allowBlank: true},
                 // {name: 'total_grant_q3', allowBlank: true},
@@ -192,7 +194,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {name: 'adjust', allowBlank: true},
                 {name: 'comment', allowBlank: true},
                 {name: 'total_adjusted', allowBlank: true},
-                {name: 'fecha_registro', allowBlank: true},
+                {name: 'fecha_registro', type: 'date', dateFormat: 'c', allowBlank: true},
             ]
         });
 
@@ -1641,6 +1643,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     // renderer: personaReceptaDenuncia
                 },
                 {
+                    header: 'Fund',
+                    dataIndex: 'fund',
+                    sortable: true,
+                    width: 28,
+                    editor: textField
+                    // renderer: personaReceptaDenuncia
+                },
+                {
                     header: 'Donor',
                     dataIndex: 'donor',
                     sortable: true,
@@ -1678,6 +1688,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 },
                 {
                     header: 'Total Contribution',
+                    dataIndex: 'total_contribution',
+                    sortable: true,
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: new Ext.form.NumberField({
+                        allowBlank: false,
+                        allowNegative: false,
+                        maxValue: 100000000
+                    })
+                },
+                {
+                    header: 'Total Programmed',
                     dataIndex: 'total_programmed',
                     sortable: true,
                     width: 28,
@@ -2033,7 +2055,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 new Ext.grid.RowNumberer(),
                 {
                     header: 'Cost Code',
-                    dataIndex: 'parent',
+                    dataIndex: 'cost_code',
                     sortable: true,
                     width: 150,
                     editor: comboCOSTPARENTDET,
@@ -2760,6 +2782,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var inspeccion = new this.storeModuloInspeccion.recordType({
             grant_number: ' ',
             crn: ' ',
+            fund: ' ',
             donor: ' ',
             year_contribution: (new Date().getFullYear()),
             // isc: ' ',
@@ -2906,7 +2929,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addCostoMacro: function () {
         var inspeccion = new this.storeCostoMacro.recordType({
-            cost_code: '',
+            cost_code: 1,
             total: '',
             doc: '',
             dsc: '',
@@ -2916,6 +2939,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             activity: 1,
             id_cost: '',
             id_pma_costos_macro : select_SO,
+            fecha_registro : (new Date()),
 
             // total_grant_q1: '0',
             // total_grant_q2: '0',
