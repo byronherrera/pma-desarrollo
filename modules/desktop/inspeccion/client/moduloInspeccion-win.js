@@ -75,8 +75,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         //Definición del formato de fecha
         function formatDate(value) {
-            // return value ? value.dateFormat('Y-m-d H:i') : '';
-            return value ? value.dateFormat('Y-m-d') : '';
+            return value ? value.dateFormat('Y-m-d H:i') : '';
         }
 
         //Inicio ventana inspeccion
