@@ -33,16 +33,22 @@ if (isset($_FILES)) {
 
     $uploadfile = $uploaddir . date('Y-m-d-h-i-s-') . basename( $nombreArchivo );
 
-
     if (move_uploaded_file($temp_file_name, $uploadfile)) {
 
         $inputFileName = $uploadfile;
 
         $spreadsheet = IOFactory::load($inputFileName);
-        $data = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+
+//        $spreadsheet->getSheetByName('BUDGET');
+//        $spreadsheet->setActiveSheetIndexByName('BUDGET');
+//        $spreadsheet->getActiveSheet()
+
+        $sheet = $spreadsheet->getActiveSheet()->getTitle();
+        $data = $spreadsheet->getSheetByName('BUDGET')->toArray(null, true, true, true);
         $total = 0;
         echo json_encode(array(
                 "total" => $total,
+                "Sheet" => $sheet,
                 "success" => true,
                 "data" => $data)
         );
