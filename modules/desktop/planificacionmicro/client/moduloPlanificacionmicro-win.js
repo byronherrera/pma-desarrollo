@@ -22,6 +22,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         this.selectContribuciones = 0;
         this.select_SO = 0;
+        this.select_macro = 0;
 
         //Control en caso de tener asignado el perfil de administrador
         if (accesosCoordinadorPlanificacionmicro && accesosSecretaria && accesosInspectores && accesosSupervision == true) {
@@ -211,6 +212,44 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
             ]
         });
+
+        //inicio mantenimiento Planificacionmicrodet
+        var proxyPlanificacionmicrodet = new Ext.data.HttpProxy({
+            api: {
+                create: urlPlanificacionmicro + "crudCostosMicro.php?operation=insert",
+                read: urlPlanificacionmicro + "crudCostosMicro.php?operation=select",
+                update: urlPlanificacionmicro + "crudCostosMicro.php?operation=update",
+                destroy: urlPlanificacionmicro + "crudCostosMicro.php?operation=delete"
+            }
+        });
+
+        var readerPlanificacionmicrodet = new Ext.data.JsonReader({
+            successProperty: 'success',
+            messageProperty: 'message',
+            idProperty: 'id',
+            root: 'data',
+            fields: [
+                {name: 'id', allowBlank: false},
+                {name: 'id_pma_costos_micro', allowBlank: false},
+                {name: 'cost_code_micro', allowBlank: false},
+                {name: 'description_micro', allowBlank: false},
+                {name: 'total_micro', allowBlank: false}
+            ]
+        });
+
+        var writerPlanificacionmicrodet = new Ext.data.JsonWriter({
+            encode: true,
+            writeAllFields: true
+        });
+
+        this.storePlanificacionmicrodet = new Ext.data.Store({
+            id: "id",
+            proxy: proxyPlanificacionmicrodet,
+            reader: readerPlanificacionmicrodet,
+            writer: writerPlanificacionmicrodet,
+            autoSave: true
+        });
+        this.storePlanificacionmicrodet.load();
 
         //Definición de escritura en campos bdd Planificacionmicro
         var writerListadoPlanificacionmicro = new Ext.data.JsonWriter({
@@ -1590,10 +1629,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             })
             , text: 'Código trámite'
         });
-
         this.storeModuloPlanificacionmicro.load();
         this.storeDetallePlanificacionmicro.load();
         this.storeCostoMacro.load();
+        this.storePlanificacionmicrodet.load();
 
         // if (todosInspectores == true) {
         this.storeListadoPlanificacionmicro.load();
@@ -1609,6 +1648,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         storeCostoMacro = this.storeCostoMacro;
         var anchoHelp = 43;
         var altoHelp = 185;
+        storePlanificacionmicrodet = this.storePlanificacionmicrodet;
         storeModuloPlanificacionmicro.baseParams = {
             limit: limiteModuloPlanificacionmicro
         };
@@ -2087,12 +2127,20 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             viewConfig: {
                 forceFit: false
             },
+            sm: new Ext.grid.RowSelectionModel({
+              singleSelect: true,
+              listeners: {
+                  rowselect: function (sm, row, rec) {
+                      // recuperamos la informacion de personal asignado a ese operativo
+                      select_macro = rec.id;
 
-            sm: new Ext.grid.RowSelectionModel(
-                {
-                    singleSelect: true
-                }
-            ),
+
+                      storePlanificacionmicrodet.load({params: {id: rec.id}});
+
+                  }
+              }
+          }),
+
             border: false,
             stripeRows: true,
             //Definición de barra de paginado
@@ -2240,43 +2288,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         //Fin formato grid detalle planificacionmicro
 
-        //inicio mantenimiento Planificacionmicrodet
-        var proxyPlanificacionmicrodet = new Ext.data.HttpProxy({
-            api: {
-                create: urlPlanificacionmicro + "crudPlanificacionmicrodet.php?operation=insert",
-                read: urlPlanificacionmicro + "crudPlanificacionmicrodet.php?operation=select",
-                update: urlPlanificacionmicro + "crudPlanificacionmicrodet.php?operation=update",
-                destroy: urlPlanificacionmicro + "crudPlanificacionmicrodet.php?operation=delete"
-            }
-        });
-
-        var readerPlanificacionmicrodet = new Ext.data.JsonReader({
-            successProperty: 'success',
-            messageProperty: 'message',
-            idProperty: 'id',
-            root: 'data',
-            fields: [
-                {name: 'id', allowBlank: false},
-                {name: 'numero', allowBlank: false},
-                {name: 'unidad', allowBlank: false},
-                {name: 'id_member', allowBlank: false},
-                {name: 'creado', allowBlank: false}
-            ]
-        });
-
-        var writerPlanificacionmicrodet = new Ext.data.JsonWriter({
-            encode: true,
-            writeAllFields: true
-        });
-
-        this.storePlanificacionmicrodet = new Ext.data.Store({
-            id: "id",
-            proxy: proxyPlanificacionmicrodet,
-            reader: readerPlanificacionmicrodet,
-            writer: writerPlanificacionmicrodet,
-            autoSave: true
-        });
-        this.storePlanificacionmicrodet.load();
 
         this.gridPlanificacionmicrodet = new Ext.grid.EditorGridPanel({
             id: 'gridPlanificacionmicrodet',
@@ -2295,19 +2306,19 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 // },
                 {
                     header: 'Cost Code Micro',
-                    dataIndex: 'numero',
+                    dataIndex: 'cost_code_micro',
                     sortable: true,
                     width: 30
                 },
                 {
                     header: 'Descripción',
-                    dataIndex: 'unidad',
+                    dataIndex: 'description_micro',
                     sortable: true,
                     width: 40
                 },
                 {
                     header: 'Total',
-                    dataIndex: 'creado',
+                    dataIndex: 'total_micro',
                     sortable: true,
                     width: 30
                 }
