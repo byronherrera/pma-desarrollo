@@ -2472,9 +2472,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     region: 'center',
                                     margins: '0 5 0 0',
                                     layout: 'accordion',
-                                    layoutConfig: {
-                                        animate: true
-                                    },
+                                     
                                     items: [{
                                         title: 'Paso 1 - Contribuciones',
                                         autoScroll: true,
@@ -2652,7 +2650,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                         tbar: [
                                             //Definición de botón nuevo
                                             {
-                                                id: 'btnNuevoDetallePlanificacionmicro',
+                                                id: 'btnNuevoDetallePlanificacionmicro2',
                                                 text: 'Nuevo',
                                                 scope: this,
                                                 handler: this.addDetallePlanificacionmicro,
@@ -2662,7 +2660,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             '-',
                                             //Definición de botón eliminar
                                             {
-                                                id: 'btnEliminarDetallePlanificacionmicro',
+                                                id: 'btnEliminarDetallePlanificacionmicro2',
                                                 text: "Eliminar",
                                                 scope: this,
                                                 handler: this.deleteDetallePlanificacionmicro,
@@ -2672,7 +2670,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             '-',
                                             //Definición de botón Recargar datos
                                             {
-                                                id: 'btnRecargarDatosDetallePlanificacionmicro',
+                                                id: 'btnRecargarDatosDetallePlanificacionmicro2',
                                                 iconCls: 'reload-icon',
                                                 handler: this.requestGridDataDetallePlanificacionmicro,
                                                 disabled: false,
