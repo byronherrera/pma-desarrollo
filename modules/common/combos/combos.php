@@ -110,7 +110,13 @@ function comboCostcode2()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 2 AND parent = 1 ORDER BY id";
+    if (isset($_POST['costCodeNuevo2']))
+        $where = " AND parent = " . $_POST['costCodeNuevo2'];
+    else
+        $where = '';
+
+    $costCodeNuevo2 =
+    $sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 2 $where ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {

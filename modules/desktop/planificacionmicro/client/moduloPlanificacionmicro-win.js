@@ -268,14 +268,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             },
             listeners: {
                 write: function (proxy, action, result, res, rs) {
-                    //console.log (action);
-                    //console.log (result);
-                    //console.log (res);
-                    //console.log (rs.data['cost_code']);
-                    costCodeNuevo2 = rs.data['cost_code'];
 
-                    comboElcombo.clearValue();		//step 3
-                    storeElcombo.load({			//step 4
+                    costCodeNuevo2 = rs.data['cost_code'];
+                    comboCostCode2.clearValue();
+                    storeCostCode2.load({
                         params: {
                             costCodeNuevo2: costCodeNuevo2	//step 5
                         }
