@@ -239,7 +239,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     comboCostCode3.clearValue();
                     storeCostCode3.load({
                         params: {
-                            costCodeNuevo3: costCodeNuevo3	//step 5
+                            costCodeNuevo3: costCodeNuevo3
                         }
                     });
                 }
