@@ -106,12 +106,11 @@ function comboCost()
     );
 }
 
-
-function comboSO()
+function comboCostcode2()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id,category_name FROM pma_so_categories ORDER BY id";
+    $sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 2 AND parent = 1 ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -122,7 +121,9 @@ function comboSO()
             "data" => $data)
     );
 }
-function comboSO2()
+
+
+function comboSO()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
@@ -832,5 +833,8 @@ switch ($_GET['tipo']) {
         break;
     case 'activities' :
         comboActivities();
+        break;
+    case 'costcode2' :
+        comboCostcode2();
         break;
 }
