@@ -10,6 +10,7 @@ if (!$os->session_exists()) {
 function selectDetalleInspecciones()
 {
     global $os;
+    $where = "";
     if (isset($_POST['id'])) {
         $id = (int)$_POST ['id'];
         $where = " id_pma_costos_micro  = '$id'";
@@ -27,7 +28,14 @@ function selectDetalleInspecciones()
     $orderby = 'ORDER BY id DESC';
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_costos_micro WHERE $where  $orderby ";
+
+if ($where == "") {
+        $sql = "SELECT * FROM pma_costos_micro $orderby ";
+    } else {
+        $sql = "SELECT * FROM pma_costos_micro WHERE $where  $orderby ";
+    }
+
+    
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
