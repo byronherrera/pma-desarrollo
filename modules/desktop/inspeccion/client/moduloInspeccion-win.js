@@ -1619,9 +1619,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             id: 'gridModuloInspeccion',
             xtype: "grid",
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight * 0.38,
+            height: winHeight * 0.35,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
-            width: winWidth - 22,
+            width: winWidth - 16,
             store: this.storeModuloInspeccion,
             columns: [
                 //Definición de campos bdd Inspeccion

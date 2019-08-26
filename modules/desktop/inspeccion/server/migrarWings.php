@@ -1,5 +1,4 @@
 <?php
-
 require_once '../../../common/Classes/PhpSpreadsheet/autoload.php';
 
 //require __DIR__ . "/PhpSpreadsheet/autoload.php";
@@ -7,6 +6,7 @@ require_once '../../../common/Classes/PhpSpreadsheet/autoload.php';
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 require_once '../../../../server/os.php';
+
 $os = new os();
 if (!$os->session_exists()) {
     die('No existe sesión!');
@@ -16,15 +16,16 @@ if (!$os->session_exists()) {
 ///////////////
 ///
 ///
-
+// todo habilitar esta seccion
 //if(isset($_POST['data'])){
 //    if($_POST['data']!= '0'){
+
 if (isset($_FILES)) {
     $temp_file_name = $_FILES['photo-path']['tmp_name'];
 
     $original_file_name = $_FILES['photo-path']['name'];
     $uploaddir = __DIR__ . "/../../../../migrar/";
-    //$uploaddir = __DIR__ . "\\" ;
+
 
     $nombreArchivo = $_FILES['photo-path']['name'];
 

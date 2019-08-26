@@ -264,6 +264,22 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 read: urlPlanificacionmicro + "crudCostosMacro.php?operation=select",
                 update: urlPlanificacionmicro + "crudCostosMacro.php?operation=update",
                 destroy: urlPlanificacionmicro + "crudCostosMacro.php?operation=delete"
+            },
+            listeners: {
+                write: function (proxy, action, result, res, rs) {
+                    //console.log (action);
+                    //console.log (result);
+                    //console.log (res);
+                    //console.log (rs.data['cost_code']);
+                    costCodeNuevo2 = rs.data['cost_code'];
+
+                    comboElcombo.clearValue();		//step 3
+                    storeElcombo.load({			//step 4
+                        params: {
+                            costCodeNuevo2: costCodeNuevo2	//step 5
+                        }
+                    });
+                }
             }
         });
 
@@ -449,6 +465,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 ]
             }
         });
+        this.storeSO = storeSO
 
         var comboSO = new Ext.form.ComboBox({
             id: 'comboSO',
@@ -1698,7 +1715,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             id: 'gridModuloPlanificacionmicro',
             xtype: "grid",
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight -altoHelp,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
             width: winWidth - anchoHelp,
             store: this.storeModuloPlanificacionmicro,
@@ -2082,7 +2099,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         this.gridCostoMacro = new Ext.grid.EditorGridPanel({
             id: 'gridCostoMacro',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight -altoHelp,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
             width: winWidth - anchoHelp,
             readOnly: false,
@@ -2168,18 +2185,18 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 forceFit: false
             },
             sm: new Ext.grid.RowSelectionModel({
-              singleSelect: true,
-              listeners: {
-                  rowselect: function (sm, row, rec) {
-                      // recuperamos la informacion de personal asignado a ese operativo
-                      select_macro = rec.id;
+                singleSelect: true,
+                listeners: {
+                    rowselect: function (sm, row, rec) {
+                        // recuperamos la informacion de personal asignado a ese operativo
+                        select_macro = rec.id;
 
 
-                      storePlanificacionmicrodet.load({params: {id: rec.id}});
+                        storePlanificacionmicrodet.load({params: {id: rec.id}});
 
-                  }
-              }
-          }),
+                    }
+                }
+            }),
 
             border: false,
             stripeRows: true,
@@ -2218,7 +2235,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         this.gridDetallePlanificacionmicro = new Ext.grid.EditorGridPanel({
             id: 'gridDetallePlanificacionmicro',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight -altoHelp,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
             width: winWidth - anchoHelp,
             readOnly: false,
@@ -2332,7 +2349,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         this.gridPlanificacionmicrodet = new Ext.grid.EditorGridPanel({
             id: 'gridPlanificacionmicrodet',
             xtype: "grid",
-            height: winHeight -altoHelp,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
             width: winWidth - anchoHelp,
             store: this.storePlanificacionmicrodet,
@@ -2487,7 +2504,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 //                          disabled: accesosInspectores,
                             hidden: true,
                             id: 'tramites-pendientes',
-
                             items: [
                                 {
                                     region: 'east',
@@ -2516,7 +2532,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     region: 'center',
                                     margins: '0 5 0 0',
                                     layout: 'accordion',
-                                     
                                     items: [{
                                         title: 'Paso 1 - Contribuciones',
                                         autoScroll: true,
@@ -3020,8 +3035,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     addPlanificacionmicrodet: function () {
         var planificacionmicro = new this.storePlanificacionmicrodet.recordType({
             cost_code_micro: 1,
-            description_micro:'',
-            total_micro:0
+            description_micro: '',
+            total_micro: 0
 
             // total_grant_q1: '0',
             // total_grant_q2: '0',
