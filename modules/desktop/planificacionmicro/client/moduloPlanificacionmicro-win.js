@@ -83,6 +83,18 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 read: urlPlanificacionmicro + "crudContribuciones.php?operation=select",
                 update: urlPlanificacionmicro + "crudContribuciones.php?operation=update",
                 destroy: urlPlanificacionmicro + "crudContribuciones.php?operation=delete"
+            },
+            listeners: {
+                write: function (proxy, action, result, res, rs) {
+
+                    costCodeNuevo3 = rs.data['cost_code2'];
+                    comboCostCode3.clearValue();
+                    storeCostCode3.load({
+                        params: {
+                            costCodeNuevo3: costCodeNuevo3	//step 5
+                        }
+                    });
+                }
             }
         });
 

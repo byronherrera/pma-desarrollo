@@ -128,6 +128,28 @@ function comboCostcode2()
     );
 }
 
+function comboCostcode3()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    if (isset($_POST['costCodeNuevo3']))
+        $where = " AND parent = " . $_POST['costCodeNuevo3'];
+    else
+        $where = '';
+
+    $costCodeNuevo2 =
+    $sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 3 $where ORDER BY id";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
 
 function comboSO()
 {
@@ -842,5 +864,8 @@ switch ($_GET['tipo']) {
         break;
     case 'costcode2' :
         comboCostcode2();
+        break;
+    case 'costcode3' :
+        comboCostcode3();
         break;
 }
