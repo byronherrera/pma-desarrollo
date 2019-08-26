@@ -78,7 +78,7 @@ function comboCostParent()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id, CONCAT(cost,' -',description) cost FROM pma_cost_category WHERE active = 1 AND ISNULL(parent)   ORDER BY id";
+    $sql = "SELECT id, CONCAT(cost,' - ',description) cost FROM pma_cost_category WHERE active = 1 AND nivel = 1 AND ISNULL(parent)   ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -108,6 +108,21 @@ function comboCost()
 
 
 function comboSO()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT id,category_name FROM pma_so_categories ORDER BY id";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+function comboSO2()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");

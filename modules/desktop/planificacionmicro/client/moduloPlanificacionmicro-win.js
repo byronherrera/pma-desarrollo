@@ -469,6 +469,46 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         //fin combo SO
 
+        //inicio combo SO
+        storeCostCode2 = new Ext.data.JsonStore({
+            root: 'data',
+            fields: ['id', 'category_name'],
+            autoLoad: true,
+            url: 'modules/common/combos/combos.php?tipo=costcode2'
+        });
+        // storeSO = new Ext.data.JsonStore({
+        //     root: 'datos',
+        //     fields: ['id', 'category_name'],
+        //     autoLoad: true,
+        //     data: {
+        //         datos: [
+        //             {"id": 1, "category_name": "SO1"},
+        //             {"id": 2, "category_name": "SO2"},
+        //             {"id": 3, "category_name": "SO3"},
+        //             {"id": 4, "category_name": "SO4"}
+        //         ]
+        //     }
+        // });
+
+        var comboSO = new Ext.form.ComboBox({
+            id: 'comboSO',
+            store: storeSO,
+            valueField: 'id',
+            displayField: 'category_name',
+            triggerAction: 'all',
+            mode: 'local'
+        });
+
+        function costSO(id) {
+            var index = storeSO.find('id', id);
+            if (index > -1) {
+                var record = storeSO.getAt(index);
+                return record.get('category_name');
+            }
+        }
+
+        //fin combo SO
+
 
         //inicio combo tipo documento  TID
         storeTID = new Ext.data.JsonStore({
@@ -2053,7 +2093,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Cost Code',
                     dataIndex: 'cost_code',
                     sortable: true,
-                    width: 100,
+                    width: 200,
                     editor: comboCOSTPARENTDET,
                     renderer: costparentAdmDet
                 },
@@ -2308,19 +2348,23 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Cost Code Micro',
                     dataIndex: 'cost_code_micro',
                     sortable: true,
-                    width: 30
+                    width: 30,
+                    editor: comboSO,
+                    renderer: costSO
                 },
                 {
                     header: 'Descripción',
                     dataIndex: 'description_micro',
                     sortable: true,
-                    width: 40
+                    width: 40,
+                    editor: textFieldDetalle
                 },
                 {
                     header: 'Total',
                     dataIndex: 'total_micro',
                     sortable: true,
-                    width: 30
+                    width: 30,
+                    editor: textFieldDetalle
                 }
                 // {
                 //     header: 'Encargado',
@@ -2655,8 +2699,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                 id: 'btnNuevoDetallePlanificacionmicro',
                                                 text: 'Nuevo',
                                                 scope: this,
-                                                handler: this.addDetallePlanificacionmicro,
-                                                disabled: true,
+                                                handler: this.addPlanificacionmicrodet,
+                                                disabled: false,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
@@ -2665,8 +2709,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                 id: 'btnEliminarDetallePlanificacionmicro',
                                                 text: "Eliminar",
                                                 scope: this,
-                                                handler: this.deleteDetallePlanificacionmicro,
-                                                disabled: true,
+                                                handler: this.deletePlanificacionmicrodet,
+                                                disabled: false,
                                                 iconCls: 'delete-icon'
                                             },
                                             '-',
@@ -2674,23 +2718,23 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             {
                                                 id: 'btnRecargarDatosDetallePlanificacionmicro',
                                                 iconCls: 'reload-icon',
-                                                handler: this.requestGridDataDetallePlanificacionmicro,
+                                                handler: this.requestGridDataPlanificacionmicrodet,
                                                 disabled: false,
                                                 scope: this,
                                                 text: 'Recargar'
                                             }
-                                            ,
-                                            '-',
-                                            //Definición de botón guardar datos
-                                            {
-                                                text: 'Guardar datos Inspección',
-                                                scope: this,
-                                                handler: this.grabardenuncias,
-                                                iconCls: 'save-icon',
-                                                //disabled: !acceso,
-                                                id: 'tb_grabardenuncias'
-                                                , formBind: true
-                                            }
+                                            // ,
+                                            // '-',
+                                            // //Definición de botón guardar datos
+                                            // {
+                                            //     text: 'Guardar datos Inspección',
+                                            //     scope: this,
+                                            //     handler: this.grabardenuncias,
+                                            //     iconCls: 'save-icon',
+                                            //     //disabled: !acceso,
+                                            //     id: 'tb_grabardenuncias'
+                                            //     , formBind: true
+                                            // }
                                         ]
                                     }]
                                 }
@@ -2946,6 +2990,63 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle planificacionmicro
     requestGridDataDetallePlanificacionmicro: function () {
         this.storeDetallePlanificacionmicro.load({
+            params: {
+                id: tramiteSeleccionado
+            }
+        });
+    },
+
+
+    //Función para eliminación de registros de Planificacionmicro
+    deletePlanificacionmicrodet: function () {
+        //Popup de confirmación
+        Ext.Msg.show({
+            title: 'Confirmación',
+            msg: 'Está seguro de borrar el registro seleccionado?',
+            scope: this,
+            buttons: Ext.Msg.YESNO,
+            //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
+            fn: function (btn) {
+                if (btn == 'yes') {
+                    var rows = this.gridPlanificacionmicrodet.getSelectionModel().getSelections();
+                    if (rows.length === 0) {
+                        return false;
+                    }
+                    this.storePlanificacionmicrodet.remove(rows);
+                }
+            }
+        });
+    },
+
+    //Función para inserción de registros de detalle de planificacionmicro
+    addPlanificacionmicrodet: function () {
+        var planificacionmicro = new this.storePlanificacionmicrodet.recordType({
+            cost_code_micro: 1,
+            description_micro:'',
+            total_micro:0
+
+            // total_grant_q1: '0',
+            // total_grant_q2: '0',
+            // total_grant_q3: '0',
+            // total_grant_q4: '0',
+            // total_grant_prog_doc: '0',
+            // total_grant_prog_dsc: '0',
+            // total_pr_po_doc: '0',
+            // total_actuals_doc: '0',
+            // total_balance_doc: '0',
+            // total_pr_po_dsc: '0',
+            // total_actuals_dsc: '0',
+            // total_grant_balance_dsc: '0',
+
+        });
+        this.gridPlanificacionmicrodet.stopEditing();
+        this.storePlanificacionmicrodet.insert(0, planificacionmicro);
+        this.gridPlanificacionmicrodet.startEditing(0, 0);
+    },
+
+    //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle planificacionmicro
+    requestGridPlanificacionmicrodet: function () {
+        this.storePlanificacionmicrodet.load({
             params: {
                 id: tramiteSeleccionado
             }
