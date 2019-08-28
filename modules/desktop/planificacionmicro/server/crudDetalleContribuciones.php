@@ -93,7 +93,7 @@ function insertDetalleInspecciones()
     $data = json_decode(stripslashes($_POST["data"]));
     $data->id = generaCodigoProcesoOrdenanza();
     // $data->id_inspeccion = generaNuevoCodigoInspeccion();
-    $data->fecha_recepcion_documento = date('Y-m-d H:i:s');
+    $data->fecha_registro = date('Y-m-d H:i:s');
     //genero el listado de nombre de campos
 
     $cadenaDatos = '';
@@ -134,7 +134,7 @@ function insertDetalleInspecciones()
             "data" => array($data)
         ));
         // para el caso que ya se haya procesado o sea reinspeccion
-        actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
+        // actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
     } else {
         echo json_encode(array(
             "success" => false,

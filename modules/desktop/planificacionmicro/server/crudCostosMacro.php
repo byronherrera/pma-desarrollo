@@ -10,11 +10,11 @@ if (!$os->session_exists()) {
 function selectDetalleInspecciones()
 {
     global $os;
-    $where = "";
     if (isset($_POST['id'])) {
         $id = (int)$_POST ['id'];
         $where = " id_pma_costos_macro  = '$id'";
     }
+
     if (isset($_POST['filterText'])) {
         $campo = $_POST['filterText'];
         if (isset($_POST['filterField'])) {
@@ -24,16 +24,10 @@ function selectDetalleInspecciones()
     }
 
     // cambio BH
-    $orderby = ' ORDER BY id DESC ';
+    $orderby = 'ORDER BY id DESC';
 
     $os->db->conn->query("SET NAMES 'utf8'");
-
-    if ($where == "") {
-	    $sql = "SELECT * FROM pma_costos_macro  $orderby ";
-    } else {
-	    $sql = "SELECT * FROM pma_costos_macro WHERE $where  $orderby ";
-    }
- 
+    $sql = "SELECT * FROM pma_costos_macro WHERE $where  $orderby ";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -97,7 +91,9 @@ function insertDetalleInspecciones()
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
-    $data->id = generaCodigoProcesoOrdenanza();
+    $data->id = generaCodigoCostoMacro();
+    // $data->id_pma_costos_macro = generaidpmaCostoMacro();
+    $data->fecha_registro = date('Y-m-d H:i:s');
     // $data->id_inspeccion = generaNuevoCodigoInspeccion();
     //$data->fecha_recepcion_documento = date('Y-m-d H:i:s');
     //genero el listado de nombre de campos
@@ -151,13 +147,33 @@ function insertDetalleInspecciones()
 }
 
 
-function generaCodigoProcesoOrdenanza()
+function generaCodigoCostoMacro()
 {
     global $os;
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT MAX(id) AS maximo FROM pma_costos_macro";
+    $result = $os->db->conn->query($sql);
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+    if (isset($row['maximo'])) {
+        $nuevoCodogo = $row['maximo'] + 1;
+        return $nuevoCodogo;
+    } else {
+        // valor inicial proceso
+
+        return 1;
+
+    }
+}
+
+function generaidpmaCostoMacro()
+{
+    global $os;
+
+    $usuario = $os->get_member_id();
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT MAX(id_pma_costos_macro) AS maximo FROM pma_costos_macro";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     if (isset($row['maximo'])) {

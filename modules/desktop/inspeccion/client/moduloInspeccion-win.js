@@ -1,4 +1,4 @@
-var tramiteSeleccionado = '';
+var contribucionSeleccionada = '';
 var inspeccionSeleccionada = '';
 // var todosInspectores = '';
 // var todasInspecciones = true;
@@ -186,6 +186,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
+                {name: 'id_pma_costos_macro', allowBlank: true},
                 {name: 'cost_code', allowBlank: true},
                 {name: 'total', allowBlank: true},
                 {name: 'doc', allowBlank: true},
@@ -1407,7 +1408,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
         comboPERDIS.on('select', function () {
             //AppMsg.setAlert("Alerta ", inspeccionSeleccionada);
-            //AppMsg.setAlert("Alerta ", tramiteSeleccionado);
+            //AppMsg.setAlert("Alerta ", contribucionSeleccionada);
             //storeACTUALIZARFECHA.load({params: {id_inspeccion: inspeccionSeleccionada}});
             //storeACTUALIZARFECHA.load();
         })
@@ -1428,7 +1429,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
         comboINSP.on('select', function () {
             //AppMsg.setAlert("Alerta ", inspeccionSeleccionada);
-            //AppMsg.setAlert("Alerta ", tramiteSeleccionado);
+            //AppMsg.setAlert("Alerta ", contribucionSeleccionada);
             //storeACTUALIZARFECHA.load({params: {id_inspeccion: inspeccionSeleccionada}});
             //storeACTUALIZARFECHA.load();
         })
@@ -1789,7 +1790,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         //select_codigo_tramite = rec.id;
                         selectContribuciones = rec.id;
                         storeDetalleInspeccion.load({params: {id: rec.id}});
-                        tramiteSeleccionado = rec.id;
+                        contribucionSeleccionada = rec.id;
                         inspeccionSeleccionada = rec.id_denuncia;
                         //storeDetalleInspeccion.load({params: {filterText: rec.data.codigo_tramite}});
                         if (creacionDatosInspeccion) {
@@ -2053,6 +2054,13 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
+                    header: 'id_macro',
+                    dataIndex: 'id_pma_costos_macro',
+                    hidden: true,
+                    width: 80,
+                    editor: textFieldDetalle
+                },
+                {
                     header: 'Cost Code',
                     dataIndex: 'cost_code',
                     sortable: true,
@@ -2078,7 +2086,17 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {header: 'Adjust', dataIndex: 'adjust', hidden: false, width: 100, renderer: 'usMoney', editor: textFieldDetalle},
                 {header: 'Comment', dataIndex: 'comment', hidden: false, width: 100, editor: textFieldDetalle},
                 {header: 'Total adjusted', dataIndex: 'total_adjusted', hidden: false, width: 100, renderer: 'usMoney', editor: textFieldDetalle},
-
+                {
+                    header: 'Fecha de Registro',
+                    dataIndex: 'fecha_registro',
+                    hidden: true,
+                    width: 120,
+                    renderer: formatDate,
+                    editor: new Ext.ux.form.DateTimeField({
+                        dateFormat: 'Y-m-d',
+                        timeFormat: 'H:i:s'
+                    })
+                },
                 // {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
                 // {header: 'Total Grant V. II Quarter', dataIndex: 'total_grant_q2', hidden: false, width: 130, editor: textFieldDetalle},
                 // {header: 'Total Grant V. III Quarter', dataIndex: 'total_grant_q3', hidden: false, width: 130, editor: textFieldDetalle},
@@ -2207,7 +2225,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
                         storeCostoMacro.load({params: {id: rec.id}});
 
-                        //tramiteSeleccionado = rec.id;
+                        //contribucionSeleccionada = rec.id;
                         //inspeccionSeleccionada = rec.id_denuncia;
                         //storeDetalleInspeccion.load({params: {filterText: rec.data.codigo_tramite}});
                         if (creacionDatosInspeccion) {
@@ -2888,7 +2906,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     requestGridDataDetalleInspeccion: function () {
         this.storeDetalleInspeccion.load({
             params: {
-                id: tramiteSeleccionado
+                id: contribucionSeleccionada
             }
         });
     },
@@ -2928,17 +2946,17 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addCostoMacro: function () {
         var inspeccion = new this.storeCostoMacro.recordType({
-            cost_code: 1,
-            total: '',
-            doc: '',
-            dsc: '',
-            adjust: '',
-            comment: '',
-            total_adjusted: '',
-            activity: 1,
-            id_cost: '',
-            id_pma_costos_macro : select_SO,
-            fecha_registro : (new Date()),
+          id_pma_costos_macro: select_SO,
+          cost_code: 1,
+          total: 0,
+          doc: 0,
+          dsc: 0,
+          adjust: 0,
+          comment: ' ',
+          total_adjusted: 0,
+          // activity: 1,
+          // id_cost: ' ',
+          fecha_registro: (new Date()),
 
             // total_grant_q1: '0',
             // total_grant_q2: '0',
