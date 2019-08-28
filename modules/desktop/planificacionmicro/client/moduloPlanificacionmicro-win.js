@@ -275,7 +275,9 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {name: 'cost_code4', allowBlank: false},
                 {name: 'cost_code5', allowBlank: false},
                 {name: 'description_micro', allowBlank: false},
-                {name: 'total_micro', allowBlank: false}
+                {name: 'total_micro', allowBlank: false},
+                {name: 'adjust', allowBlank: false},
+                {name: 'total_after_adjust', allowBlank: false}
             ]
         });
 
@@ -1803,7 +1805,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         limiteDetallePlanificacionmicroLarge = 100;
         storeCostoMacro = this.storeCostoMacro;
         var anchoHelp = 43;
-        var altoHelp = 185;
+        var altoHelp = 188;
         storePlanificacionmicrodet = this.storePlanificacionmicrodet;
 
         storeModuloPlanificacionmicro.baseParams = {
@@ -1823,111 +1825,106 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 //Definición de campos bdd Planificacionmicro
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'Grant Number CSP',
+                    header: 'Grant Number',
                     dataIndex: 'grant_number',
                     sortable: true,
-                    width: 38,
-                    editor: textField
-                },
-                {
-                    header: 'Estado',
-                    dataIndex: 'estado',
-                    sortable: true,
-                    width: 28,
-                    editor: textField
-                    // renderer: personaReceptaDenuncia
+                    width: 80
                 },
                 {
                     header: 'CRN',
                     dataIndex: 'crn',
                     sortable: true,
-                    width: 28,
-                    editor: textField
-                    // renderer: personaReceptaDenuncia
+                    width: 100
                 },
+                // {
+                //     header: 'Fund',
+                //     dataIndex: 'fund',
+                //     sortable: true,
+                //     width: 28
+                // },
                 {
                     header: 'Donor',
                     dataIndex: 'donor',
                     sortable: true,
-                    width: 28,
-                    editor: textField
-                    // renderer: personaReceptaDenuncia
+                    width: 80
                 },
                 {
-                    header: 'Comments',
-                    dataIndex: 'comments',
-                    sortable: true,
-                    width: 28,
-                    editor: textField
-                    // renderer: personaReceptaDenuncia
-                },
-                {
-                    header: 'Year contribution',
+                    header: 'Year',
                     dataIndex: 'year_contribution',
                     sortable: true,
-                    width: 28,
-                    editor: textField
-                    // renderer: personaReceptaDenuncia
+                    width: 40
                 },
                 {
                     header: 'ISC',
                     dataIndex: 'isc',
                     sortable: true,
-                    width: 28,
-                    editor: textField
-                    // renderer: personaReceptaDenuncia
+                    width: 80
                 },
                 {
-                    header: 'Total Grant Value without ISC',
+                    header: 'Total Direct Cost',
                     dataIndex: 'total_grant',
                     sortable: true,
-                    width: 28,
-                    editor: textField
-                    // renderer: personaReceptaDenuncia
+                    width: 100,
+                    renderer: 'usMoney'
+                },
+                {
+                    header: 'Total Contribution',
+                    dataIndex: 'total_contribution',
+                    sortable: true,
+                    width: 100,
+                    renderer: 'usMoney'
+                },
+                {
+                    header: 'Total Programmed',
+                    dataIndex: 'total_programmed',
+                    sortable: true,
+                    width: 100,
+                    renderer: 'usMoney'
+                },
+                {
+                    header: 'Unprogrammed',
+                    dataIndex: 'total_unprogrammed',
+                    sortable: true,
+                    width: 80,
+                    renderer: 'usMoney'
                 },
                 {
                     header: 'Grant TOD',
                     dataIndex: 'grant_tod',
                     sortable: true,
-                    width: 40,
-                    renderer: formatDate,
-                    editor: new Ext.ux.form.DateTimeField({
-                        dateFormat: 'Y-m-d',
-                        timeFormat: 'H:i:s'
-                    })
+                    width: 100,
+                    renderer: formatDate
                 },
                 {
                     header: 'Grant TDD',
                     dataIndex: 'grant_tdd',
                     sortable: true,
-                    width: 40,
-                    renderer: formatDate,
-                    editor: new Ext.ux.form.DateTimeField({
-                        dateFormat: 'Y-m-d',
-                        timeFormat: 'H:i:s'
-                    })
+                    width: 100,
+                    renderer: formatDate
                 },
                 {
                     header: 'Grant Specific',
                     dataIndex: 'grant_specific',
                     sortable: true,
-                    width: 25,
-                    editor: textField
-                    // editor: comboGrant, renderer: personaTipoDocumento
+                    width: 100
                 },
                 {
-                    header: 'Activity',
-                    dataIndex: 'activity',
+                    header: 'Status',
+                    dataIndex: 'estado',
                     sortable: true,
-                    width: 22,
-                    editor: textField
-                    // editor: new Ext.form.TextField({allowBlank: false})
+                    width: 80
                 },
-
+                {
+                    header: 'Comments',
+                    dataIndex: 'comments',
+                    sortable: true,
+                    width: 158
+                },
 
             ],
             viewConfig: {
-                forceFit: winWidth > 1024 ? true : false
+                // forceFit: winWidth > 1024 ? true : false
+                forceFit:false
             },
             sm: new Ext.grid.RowSelectionModel({
                 singleSelect: true,
@@ -2211,24 +2208,24 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'id_pma_costos_macro',
                     hidden: true,
                     width: 80,
-                    editor: textFieldDetalle
+                    // editor: textFieldDetalle
                 },
                 {
-                    header: 'Cost Code',
+                    header: 'Cost Code Macro',
                     dataIndex: 'cost_code',
                     sortable: true,
-                    width: 200,
-                    editor: comboCOSTPARENTDET,
+                    width: 300,
+                    // editor: comboCOSTPARENTDET,
                     renderer: costparentAdmDet
                 },
                 // {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
                 {
-                    header: 'Total',
+                    header: 'Amount Programmed',
                     dataIndex: 'total',
                     hidden: false,
-                    width: 80,
+                    width: 150,
                     renderer: 'usMoney',
-                    editor: textFieldDetalle
+                    // editor: textFieldDetalle
                 },
                 // {
                 //     header: 'Fecha de Registro',
@@ -2241,50 +2238,50 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 //         timeFormat: 'H:i:s'
                 //     })
                 // },
-                {
-                    header: 'DOC',
-                    dataIndex: 'doc',
-                    hidden: false,
-                    width: 80,
-                    renderer: 'usMoney',
-                    editor: textFieldDetalle
-                },
-                {
-                    header: 'DSC',
-                    dataIndex: 'dsc',
-                    hidden: false,
-                    width: 80,
-                    renderer: 'usMoney',
-                    editor: textFieldDetalle
-                },
+                // {
+                //     header: 'DOC',
+                //     dataIndex: 'doc',
+                //     hidden: false,
+                //     width: 80,
+                //     renderer: 'usMoney',
+                //     editor: textFieldDetalle
+                // },
+                // {
+                //     header: 'DSC',
+                //     dataIndex: 'dsc',
+                //     hidden: false,
+                //     width: 80,
+                //     renderer: 'usMoney',
+                //     editor: textFieldDetalle
+                // },
                 {
                     header: 'Adjust',
                     dataIndex: 'adjust',
                     hidden: false,
-                    width: 100,
+                    width: 150,
                     renderer: 'usMoney',
-                    editor: textFieldDetalle
+                    // editor: textFieldDetalle
                 },
-                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 100, editor: textFieldDetalle},
+                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 300},
                 {
                     header: 'Total adjusted',
                     dataIndex: 'total_adjusted',
                     hidden: false,
-                    width: 100,
+                    width: 150,
                     renderer: 'usMoney',
-                    editor: textFieldDetalle
+                    // editor: textFieldDetalle
                 },
 
                 {
                     header: 'Fecha de Registro',
                     dataIndex: 'fecha_registro',
-                    hidden: true,
-                    width: 120,
+                    hidden: false,
+                    width: 150,
                     renderer: formatDate,
-                    editor: new Ext.ux.form.DateTimeField({
-                        dateFormat: 'Y-m-d',
-                        timeFormat: 'H:i:s'
-                    })
+                    // editor: new Ext.ux.form.DateTimeField({
+                    //     dateFormat: 'Y-m-d',
+                    //     timeFormat: 'H:i:s'
+                    // })
                 },
 
                 // {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
@@ -2366,19 +2363,19 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             store: this.storeDetallePlanificacionmicro,
             columns: [
                 new Ext.grid.RowNumberer(),
-                {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textFieldDetalle},
+                {header: 'Year', dataIndex: 'year', hidden: false, width: 100},
                 {
                     header: 'id_pma_contribuciones_detalle',
                     dataIndex: 'id_pma_contribuciones_detalle',
                     hidden: true,
-                    width: 50
+                    width: 100
                 },
                 {
                     header: 'Strategic Objectives',
                     dataIndex: 'so',
                     sortable: true,
                     width: 125,
-                    editor: comboSO,
+                    // editor: comboSO,
                     renderer: costSO
                 },
                 {
@@ -2386,9 +2383,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'activity',
                     sortable: true,
                     width: 129,
-                    editor: comboActivities,
+                    // editor: comboActivities,
                     renderer: costActivities
                 },
+                {header: 'Total macro', dataIndex: 'total', hidden: false, width: 150},
                 // {header: 'Cost Code', dataIndex: 'parent', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
                 // {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
                 // {header: 'Strategic Objectives', dataIndex: 'parent', sortable: true, width: 100, editor: comboSO, renderer: costSO },
@@ -2497,15 +2495,21 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Cost Code nivel 3',
                     dataIndex: 'cost_code3',
                     sortable: true,
-                    width: 200,
+                    width: 150,
                     editor: comboCostCode3,
                     renderer: costCode3
+                },
+                {
+                    header: 'GL Code',
+                    dataIndex: 'glcode',
+                    sortable: true,
+                    width: 100,
                 },
                 {
                     header: 'Cost Code nivel 4',
                     dataIndex: 'cost_code4',
                     sortable: true,
-                    width: 200,
+                    width: 150,
                     editor: comboCostCode4,
                     renderer: costCode4
                 },
@@ -2513,7 +2517,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Cost Code nivel 5',
                     dataIndex: 'cost_code5',
                     sortable: true,
-                    width: 200,
+                    width: 150,
                     editor: comboCostCode5,
                     renderer: costCode5
                 },
@@ -2525,11 +2529,26 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     editor: textFieldDetalle
                 },
                 {
-                    header: 'Total',
+                    header: 'Total micro',
                     dataIndex: 'total_micro',
                     sortable: true,
                     width: 100,
+                    renderer: 'usMoney',
                     editor: textFieldDetalle
+                },
+                {
+                    header: 'Adjust',
+                    dataIndex: 'adjust',
+                    sortable: true,
+                    width: 100,
+                    renderer: 'usMoney',
+                    editor: textFieldDetalle
+                },
+                {
+                    header: 'Total after adjustment',
+                    dataIndex: 'total_after_adjust',
+                    sortable: true,
+                    width: 150
                 }
                 // {
                 //     header: 'Encargado',
@@ -3188,7 +3207,9 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             cost_code4: 1,
             cost_code5: 1,
             description_micro: '',
-            total_micro: 0
+            total_micro: 0,
+            adjust: 0,
+            total_after_adjust: 0
 
             // total_grant_q1: '0',
             // total_grant_q2: '0',
