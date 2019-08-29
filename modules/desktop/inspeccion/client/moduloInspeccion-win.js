@@ -179,6 +179,11 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 read: urlInspeccion + "crudCostosMacro.php?operation=select",
                 update: urlInspeccion + "crudCostosMacro.php?operation=update",
                 destroy: urlInspeccion + "crudCostosMacro.php?operation=delete"
+            },
+            listeners: {
+                write: function (proxy, action, result, res, rs) {
+                    storeDetalleInspeccion.load();
+                }
             }
         });
 
@@ -282,6 +287,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             autoSave: true, // dependiendo de si se tiene acceso para grabar
             //remoteSort: true,
             //baseParams: {}
+            baseParams: { id: contribucionSeleccionada }
         });
 
         this.storeCostoMacro = new Ext.data.Store({
@@ -1678,8 +1684,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
         this.storeModuloInspeccion.load();
-        this.storeDetalleInspeccion.load();
-        this.storeCostoMacro.load();
+        //this.storeDetalleInspeccion.load();
+       // this.storeCostoMacro.load();
 
         // if (todosInspectores == true) {
         this.storeListadoInspeccion.load();
@@ -1759,18 +1765,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {
                     header: 'Total Direct Cost',
                     dataIndex: 'total_grant',
-                    sortable: true,
-                    width: 28,
-                    renderer: 'usMoney',
-                    editor: new Ext.form.NumberField({
-                        allowBlank: false,
-                        allowNegative: false,
-                        maxValue: 100000000
-                    })
-                },
-                {
-                    header: 'Total Contribution',
-                    dataIndex: 'total_contribution',
                     sortable: true,
                     width: 28,
                     renderer: 'usMoney',
@@ -1871,7 +1865,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         // recuperamos la informacion de personal asignado a ese operativo
                         //select_codigo_tramite = rec.id;
                         selectContribuciones = rec.id;
-                        storeDetalleInspeccion.load({params: {id: rec.id}});
+
+                        storeDetalleInspeccion.baseParams.id = selectContribuciones;
+                        storeDetalleInspeccion.load();
+
                         contribucionSeleccionada = rec.id;
                         inspeccionSeleccionada = rec.id_denuncia;
                         //storeDetalleInspeccion.load({params: {filterText: rec.data.codigo_tramite}});
@@ -2152,6 +2149,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 },
                 // {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
                 {header: 'Amount Programmed', dataIndex: 'total', hidden: false, width: 100, renderer: 'usMoney', editor: textFieldDetalle},
+                {header: 'Adjust', dataIndex: 'adjust', hidden: false, width: 100, renderer: 'usMoney', editor: textFieldDetalle},
+                {header: 'Total adjusted', dataIndex: 'total_adjusted', hidden: false, width: 100, renderer: 'usMoney'},
+                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 150, editor: textFieldDetalle},
                 {
                     header: 'Fecha de Registro',
                     dataIndex: 'fecha_registro',
@@ -2162,11 +2162,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         dateFormat: 'Y-m-d'
                     })
                 },
-                // {header: 'Direct Operational Cost', dataIndex: 'doc', hidden: false, width: 150, renderer: 'usMoney', editor: textFieldDetalle},
-                // {header: 'Direct Support Cost', dataIndex: 'dsc', hidden: false, width: 150, renderer: 'usMoney', editor: textFieldDetalle},
-                {header: 'Adjust', dataIndex: 'adjust', hidden: false, width: 100, renderer: 'usMoney', editor: textFieldDetalle},
-                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 150, editor: textFieldDetalle},
-                {header: 'Total adjusted', dataIndex: 'total_adjusted', hidden: false, width: 100, renderer: 'usMoney'},
+
                 // {
                 //     header: 'Fecha de Registro',
                 //     dataIndex: 'fecha_registro',
@@ -2262,36 +2258,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     editor: comboActivities,
                     renderer: costActivities
                 },
-                {header: 'Total macro', dataIndex: 'total', hidden: false, width: 150},
-                // {
-                //     header: 'Cost Code',
-                //     dataIndex: 'parent',
-                //     sortable: true,
-                //     width: 150,
-                //     editor: comboCOSTPARENTDET,
-                //     renderer: costparentAdmDet
-                // },
-                // // {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
-                // {header: 'Total', dataIndex: 'total', hidden: false, width: 100, editor: textFieldDetalle},
-                // {
-                //     header: 'Fecha de Registro',
-                //     dataIndex: 'fecha_registro',
-                //     hidden: false,
-                //     width: 120,
-                //     editor: textFieldDetalle
-                // },
-                // {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. II Quarter', dataIndex: 'total_grant_q2', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. III Quarter', dataIndex: 'total_grant_q3', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. IV Quarter', dataIndex: 'total_grant_q4', hidden: false, width: 140, editor: textFieldDetalle},
-                // {header: 'Total Grant V. DOC ', dataIndex: 'total_grant_prog_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. DSC', dataIndex: 'total_grant_prog_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total PR and PO - DOC', dataIndex: 'total_pr_po_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Actuals DOC', dataIndex: 'total_actuals_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant Value Balance DOC', dataIndex: 'total_balance_doc', hidden: false, width: 170, editor: textFieldDetalle},
-                // {header: 'Total PR and PO - DSC', dataIndex: 'total_pr_po_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Actuals DSC ', dataIndex: 'total_actuals_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant Value Balance DSC', dataIndex: 'total_grant_balance_dsc', hidden: false, width: 170, editor: textFieldDetalle}
+                {header: 'Total macro', dataIndex: 'total', hidden: false, width: 150}
+
             ],
             viewConfig: {
                 forceFit: false
@@ -2699,7 +2667,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                                 text: "Eliminar",
                                                                 scope: this,
                                                                 handler: this.deleteCostoMacro,
-                                                                disabled: true,
+                                                                disabled: false,
                                                                 iconCls: 'delete-icon'
                                                             },
                                                             '-',
@@ -2712,18 +2680,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                                 scope: this,
                                                                 text: 'Recargar'
                                                             }
-                                                            /*,
-                                                            '-',
-                                                            //Definición de botón guardar datos
-                                                            {
-                                                                text: 'Guardar datos Inspección',
-                                                                scope: this,
-                                                                handler: this.grabardenuncias,
-                                                                iconCls: 'save-icon',
-                                                                disabled: !acceso,
-                                                                id: 'tb_grabardenuncias'
-                                                                , formBind: true
-                                                            }*/
+
                                                         ],
                                                         items: this.gridCostoMacro
                                                     }
@@ -2881,12 +2838,12 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var inspeccion = new this.storeModuloInspeccion.recordType({
             grant_number: ' ',
             crn: ' ',
-            fund: ' ',
+            fund: 0,
             donor: ' ',
             year_contribution: (new Date().getFullYear()),
             // isc: ' ',
-            // total_grant: 0,
-            // total_programmed: 0,
+            total_grant: 0,
+            total_programmed: 0,
             // total_unprogrammed: 0,
             // grant_tod: (new Date()),
             // grant_tdd: (new Date()),
@@ -2986,6 +2943,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
     //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle inspeccion
     requestGridDataDetalleInspeccion: function () {
+        console.log (contribucionSeleccionada)
         this.storeDetalleInspeccion.load({
             params: {
                 id: contribucionSeleccionada
@@ -3038,20 +2996,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
           total_adjusted: 0,
           // activity: 1,
           // id_cost: ' ',
-          fecha_registro: (new Date()),
+          fecha_registro: (new Date())
+,
 
-            // total_grant_q1: '0',
-            // total_grant_q2: '0',
-            // total_grant_q3: '0',
-            // total_grant_q4: '0',
-            // total_grant_prog_doc: '0',
-            // total_grant_prog_dsc: '0',
-            // total_pr_po_doc: '0',
-            // total_actuals_doc: '0',
-            // total_balance_doc: '0',
-            // total_pr_po_dsc: '0',
-            // total_actuals_dsc: '0',
-            // total_grant_balance_dsc: '0',
 
         });
         this.gridCostoMacro.stopEditing();

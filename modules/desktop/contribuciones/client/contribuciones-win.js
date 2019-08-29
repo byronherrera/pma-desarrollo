@@ -2504,7 +2504,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             grant_specific: ' ',
             year_contribution: (new Date().getFullYear()),
             // id_tipo: '',
-            crn: ' ',
+            crn: '',
             recepcion_documento: (new Date()),
             //id_tipo_documento: '2',
             // num_documento: 'S/N',

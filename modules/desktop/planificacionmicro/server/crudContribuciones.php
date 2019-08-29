@@ -183,10 +183,14 @@ function insertDenuncias()
 
     $sql = "INSERT INTO pma_contribuciones($cadenaCampos)
 	values($cadenaDatos);";
+
+
+
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
     $data->id = $os->db->conn->lastInsertId();
+
     // genero el nuevo codigo de proceso
 
     $message = '';

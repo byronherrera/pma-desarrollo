@@ -171,6 +171,9 @@ function updateDetalleInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
 
+    // calculo el valor de total en base de amount - adjust
+    $data['total_adjusted'] = $data['total'] + $data['adjus'];
+
     // if (isset($data->despacho_secretaria)) {
     //     if (!$data->despacho_secretaria)
     //         $data->despacho_secretaria = 'false';
@@ -214,7 +217,8 @@ function updateDetalleInspecciones()
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
         "msg" => $sql->errorCode() == 0 ? "Ubicación en amc_denuncias actualizado exitosamente" : $sql->errorCode(),
-        "message" => $message
+        "message" => $message,
+        "data" => array($data)
     ));
 
 
