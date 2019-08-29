@@ -1,6 +1,7 @@
 var contribucionSeleccionada = '';
 var planificacionmicroSeleccionada = '';
 
+
 QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     id: 'moduloPlanificacionmicro',
     type: 'desktop/moduloPlanificacionmicro',
@@ -268,16 +269,16 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'id', allowBlank: false},
-                {name: 'id_pma_costos_micro', allowBlank: false},
-                {name: 'cost_code2', allowBlank: false},
-                {name: 'cost_code3', allowBlank: false},
-                {name: 'cost_code4', allowBlank: false},
-                {name: 'cost_code5', allowBlank: false},
-                {name: 'description_micro', allowBlank: false},
-                {name: 'total_micro', allowBlank: false},
-                {name: 'adjust', allowBlank: false},
-                {name: 'total_after_adjust', allowBlank: false}
+                {name: 'id', allowBlank: true},
+                {name: 'id_pma_costos_micro', allowBlank: true},
+                {name: 'cost_code2', allowBlank: true},
+                {name: 'cost_code3', allowBlank: true},
+                {name: 'cost_code4', allowBlank: true},
+                {name: 'cost_code5', allowBlank: true},
+                {name: 'description_micro', allowBlank: true},
+                {name: 'total_micro', allowBlank: true},
+                {name: 'adjust', allowBlank: true},
+                {name: 'total_after_adjust', allowBlank: true}
             ]
         });
 
@@ -2477,12 +2478,12 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             store: this.storePlanificacionmicrodet,
             columns: [
                 new Ext.grid.RowNumberer(),
-                // {
-                //     header: 'id',
-                //     dataIndex: 'id',
-                //     sortable: true,
-                //     width: 5
-                // },
+                {
+                     header: 'id_pma_costos_micro',
+                     dataIndex: 'id_pma_costos_micro',
+                     sortable: false,
+                     width: 15
+                },
                 {
                     header: 'Cost Code nivel 2',
                     dataIndex: 'cost_code2',
@@ -2550,12 +2551,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 150
                 }
-                // {
-                //     header: 'Encargado',
-                //     dataIndex: 'id_member',
-                //     sortable: true,
-                //     width: 40
-                // }
+
             ],
             viewConfig: {forceFit: false},
             sm: new Ext.grid.RowSelectionModel({
@@ -3209,8 +3205,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             description_micro: '',
             total_micro: 0,
             adjust: 0,
-            total_after_adjust: 0
-
+            total_after_adjust: 0,
+            id_pma_costos_micro: select_SO,
             // total_grant_q1: '0',
             // total_grant_q2: '0',
             // total_grant_q3: '0',
