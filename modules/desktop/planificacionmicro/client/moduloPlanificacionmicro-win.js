@@ -1945,6 +1945,11 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                             // Ext.getCmp('gridDetalleTodasPlanificacionmicro').setVisible(false);
                             Ext.getCmp('gridDetallePlanificacionmicro').setVisible(true);
                         }
+                        //
+                        Ext.getCmp('paso1').setTitle("Paso 1 - Contribuciones - " + rec.data['grant_number']);
+                        Ext.getCmp('paso2').setTitle("Paso 2 - Actividades");
+                        Ext.getCmp('paso3').setTitle("Paso 3 - Costos Macro");
+                        Ext.getCmp('paso4').setTitle("Paso 4 - Costros Micro");
                     }
                 }
             }),
@@ -2316,6 +2321,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                 costCodeNuevo2: costCodeNuevo2
                             }
                         });
+                        Ext.getCmp('paso3').setTitle("Paso 3 - Costos Macro  - " + costparentAdmDet(rec.data['cost_code']));
+                        Ext.getCmp('paso4').setTitle("Paso 4 - Costros Micro");
 
                     }
                 }
@@ -2389,23 +2396,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     renderer: costActivities
                 },
                 {header: 'Total macro', dataIndex: 'total', hidden: false, width: 150},
-                // {header: 'Cost Code', dataIndex: 'parent', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
-                // {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
-                // {header: 'Strategic Objectives', dataIndex: 'parent', sortable: true, width: 100, editor: comboSO, renderer: costSO },
-                // {header: 'Activities', dataIndex: 'parent', sortable: true, width: 100, editor: comboActivities, renderer: costActivities },
 
-                // {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. II Quarter', dataIndex: 'total_grant_q2', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. III Quarter', dataIndex: 'total_grant_q3', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. IV Quarter', dataIndex: 'total_grant_q4', hidden: false, width: 140, editor: textFieldDetalle},
-                // {header: 'Total Grant V. DOC ', dataIndex: 'total_grant_prog_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. DSC', dataIndex: 'total_grant_prog_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total PR and PO - DOC', dataIndex: 'total_pr_po_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Actuals DOC', dataIndex: 'total_actuals_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant Value Balance DOC', dataIndex: 'total_balance_doc', hidden: false, width: 170, editor: textFieldDetalle},
-                // {header: 'Total PR and PO - DSC', dataIndex: 'total_pr_po_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Actuals DSC ', dataIndex: 'total_actuals_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant Value Balance DSC', dataIndex: 'total_grant_balance_dsc', hidden: false, width: 170, editor: textFieldDetalle}
             ],
             viewConfig: {
                 forceFit: false
@@ -2417,20 +2408,12 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     rowselect: function (sm, row, rec) {
                         // recuperamos la informacion de personal asignado a ese operativo
                         select_SO = rec.id;
-                        console.log("select_SO",select_SO);
-
                         storeCostoMacro.load({params: {id: rec.id}});
 
-                        //contribucionSeleccionada = rec.id;
-                        //inspeccionSeleccionada = rec.id_denuncia;
-                        //storeDetalleInspeccion.load({params: {filterText: rec.data.codigo_tramite}});
-                        // if (creacionDatosInspeccion) {
-                        //     Ext.getCmp('btnNuevoDetalleInspeccion').setDisabled(false);
-                        //     Ext.getCmp('btnEliminarDetalleInspeccion').setDisabled(false);
-                        //     // Ext.getCmp('checkTodasInspecciones').setValue(false);
-                        //     // Ext.getCmp('gridDetalleTodasInspecciones').setVisible(false);
-                        //     Ext.getCmp('gridCostoMacro').setVisible(true);
-                        // }
+                        Ext.getCmp('paso2').setTitle("Paso 2 - Actividades - " + costSO(rec.data['so']) + " - " +costActivities(rec.data['activity']));
+                        Ext.getCmp('paso3').setTitle("Paso 3 - Costos Macro");
+                        Ext.getCmp('paso4').setTitle("Paso 4 - Costros Micro");
+
                     }
                 }
             }),
@@ -2482,7 +2465,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {
                      header: 'id_pma_costos_micro',
                      dataIndex: 'id_pma_costos_micro',
-                     sortable: false,
+                     sortable: false, hidden: true,
                      width: 15,
                      hidden: true
                 },
@@ -2562,6 +2545,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 listeners: {
                     rowselect: function (sm, row, rec) {
                         //storePlanificacionmicrodetSimple.load({params: {filterField: 'guia', filterText: rec.get("numero")}})
+                        Ext.getCmp('paso4').setTitle("Paso 4 - Costros Micro- " + costCode2(rec.data['cost_code2']));
                     }
                 }
             }),
@@ -2700,6 +2684,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     layout: 'accordion',
                                     items: [{
                                         title: 'Paso 1 - Contribuciones',
+                                        id : 'paso1',
                                         autoScroll: true,
                                         border: false,
                                         items: this.gridModuloPlanificacionmicro,
@@ -2783,6 +2768,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     }, {
                                         title: 'Paso 2 - Actividades',
                                         border: false,
+                                        id : 'paso2',
                                         autoScroll: true,
                                         items: [this.gridDetallePlanificacionmicro],
                                         tbar: [
@@ -2820,6 +2806,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     }, {
                                         title: 'Paso 3 - Costos Macro',
                                         border: false,
+                                        id : 'paso3',
                                         autoScroll: true,
                                         items: this.gridCostoMacro,
                                         tbar: [
@@ -2871,6 +2858,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                         title: 'Paso 4 - Costos Micro',
                                         border: false,
                                         autoScroll: true,
+                                        id : 'paso4',
                                         items: [this.gridPlanificacionmicrodet],
                                         tbar: [
                                             //Definición de botón nuevo

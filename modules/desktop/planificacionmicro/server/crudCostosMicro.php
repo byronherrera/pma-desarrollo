@@ -172,8 +172,8 @@ function updateDetalleInspecciones()
     $data = json_decode($_POST["data"]);
     // calculo el valor de total en base de amount - adjust
      $data->total_after_adjust = $data->total_micro + $data->adjust;
-     console.log($data->total_after_adjust);
-    // if (isset($data->despacho_secretaria)) {
+
+     // if (isset($data->despacho_secretaria)) {
     //     if (!$data->despacho_secretaria)
     //         $data->despacho_secretaria = 'false';
     //     else
