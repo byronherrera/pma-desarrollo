@@ -31,6 +31,8 @@ function selectDetalleInspecciones()
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $total = calcularTotal($row['id']);
+        $row['total'] = $total;
         $data[] = $row;
     }
     echo json_encode(array(
@@ -39,7 +41,26 @@ function selectDetalleInspecciones()
     );
 }
 
-function    selectDetalleTodasInspecciones()
+function calcularTotal($id)
+{
+    // aca el calculo
+    global $os;
+
+    $sql = "SELECT SUM(total_adjusted) as total  FROM pma_costos_macro where id_pma_costos_macro = $id ";
+    $result = $os->db->conn->query($sql);
+    $total = 0;
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+
+        if (!is_null($row ['total']))
+        $total = $row ['total'];
+
+    }
+
+    return $total;
+}
+
+;
+function selectDetalleTodasInspecciones()
 {
     global $os;
     //Se inicializa el parámetro de búsqueda de código trámite
@@ -93,7 +114,7 @@ function insertDetalleInspecciones()
     $data = json_decode(stripslashes($_POST["data"]));
     $data->id = generaCodigoProcesoOrdenanza();
     // $data->id_inspeccion = generaNuevoCodigoInspeccion();
-    $data->fecha_registro = date('Y-m-d H:i:s');
+    //$data->fecha_recepcion_documento = date('Y-m-d H:i:s');
     //genero el listado de nombre de campos
 
     $cadenaDatos = '';
@@ -134,7 +155,7 @@ function insertDetalleInspecciones()
             "data" => array($data)
         ));
         // para el caso que ya se haya procesado o sea reinspeccion
-        // actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
+        //actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
     } else {
         echo json_encode(array(
             "success" => false,
@@ -170,9 +191,6 @@ function updateDetalleInspecciones()
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
-
-    // calculo el valor de total en base de amount - adjust
-    $data['total_adjusted'] = $data['total'] + $data['adjus'];
 
     // if (isset($data->despacho_secretaria)) {
     //     if (!$data->despacho_secretaria)
@@ -224,14 +242,15 @@ function updateDetalleInspecciones()
 
 }
 
-function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
+function cambioEstadoAsignacion($id_asignacion, $idInspeccion)
+{
     global $os;
     // en caso de que sea una reasignacion entonces se cambia de estado
-    if (!is_null($id_asignacion) AND $id_asignacion != ''){
+    if (!is_null($id_asignacion) AND $id_asignacion != '') {
 
         // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
 
-        if ( verificaAnteriorReasignacion ($id_asignacion, $idInspeccion)) {
+        if (verificaAnteriorReasignacion($id_asignacion, $idInspeccion)) {
             $sql = "UPDATE `amc_inspeccion` SET `estado_asignacion` = 1 WHERE `id` = $idInspeccion";
             $sql = $os->db->conn->prepare($sql);
             $sql->execute();
@@ -239,26 +258,28 @@ function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
     }
 }
 
-function verificaAnteriorAsignacion ($id_reasignacion, $idInspeccion) {
+function verificaAnteriorAsignacion($id_reasignacion, $idInspeccion)
+{
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT funcionario_entrega FROM  `amc_inspeccion` WHERE  id = $idInspeccion";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
-    if ($row['funcionario_entrega'] === $id_reasignacion )
+    if ($row['funcionario_entrega'] === $id_reasignacion)
         return false;
     else
         return true;
 }
 
-function cambioEstadoReasignacion ($id_reasignacion, $idInspeccion ) {
+function cambioEstadoReasignacion($id_reasignacion, $idInspeccion)
+{
     global $os;
     // en caso de que sea una reasignacion entonces se cambia de estado
-    if (!is_null($id_reasignacion) AND $id_reasignacion != ''){
+    if (!is_null($id_reasignacion) AND $id_reasignacion != '') {
 
         // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
 
-        if ( verificaAnteriorReasignacion ($id_reasignacion, $idInspeccion)) {
+        if (verificaAnteriorReasignacion($id_reasignacion, $idInspeccion)) {
             $sql = "UPDATE `amc_inspeccion` SET `estado_asignacion` = 3 WHERE `id` = $idInspeccion";
             $sql = $os->db->conn->prepare($sql);
             $sql->execute();
@@ -267,13 +288,14 @@ function cambioEstadoReasignacion ($id_reasignacion, $idInspeccion ) {
     }
 }
 
-function verificaAnteriorReasignacion ($id_reasignacion, $idInspeccion) {
+function verificaAnteriorReasignacion($id_reasignacion, $idInspeccion)
+{
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT funcionario_reasignacion FROM  `amc_inspeccion` WHERE  id = $idInspeccion";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
-    if ($row['funcionario_reasignacion'] === $id_reasignacion )
+    if ($row['funcionario_reasignacion'] === $id_reasignacion)
         return false;
     else
         return true;

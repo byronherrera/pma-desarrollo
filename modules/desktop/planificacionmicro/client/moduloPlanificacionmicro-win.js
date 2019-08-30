@@ -161,6 +161,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 //{name: 'id_cost', allowBlank: true},
                 {name: 'so', allowBlank: true},
                 {name: 'activity', allowBlank: true},
+                {name: 'total', allowBlank: true},
                 // {name: 'id_cost', allowBlank: true},
                 // {name: 'id_cost_detail', allowBlank: true},
                 // {name: 'category_name', allowBlank: true},
@@ -2229,7 +2230,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     // editor: textFieldDetalle
                 },
                 // {
-                //     header: 'Fecha de Registro',
+                //     header: 'Register date',
                 //     dataIndex: 'fecha_registro',
                 //     hidden: false,
                 //     width: 120,
@@ -2274,7 +2275,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 },
 
                 {
-                    header: 'Fecha de Registro',
+                    header: 'Register date',
                     dataIndex: 'fecha_registro',
                     hidden: false,
                     width: 150,
@@ -2482,7 +2483,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                      header: 'id_pma_costos_micro',
                      dataIndex: 'id_pma_costos_micro',
                      sortable: false,
-                     width: 15
+                     width: 15,
+                     hidden: true
                 },
                 {
                     header: 'Cost Code nivel 2',
@@ -2549,6 +2551,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Total after adjustment',
                     dataIndex: 'total_after_adjust',
                     sortable: true,
+                    renderer: 'usMoney',
                     width: 150
                 }
 
@@ -3139,7 +3142,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             year: ' ',
             so: 1,
             activity: 1,
-
+            total: 0,
             // id_cost: '',
             // id_cost_detail: '',
             // category_name: '',

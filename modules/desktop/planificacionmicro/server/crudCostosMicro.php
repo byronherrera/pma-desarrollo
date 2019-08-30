@@ -10,7 +10,6 @@ if (!$os->session_exists()) {
 function selectDetalleInspecciones()
 {
     global $os;
-    $where = "";
     if (isset($_POST['id'])) {
         $id = (int)$_POST ['id'];
         $where = " id_pma_costos_micro  = '$id'";
@@ -28,14 +27,7 @@ function selectDetalleInspecciones()
     $orderby = 'ORDER BY id DESC';
 
     $os->db->conn->query("SET NAMES 'utf8'");
-
-if ($where == "") {
-        $sql = "SELECT * FROM pma_costos_micro $orderby ";
-    } else {
-        $sql = "SELECT * FROM pma_costos_micro WHERE $where  $orderby ";
-    }
-
-    
+    $sql = "SELECT * FROM pma_costos_micro WHERE $where  $orderby ";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -178,7 +170,9 @@ function updateDetalleInspecciones()
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
-
+    // calculo el valor de total en base de amount - adjust
+     $data->total_after_adjust = $data->total_micro + $data->adjust;
+     console.log($data->total_after_adjust);
     // if (isset($data->despacho_secretaria)) {
     //     if (!$data->despacho_secretaria)
     //         $data->despacho_secretaria = 'false';
