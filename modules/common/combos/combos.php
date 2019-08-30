@@ -115,7 +115,7 @@ function comboCostcode2()
     else
         $where = '';
 
-    $costCodeNuevo2 =
+    // $costCodeNuevo2 =
     $sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 2 $where ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
@@ -137,8 +137,47 @@ function comboCostcode3()
     else
         $where = '';
 
-    $costCodeNuevo2 =
+    // $costCodeNuevo2 =
     $sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 3 $where ORDER BY id";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
+function comboCostcode4()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+
+    $sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 4 ORDER BY id";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
+function comboCostcode5()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    if (isset($_POST['costCodeNuevo5']))
+        $where = " AND parent = " . $_POST['costCodeNuevo5'];
+    else
+        $where = '';
+
+    // $costCodeNuevo2 =
+    $sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 5 $where ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -867,5 +906,11 @@ switch ($_GET['tipo']) {
         break;
     case 'costcode3' :
         comboCostcode3();
+        break;
+    case 'costcode4' :
+        comboCostcode4();
+        break;
+    case 'costcode5' :
+        comboCostcode5();
         break;
 }
