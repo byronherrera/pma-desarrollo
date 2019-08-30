@@ -72,7 +72,7 @@ function    selectDetalleTodasInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
 
     $sql = "SELECT * FROM pma_costos_micro $where $orderby LIMIT $start, $limit";
-    //$sql = "SELECT * FROM amc_inspeccion";
+
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -213,15 +213,36 @@ function updateDetalleInspecciones()
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
+
+
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_micro actualizado exitosamente" : $sql->errorCode(),
-        "message" => $message
+        "message" => $message,
+        "data" => $data,
+        "total" => totalCostosMicro ($data->id_pma_costos_micro)
     ));
 
 
 }
 
+
+function totalCostosMicro ($id) {
+    // aca el calculo
+    global $os;
+
+    $sql = "SELECT SUM(total_micro) as total  FROM pma_costos_micro where id_pma_costos_micro = $id ";
+    $result = $os->db->conn->query($sql);
+    $total = 0;
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+
+        if (!is_null($row ['total']))
+            $total = $row ['total'];
+
+    }
+
+    return $total;
+}
 function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
     global $os;
     // en caso de que sea una reasignacion entonces se cambia de estado
@@ -230,7 +251,7 @@ function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
         // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
 
         if ( verificaAnteriorReasignacion ($id_asignacion, $idInspeccion)) {
-            $sql = "UPDATE `amc_inspeccion` SET `estado_asignacion` = 1 WHERE `id` = $idInspeccion";
+            $sql = "UPDATE `pma_costos_micro` SET `estado_asignacion` = 1 WHERE `id` = $idInspeccion";
             $sql = $os->db->conn->prepare($sql);
             $sql->execute();
         }
@@ -240,7 +261,7 @@ function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
 function verificaAnteriorAsignacion ($id_reasignacion, $idInspeccion) {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT funcionario_entrega FROM  `amc_inspeccion` WHERE  id = $idInspeccion";
+    $sql = "SELECT funcionario_entrega FROM  `pma_costos_micro` WHERE  id = $idInspeccion";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     if ($row['funcionario_entrega'] === $id_reasignacion )
@@ -257,7 +278,7 @@ function cambioEstadoReasignacion ($id_reasignacion, $idInspeccion ) {
         // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
 
         if ( verificaAnteriorReasignacion ($id_reasignacion, $idInspeccion)) {
-            $sql = "UPDATE `amc_inspeccion` SET `estado_asignacion` = 3 WHERE `id` = $idInspeccion";
+            $sql = "UPDATE `pma_costos_micro` SET `estado_asignacion` = 3 WHERE `id` = $idInspeccion";
             $sql = $os->db->conn->prepare($sql);
             $sql->execute();
 
@@ -268,7 +289,7 @@ function cambioEstadoReasignacion ($id_reasignacion, $idInspeccion ) {
 function verificaAnteriorReasignacion ($id_reasignacion, $idInspeccion) {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT funcionario_reasignacion FROM  `amc_inspeccion` WHERE  id = $idInspeccion";
+    $sql = "SELECT funcionario_reasignacion FROM  `pma_costos_micro` WHERE  id = $idInspeccion";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     if ($row['funcionario_reasignacion'] === $id_reasignacion )
@@ -303,7 +324,7 @@ function selectDetalleInspeccionesForm()
     $id = (int)$_POST ['id'];
     if ($id != 0) {
         $os->db->conn->query("SET NAMES 'utf8'");
-        $sql = "SELECT * FROM amc_inspeccion WHERE amc_inspeccion.id_denuncia = $id";
+        $sql = "SELECT * FROM pma_costos_micro WHERE id_denuncia = $id";
         $result = $os->db->conn->query($sql);
         $data = array();
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -358,7 +379,7 @@ function deleteDetalleInspecciones()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM amc_inspeccion WHERE id = $id";
+    $sql = "DELETE FROM pma_costos_micro WHERE id = $id";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
     echo json_encode(array(

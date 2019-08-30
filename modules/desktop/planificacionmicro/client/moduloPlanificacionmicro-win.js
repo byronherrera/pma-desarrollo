@@ -1,6 +1,6 @@
 var contribucionSeleccionada = '';
 var planificacionmicroSeleccionada = '';
-
+var costoMacroSeleccionada = '';
 
 QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     id: 'moduloPlanificacionmicro',
@@ -254,6 +254,17 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             },
             listeners: {
                 write: function (proxy, action, result, res, rs) {
+                    console.log (rs);
+                    console.log (res.total);
+                    console.log (result);
+                    console.log (action);
+                    // verifica que no se pase ..
+                    if (typeof res.total !== 'undefined') {
+                        if (res.total != '') {
+//                            AppMsg.setAlert(AppMsg.STATUS_NOTICE, res.message);
+                            AppMsg.setAlert(AppMsg.STATUS_NOTICE, "se paso el valor");
+                        }
+                    }
                     costCodeNuevo3 = rs.data['cost_code2'];
                     comboCostCode3.clearValue();
                     storeCostCode3.load({
@@ -262,13 +273,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         }
                     });
                     costCodeNuevo5 = rs.data['cost_code4'];
-                    console.log("costCodeNuevo5",costCodeNuevo5);
                     comboCostCode5.clearValue();
                     storeCostCode5.load({
                         params: {
                             costCodeNuevo5: costCodeNuevo5
                         }
                     });
+
                 }
             }
         });
@@ -2011,7 +2022,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             writer: writerPlanificacionmicroActa,
             autoSave: true
         });
-        this.storePlanificacionmicroActa.load();
+       // this.storePlanificacionmicroActa.load();
 
         this.gridPlanificacionmicroActa = new Ext.grid.EditorGridPanel({
             id: 'gridPlanificacionmicroActa',
@@ -2323,6 +2334,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         // recuperamos la informacion de personal asignado a ese operativo
                         select_macro = rec.id;
                         storePlanificacionmicrodet.load({params: {id: rec.id}});
+                        costoMacroSeleccionada = rec.id;
+                        // actualizamos el combo box
                         costCodeNuevo2 = rec.data['cost_code'];
                         comboCostCode2.clearValue();
                         storeCostCode2.load({
@@ -2474,7 +2487,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {
                      header: 'id_pma_costos_micro',
                      dataIndex: 'id_pma_costos_micro',
-                     sortable: false, hidden: true,
+                     sortable: false,
                      width: 15,
                      hidden: true
                 },
@@ -2548,7 +2561,16 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 }
 
             ],
-            viewConfig: {forceFit: false},
+            viewConfig: {
+                forceFit: false,
+                /*getRowClass: function (record, index) {
+                    dato1 = Ext.getCmp('paso4').getRow()
+
+                    if (  (record.get('id_estado') == record.get('id_estado'))) {
+                        return 'redstate';
+                    }
+                }*/
+            },
             sm: new Ext.grid.RowSelectionModel({
                 singleSelect: false,
                 listeners: {
@@ -3108,7 +3130,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     //Función para actualizar los datos mostrados en pantalla de la pestaña de ModuloPlanificacionmicro
     requestGridDataDenunciasActa: function () {
 
-        this.storePlanificacionmicroActa.load();
+       // this.storePlanificacionmicroActa.load();
     },
 
     //Función para eliminación de registros de Planificacionmicro
@@ -3206,19 +3228,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             total_micro: 0,
             adjust: 0,
             total_after_adjust: 0,
-            id_pma_costos_micro: select_SO,
-            // total_grant_q1: '0',
-            // total_grant_q2: '0',
-            // total_grant_q3: '0',
-            // total_grant_q4: '0',
-            // total_grant_prog_doc: '0',
-            // total_grant_prog_dsc: '0',
-            // total_pr_po_doc: '0',
-            // total_actuals_doc: '0',
-            // total_balance_doc: '0',
-            // total_pr_po_dsc: '0',
-            // total_actuals_dsc: '0',
-            // total_grant_balance_dsc: '0',
+            id_pma_costos_micro: costoMacroSeleccionada,
 
         });
         this.gridPlanificacionmicrodet.stopEditing();
