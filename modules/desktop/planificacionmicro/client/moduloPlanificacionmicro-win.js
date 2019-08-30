@@ -76,6 +76,15 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             return value ? value.dateFormat('Y-m-d H:i') : '';
         }
 
+        function valueColor(val) {
+            if (val > 0) {
+                return '<span style="color:green;">' + val + '</span>';
+            } else if (val < 0) {
+                return '<span style="color:red;">' + val + '</span>';
+            }
+            return val;
+        }
+
         //Inicio ventana planificacionmicro
         //Definición de url CRUD
         var proxyModuloPlanificacionmicro = new Ext.data.HttpProxy({
@@ -2395,7 +2404,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     // editor: comboActivities,
                     renderer: costActivities
                 },
-                {header: 'Total macro', dataIndex: 'total', hidden: false, width: 150},
+                {header: 'Total macro', dataIndex: 'total', hidden: false, renderer: valueColor,  width: 150},
 
             ],
             viewConfig: {
