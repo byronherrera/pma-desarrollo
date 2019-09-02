@@ -77,6 +77,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         function formatDate(value) {
             return value ? value.dateFormat('Y-m-d H:i') : '';
         }
+
         function formatDateNoTime(value) {
             return value ? value.dateFormat('Y-m-d') : '';
         }
@@ -236,7 +237,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {name: 'id_inspeccion', readOnly: false, allowBlank: true},
                 //{name: 'codificacion', readOnly: false, allowBlank: true},
                 {name: 'nombre_denunciado', readOnly: false, allowBlank: true},
-               // {name: 'id_ordenanza', readOnly: true, allowBlank: true},
+                // {name: 'id_ordenanza', readOnly: true, allowBlank: true},
                 {name: 'fecha_despacho', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'id_actividad', readOnly: false, allowBlank: true},
                 //{name: 'respuesta', readOnly: false, allowBlank: true},
@@ -287,7 +288,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             autoSave: true, // dependiendo de si se tiene acceso para grabar
             //remoteSort: true,
             //baseParams: {}
-            baseParams: { id: contribucionSeleccionada }
+            baseParams: {id: contribucionSeleccionada}
         });
 
         this.storeCostoMacro = new Ext.data.Store({
@@ -394,7 +395,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
         function costActivities(id) {
-         //   var index = storeActivities.findExact('id', id);
+            //   var index = storeActivities.findExact('id', id);
             var index = storeActivities.find('id', id);
             if (index > -1) {
                 var record = storeActivities.getAt(index);
@@ -433,7 +434,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
         function costGrant(id) {
-         //   var index = storeActivities.findExact('id', id);
+            //   var index = storeActivities.findExact('id', id);
             var index = storeGrant.find('id', id);
             if (index > -1) {
                 var record = storeGrant.getAt(index);
@@ -472,7 +473,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
         function costStatus(id) {
-         //   var index = storeActivities.findExact('id', id);
+            //   var index = storeActivities.findExact('id', id);
             var index = storeStatus.find('id', id);
             if (index > -1) {
                 var record = storeStatus.getAt(index);
@@ -1685,7 +1686,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         this.storeModuloInspeccion.load();
         //this.storeDetalleInspeccion.load();
-       // this.storeCostoMacro.load();
+        // this.storeCostoMacro.load();
 
         // if (todosInspectores == true) {
         this.storeListadoInspeccion.load();
@@ -1993,8 +1994,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         //fin mantenimiento InspeccionActa
 
 
-
-
         // Inicio mantenimiento InspeccionActa simple
         this.storeInspeccionActaSimple = new Ext.data.Store({
             id: "id",
@@ -2125,9 +2124,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         this.gridCostoMacro = new Ext.grid.EditorGridPanel({
             id: 'gridCostoMacro',
             //Calculo de tamaño vertical frame inferior de pestaña Trámites pendientes
-            height: winHeight * 0.34,
+            height:winHeight - winHeight*.35- 165,
             //Calculo de tamaño horizontal frame inferior de pestaña Trámites pendientes
-            width: winWidth * 0.62,
+            width: 'auto',
             readOnly: false,
             store: this.storeCostoMacro,
             columns: [
@@ -2148,8 +2147,22 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     renderer: costparentAdmDet
                 },
                 // {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
-                {header: 'Amount Programmed', dataIndex: 'total', hidden: false, width: 100, renderer: 'usMoney', editor: textFieldDetalle},
-                {header: 'Adjust', dataIndex: 'adjust', hidden: false, width: 100, renderer: 'usMoney', editor: textFieldDetalle},
+                {
+                    header: 'Amount Programmed',
+                    dataIndex: 'total',
+                    hidden: false,
+                    width: 100,
+                    renderer: 'usMoney',
+                    editor: textFieldDetalle
+                },
+                {
+                    header: 'Adjust',
+                    dataIndex: 'adjust',
+                    hidden: false,
+                    width: 100,
+                    renderer: 'usMoney',
+                    editor: textFieldDetalle
+                },
                 {header: 'Total adjusted', dataIndex: 'total_adjusted', hidden: false, width: 100, renderer: 'usMoney'},
                 {header: 'Comment', dataIndex: 'comment', hidden: false, width: 150, editor: textFieldDetalle},
                 {
@@ -2233,15 +2246,21 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         this.gridDetalleInspeccion = new Ext.grid.EditorGridPanel({
             id: 'gridDetalleInspeccion',
             //Calculo de tamaño vertical frame inferior de pestaña Trámites pendientes
-            height: winHeight * 0.34,
+
             //Calculo de tamaño horizontal frame inferior de pestaña Trámites pendientes
-            width: winWidth * 0.35,
+            width: 'auto',
+            height:winHeight - winHeight*.35- 165,
             readOnly: false,
             store: this.storeDetalleInspeccion,
             columns: [
                 new Ext.grid.RowNumberer(),
                 {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textFieldDetalle},
-                {header: 'id_pma_contribuciones_detalle', dataIndex: 'id_pma_contribuciones_detalle', hidden: true, width: 50},
+                {
+                    header: 'id_pma_contribuciones_detalle',
+                    dataIndex: 'id_pma_contribuciones_detalle',
+                    hidden: true,
+                    width: 50
+                },
                 {
                     header: 'Strategic Objectives',
                     dataIndex: 'so',
@@ -2264,25 +2283,16 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             viewConfig: {
                 forceFit: false
             },
-
             sm: new Ext.grid.RowSelectionModel({
                 singleSelect: true,
                 listeners: {
                     rowselect: function (sm, row, rec) {
                         // recuperamos la informacion de personal asignado a ese operativo
                         select_SO = rec.id;
-
-
                         storeCostoMacro.load({params: {id: rec.id}});
-
-                        //contribucionSeleccionada = rec.id;
-                        //inspeccionSeleccionada = rec.id_denuncia;
-                        //storeDetalleInspeccion.load({params: {filterText: rec.data.codigo_tramite}});
                         if (creacionDatosInspeccion) {
                             Ext.getCmp('btnNuevoDetalleInspeccion').setDisabled(false);
                             Ext.getCmp('btnEliminarDetalleInspeccion').setDisabled(false);
-                            // Ext.getCmp('checkTodasInspecciones').setValue(false);
-                            // Ext.getCmp('gridDetalleTodasInspecciones').setVisible(false);
                             Ext.getCmp('gridCostoMacro').setVisible(true);
                         }
                     }
@@ -2329,19 +2339,19 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             renderTo: Ext.getBody(),
             enableDD: true,
 
-            columns:[{
+            columns: [{
                 header: 'Description',
                 dataIndex: 'description',
                 width: 230
-            },{
+            }, {
                 header: 'Duration',
                 width: 100,
                 dataIndex: 'active',
                 align: 'center',
                 sortType: 'asFloat',
                 tpl: new Ext.XTemplate('{duration:this.formatHours}', {
-                    formatHours: function(v) {
-                        if(v < 1) {
+                    formatHours: function (v) {
+                        if (v < 1) {
                             return Math.round(v * 60) + ' mins';
                         } else if (Math.floor(v) !== v) {
                             var min = v - Math.floor(v);
@@ -2351,7 +2361,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         }
                     }
                 })
-            },{
+            }, {
                 header: 'Cost',
                 width: 150,
                 dataIndex: 'cost'
@@ -2482,7 +2492,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                     text: 'Recargar'
                                 },
                                 '-',
-                                {
+                                /*{
                                     xtype: 'checkbox',
                                     boxLabel: 'Pendientes por aprobar ',
                                     id: 'checkPendientesAprobar',
@@ -2505,18 +2515,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                         //Ext.getCmp('tb_seleccionarUnidad').setValue('Seleccionar Unidad');
                                         //}
                                     }
-                                },
+                                },*/
                                 '-',
                                 //bh boton generar
-                             /*   {
-                                    iconCls: 'excel-icon',
-                                    handler: this.botonGenerarActa,
-                                    scope: this,
-                                    text: 'Generar Nueva Acta',
-                                    tooltip: 'Se genera acta con las ',
-                                    id: 'tb_repoteDenuncias',
-                                    disabled: false
-                                },*/
+                                /*   {
+                                       iconCls: 'excel-icon',
+                                       handler: this.botonGenerarActa,
+                                       scope: this,
+                                       text: 'Generar Nueva Acta',
+                                       tooltip: 'Se genera acta con las ',
+                                       id: 'tb_repoteDenuncias',
+                                       disabled: false
+                                   },*/
 
                                 //bh boton migrar Wings
 
@@ -2552,7 +2562,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                 {
                                     text: "Subir Excel",
                                     scope: this,
-                                    handler:this.botonImportarWings,
+                                    handler: this.botonImportarWings,
                                     id: 'subirimagen',
                                     iconCls: 'subir-icon',
                                     //disabled: this.app.isAllowedTo('accesosAdministradorOpe', this.id) ? false : true
@@ -2572,124 +2582,115 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                 })
                             ],
                             //Llamado a función que arma la tabla de datos
-                            items: [{
-                                id: 'formModuloInspeccion',
-                                titleCollapse: true,
-                                flex: 1,
-                                autoScroll: true,
-                                layout: 'column',
-                                items: this.gridModuloInspeccion
-                            }, {
-                                flex: 2,
-                                bodyStyle: 'padding:0; background: #0f6dff',
-                                items: [
-                                    {
-                                        xtype: 'tabpanel',
-                                        activeTab: 0,
-                                        width: winWidth - 15,
-                                        cls: 'no-border',
-                                        items: [
-                                            {
-                                                title: 'Planificación Macro',
-                                                autoScroll: true,
-                                                height: winHeight * 0.42,
-                                                flex: 1,
-                                                autoScroll: true,
-                                                layout: 'column',
-                                                items: [
-                                                    //{
-                                                    //    columnWidth: 1 / 4,
-                                                  //      items: this.tree
-                                                  //  },
-                                                    {
-                                                        columnWidth: 3 / 8,
-                                                        tbar: [
-                                                            //Definición de botón nuevo
-                                                            {
-                                                                id: 'btnNuevoDetalleInspeccion',
-                                                                text: 'Nuevo',
-                                                                scope: this,
-                                                                handler: this.addDetalleInspeccion,
-                                                                disabled: false,
-                                                                iconCls: 'save-icon'
-                                                            },
-                                                            '-',
-                                                            //Definición de botón eliminar
-                                                            {
-                                                                id: 'btnEliminarDetalleInspeccion',
-                                                                text: "Eliminar",
-                                                                scope: this,
-                                                                handler: this.deleteDetalleInspeccion,
-                                                                disabled: true,
-                                                                iconCls: 'delete-icon'
-                                                            },
-                                                            '-',
-                                                            //Definición de botón Recargar datos
-                                                            {
-                                                                id: 'btnRecargarDatosDetalleInspeccion',
-                                                                iconCls: 'reload-icon',
-                                                                handler: this.requestGridDataDetalleInspeccion,
-                                                                disabled: false,
-                                                                scope: this,
-                                                                text: 'Recargar'
-                                                            }
-                                                            /*,
-                                                            '-',
-                                                            //Definición de botón guardar datos
-                                                            {
-                                                                text: 'Guardar datos Inspección',
-                                                                scope: this,
-                                                                handler: this.grabardenuncias,
-                                                                iconCls: 'save-icon',
-                                                                disabled: !acceso,
-                                                                id: 'tb_grabardenuncias'
-                                                                , formBind: true
-                                                            }*/
-                                                        ],
-                                                        items: this.gridDetalleInspeccion
-                                                    },
-                                                    {
-                                                        columnWidth: 5 / 8,
-                                                        tbar: [
-                                                            //Definición de botón nuevo
-                                                            {
-                                                                id: 'btnNuevoCostoMacro',
-                                                                text: 'Nuevo',
-                                                                scope: this,
-                                                                handler: this.addCostoMacro,
-                                                                disabled: false,
-                                                                iconCls: 'save-icon'
-                                                            },
-                                                            '-',
-                                                            //Definición de botón eliminar
-                                                            {
-                                                                id: 'btnEliminarCostoMacro',
-                                                                text: "Eliminar",
-                                                                scope: this,
-                                                                handler: this.deleteCostoMacro,
-                                                                disabled: false,
-                                                                iconCls: 'delete-icon'
-                                                            },
-                                                            '-',
-                                                            //Definición de botón Recargar datos
-                                                            {
-                                                                id: 'btnRecargarDatosCostoMacro',
-                                                                iconCls: 'reload-icon',
-                                                                handler: this.requestGridDataCostoMacro,
-                                                                disabled: false,
-                                                                scope: this,
-                                                                text: 'Recargar'
-                                                            }
+                            items: [
+                                {
+                                    id: 'formModuloInspeccion',
+                                    titleCollapse: true,
+                                    flex: 1,
+                                    autoScroll: false,
+                                    layout: 'column',
+                                    items: this.gridModuloInspeccion
+                                },
+                                {
+                                    flex: 2,
+                                    bodyStyle: 'padding:0; background: #0f6dff',
+                                    items: [
+                                        {
+                                            layout: 'border',
+                                            height: winHeight - winHeight * 0.35 -107,
+                                            items: [{
+                                                region: 'west',
+                                                id: 'west-panel',
+                                                title: 'Actividades',
+                                                split: true,
+                                                width: 200,
+                                                width: winWidth * 0.3,
+                                                minSize: 175,
+                                                maxSize: 400,
+                                                collapsible: true,
+                                                layoutConfig: {
+                                                    animate: true
+                                                },
+                                                items: [{
+                                                    tbar: [
+                                                        //Definición de botón nuevo
+                                                        {
+                                                            id: 'btnNuevoDetalleInspeccion',
+                                                            text: 'Nuevo',
+                                                            scope: this,
+                                                            handler: this.addDetalleInspeccion,
+                                                            disabled: false,
+                                                            iconCls: 'save-icon'
+                                                        },
+                                                        '-',
+                                                        //Definición de botón eliminar
+                                                        {
+                                                            id: 'btnEliminarDetalleInspeccion',
+                                                            text: "Eliminar",
+                                                            scope: this,
+                                                            handler: this.deleteDetalleInspeccion,
+                                                            disabled: true,
+                                                            iconCls: 'delete-icon'
+                                                        },
+                                                        '-',
+                                                        //Definición de botón Recargar datos
+                                                        {
+                                                            id: 'btnRecargarDatosDetalleInspeccion',
+                                                            iconCls: 'reload-icon',
+                                                            handler: this.requestGridDataDetalleInspeccion,
+                                                            disabled: false,
+                                                            scope: this,
+                                                            text: 'Recargar'
+                                                        }
 
-                                                        ],
-                                                        items: this.gridCostoMacro
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }],
+                                                    ],
+                                                    items: this.gridDetalleInspeccion
+                                                }]
+                                            }, {
+                                                title: 'Costos Macro',
+                                                region: 'center',
+
+                                                items: [{
+                                                    tbar: [
+                                                        //Definición de botón nuevo
+                                                        {
+                                                            id: 'btnNuevoCostoMacro',
+                                                            text: 'Nuevo',
+                                                            scope: this,
+                                                            handler: this.addCostoMacro,
+                                                            disabled: false,
+                                                            iconCls: 'save-icon'
+                                                        },
+                                                        '-',
+                                                        //Definición de botón eliminar
+                                                        {
+                                                            id: 'btnEliminarCostoMacro',
+                                                            text: "Eliminar",
+                                                            scope: this,
+                                                            handler: this.deleteCostoMacro,
+                                                            disabled: false,
+                                                            iconCls: 'delete-icon'
+                                                        },
+                                                        '-',
+                                                        //Definición de botón Recargar datos
+                                                        {
+                                                            id: 'btnRecargarDatosCostoMacro',
+                                                            iconCls: 'reload-icon',
+                                                            handler: this.requestGridDataCostoMacro,
+                                                            disabled: false,
+                                                            scope: this,
+                                                            text: 'Recargar'
+                                                        }
+
+                                                    ],
+                                                    items: this.gridCostoMacro
+                                                }]
+
+
+                                            }]
+                                        }
+                                    ]
+                                }],
                         },
                         {
                             title: 'Actas',
@@ -2919,7 +2920,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             so: 1,
             activity: 1,
             id_cost: '',
-            id_pma_contribuciones_detalle : selectContribuciones,
+            id_pma_contribuciones_detalle: selectContribuciones,
             //category_name: '',
             total: 0,
             // total_grant_q1: '0',
@@ -2943,7 +2944,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
     //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle inspeccion
     requestGridDataDetalleInspeccion: function () {
-        console.log (contribucionSeleccionada)
+        console.log(contribucionSeleccionada)
         this.storeDetalleInspeccion.load({
             params: {
                 id: contribucionSeleccionada
@@ -2986,18 +2987,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addCostoMacro: function () {
         var inspeccion = new this.storeCostoMacro.recordType({
-          id_pma_costos_macro: select_SO,
-          cost_code: 1,
-          total: 0,
-          doc: 0,
-          dsc: 0,
-          adjust: 0,
-          comment: ' ',
-          total_adjusted: 0,
-          // activity: 1,
-          // id_cost: ' ',
-          fecha_registro: (new Date())
-,
+            id_pma_costos_macro: select_SO,
+            cost_code: 1,
+            total: 0,
+            doc: 0,
+            dsc: 0,
+            adjust: 0,
+            comment: ' ',
+            total_adjusted: 0,
+            // activity: 1,
+            // id_cost: ' ',
+            fecha_registro: (new Date())
+            ,
 
 
         });
@@ -3058,11 +3059,11 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             buttons: Ext.Msg.YESNO,
             fn: function (btn) {
                 if (btn == 'yes') {
-    //                window.location.href = 'modules/desktop/inspeccion/server/migrarWings.php';
-    //                setTimeout(function () {
-    //                    AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
-    //                    storeModuloInspeccion.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
-    //                }, 1500);
+                    //                window.location.href = 'modules/desktop/inspeccion/server/migrarWings.php';
+                    //                setTimeout(function () {
+                    //                    AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
+                    //                    storeModuloInspeccion.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
+                    //                }, 1500);
                     if (Ext.getCmp('fp').getForm().isValid()) {
                         Ext.getCmp('fp').getForm().submit({
                             url: 'modules/desktop/inspeccion/server/migrarWings.php',
@@ -3070,7 +3071,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                             //params: {data: selectOperativos},
                             success: function (fp, o) {
 
-                             //   storeModuloInspeccion.load();
+                                //   storeModuloInspeccion.load();
                                 //storeOperativosImagenes.load({params: {id_operativo: selectPlanificaion}});
                                 Ext.getCmp('fp').getForm().reset();
                             },
