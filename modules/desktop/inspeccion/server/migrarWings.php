@@ -45,8 +45,24 @@ if (isset($_FILES)) {
 //        $spreadsheet->getActiveSheet()
 
         $sheet = $spreadsheet->getActiveSheet()->getTitle();
-        $data = $spreadsheet->getSheetByName('BUDGET')->toArray(null, true, true, true);
         $total = 0;
+
+        // se recupera la columna a cargar
+        $sql = "SELECT * FROM pma_migrate   WHERE active  = 1;";
+        $result = $os->db->conn->query($sql);
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)
+        ) {
+            //recupea la columna
+            $hoja = $row['tab_wings'];
+            $fila = $row['name_wings'];
+            $data = $spreadsheet->getSheetByName($hoja)->toArray(null, true, true, true);
+
+            $fila_cabecera = $data(1);
+            if (in_array("$fila", $os)) {
+                echo "Existe Irix";
+            }
+        };
+
         echo json_encode(array(
                 "total" => $total,
                 "Sheet" => $sheet,
@@ -61,8 +77,8 @@ if (isset($_FILES)) {
                 "data" => "")
         );
     }
-    //       }
-    //   }
+
+
 }
 
 
