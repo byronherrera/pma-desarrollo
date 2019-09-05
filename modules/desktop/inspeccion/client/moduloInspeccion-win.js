@@ -454,7 +454,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             }
         }
 
-        //fin combo GRANT
+        //fin combo Status
 
         //inicio combo SO
         // storeSO = new Ext.data.JsonStore({
@@ -1713,8 +1713,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteModuloInspeccion,
                 store: storeModuloInspeccion,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
-                emptyMsg: "No existen trámites que mostrar"
+                displayMsg: 'Showing contributions: {0} - {1} of {2} - PMA',
+                emptyMsg: "No contributions to be shown"
             })
         });
         //Fin formato grid Inspeccion
@@ -1988,7 +1988,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {header: 'Total adjusted', dataIndex: 'total_adjusted', hidden: false, width: 100, renderer: 'usMoney'},
                 {header: 'Comment', dataIndex: 'comment', hidden: false, width: 150, editor: textFieldDetalle},
                 {
-                    header: 'Fecha de Registro',
+                    header: 'Register Date',
                     dataIndex: 'fecha_registro',
                     hidden: false,
                     width: 100,
@@ -2038,8 +2038,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteDetalleInspeccion,
                 store: storeCostoMacro,
                 displayInfo: true,
-                displayMsg: 'Mostrando costos macro: {0} - {1} de {2} - PMA',
-                emptyMsg: "Seleccione un costo macro"
+                displayMsg: 'Showing macro costs: {0} - {1} de {2} - PMA',
+                emptyMsg: "Select macro cost"
             }),
             listeners: {
                 beforeedit: function (e) {
@@ -2260,7 +2260,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             win = desktop.createWindow({
                 id: 'grid-win-moduloInspeccion',
                 //Definición del título de la ventana
-                title: 'PLANIFICACIÓN MACRO',
+                title: 'MACRO PLANIFICATION',
                 //Definición de tamaños de la ventana
                 width: winWidth,
                 height: winHeight,
@@ -2278,7 +2278,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         //Pestaña Inspección
                         {
                             autoScroll: true,
-                            title: 'Registro de Contribuciones',
+                            title: 'Contributions',
                             closable: false,
                             //layout: 'fit',
                             //height: winHeight-70,
@@ -2289,7 +2289,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                             tbar: [
                                 //Definición de botón nuevo
                                 {
-                                    text: 'Nuevo',
+                                    text: 'New',
                                     scope: this,
                                     handler: this.addModuloInspeccion,
                                     disabled: false,
@@ -2298,7 +2298,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                 '-',
                                 //Definición de botón eliminar
                                 {
-                                    text: "Eliminar",
+                                    text: "Delete",
                                     scope: this,
                                     handler: this.deleteModuloInspeccion,
                                     //disabled: true,
@@ -2311,7 +2311,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                     iconCls: 'reload-icon',
                                     handler: this.requestGridDataModuloInspeccion,
                                     scope: this,
-                                    text: 'Recargar'
+                                    text: 'Reload data'
                                 },
                                 '-',
                                 /*{
@@ -2368,7 +2368,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                             xtype: 'fileuploadfield',
                                             id: 'form-file',
                                             emptyText: 'Seleccione archivo a importar',
-                                            fieldLabel: 'Archivo Excel',
+                                            fieldLabel: 'Excel File',
                                             name: 'photo-path',
                                             regex: /^.*.(xls|XLS|xlsx|XLSX)$/,
                                             regexText: 'Solo Excel',
@@ -2382,7 +2382,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                 },
                                 '-',
                                 {
-                                    text: "Subir Excel",
+                                    text: "Upload Excel File",
                                     scope: this,
                                     handler: this.botonImportarWings,
                                     id: 'subirimagen',
@@ -2392,7 +2392,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                 },
                                 '->'
                                 , {
-                                    text: 'Buscar por:'
+                                    text: 'Search by:'
                                     , xtype: 'tbtext'
                                 }
 
@@ -2423,7 +2423,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                             items: [{
                                                 region: 'west',
                                                 id: 'west-panel',
-                                                title: 'Actividades',
+                                                title: 'Activities',
                                                 split: true,
                                                 width: 200,
                                                 width: winWidth * 0.3,
@@ -2438,7 +2438,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                         //Definición de botón nuevo
                                                         {
                                                             id: 'btnNuevoDetalleInspeccion',
-                                                            text: 'Nuevo',
+                                                            text: 'New',
                                                             scope: this,
                                                             handler: this.addDetalleInspeccion,
                                                             disabled: false,
@@ -2448,7 +2448,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                         //Definición de botón eliminar
                                                         {
                                                             id: 'btnEliminarDetalleInspeccion',
-                                                            text: "Eliminar",
+                                                            text: "Delete",
                                                             scope: this,
                                                             handler: this.deleteDetalleInspeccion,
                                                             //disabled: true,
@@ -2462,14 +2462,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                             handler: this.requestGridDataDetalleInspeccion,
                                                             disabled: false,
                                                             scope: this,
-                                                            text: 'Recargar'
+                                                            text: 'Reload data'
                                                         }
 
                                                     ],
                                                     items: this.gridDetalleInspeccion
                                                 }]
                                             }, {
-                                                title: 'Costos Macro',
+                                                title: 'Macro Costs',
                                                 region: 'center',
 
                                                 items: [{
@@ -2477,14 +2477,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                         //Definición de botón nuevo
                                                         {
                                                             id: 'btnNuevoCostoMacro',
-                                                            text: 'Nuevo',
+                                                            text: 'New',
                                                             scope: this,
                                                             handler: this.addCostoMacro,
                                                             disabled: false,
                                                             iconCls: 'save-icon'
                                                         },
                                                         '-',
-                                                        //Definición de botón eliminar
+                                                        //Definición de botón Delete
                                                         {
                                                             id: 'btnEliminarCostoMacro',
                                                             text: "Eliminar",
@@ -2494,14 +2494,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                             iconCls: 'delete-icon'
                                                         },
                                                         '-',
-                                                        //Definición de botón Recargar datos
+                                                        //Definición de botón Reload data datos
                                                         {
                                                             id: 'btnRecargarDatosCostoMacro',
                                                             iconCls: 'reload-icon',
                                                             handler: this.requestGridDataCostoMacro,
                                                             disabled: false,
                                                             scope: this,
-                                                            text: 'Recargar'
+                                                            text: 'Reload data'
                                                         }
 
                                                     ],
@@ -2514,103 +2514,103 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                     ]
                                 }],
                         },
-                        {
-                            title: 'Actas',
-                            closable: true,
-                            layout: 'border',
-                            id: 'actas',
-                            disabled: accesosInspectores,
-                            tbar: [
-                                {
-                                    iconCls: 'reload-icon',
-                                    handler: this.requestGridDataDenunciasActa,
-                                    scope: this,
-                                    text: 'Recargar Datos'
-
-                                },
-                                {
-                                    iconCls: 'excel-icon',
-                                    handler: this.botonImprimirActa,
-                                    scope: this,
-                                    text: 'Imprimir Acta',
-                                    tooltip: 'Se reimprime el acta seleccionada.',
-                                    id: 'tb_repoteActas',
-                                    // disabled: !acceso
-                                }
-                            ],
-                            items: [
-                                {
-                                    region: 'north',
-                                    height: 200,
-                                    minSize: 100,
-                                    maxSize: 150,
-                                    closable: true,
-                                    autoScroll: false,
-                                    items: this.gridInspeccionActa
-
-                                },
-                                // create instance immediately
-                                {
-                                    region: 'center',
-                                    split: true,
-                                    autoScroll: true,
-                                    height: 300,
-                                    minSize: 100,
-                                    maxSize: 150,
-                                    margins: '0 0 0 0',
-                                    items: this.gridInspeccionActaSimple
-                                }
-                            ]
-
-                        },
-                        {
-                            autoScroll: true,
-                            title: 'Inspecciones',
-                            closable: false,
-                            id: 'inspecciones',
-
-                            tbar: [
-                                //Definición de botón Recargar datos
-                                {
-                                    iconCls: 'reload-icon',
-                                    handler: this.requestGridDataListadoInspeccion,
-                                    scope: this,
-                                    text: 'Recargar'
-                                }, '-',
-                                {
-                                    xtype: 'label',
-                                    html: "<object id='clipboard' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0' width='16' height='16' align='middle'><param name='allowScriptAccess' value='always' /><param name='allowFullScreen' value='false' /><param name='movie' value='modules/common/libraries/grid-copy-clipboard/clipboard.swf' /><param name='quality' value='high' /><param name='bgcolor' value='#ffffff' /><param name='wmode' value='transparent' /><param name='flashvars' value='callback=f1' /><embed src='modules/common/libraries/grid-copy-clipboard/clipboard.swf' flashvars='callback=f1' quality='high' swliveconnect='true' bgcolor='#ffffff' width='16' height='16' wmode='transparent' name='clipboard' align='middle' allowscriptaccess='always' allowfullscreen='false' type='application/x-shockwave-flash' pluginspage='http://www.adobe.com/go/getflashplayer' /></object>"
-                                },
-
-                                '-',
-                                /* {
-                                     iconCls: 'reload-icon',
-                                     handler: this.f1,
-                                     scope: this,
-                                     text: 'Recargar'
-                                 }, '-',*/
-                                '->'
-                                , {
-                                    text: 'Buscar por:'
-                                    , xtype: 'tbtext'
-                                }
-
-                                , searchListadoInpeccionesBtn
-                                , ' ', ' '
-                                , new QoDesk.QoAdmin.SearchField({
-                                    paramName: 'filterText'
-                                    ,
-                                    store: this.storeListadoInspeccion
-                                })
-                            ], items: [{
-                                id: 'formListadoInspeccion',
-                                titleCollapse: true,
-                                flex: 1,
-                                autoScroll: true,
-                                layout: 'column',
-                                items: this.gridListadoInspeccion
-                            }]
-                        }
+                        // {
+                        //     title: 'Actas',
+                        //     closable: true,
+                        //     layout: 'border',
+                        //     id: 'actas',
+                        //     disabled: accesosInspectores,
+                        //     tbar: [
+                        //         {
+                        //             iconCls: 'reload-icon',
+                        //             handler: this.requestGridDataDenunciasActa,
+                        //             scope: this,
+                        //             text: 'Reload data'
+                        //
+                        //         },
+                        //         {
+                        //             iconCls: 'excel-icon',
+                        //             handler: this.botonImprimirActa,
+                        //             scope: this,
+                        //             text: 'Imprimir Acta',
+                        //             tooltip: 'Se reimprime el acta seleccionada.',
+                        //             id: 'tb_repoteActas',
+                        //             // disabled: !acceso
+                        //         }
+                        //     ],
+                        //     items: [
+                        //         {
+                        //             region: 'north',
+                        //             height: 200,
+                        //             minSize: 100,
+                        //             maxSize: 150,
+                        //             closable: true,
+                        //             autoScroll: false,
+                        //             items: this.gridInspeccionActa
+                        //
+                        //         },
+                        //         // create instance immediately
+                        //         {
+                        //             region: 'center',
+                        //             split: true,
+                        //             autoScroll: true,
+                        //             height: 300,
+                        //             minSize: 100,
+                        //             maxSize: 150,
+                        //             margins: '0 0 0 0',
+                        //             items: this.gridInspeccionActaSimple
+                        //         }
+                        //     ]
+                        //
+                        // },
+                        // {
+                        //     autoScroll: true,
+                        //     title: 'Inspecciones',
+                        //     closable: false,
+                        //     id: 'inspecciones',
+                        //
+                        //     tbar: [
+                        //         //Definición de botón Recargar datos
+                        //         {
+                        //             iconCls: 'reload-icon',
+                        //             handler: this.requestGridDataListadoInspeccion,
+                        //             scope: this,
+                        //             text: 'Reload data'
+                        //         }, '-',
+                        //         {
+                        //             xtype: 'label',
+                        //             html: "<object id='clipboard' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0' width='16' height='16' align='middle'><param name='allowScriptAccess' value='always' /><param name='allowFullScreen' value='false' /><param name='movie' value='modules/common/libraries/grid-copy-clipboard/clipboard.swf' /><param name='quality' value='high' /><param name='bgcolor' value='#ffffff' /><param name='wmode' value='transparent' /><param name='flashvars' value='callback=f1' /><embed src='modules/common/libraries/grid-copy-clipboard/clipboard.swf' flashvars='callback=f1' quality='high' swliveconnect='true' bgcolor='#ffffff' width='16' height='16' wmode='transparent' name='clipboard' align='middle' allowscriptaccess='always' allowfullscreen='false' type='application/x-shockwave-flash' pluginspage='http://www.adobe.com/go/getflashplayer' /></object>"
+                        //         },
+                        //
+                        //         '-',
+                        //         /* {
+                        //              iconCls: 'reload-icon',
+                        //              handler: this.f1,
+                        //              scope: this,
+                        //              text: 'Recargar'
+                        //          }, '-',*/
+                        //         '->'
+                        //         , {
+                        //             text: 'Search by:'
+                        //             , xtype: 'tbtext'
+                        //         }
+                        //
+                        //         , searchListadoInpeccionesBtn
+                        //         , ' ', ' '
+                        //         , new QoDesk.QoAdmin.SearchField({
+                        //             paramName: 'filterText'
+                        //             ,
+                        //             store: this.storeListadoInspeccion
+                        //         })
+                        //     ], items: [{
+                        //         id: 'formListadoInspeccion',
+                        //         titleCollapse: true,
+                        //         flex: 1,
+                        //         autoScroll: true,
+                        //         layout: 'column',
+                        //         items: this.gridListadoInspeccion
+                        //     }]
+                        // }
                     ]
                 })
             });

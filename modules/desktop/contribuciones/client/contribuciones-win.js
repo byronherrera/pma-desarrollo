@@ -49,17 +49,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             }
         });
 
-        var comboGrant = new Ext.form.ComboBox({
-            id: 'comboGrant',
-            store: storeGrant,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            forceSelection: true,
-            allowBlank: false
-        });
-
         function personaTipoDocumento(id) {
             var index = storeGrant.find('id', id);
             if (index > -1) {
@@ -544,6 +533,83 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
 
         //fin combo actividad  ACTA
 
+        //inicio combo Status
+        // storeSO = new Ext.data.JsonStore({
+        //     root: 'data',
+        //     fields: ['id', 'category_name'],
+        //     autoLoad: true,
+        //     url: 'modules/common/combos/combos.php?tipo=so'
+        // });
+        storeStatus = new Ext.data.JsonStore({
+            root: 'datos',
+            fields: ['id', 'subcategory_name'],
+            autoLoad: true,
+            data: {
+                datos: [
+                    {"id": 1, "subcategory_name": "Vigente"},
+                    {"id": 2, "subcategory_name": "Cerrada"}
+                ]
+            }
+        });
+
+        var comboStatus = new Ext.form.ComboBox({
+            id: 'comboStatus',
+            store: storeStatus,
+            valueField: 'id',
+            displayField: 'subcategory_name',
+            triggerAction: 'all',
+            mode: 'local'
+        });
+
+        function costStatus(id) {
+            //   var index = storeActivities.findExact('id', id);
+            var index = storeStatus.find('id', id);
+            if (index > -1) {
+                var record = storeStatus.getAt(index);
+                return record.get('subcategory_name');
+            }
+        }
+        //fin combo Status
+
+        //inicio combo GRANT
+        // storeSO = new Ext.data.JsonStore({
+        //     root: 'data',
+        //     fields: ['id', 'category_name'],
+        //     autoLoad: true,
+        //     url: 'modules/common/combos/combos.php?tipo=so'
+        // });
+        storeGrant = new Ext.data.JsonStore({
+            root: 'datos',
+            fields: ['id', 'subcategory_name'],
+            autoLoad: true,
+            data: {
+                datos: [
+                    {"id": 1, "subcategory_name": "Si"},
+                    {"id": 2, "subcategory_name": "No"}
+                ]
+            }
+        });
+
+        var comboGrant = new Ext.form.ComboBox({
+            id: 'comboGrant',
+            store: storeGrant,
+            valueField: 'id',
+            displayField: 'subcategory_name',
+            triggerAction: 'all',
+            mode: 'local'
+        });
+
+        function costGrant(id) {
+            //   var index = storeActivities.findExact('id', id);
+            var index = storeGrant.find('id', id);
+            if (index > -1) {
+                var record = storeGrant.getAt(index);
+                return record.get('subcategory_name');
+            }
+        }
+
+        //fin combo GRANT
+
         //inicio combo Estado Recepcion Información Inspeccion ESREA
         storeESREA = new Ext.data.JsonStore({
             root: 'datos',
@@ -725,8 +791,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 pageSize: 100,
                 store: this.storeContribucionesGuia,
                 displayInfo: true,
-                displayMsg: 'Mostrando contribuciones {0} - {1} of {2}',
-                emptyMsg: "No existen contribuciones que mostrar"
+                displayMsg: 'Showing contributions {0} - {1} of {2}',
+                emptyMsg: "No contributions to be shown"
             }),
         });
 
@@ -831,23 +897,23 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'Grant Number CSP',
+                    header: 'Grant Number',
                     dataIndex: 'grant_number',
                     sortable: true,
                     width: 38,
                     editor: textField
                 },
                 {
-                    header: 'Estado',
-                    dataIndex: 'estado',
+                    header: 'CRN',
+                    dataIndex: 'crn',
                     sortable: true,
                     width: 28,
                     editor: textField
                     // renderer: personaReceptaDenuncia
                 },
                 {
-                    header: 'CRN',
-                    dataIndex: 'crn',
+                    header: 'Fund',
+                    dataIndex: 'fund',
                     sortable: true,
                     width: 28,
                     editor: textField
@@ -862,18 +928,10 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     // renderer: personaReceptaDenuncia
                 },
                 {
-                    header: 'Comments',
-                    dataIndex: 'comments',
-                    sortable: true,
-                    width: 28,
-                    editor: textField
-                    // renderer: personaReceptaDenuncia
-                },
-                {
-                    header: 'Year contribution',
+                    header: 'Year',
                     dataIndex: 'year_contribution',
                     sortable: true,
-                    width: 28,
+                    width: 20,
                     editor: textField
                     // renderer: personaReceptaDenuncia
                 },
@@ -886,7 +944,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     // renderer: personaReceptaDenuncia
                 },
                 {
-                    header: 'Total Grant Value without ISC',
+                    header: 'Total Direct Cost',
                     dataIndex: 'total_grant',
                     sortable: true,
                     width: 28,
@@ -898,7 +956,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     })
                 },
                 {
-                    header: 'Programmed',
+                    header: 'Total Programmed',
                     dataIndex: 'total_programmed',
                     sortable: true,
                     width: 28,
@@ -926,7 +984,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'grant_tod',
                     sortable: true,
                     width: 40,
-                    renderer: formatDate,
+                    renderer: Ext.util.Format.dateRenderer('Y-m-d'),
                     editor: new Ext.form.DateField({
                         format: 'Y-m-d'
                     })
@@ -936,7 +994,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'grant_tdd',
                     sortable: true,
                     width: 40,
-                    renderer: formatDate,
+                    renderer: Ext.util.Format.dateRenderer('Y-m-d'),
                     editor: new Ext.form.DateField({
                         format: 'Y-m-d'
                     })
@@ -945,126 +1003,24 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     header: 'Grant Specific',
                     dataIndex: 'grant_specific',
                     sortable: true,
-                    width: 25,
-                    editor: textField
-                    // editor: comboGrant, renderer: personaTipoDocumento
+                    width: 28,
+                    editor: comboGrant,
+                    renderer: costGrant
                 },
                 {
-                    header: 'Activity',
-                    dataIndex: 'activity',
+                    header: 'Status',
+                    dataIndex: 'estado',
                     sortable: true,
-                    width: 22,
-                    editor: textField
-                    // editor: new Ext.form.TextField({allowBlank: false})
+                    width: 28,
+                    editor: comboStatus,
+                    renderer: costStatus
                 },
-                // {
-                //     header: 'Email',
-                //     dataIndex: 'email',
-                //     sortable: true,
-                //     width: 35, editor: {
-                //         xtype: 'textfield',
-                //         vtype: 'email',
-                //         allowBlank: true
-                //     }
-                // },
-                // {
-                //     header: 'Motivo',
-                //     dataIndex: 'id_tipo',
-                //     sortable: true,
-                //     width: 22,
-                //     editor: comboCROLPROGRAMADO,
-                //     renderer: crolProgramado
-                // },
-                // {
-                //     header: 'Ordenanza',
-                //     dataIndex: 'id_ordenanza',
-                //     sortable: true,
-                //     width: 22,
-                //     editor: comboDETIORD, renderer: denunciasListaOrdenanza
-                //
-                // },
-                // {
-                //     header: 'N. documento',
-                //     dataIndex: 'num_documento',
-                //     sortable: true,
-                //     width: 36,
-                //     editor: new Ext.form.TextField({allowBlank: false}), renderer: smalltext
-                // },
-                // {
-                //     header: 'Remitente/denunciante',
-                //     dataIndex: 'remitente',
-                //     sortable: true,
-                //     width: 50,
-                //     editor: comboREMI, renderer: listadoRemitentes
-                // },
-                // {
-                //     header: 'Institución',
-                //     dataIndex: 'institucion',
-                //     sortable: true,
-                //     width: 30,
-                //     editor: comboINST, renderer: listadoInstituciones,
-                //     cls: 'expand-panel'
-                // },
-                // {
-                //     header: 'Asunto',
-                //     dataIndex: 'asunto',
-                //     sortable: true,
-                //     width: 50,
-                //     editor: new Ext.form.TextField({allowBlank: false}), renderer: smalltext
-                // },
-                // {
-                //     header: 'GDoc / Desc. anexos',
-                //     dataIndex: 'descripcion_anexos',
-                //     sortable: true,
-                //     width: 38,
-                //     editor: new Ext.form.TextField({allowBlank: false}), renderer: smalltext
-                // },
-                // {
-                //     header: 'Fojas',
-                //     dataIndex: 'cantidad_fojas',
-                //     align: 'center',
-                //     width: 12,
-                //     editor: new Ext.ux.form.SpinnerField({
-                //         fieldLabel: 'Age',
-                //         name: 'age',
-                //         minValue: 0,
-                //         maxValue: 1000
-                //     })
-                // },
-                // {
-                //     header: 'Reasignación',
-                //     dataIndex: 'reasignacion',
-                //     sortable: true,
-                //     width: 45,
-                //     editor: comboREA, renderer: departamentoReasignacion
-                // },
-                // {
-                //     header: 'Caracter',
-                //     dataIndex: 'id_caracter_tramite',
-                //     sortable: true,
-                //     width: 15,
-                //     editor: comboCDT, renderer: caracterTramite
-                // },
-                // {
-                //     header: 'Zonal',
-                //     dataIndex: 'id_zonal_origen',
-                //     align: 'center',
-                //     width: 30,
-                //     renderer: zonales
-                // },
                 {
-                    header: 'Despachado'
-                    , dataIndex: 'despacho_secretaria'
-                    , align: 'center'
-                    , falseText: 'No'
-                    , menuDisabled: true
-                    , trueText: 'Si'
-                    , sortable: true
-                    , width: 18
-                    , xtype: 'booleancolumn'
-                    , hidden: true
-
-
+                    header: 'Comments',
+                    dataIndex: 'comments',
+                    sortable: true,
+                    width: 28,
+                    editor: textField
                 }
             ],
             viewConfig: {
@@ -1102,8 +1058,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitecontribuciones,
                 store: storeContribuciones,
                 displayInfo: true,
-                displayMsg: 'Mostrando contribuciones  {0} - {1} of {2}',
-                emptyMsg: "No existen contribuciones que mostrar"
+                displayMsg: 'Showing contributions  {0} - {1} of {2}',
+                emptyMsg: "No contributions to be shown"
                 //filter: Ext.getCmp('tb_seleccionarUnidad').getValue()
 
             }),
@@ -1382,7 +1338,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 store: this.storeDocumentosReporte,
                 displayInfo: true,
                 displayMsg: 'Mostrando guías {0} - {1} of {2}',
-                emptyMsg: "No existen contribuciones que mostrar"
+                emptyMsg: "No contributions to be shown"
             }),
         });
         // fin datastore and datagrid in Guia
@@ -2170,7 +2126,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             storeContribuciones.load();
             win = desktop.createWindow({
                 id: 'grid-win-contribuciones',
-                title: 'Contribuciones',
+                title: 'CONTRIBUTIONS',
                 width: winWidth,
                 height: winHeight,
                 iconCls: 'contribuciones-icon',
@@ -2190,7 +2146,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                             closable: true,
                             tbar: [
                                 {
-                                    text: 'Nuevo',
+                                    text: 'New',
                                     scope: this,
                                     handler: this.addcontribuciones,
                                     iconCls: 'save-icon',
@@ -2198,7 +2154,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                 },
                                 '-',
                                 {
-                                    text: "Eliminar",
+                                    text: "Delete",
                                     scope: this,
                                     handler: this.deletecontribuciones,
                                     iconCls: 'delete-icon',
@@ -2210,22 +2166,22 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                     iconCls: 'reload-icon',
                                     handler: this.requestGridData,
                                     scope: this,
-                                    text: 'Recargar Datos',
-                                    tooltip: 'Recargar datos'
+                                    text: 'Reload data',
+                                    tooltip: 'Reload data'
                                 },
                                 {
                                     iconCls: 'excel-icon',
                                     handler: this.botonExportarReporte,
                                     scope: this,
-                                    text: 'Generar Reporte',
-                                    tooltip: 'Se genera el reporte de los items',
+                                    text: 'Generate Report',
+                                    tooltip: 'Generate Report',
                                     id: 'tb_repoteContribuciones',
                                     disabled: true
                                 },
                                 '-',
                                 '->'
                                 , {
-                                    text: 'Buscar por:'
+                                    text: 'Search by:'
                                     , xtype: 'tbtext'
                                 }
 
@@ -2248,7 +2204,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                     iconCls: 'reload-icon',
                                     handler: this.requestGridDataContribucionesGuia,
                                     scope: this,
-                                    text: 'Recargar Datos'
+                                    text: 'Reload data'
 
                                 },
                                 {
@@ -2291,7 +2247,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                         }
 */
                         , {
-                            title: 'Reportes',
+                            title: 'Reports',
                             closable: true,
                             layout: 'border',
                             //disabled: this.app.isAllowedTo('accesosSecretaria', this.id) ? false : true,

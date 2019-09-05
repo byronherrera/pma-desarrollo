@@ -166,8 +166,8 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitemantenimiento,
                 store: storeCostcategory,
                 displayInfo: true,
-                displayMsg: 'Mostrando: {0} - {1} de {2} - PMA',
-                emptyMsg: "No existen trámites que mostrar"
+                displayMsg: 'Showing: {0} - {1} de {2} - PMA',
+                emptyMsg: "No data to be shown"
             })
         });
         //Fin formato grid Costcategory
@@ -265,8 +265,8 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitemantenimiento,
                 store: storeOrdenanzas,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
-                emptyMsg: "No existen trámites que mostrar"
+                displayMsg: 'Showing SO Codes: {0} - {1} of {2} - PMA',
+                emptyMsg: "No contributions to be shown"
             })
         });
         //Fin formato grid Ordenanzas
@@ -389,8 +389,8 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitemantenimiento,
                 store: storeUnidades,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
-                emptyMsg: "No existen trámites que mostrar"
+                displayMsg: 'Showing activity codes: {0} - {1} of {2} - PMA',
+                emptyMsg: "No contributions to be shown"
             })
         });
         //Fin formato grid pestaña Unidades
@@ -563,8 +563,8 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limitemantenimiento,
                 store: storeUnidades,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
-                emptyMsg: "No existen trámites que mostrar"
+                displayMsg: 'Showing cost categories: {0} - {1} of {2} - PMA',
+                emptyMsg: "No contributions to be shown"
             })
         });
         //Fin formato grid pestaña Procedimientos
@@ -839,7 +839,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             win = desktop.createWindow({
                 id: 'grid-win-mantenimiento',
                 //Definición del título de la ventana
-                title: 'Modulo de Mantenimiento',
+                title: 'MANAGEMENT MODULE',
                 //Definición de tamaños de la ventana
                 width: winWidth,
                 height: winHeight,
@@ -863,15 +863,15 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                             tbar: [
                                 //Definición de botón nuevo
                                 {
-                                    text: 'Nuevo',
+                                    text: 'New',
                                     scope: this,
                                     handler: this.addOrdenanzas,
                                     iconCls: 'save-icon'
                                 },
                                 '-',
                                 {
-                                    //Definición de botón eliminar
-                                    text: "Eliminar",
+                                    //Definición de botón Delete
+                                    text: "Delete",
                                     scope: this,
                                     handler: this.deleteOrdenanzas,
                                     iconCls: 'delete-icon'
@@ -879,10 +879,10 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                                 '-',
                                 //Definición de botón regargar datos
                                 {
-                                    iconCls: 'demo-grid-add',
+                                    iconCls: 'reload-icon',
                                     handler: this.requestGridDataOrdenanzas,
                                     scope: this,
-                                    text: 'Recargar Datos'
+                                    text: 'Reload data'
                                 }
                             ]
                             //Llamado a función que arma la tabla de datos
@@ -900,15 +900,15 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                             tbar: [
                                 //Definición de botón nuevo
                                 {
-                                    text: 'Nuevo',
+                                    text: 'New',
                                     scope: this,
                                     handler: this.addUnidades,
                                     iconCls: 'save-icon'
                                 },
                                 '-',
-                                //Definición de botón eliminar
+                                //Definición de botón Delete
                                 {
-                                    text: "Eliminar",
+                                    text: "Delete",
                                     scope: this,
                                     handler: this.deleteUnidades,
                                     iconCls: 'delete-icon'
@@ -916,10 +916,10 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                                 '-',
                                 //Definición de botón regargar datos
                                 {
-                                    iconCls: 'demo-grid-add',
+                                    iconCls: 'reload-icon',
                                     handler: this.requestGridDataUnidades,
                                     scope: this,
-                                    text: 'Recargar Datos'
+                                    text: 'Reload data'
                                 }
                             ],
                             //Llamado a función que arma la tabla de datos
@@ -937,15 +937,15 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                             tbar: [
                                 //Definición de botón nuevo
                                 {
-                                    text: 'Nuevo',
+                                    text: 'New',
                                     scope: this,
                                     handler: this.addCostcategory,
                                     iconCls: 'save-icon'
                                 },
                                 '-',
                                 {
-                                    //Definición de botón eliminar
-                                    text: "Eliminar",
+                                    //Definición de botón Delete
+                                    text: "Delete",
                                     scope: this,
                                     handler: this.deleteCostcategory,
                                     iconCls: 'delete-icon'
@@ -953,10 +953,10 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                                 '-',
                                 //Definición de botón regargar datos
                                 {
-                                    iconCls: 'demo-grid-add',
+                                    iconCls: 'reload-icon',
                                     handler: this.requestGridDataCostcategory,
                                     scope: this,
-                                    text: 'Recargar Datos'
+                                    text: 'Reload data'
                                 }
                             ]
                             //Llamado a función que arma la tabla de datos
@@ -982,9 +982,9 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                         //             iconCls: 'save-icon'
                         //         },
                         //         '-',
-                        //         //Definición de botón eliminar
+                        //         //Definición de botón Delete
                         //         {
-                        //             text: "Eliminar",
+                        //             text: "Delete",
                         //             scope: this,
                         //             handler: this.deleteZonas,
                         //             iconCls: 'delete-icon'
@@ -1019,9 +1019,9 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                         //             iconCls: 'save-icon'
                         //         },
                         //         '-',
-                        //         //Definición de botón eliminar
+                        //         //Definición de botón Delete
                         //         {
-                        //             text: "Eliminar",
+                        //             text: "Delete",
                         //             scope: this,
                         //             handler: this.deleteProcedimientos,
                         //             iconCls: 'delete-icon'
@@ -1055,9 +1055,9 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                         //             iconCls: 'save-icon'
                         //         },
                         //         '-',
-                        //         //Definición de botón eliminar
+                        //         //Definición de botón Delete
                         //         {
-                        //             text: "Eliminar",
+                        //             text: "Delete",
                         //             scope: this,
                         //             handler: this.deleteTiposOperativos,
                         //             iconCls: 'delete-icon'
@@ -1091,9 +1091,9 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                         //             iconCls: 'save-icon'
                         //         },
                         //         '-',
-                        //         //Definición de botón eliminar
+                        //         //Definición de botón Delete
                         //         {
-                        //             text: "Eliminar",
+                        //             text: "Delete",
                         //             scope: this,
                         //             handler: this.deleteEntidades,
                         //             iconCls: 'delete-icon'

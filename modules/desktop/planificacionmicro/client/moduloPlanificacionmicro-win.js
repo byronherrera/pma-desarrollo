@@ -73,7 +73,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         //Definición del formato de fecha
         function formatDate(value) {
-            return value ? value.dateFormat('Y-m-d H:i') : '';
+            return value ? value.dateFormat('Y-m-d') : '';
         }
 
         function valueColor(val) {
@@ -1966,10 +1966,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                             Ext.getCmp('gridDetallePlanificacionmicro').setVisible(true);
                         }
                         //
-                        Ext.getCmp('paso1').setTitle("Paso 1 - Contribuciones - " + rec.data['grant_number']);
-                        Ext.getCmp('paso2').setTitle("Paso 2 - Actividades");
-                        Ext.getCmp('paso3').setTitle("Paso 3 - Costos Macro");
-                        Ext.getCmp('paso4').setTitle("Paso 4 - Costros Micro");
+                        Ext.getCmp('paso1').setTitle("Step 1 - Contributions - " + rec.data['grant_number']);
+                        Ext.getCmp('paso2').setTitle("Step 2 - Activities");
+                        Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
+                        Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
                     }
                 }
             }),
@@ -1980,8 +1980,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteModuloPlanificacionmicro,
                 store: storeModuloPlanificacionmicro,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
-                emptyMsg: "No existen trámites que mostrar"
+                displayMsg: 'Showing contributions: {0} - {1} of {2} - PMA',
+                emptyMsg: "No contributions to be shown"
             })
         });
         //Fin formato grid Planificacionmicro
@@ -2343,8 +2343,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                 costCodeNuevo2: costCodeNuevo2
                             }
                         });
-                        Ext.getCmp('paso3').setTitle("Paso 3 - Costos Macro  - " + costparentAdmDet(rec.data['cost_code']));
-                        Ext.getCmp('paso4').setTitle("Paso 4 - Costros Micro");
+                        Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs - " + costparentAdmDet(rec.data['cost_code']));
+                        Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
 
                     }
                 }
@@ -2357,8 +2357,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteDetallePlanificacionmicro,
                 store: storeCostoMacro,
                 displayInfo: true,
-                displayMsg: 'Mostrando costos macro: {0} - {1} de {2} - PMA',
-                emptyMsg: "Seleccione un costo macro"
+                displayMsg: 'Showing macro costs: {0} - {1} of {2} - PMA',
+                emptyMsg: "No macro costs to be shown"
             }),
             listeners: {
                 beforeedit: function (e) {
@@ -2432,9 +2432,9 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         select_SO = rec.id;
                         storeCostoMacro.load({params: {id: rec.id}});
 
-                        Ext.getCmp('paso2').setTitle("Paso 2 - Actividades - " + costSO(rec.data['so']) + " - " +costActivities(rec.data['activity']));
-                        Ext.getCmp('paso3').setTitle("Paso 3 - Costos Macro");
-                        Ext.getCmp('paso4').setTitle("Paso 4 - Costros Micro");
+                        Ext.getCmp('paso2').setTitle("Step 2 - Activities - " + costSO(rec.data['so']) + " - " +costActivities(rec.data['activity']));
+                        Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
+                        Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
 
                     }
                 }
@@ -2446,8 +2446,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 pageSize: limiteDetallePlanificacionmicro,
                 store: storeDetallePlanificacionmicro,
                 displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
-                emptyMsg: "Seleccione un trámite"
+                displayMsg: 'Showing activities: {0} - {1} of {2} - PMA',
+                emptyMsg: "No activities to be shown"
             }),
             listeners: {
                 beforeedit: function (e) {
@@ -2512,6 +2512,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'glcode',
                     sortable: true,
                     width: 100,
+                    hidden: true
                 },
                 {
                     header: 'Cost Code nivel 4',
@@ -2576,7 +2577,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 listeners: {
                     rowselect: function (sm, row, rec) {
                         //storePlanificacionmicrodetSimple.load({params: {filterField: 'guia', filterText: rec.get("numero")}})
-                        Ext.getCmp('paso4').setTitle("Paso 4 - Costros Micro- " + costCode2(rec.data['cost_code2']));
+                        Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs- " + costCode2(rec.data['cost_code2']));
                     }
                 }
             }),
@@ -2586,8 +2587,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 pageSize: 100,
                 store: this.storePlanificacionmicrodet,
                 displayInfo: true,
-                displayMsg: 'Mostrando pmicro {0} - {1} de {2} PMA',
-                emptyMsg: "No existen nada  que mostrar"
+                displayMsg: 'Showing micro costs {0} - {1} of {2} PMA',
+                emptyMsg: "No micro costs to be shown"
             }),
         });
 
@@ -2661,7 +2662,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             win = desktop.createWindow({
                 id: 'grid-win-moduloPlanificacionmicro',
                 //Definición del título de la ventana
-                title: 'PLANIFICACIÓN MICRO',
+                title: 'MICRO PLANIFICATION',
                 //Definición de tamaños de la ventana
                 width: winWidth,
                 height: winHeight,
@@ -2678,7 +2679,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     items: [
                         //Pestaña Inspección
                         {
-                            title: 'Registro de Contribuciones',
+                            title: 'Contributions',
                             autoScroll: true,
                             closable: false,
                             layout: 'border',
@@ -2714,7 +2715,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     margins: '0 5 0 0',
                                     layout: 'accordion',
                                     items: [{
-                                        title: 'Paso 1 - Contribuciones',
+                                        title: 'Step 1 - Contributions',
                                         id : 'paso1',
                                         autoScroll: true,
                                         border: false,
@@ -2722,16 +2723,16 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                         tbar: [
                                             //Definición de botón nuevo
                                             {
-                                                text: 'Nuevo',
+                                                text: 'New',
                                                 scope: this,
                                                 handler: this.addModuloPlanificacionmicro,
                                                 disabled: false,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
-                                            //Definición de botón eliminar
+                                            //Definición de botón Delete
                                             {
-                                                text: "Eliminar",
+                                                text: "Delete",
                                                 scope: this,
                                                 handler: this.deleteModuloPlanificacionmicro,
                                                 disabled: true,
@@ -2739,22 +2740,22 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                 iconCls: 'delete-icon'
                                             },
                                             '-',
-                                            //Definición de botón Recargar datos
+                                            //Definición de botón Reload data
                                             {
                                                 iconCls: 'reload-icon',
                                                 handler: this.requestGridDataModuloPlanificacionmicro,
                                                 scope: this,
-                                                text: 'Recargar'
+                                                text: 'Reload data'
                                             },
                                             '-',
                                             {
                                                 xtype: 'checkbox',
-                                                boxLabel: 'Pendientes por aprobar ',
+                                                boxLabel: 'Filter',
                                                 id: 'checkPendientesAprobar',
                                                 name: 'pendientesAprobar',
                                                 checked: accesosSecretaria,
                                                 inputValue: '1',
-                                                tooltip: 'Recargar datos',
+                                                tooltip: 'Reload data',
                                                 //disabled: !acceso,
                                                 cls: 'barramenu',
                                                 handler: function (checkbox, isChecked) {
@@ -2771,21 +2772,21 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                     //}
                                                 }
                                             },
-                                            '-',
-                                            //bh boton generar
-                                            {
-                                                iconCls: 'excel-icon',
-                                                handler: this.botonGenerarActa,
-                                                scope: this,
-                                                text: 'Generar Nueva Acta',
-                                                tooltip: 'Se genera acta con las ',
-                                                id: 'tb_repoteDenuncias',
-                                                disabled: false
-                                            },
+                                            // '-',
+                                            // //bh boton generar
+                                            // {
+                                            //     iconCls: 'excel-icon',
+                                            //     handler: this.botonGenerarActa,
+                                            //     scope: this,
+                                            //     text: 'Generar Nueva Acta',
+                                            //     tooltip: 'Se genera acta con las ',
+                                            //     id: 'tb_repoteDenuncias',
+                                            //     disabled: false
+                                            // },
                                             '-',
                                             '->'
                                             , {
-                                                text: 'Buscar por:'
+                                                text: 'Search by:'
                                                 , xtype: 'tbtext'
                                             }
 
@@ -2797,7 +2798,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             })
                                         ],
                                     }, {
-                                        title: 'Paso 2 - Actividades',
+                                        title: 'Step 2 - Activities',
                                         border: false,
                                         id : 'paso2',
                                         autoScroll: true,
@@ -2806,36 +2807,36 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             //Definición de botón nuevo
                                             {
                                                 id: 'btnNuevoDetallePlanificacionmicro',
-                                                text: 'Nuevo',
+                                                text: 'New',
                                                 scope: this,
                                                 handler: this.addDetallePlanificacionmicro,
                                                 disabled: false,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
-                                            //Definición de botón eliminar
+                                            //Definición de botón Delete
                                             {
                                                 id: 'btnEliminarDetallePlanificacionmicro',
-                                                text: "Eliminar",
+                                                text: "Delete",
                                                 scope: this,
                                                 handler: this.deleteDetallePlanificacionmicro,
                                                 disabled: true,
                                                 iconCls: 'delete-icon'
                                             },
                                             '-',
-                                            //Definición de botón Recargar datos
+                                            //Definición de botón Reload data
                                             {
                                                 id: 'btnRecargarDatosDetallePlanificacionmicro',
                                                 iconCls: 'reload-icon',
                                                 handler: this.requestGridDataDetallePlanificacionmicro,
                                                 disabled: false,
                                                 scope: this,
-                                                text: 'Recargar'
+                                                text: 'Reload data'
                                             }
 
                                         ]
                                     }, {
-                                        title: 'Paso 3 - Costos Macro',
+                                        title: 'Step 3 - Macro Costs',
                                         border: false,
                                         id : 'paso3',
                                         autoScroll: true,
@@ -2846,31 +2847,31 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             //Definición de botón nuevo
                                             {
                                                 id: 'btnNuevoCostoMacro',
-                                                text: 'Nuevo',
+                                                text: 'New',
                                                 scope: this,
                                                 handler: this.addCostoMacro,
                                                 disabled: false,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
-                                            //Definición de botón eliminar
+                                            //Definición de botón Delete
                                             {
                                                 id: 'btnEliminarCostoMacro',
-                                                text: "Eliminar",
+                                                text: "Delete",
                                                 scope: this,
                                                 handler: this.deleteCostoMacro,
                                                 disabled: true,
                                                 iconCls: 'delete-icon'
                                             },
                                             '-',
-                                            //Definición de botón Recargar datos
+                                            //Definición de botón Reload data
                                             {
                                                 id: 'btnRecargarDatosCostoMacro',
                                                 iconCls: 'reload-icon',
                                                 handler: this.requestGridDataCostoMacro,
                                                 disabled: false,
                                                 scope: this,
-                                                text: 'Recargar'
+                                                text: 'Reload data'
                                             }
                                             /*,
                                             '-',
@@ -2886,7 +2887,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             }*/
                                         ]
                                     }, {
-                                        title: 'Paso 4 - Costos Micro',
+                                        title: 'Step 4 - Micro Costs',
                                         border: false,
                                         autoScroll: true,
                                         id : 'paso4',
@@ -2895,31 +2896,31 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             //Definición de botón nuevo
                                             {
                                                 id: 'btnNuevoDetallePlanificacionmicro2',
-                                                text: 'Nuevo',
+                                                text: 'New',
                                                 scope: this,
                                                 handler: this.addPlanificacionmicrodet,
                                                 disabled: false,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
-                                            //Definición de botón eliminar
+                                            //Definición de botón Delete
                                             {
                                                 id: 'btnEliminarDetallePlanificacionmicro2',
-                                                text: "Eliminar",
+                                                text: "Delete",
                                                 scope: this,
                                                 handler: this.deletePlanificacionmicrodet,
                                                 disabled: false,
                                                 iconCls: 'delete-icon'
                                             },
                                             '-',
-                                            //Definición de botón Recargar datos
+                                            //Definición de botón Reload data
                                             {
                                                 id: 'btnRecargarDatosDetallePlanificacionmicro2',
                                                 iconCls: 'reload-icon',
                                                 handler: this.requestGridDataPlanificacionmicrodet,
                                                 disabled: false,
                                                 scope: this,
-                                                text: 'Recargar'
+                                                text: 'Reload data'
                                             }
                                             // ,
                                             // '-',
@@ -2938,108 +2939,108 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                 }
                             ]
                         },
-                        {
-                            title: 'Actas',
-                            closable: true,
-                            layout: 'border',
-                            id: 'actas',
-                            disabled: accesosInspectores,
-                            tbar: [
-                                {
-                                    iconCls: 'reload-icon',
-                                    handler: this.requestGridDataDenunciasActa,
-                                    scope: this,
-                                    text: 'Recargar Datos'
-
-                                },
-                                {
-                                    iconCls: 'excel-icon',
-                                    handler: this.botonImprimirActa,
-                                    scope: this,
-                                    text: 'Imprimir Acta',
-                                    tooltip: 'Se reimprime el acta seleccionada.',
-                                    id: 'tb_repoteActas',
-                                    // disabled: !acceso
-                                }
-                            ],
-                            items: [
-                                {
-                                    region: 'north',
-                                    height: 200,
-                                    minSize: 100,
-                                    maxSize: 150,
-                                    closable: true,
-                                    autoScroll: false,
-                                    items: this.gridPlanificacionmicroActa
-
-                                },
-                                // create instance immediately
-                                {
-
-                                    region: 'center',
-                                    split: true,
-                                    autoScroll: true,
-                                    height: 300,
-                                    minSize: 100,
-                                    maxSize: 150,
-                                    margins: '0 0 0 0',
-                                    items: this.gridPlanificacionmicroActaSimple
-                                }
-                            ]
-
-                        },
-                        {
-                            autoScroll: true,
-                            title: 'Planificacionmicro',
-                            closable: false,
-                            id: 'planificacionmicroes',
-                            //layout: 'fit',
-                            //height: winHeight-70,
-                            // disabled: !pestPlanificacionmicro,
-                            //Barra de botones
-                            tbar: [
-                                //Definición de botón Recargar datos
-                                {
-                                    iconCls: 'reload-icon',
-                                    handler: this.requestGridDataListadoPlanificacionmicro,
-                                    scope: this,
-                                    text: 'Recargar'
-                                }, '-',
-                                {
-                                    xtype: 'label',
-                                    html: "<object id='clipboard' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0' width='16' height='16' align='middle'><param name='allowScriptAccess' value='always' /><param name='allowFullScreen' value='false' /><param name='movie' value='modules/common/libraries/grid-copy-clipboard/clipboard.swf' /><param name='quality' value='high' /><param name='bgcolor' value='#ffffff' /><param name='wmode' value='transparent' /><param name='flashvars' value='callback=f1' /><embed src='modules/common/libraries/grid-copy-clipboard/clipboard.swf' flashvars='callback=f1' quality='high' swliveconnect='true' bgcolor='#ffffff' width='16' height='16' wmode='transparent' name='clipboard' align='middle' allowscriptaccess='always' allowfullscreen='false' type='application/x-shockwave-flash' pluginspage='http://www.adobe.com/go/getflashplayer' /></object>"
-                                },
-
-                                '-',
-                                /* {
-                                     iconCls: 'reload-icon',
-                                     handler: this.f1,
-                                     scope: this,
-                                     text: 'Recargar'
-                                 }, '-',*/
-                                '->'
-                                , {
-                                    text: 'Buscar por:'
-                                    , xtype: 'tbtext'
-                                }
-
-                                , searchListadoInpeccionesBtn
-                                , ' ', ' '
-                                , new QoDesk.QoAdmin.SearchField({
-                                    paramName: 'filterText'
-                                    ,
-                                    store: this.storeListadoPlanificacionmicro
-                                })
-                            ], items: [{
-                                id: 'formListadoPlanificacionmicro',
-                                titleCollapse: true,
-                                flex: 1,
-                                autoScroll: true,
-                                layout: 'column',
-                                items: this.gridListadoPlanificacionmicro
-                                //items: this.gridListadoPlanificacionmicro
-                            }]
-                        }
+                        // {
+                        //     title: 'Actas',
+                        //     closable: true,
+                        //     layout: 'border',
+                        //     id: 'actas',
+                        //     disabled: accesosInspectores,
+                        //     tbar: [
+                        //         {
+                        //             iconCls: 'reload-icon',
+                        //             handler: this.requestGridDataDenunciasActa,
+                        //             scope: this,
+                        //             text: 'Reload data'
+                        //
+                        //         },
+                        //         {
+                        //             iconCls: 'excel-icon',
+                        //             handler: this.botonImprimirActa,
+                        //             scope: this,
+                        //             text: 'Imprimir Acta',
+                        //             tooltip: 'Se reimprime el acta seleccionada.',
+                        //             id: 'tb_repoteActas',
+                        //             // disabled: !acceso
+                        //         }
+                        //     ],
+                        //     items: [
+                        //         {
+                        //             region: 'north',
+                        //             height: 200,
+                        //             minSize: 100,
+                        //             maxSize: 150,
+                        //             closable: true,
+                        //             autoScroll: false,
+                        //             items: this.gridPlanificacionmicroActa
+                        //
+                        //         },
+                        //         // create instance immediately
+                        //         {
+                        //
+                        //             region: 'center',
+                        //             split: true,
+                        //             autoScroll: true,
+                        //             height: 300,
+                        //             minSize: 100,
+                        //             maxSize: 150,
+                        //             margins: '0 0 0 0',
+                        //             items: this.gridPlanificacionmicroActaSimple
+                        //         }
+                        //     ]
+                        //
+                        // },
+                        // {
+                        //     autoScroll: true,
+                        //     title: 'Planificacionmicro',
+                        //     closable: false,
+                        //     id: 'planificacionmicroes',
+                        //     //layout: 'fit',
+                        //     //height: winHeight-70,
+                        //     // disabled: !pestPlanificacionmicro,
+                        //     //Barra de botones
+                        //     tbar: [
+                        //         //Definición de botón Reload data
+                        //         {
+                        //             iconCls: 'reload-icon',
+                        //             handler: this.requestGridDataListadoPlanificacionmicro,
+                        //             scope: this,
+                        //             text: 'Reload data'
+                        //         }, '-',
+                        //         {
+                        //             xtype: 'label',
+                        //             html: "<object id='clipboard' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0' width='16' height='16' align='middle'><param name='allowScriptAccess' value='always' /><param name='allowFullScreen' value='false' /><param name='movie' value='modules/common/libraries/grid-copy-clipboard/clipboard.swf' /><param name='quality' value='high' /><param name='bgcolor' value='#ffffff' /><param name='wmode' value='transparent' /><param name='flashvars' value='callback=f1' /><embed src='modules/common/libraries/grid-copy-clipboard/clipboard.swf' flashvars='callback=f1' quality='high' swliveconnect='true' bgcolor='#ffffff' width='16' height='16' wmode='transparent' name='clipboard' align='middle' allowscriptaccess='always' allowfullscreen='false' type='application/x-shockwave-flash' pluginspage='http://www.adobe.com/go/getflashplayer' /></object>"
+                        //         },
+                        //
+                        //         '-',
+                        //         /* {
+                        //              iconCls: 'reload-icon',
+                        //              handler: this.f1,
+                        //              scope: this,
+                        //              text: 'Reload data'
+                        //          }, '-',*/
+                        //         '->'
+                        //         , {
+                        //             text: 'Search by:'
+                        //             , xtype: 'tbtext'
+                        //         }
+                        //
+                        //         , searchListadoInpeccionesBtn
+                        //         , ' ', ' '
+                        //         , new QoDesk.QoAdmin.SearchField({
+                        //             paramName: 'filterText'
+                        //             ,
+                        //             store: this.storeListadoPlanificacionmicro
+                        //         })
+                        //     ], items: [{
+                        //         id: 'formListadoPlanificacionmicro',
+                        //         titleCollapse: true,
+                        //         flex: 1,
+                        //         autoScroll: true,
+                        //         layout: 'column',
+                        //         items: this.gridListadoPlanificacionmicro
+                        //         //items: this.gridListadoPlanificacionmicro
+                        //     }]
+                        // }
                     ]
                 })
             });
