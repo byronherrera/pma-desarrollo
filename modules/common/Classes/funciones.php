@@ -212,9 +212,10 @@ function calcularContribucionesTotal ($id)
             $total = $row ['total'];
     }
 
-    $sql = "UPDATE pma_contribuciones SET total_programmed = $total, total_unprogrammed = total_programmed  - $total WHERE `id` = $id";
+    $sql = "UPDATE pma_contribuciones SET total_programmed = $total, total_unprogrammed = total_grant - $total WHERE `id` = $id";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
+
     return 1;
 }
 

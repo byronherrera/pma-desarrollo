@@ -195,7 +195,7 @@ function updateDetalleInspecciones()
 
     // actualizar el total en el padre
     $idActivities = calcularActivitiesTotal ($data->id_pma_costos_macro);
-    $total2 = calcularContribucionesTotal ($idActivities);
+    calcularContribucionesTotal ($idActivities);
 
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
