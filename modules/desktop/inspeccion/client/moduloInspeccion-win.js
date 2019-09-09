@@ -165,6 +165,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             listeners: {
                 write: function (proxy, action, result, res, rs) {
                     storeDetalleInspeccion.load();
+                    storeModuloInspeccion.load();
                 }
             }
         });
@@ -250,9 +251,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             proxy: proxyModuloInspeccion,
             reader: readerModuloInspeccion,
             writer: writerModuloInspeccion,
-            autoSave: !accesosSupervision, // dependiendo de si se tiene acceso para grabar
-            //remoteSort: true,
-            //autoSave: true
+            autoSave: true, // dependiendo de si se tiene acceso para grabar
+            //             //remoteSort: true,
+            //             //autoSave: true
             //baseParams: {}
         });
 
@@ -578,8 +579,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
 
-
-
         //inicio combo caracter del tramite CDT
         storeCDT = new Ext.data.JsonStore({
             root: 'datos',
@@ -856,7 +855,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         }
 
 
-
         //inicio combo unidad asignada Inspección
         storeACTUALIZARFECHA = new Ext.data.JsonStore({
             root: 'data',
@@ -1074,8 +1072,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         //fin combo
 
 
-
-
         //inicio combo denuncias ordenanza DETIORD
         storeINSPORD = new Ext.data.JsonStore({
             root: 'data',
@@ -1192,7 +1188,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 return record.get('nombre');
             }
         }
-
 
 
         function asunto(id) {
@@ -1334,7 +1329,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
 
-
         storeFUNREA.sort('orden', 'ASC');
         var comboFUNREA = new Ext.form.ComboBox({
             id: 'comboFUNREA',
@@ -1348,7 +1342,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
 
-
         function tipoFuncionarioReasignacion(id) {
             var index = storeFUNREA.find('id', id);
             if (index > -1) {
@@ -1356,8 +1349,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 return record.get('nombre');
             }
         }
-
-
 
 
         var searchFieldBtn = new Ext.Button({
@@ -1369,70 +1360,12 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         group: 'filterField',
                         key: 'grant_number',
                         scope: this,
-                        text: 'Grant Number'
+                        text: 'All columns'
                     }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'num_documento',
-                        scope: this,
-                        text: 'Número documento'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'remitente',
-                        scope: this,
-                        text: 'Remitente'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'recepcion_documento',
-                        scope: this,
-                        text: 'Fecha Ingreso'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'cedula',
-                        scope: this,
-                        text: 'Cédula'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'email',
-                        scope: this,
-                        text: 'Email'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'institucion',
-                        scope: this,
-                        text: 'Entidad'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'asunto',
-                        scope: this,
-                        text: 'Asunto'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'guia',
-                        scope: this,
-                        text: 'Guía'
-                    }
+
                 ]
             })
-            , text: 'Código trámite'
+            , text: 'All columns'
         });
 
         var searchListadoInpeccionesBtn = new Ext.Button({
@@ -1442,59 +1375,13 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         checked: true,
                         checkHandler: checkHandlerInspecciones,
                         group: 'filterField',
-                        key: 'codigo_tramite',
+                        key: 'all_columns',
                         scope: this,
-                        text: 'Código trámite'
-                    }
-                    , {
-                        checked: true,
-                        checkHandler: checkHandlerInspecciones,
-                        group: 'filterField',
-                        key: 'id_inspeccion',
-                        scope: this,
-                        text: 'Código inspección'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandlerInspecciones,
-                        group: 'filterField',
-                        key: 'nombre_denunciado',
-                        scope: this,
-                        text: 'Nombre denunciado'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandlerInspecciones,
-                        group: 'filterField',
-                        key: 'funcionario_entrega',
-                        scope: this,
-                        text: 'Inspector'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandlerInspecciones,
-                        group: 'filterField',
-                        key: 'predio',
-                        scope: this,
-                        text: 'Predio'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandlerInspecciones,
-                        group: 'filterField',
-                        key: 'guia',
-                        scope: this,
-                        text: 'Guia'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandlerInspecciones,
-                        group: 'filterField',
-                        key: 'id_acta',
-                        scope: this,
-                        text: 'Número documento'
+                        text: 'All columns'
                     }
                 ]
             })
-            , text: 'Código trámite'
+            , text: 'All columns'
         });
 
         var searchInspeccionesBtn = new Ext.Button({
@@ -1506,19 +1393,11 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         group: 'filterField',
                         key: 'id_inspeccion',
                         scope: this,
-                        text: 'Código inspección'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandlerInspecciones,
-                        group: 'filterField',
-                        key: 'nombre_denunciado',
-                        scope: this,
-                        text: 'Nombre denunciado'
+                        text: 'All columns'
                     }
                 ]
             })
-            , text: 'Código trámite'
+            , text: 'All columns'
         });
 
         this.storeModuloInspeccion.load();
@@ -1604,6 +1483,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     header: 'Total Direct Cost',
                     dataIndex: 'total_grant',
                     sortable: true,
+                    align: 'right',
                     width: 28,
                     renderer: 'usMoney',
                     editor: new Ext.form.NumberField({
@@ -1618,11 +1498,12 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 28,
                     renderer: 'usMoney',
-                    editor: new Ext.form.NumberField({
+                    align: 'right'
+                    /*editor: new Ext.form.NumberField({
                         allowBlank: false,
                         allowNegative: false,
                         maxValue: 100000000
-                    })
+                    })*/
                 },
                 {
                     header: 'Unprogrammed',
@@ -1630,11 +1511,12 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 28,
                     renderer: 'usMoney',
-                    editor: new Ext.form.NumberField({
+                    align: 'right'
+                    /* editor: new Ext.form.NumberField({
                         allowBlank: false,
                         allowNegative: false,
                         maxValue: 100000000
-                    })
+                    })*/
                 },
                 {
                     header: 'Grant TOD',
@@ -1975,7 +1857,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     hidden: false,
                     width: 100,
                     renderer: 'usMoney',
-                    editor: textFieldDetalle
+                    editor: textFieldDetalle, align: 'right'
                 },
                 {
                     header: 'Adjust',
@@ -1983,9 +1865,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     hidden: false,
                     width: 100,
                     renderer: 'usMoney',
-                    editor: textFieldDetalle
+                    editor: textFieldDetalle, align: 'right'
                 },
-                {header: 'Total adjusted', dataIndex: 'total_adjusted', hidden: false, width: 100, renderer: 'usMoney'},
+                {header: 'Total adjusted', dataIndex: 'total_adjusted',align: 'right', hidden: false, width: 100, renderer: 'usMoney'},
                 {header: 'Comment', dataIndex: 'comment', hidden: false, width: 150, editor: textFieldDetalle},
                 {
                     header: 'Register Date',
@@ -1998,29 +1880,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     })
                 },
 
-                // {
-                //     header: 'Fecha de Registro',
-                //     dataIndex: 'fecha_registro',
-                //     hidden: true,
-                //     width: 120,
-                //     renderer: formatDate,
-                //     editor: new Ext.ux.form.DateTimeField({
-                //         dateFormat: 'Y-m-d',
-                //         timeFormat: 'H:i:s'
-                //     })
-                // },
-                // {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. II Quarter', dataIndex: 'total_grant_q2', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. III Quarter', dataIndex: 'total_grant_q3', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. IV Quarter', dataIndex: 'total_grant_q4', hidden: false, width: 140, editor: textFieldDetalle},
-                // {header: 'Total Grant V. DOC ', dataIndex: 'total_grant_prog_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. DSC', dataIndex: 'total_grant_prog_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total PR and PO - DOC', dataIndex: 'total_pr_po_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Actuals DOC', dataIndex: 'total_actuals_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant Value Balance DOC', dataIndex: 'total_balance_doc', hidden: false, width: 170, editor: textFieldDetalle},
-                // {header: 'Total PR and PO - DSC', dataIndex: 'total_pr_po_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Actuals DSC ', dataIndex: 'total_actuals_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant Value Balance DSC', dataIndex: 'total_grant_balance_dsc', hidden: false, width: 170, editor: textFieldDetalle}
             ],
             viewConfig: {
                 forceFit: false
@@ -2076,13 +1935,13 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             store: this.storeDetalleInspeccion,
             columns: [
                 new Ext.grid.RowNumberer(),
-                {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textFieldDetalle},
                 {
                     header: 'id_pma_contribuciones_detalle',
                     dataIndex: 'id_pma_contribuciones_detalle',
                     hidden: true,
                     width: 50
                 },
+                {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textFieldDetalle},
                 {
                     header: 'Strategic Objectives',
                     dataIndex: 'so',
@@ -2099,8 +1958,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     editor: comboActivities,
                     renderer: costActivities
                 },
-                {header: 'Total macro', dataIndex: 'total', hidden: false, width: 150}
-
+                {header: 'Total macro', dataIndex: 'total',  renderer: 'usMoney', width: 100, align: 'right'}
             ],
             viewConfig: {
                 forceFit: false
@@ -2128,7 +1986,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 store: storeDetalleInspeccion,
                 displayInfo: true,
                 displayMsg: '{0} - {1} de {2} - PMA',
-                emptyMsg: "Seleccione un trámite"
+                emptyMsg: "Select activities"
             }),
             listeners: {
                 beforeedit: function (e) {
@@ -2471,8 +2329,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                             }, {
                                                 title: 'Macro Costs',
                                                 region: 'center',
-
-                                                items: [{
+                                                items: [
+                                                    {
                                                     tbar: [
                                                         //Definición de botón nuevo
                                                         {

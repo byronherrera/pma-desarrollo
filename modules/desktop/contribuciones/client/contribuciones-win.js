@@ -932,15 +932,21 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'year_contribution',
                     sortable: true,
                     width: 20,
-                    editor: textField
-                    // renderer: personaReceptaDenuncia
+                    editor: new Ext.ux.form.SpinnerField({
+                        fieldLabel: 'Year',
+                        name: 'year',
+                        minValue: 2000,
+                        maxValue: 2030
+                    }),
+                    align: 'right'
                 },
                 {
                     header: 'ISC',
                     dataIndex: 'isc',
                     sortable: true,
                     width: 28,
-                    editor: textField
+                    editor: textField,
+                    align: 'right'
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -948,12 +954,14 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'total_grant',
                     sortable: true,
                     width: 28,
+                    align: 'right',
                     renderer: 'usMoney',
                     editor: new Ext.form.NumberField({
                         allowBlank: false,
                         allowNegative: false,
                         maxValue: 100000000
-                    })
+                    }),
+                    align: 'right'
                 },
                 {
                     header: 'Total Programmed',
@@ -965,7 +973,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                         allowBlank: false,
                         allowNegative: false,
                         maxValue: 100000000
-                    })
+                    }),
+                    align: 'right'
                 },
                 {
                     header: 'Unprogrammed',
@@ -977,7 +986,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                         allowBlank: false,
                         allowNegative: false,
                         maxValue: 100000000
-                    })
+                    }),
+                    align: 'right'
                 },
                 {
                     header: 'Grant TOD',
@@ -2223,7 +2233,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                     text: 'Exportar listado',
                                     tooltip: 'Se genera archivo Excel con la información solicitada',
                                     id: 'tb_repoteContribucionesGuias',
-//                                    disabled: !acceso,
                                 }
                             ],
                             items: [
@@ -2238,7 +2247,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                     items: this.formConsultaDocumentos
                                 },
                                 {
-                                    // lazily created panel (xtype:'panel' is default)
                                     region: 'center',
                                     split: true,
                                     autoScroll: true,
@@ -2253,48 +2261,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                         }
 
 /*
-                        , {
-                            autoScroll: true,
-                            title: 'Geolocalización',
-                            closable: true,
-                            hidden: 'true', //TODO eliminar pestaña
-                            items: [{
-                                region: 'center',
-                                xtype: 'gmappanel',
-                                zoomLevel: 12,
-                                gmapType: 'map',
-                                id: 'my_map',
-                                border: false,
-                                fbar: [
-                                    {
-                                        text: 'Confirmar dirección',
-                                        handler: function () {
-                                            Ext.getCmp('georeferenciaSecretaria').setValue(geoSecretaria);
-                                            Ext.getCmp('panelPrincipal').setActiveTab(0);
-                                        }
-                                    }],
-                                mapConfOpts: ['enableScrollWheelZoom', 'enableDoubleClickZoom', 'enableDragging'],
-                                mapControls: ['GSmallMapControl', 'GMapTypeControl'],
-                                setCenter: {
-                                    lat: -0.1756096,
-                                    lng: -78.4761627
-                                },
-                                markers: [{
-                                    lat: -0.17157021176359674,
-                                    lng: -78.47847476417087,
-                                    marker: {title: 'Quito', draggable: true},
-                                    listeners: {
-                                        click: function (e) {
-                                            //console.log ("Click al boton");
-                                        },
-                                        dragend: function (e) {
-                                            geoSecretaria = e.latLng.lat() + ", " + e.latLng.lng()
 
-                                        }
-                                    }
-                                }]
-                            }]
-                        }
  */                   ]
                 })
             });
@@ -2334,25 +2301,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             if (!acceso) {
                 activar2 = activar = true;
             }
-
-            // Ext.getCmp('estado').setReadOnly(activar2);
-            // Ext.getCmp('recepcion_documento').setReadOnly(activar);
-            // Ext.getCmp('id_tipo_documento').setReadOnly(activar);
-            // Ext.getCmp('num_documento').setReadOnly(activar);
-            // Ext.getCmp('remitente').setReadOnly(activar);
-            // Ext.getCmp('cedula').setReadOnly(activar);
-            // Ext.getCmp('email').setReadOnly(activar);
-            // Ext.getCmp('descripcion_anexos').setReadOnly(activar);
-            // Ext.getCmp('cantidad_fojas').setReadOnly(activar);
-            // Ext.getCmp('asunto').setReadOnly(activar);
-            // Ext.getCmp('institucion').setReadOnly(activar);
-            // Ext.getCmp('id_caracter_tramite').setReadOnly(activar);
-            // Ext.getCmp('observacion_secretaria').setReadOnly(activar);
-
-
-            // Ext.getCmp('despacho_secretaria').setReadOnly(!acceso);
-            // Ext.getCmp('guia').setReadOnly(!acceso);
-
 
             if (accesosZonales)
                 Ext.getCmp('reasignacion').disable();
@@ -2412,18 +2360,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             year_contribution: (new Date().getFullYear()),
             // id_tipo: '',
             crn: '',
-            recepcion_documento: (new Date()),
-            //id_tipo_documento: '2',
-            // num_documento: 'S/N',
-            // descripcion_anexos: '-',
-            // institucion: '',
-            // remitente: '',
-            // reasignacion: '',
-            // asunto: '',
-            // id_caracter_tramite: '1',
-            // cantidad_fojas: '0',
-            //despacho_secretaria: false
-            // id_zonal_origen:' '
+            recepcion_documento: (new Date())
+
 
         });
         this.gridContribuciones.stopEditing();

@@ -216,7 +216,7 @@ QoDesk.App = new Ext.app.App({
          },
          startButtonConfig: {
             iconCls: 'icon-qwikioffice',
-            text: 'Inicio'
+            text: 'Start'
          },
          startMenuConfig: {
             iconCls: 'icon-user-48',

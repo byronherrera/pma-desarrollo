@@ -26,13 +26,12 @@ if (isset($_FILES)) {
     $original_file_name = $_FILES['photo-path']['name'];
     $uploaddir = __DIR__ . "/../../../../migrar/";
 
-
     $nombreArchivo = $_FILES['photo-path']['name'];
 
     $vowels = array("[", "]");
     $nombreArchivo = str_replace($vowels, "", $nombreArchivo);
 
-    $uploadfile = $uploaddir . date('Y-m-d-h-i-s-') . basename( $nombreArchivo );
+    $uploadfile = $uploaddir . date('Y-m-d-h-i-s-') . basename($nombreArchivo);
 
     if (move_uploaded_file($temp_file_name, $uploadfile)) {
 
@@ -47,29 +46,46 @@ if (isset($_FILES)) {
         $sheet = $spreadsheet->getActiveSheet()->getTitle();
         $total = 0;
 
-        // se recupera la columna a cargar
-        $sql = "SELECT * FROM pma_migrate   WHERE active  = 1;";
+        $sql = "SELECT tab_wings FROM pma_migrate WHERE active  = 1 GROUP BY tab_wings";
         $result = $os->db->conn->query($sql);
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)
-        ) {
-            //recupea la columna
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            // se realiza para cada uno de las pestañas del excel
             $hoja = $row['tab_wings'];
-            $fila = $row['name_wings'];
             $data = $spreadsheet->getSheetByName($hoja)->toArray(null, true, true, true);
 
-            $fila_cabecera = $data(1);
-            if (in_array("$fila", $os)) {
-                echo "Existe Irix";
-            }
-        };
+            // se recupera la columna a cargar de una misma hoja
+            $sql = "SELECT * FROM pma_migrate   WHERE active  = 1 AND tab_wings = '$hoja';";
+            $result = $os->db->conn->query($sql);
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)
+            ) {
+                //recupea la columna
+                $fila = $row['name_wings'];
+                $cabeceras = $data[1];
+                $fila_cabecera = "";
+                if (in_array("$fila", $cabeceras)) {
+                    $fila_cabecera = "Existe Irix";
+                    // verificar si no existe
+
+                    // caso existe
+
+                    // caso no existe
+
+                    // aca realizamos la insercion
+
+
+                   }
+            };
+
+
+        }
+
 
         echo json_encode(array(
                 "total" => $total,
                 "Sheet" => $sheet,
                 "success" => true,
-                "data" => $data)
+                "hoja " =>$fila_cabecera )
         );
-
     } else {
         echo json_encode(array(
                 "total" => 0,

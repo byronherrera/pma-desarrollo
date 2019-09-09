@@ -91,9 +91,6 @@ function insertDetalleInspecciones()
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
-    //$data->id = generaCodigoCostoMacro();
-    // $data->id_pma_costos_macro = generaidpmaCostoMacro();
-    // $data->id_inspeccion = generaNuevoCodigoInspeccion();
     $data->fecha_registro = date('Y-m-d H:i:s');
     //genero el listado de nombre de campos
 
@@ -146,26 +143,6 @@ function insertDetalleInspecciones()
     }
 }
 
-function generaCodigoCostoMacro()
-{
-    global $os;
-
-    $usuario = $os->get_member_id();
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id) AS maximo FROM pma_costos_macro";
-    $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (isset($row['maximo'])) {
-        $nuevoCodogo = $row['maximo'] + 1;
-        return $nuevoCodogo;
-    } else {
-        // valor inicial proceso
-
-        return 1;
-
-    }
-}
-
 function generaidpmaCostoMacro()
 {
     global $os;
@@ -193,21 +170,8 @@ function updateDetalleInspecciones()
     $data = json_decode($_POST["data"]);
 
     $data->total_adjusted = $data->total + $data->adjust;
-    // if (isset($data->despacho_secretaria)) {
-    //     if (!$data->despacho_secretaria)
-    //         $data->despacho_secretaria = 'false';
-    //     else
-    //         $data->despacho_secretaria = 'true';
-    // }
 
     $message = '';
-    // if (isset($data->id_tipo_documento)) {
-    //     if ($data->id_tipo_documento == '1')
-    //         if (validarCedulaCorreo($data->id)) {
-    //             $message = 'Ingresar número de cédula y correo electrónico';
-    //         }
-    // }
-
     // genero el listado de valores a insertar
     $cadenaDatos = '';
     foreach ($data as $clave => $valor) {
@@ -216,7 +180,6 @@ function updateDetalleInspecciones()
                 $valor = 'NULL';
             }
         }
-
         if ($valor === 'NULL') {
             $cadenaDatos = $cadenaDatos . $clave . " = " . $valor . " ,";
         } else {
@@ -226,22 +189,24 @@ function updateDetalleInspecciones()
     }
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    // cambioEstadoAsignacion ($data->funcionario_entrega, $data->id);
-    // cambioEstadoReasignacion ($data->funcionario_reasignacion, $data->id);
-
     $sql = "UPDATE pma_costos_macro SET  $cadenaDatos  WHERE pma_costos_macro.id = '$data->id' ";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
+
+    // actualizar el total en el padre
+    $idActivities = calcularActivitiesTotal ($data->id_pma_costos_macro);
+    $total2 = calcularContribucionesTotal ($idActivities);
 
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_macro actualizado exitosamente" : $sql->errorCode(),
         "message" => $message,
-        "data" => array($data)
+        "data" => array($data),
+        "aa" => $idActivities
     ));
-
-
 }
+
+
 
 function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
     global $os;
@@ -317,7 +282,6 @@ function validarCedulaCorreo($id)
     }
 }
 
-
 function selectDetalleInspeccionesForm()
 {
     global $os;
@@ -387,7 +351,6 @@ function deleteDetalleInspecciones()
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_macro, eliminado exitosamente" : $sql->errorCode()
     ));
 }
-
 
 switch ($_GET['operation']) {
     case 'select' :

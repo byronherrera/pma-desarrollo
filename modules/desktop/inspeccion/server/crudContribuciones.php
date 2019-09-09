@@ -18,8 +18,6 @@ function selectContribuciones()
     // if (isset($_POST['filterField'])) {
     //     $columnaBusqueda = $_POST['filterField'];
     //
-    // }
-    //
     // if (isset($_POST['filterText'])) {
     //     $campo = $_POST['filterText'];
     //     $campo = str_replace(" ", "%", $campo);
@@ -40,24 +38,6 @@ function selectContribuciones()
     //         // $where = " WHERE $columnaBusqueda LIKE '%$campo%'";
     // }
     //
-    // if (isset($_POST['unidadfiltro'])) {
-    //     $unidad = $_POST['unidadfiltro'];
-    //     if ($where == '') {
-    //         $where = "WHERE reasignacion = $unidad ";
-    //     } else {
-    //         $where = " AND reasignacion = $unidad ";
-    //     }
-    // }
-    //
-    // if (isset($_POST['noenviados'])) {
-    //     if ($_POST['noenviados'] == 'true') {
-    //         if ($where == '') {
-    //             $where = " WHERE despacho_secretaria <> 'true'";
-    //         } else {
-    //             $where = $where . " AND despacho_secretaria <> 'true' ";
-    //         }
-    //     }
-    // }
 
     if (isset ($_POST['start']))
         $start = $_POST['start'];
@@ -136,12 +116,12 @@ function selectContribuciones()
 
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    // $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
     $sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-
+//        $total = calcularTotal($row['id']);
+//        $row['total_programmed'] = $total;
         $data[] = $row;
     };
 
@@ -157,6 +137,7 @@ function selectContribuciones()
             "data" => $data)
     );
 }
+
 
 function insertDenuncias()
 {

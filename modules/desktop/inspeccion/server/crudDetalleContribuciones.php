@@ -31,8 +31,8 @@ function selectDetalleInspecciones()
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $total = calcularTotal($row['id']);
-        $row['total'] = $total;
+        //$total = calcularTotal($row['id']);
+        //$row['total'] = $total;
         $data[] = $row;
     }
     echo json_encode(array(
@@ -41,25 +41,6 @@ function selectDetalleInspecciones()
     );
 }
 
-function calcularTotal($id)
-{
-    // aca el calculo
-    global $os;
-
-    $sql = "SELECT SUM(total_adjusted) as total  FROM pma_costos_macro where id_pma_costos_macro = $id ";
-    $result = $os->db->conn->query($sql);
-    $total = 0;
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-
-        if (!is_null($row ['total']))
-        $total = $row ['total'];
-
-    }
-
-    return $total;
-}
-
-;
 function selectDetalleTodasInspecciones()
 {
     global $os;

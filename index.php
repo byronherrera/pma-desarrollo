@@ -35,7 +35,6 @@ if (!class_exists('os')) {
             <script type="text/javascript" src="ext-3.4.1/examples/ux/treegrid/TreeGridColumns.js"></script>
             <script type="text/javascript" src="ext-3.4.1/examples/ux/treegrid/TreeGrid.js"></script>
 
-
             <!-- DESKTOP CSS -->
             <link rel="stylesheet" type="text/css" href="resources/css/desktop.css"/>
 

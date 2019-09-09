@@ -32,7 +32,7 @@ class config {
   // public $DB_CONN_STRING = 'mysql:dbname=procesos-amc;host=localhost';
    public $DB_CONN_STRING = 'mysql:dbname=pma-desarrollo;host=localhost';
    public $DB_USERNAME = 'root';
-   public $DB_PASSWORD = '';
+   public $DB_PASSWORD = '111111';
 
    public $AMBIENTE = 'PRUEBAS' ;
 //   public $AMBIENTE = 'PRODUCCION' ;
