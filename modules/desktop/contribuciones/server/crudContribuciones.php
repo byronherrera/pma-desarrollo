@@ -15,60 +15,13 @@ function selectContribuciones()
     $columnaBusqueda = 'grant_number';
     $where = '';
 
-     if (isset($_POST['filterField'])) {
-         $columnaBusqueda = $_POST['filterField'];
+    if (isset($_POST['filterField'])) {
+        $columnaBusqueda = $_POST['filterField'];
+    }
+    if (isset($_POST['filterText'])) {
+        $where = retornaWhereBusqueda($_POST['filterText'], $columnaBusqueda);
+    }
 
-     }
-
-     if (isset($_POST['filterText'])) {
-         $campo = $_POST['filterText'];
-         $campo = str_replace(" ", "%", $campo);
-
-         //para el caso de busqueda por guia, recuperamos el id de la guia
-        /* if ($columnaBusqueda == 'guia') {
-             // $sql = "SELECT id FROM pma_contribuciones WHERE numero = '$campo'";
-             $sql = "SELECT id FROM pma_contribuciones";
-             $numguia = $os->db->conn->query($sql);
-             if ($numguia) {
-                 $row = $numguia->fetch(PDO::FETCH_ASSOC);
-                 if ($row) {
-                     $campo = $row['id'];
-                 }
-             }
-              $where = " WHERE $columnaBusqueda LIKE '%$campo%'";
-         } else */
-              $where = " WHERE $columnaBusqueda LIKE '%$campo%' OR
-                                estado LIKE '%$campo%' OR
-                                crn  LIKE '%$campo%' OR
-                                donor LIKE '%$campo%' OR
-                                comments LIKE '%$campo%' OR
-                                year_contribution LIKE '%$campo%' OR
-                                isc LIKE '%$campo%' OR
-                                total_grant LIKE '%$campo%' OR
-                                grant_tod LIKE '%$campo%' OR
-                                grant_tdd LIKE '%$campo%' OR
-                                grant_specific LIKE '%$campo%' OR
-                                activity LIKE '%$campo%' ";
-     }
-
-/*     if (isset($_POST['unidadfiltro'])) {
-         $unidad = $_POST['unidadfiltro'];
-         if ($where == '') {
-             $where = "WHERE reasignacion = $unidad ";
-         } else {
-             $where = " AND reasignacion = $unidad ";
-         }
-     }
-
-     if (isset($_POST['noenviados'])) {
-         if ($_POST['noenviados'] == 'true') {
-             if ($where == '') {
-                 $where = " WHERE despacho_secretaria <> 'true'";
-             } else {
-                 $where = $where . " AND despacho_secretaria <> 'true' ";
-             }
-         }
-     }*/
 
     if (isset ($_POST['start']))
         $start = $_POST['start'];
@@ -82,72 +35,71 @@ function selectContribuciones()
 
     $orderby = 'ORDER BY id DESC';
     if (isset($_POST['sort'])) {
-         $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
-     }
+        $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
+    }
 
 //     para los reportes
-     if (isset($_POST['busqueda_tipo_documento']) and ($_POST['busqueda_tipo_documento'] != '')) {
-         $tipo = $_POST['busqueda_tipo_documento'];
-         if ($where == '') {
-             $where = "WHERE estado = '$tipo' ";
-         } else {
-             $where = $where . " AND estado = '$tipo' ";
-         }
-     }
-     if (isset($_POST['busqueda_institucion']) and ($_POST['busqueda_institucion'] != '')) {
-         $tipo = $_POST['busqueda_institucion'];
-         if ($where == '') {
-             $where = "WHERE donor = '$tipo' ";
-         } else {
-             $where = $where . " AND donor = '$tipo' ";
-         }
-     }
-     if (isset($_POST['busqueda_caracter_tramite']) and ($_POST['busqueda_caracter_tramite'] != '')) {
-         $tipo = $_POST['busqueda_caracter_tramite'];
-         if ($where == '') {
-             $where = "WHERE year_contribution = '$tipo' ";
-         } else {
-             $where = $where . " AND year_contribution = '$tipo' ";
-         }
-     }
+    if (isset($_POST['busqueda_tipo_documento']) and ($_POST['busqueda_tipo_documento'] != '')) {
+        $tipo = $_POST['busqueda_tipo_documento'];
+        if ($where == '') {
+            $where = "WHERE estado = '$tipo' ";
+        } else {
+            $where = $where . " AND estado = '$tipo' ";
+        }
+    }
+    if (isset($_POST['busqueda_institucion']) and ($_POST['busqueda_institucion'] != '')) {
+        $tipo = $_POST['busqueda_institucion'];
+        if ($where == '') {
+            $where = "WHERE donor = '$tipo' ";
+        } else {
+            $where = $where . " AND donor = '$tipo' ";
+        }
+    }
+    if (isset($_POST['busqueda_caracter_tramite']) and ($_POST['busqueda_caracter_tramite'] != '')) {
+        $tipo = $_POST['busqueda_caracter_tramite'];
+        if ($where == '') {
+            $where = "WHERE year_contribution = '$tipo' ";
+        } else {
+            $where = $where . " AND year_contribution = '$tipo' ";
+        }
+    }
 
-     if (isset($_POST['busqueda_guia']) and ($_POST['busqueda_guia'] != '')) {
-         $tipo = $_POST['busqueda_guia'];
-         if ($where == '') {
-             $where = "WHERE grant_specific = '$tipo' ";
-         } else {
-             $where = $where . " AND grant_specific = '$tipo' ";
-         }
-     }
+    if (isset($_POST['busqueda_guia']) and ($_POST['busqueda_guia'] != '')) {
+        $tipo = $_POST['busqueda_guia'];
+        if ($where == '') {
+            $where = "WHERE grant_specific = '$tipo' ";
+        } else {
+            $where = $where . " AND grant_specific = '$tipo' ";
+        }
+    }
 
-     if (isset($_POST['busqueda_reasignacion']) and ($_POST['busqueda_reasignacion'] != '')) {
-         $tipo = $_POST['busqueda_reasignacion'];
-         if ($where == '') {
-             $where = "WHERE reasignacion in ($tipo) ";
-         } else {
-             $where = $where . " AND reasignacion in ($tipo) ";
-         }
-     }
+    if (isset($_POST['busqueda_reasignacion']) and ($_POST['busqueda_reasignacion'] != '')) {
+        $tipo = $_POST['busqueda_reasignacion'];
+        if ($where == '') {
+            $where = "WHERE reasignacion in ($tipo) ";
+        } else {
+            $where = $where . " AND reasignacion in ($tipo) ";
+        }
+    }
 
+    if (isset($_POST['busqueda_fecha_inicio']) and ($_POST['busqueda_fecha_inicio'] != '')) {
+        $fechainicio = $_POST['busqueda_fecha_inicio'];
+        if (isset($_POST['busqueda_fecha_fin']) and ($_POST['busqueda_fecha_fin'] != '')) {
+            $fechafin = $_POST['busqueda_fecha_fin'];
+        } else {
+            $fechafin = date("Y-m-d");;
+        }
+        if ($where == '') {
+            $where = "WHERE grant_tod between '$fechainicio' and '$fechafin'  ";
+        } else {
+            $where = $where . " AND grant_tod between '$fechainicio' and '$fechafin' ";
 
-     if (isset($_POST['busqueda_fecha_inicio']) and ($_POST['busqueda_fecha_inicio'] != '')) {
-         $fechainicio = $_POST['busqueda_fecha_inicio'];
-         if (isset($_POST['busqueda_fecha_fin']) and ($_POST['busqueda_fecha_fin'] != '')) {
-             $fechafin = $_POST['busqueda_fecha_fin'];
-         } else {
-             $fechafin = date("Y-m-d");;
-         }
-         if ($where == '') {
-             $where = "WHERE grant_tod between '$fechainicio' and '$fechafin'  ";
-         } else {
-             $where = $where . " AND grant_tod between '$fechainicio' and '$fechafin' ";
-
-         }
-     }
+        }
+    }
 
     $os->db->conn->query("SET NAMES 'utf8'");
-     $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
-     // $sql = "SELECT * FROM pma_contribuciones $where LIMIT $start, $limit";
+    $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
+    // $sql = "SELECT * FROM pma_contribuciones $where LIMIT $start, $limit";
     //$sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
     $result = $os->db->conn->query($sql);
     $data = array();
@@ -156,7 +108,7 @@ function selectContribuciones()
     };
 
     // $sql = "SELECT count(*) AS total FROM pma_contribuciones $where";
-    $sql = "SELECT count(*) AS total FROM pma_contribuciones";
+    $sql = "SELECT count(*) AS total FROM pma_contribuciones $where";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     $total = $row['total'];
@@ -248,7 +200,6 @@ function insertDenuncias()
 }
 
 
-
 function updateDenuncias()
 {
     global $os;
@@ -271,14 +222,14 @@ function updateDenuncias()
     // }
 
     //if ($data->id_ordenanza == NULL)
-     //   unset($data->id_ordenanza);
+    //   unset($data->id_ordenanza);
 
 
     // genero el listado de valores a insertar
     $cadenaDatos = '';
     foreach ($data as $clave => $valor) {
         if ($valor != '')
-        $cadenaDatos = $cadenaDatos . $clave . " = '" . $valor . "',";
+            $cadenaDatos = $cadenaDatos . $clave . " = '" . $valor . "',";
     }
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
@@ -301,14 +252,14 @@ function updateDenuncias()
     // }
 
     // if ($grabar) {
-        $sql = "UPDATE pma_contribuciones SET  $cadenaDatos  WHERE pma_contribuciones.id = '$data->id' ";
-        $sql = $os->db->conn->prepare($sql);
-        $sql->execute();
-        echo json_encode(array(
-            "success" => $sql->errorCode() == 0,
-            "msg" => $sql->errorCode() == 0 ? $message : $sql->errorCode(),
-            "message" => $message
-        ));
+    $sql = "UPDATE pma_contribuciones SET  $cadenaDatos  WHERE pma_contribuciones.id = '$data->id' ";
+    $sql = $os->db->conn->prepare($sql);
+    $sql->execute();
+    echo json_encode(array(
+        "success" => $sql->errorCode() == 0,
+        "msg" => $sql->errorCode() == 0 ? $message : $sql->errorCode(),
+        "message" => $message
+    ));
     // } else {
     //     echo json_encode(array(
     //         "success" => false,

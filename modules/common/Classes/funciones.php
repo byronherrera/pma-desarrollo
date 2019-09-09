@@ -13,7 +13,6 @@ function generaNuevoCodigoTramiteUnico()
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
-    //$sql = "SELECT MAX(codigo_tramite) AS maximo FROM amc_denuncias";
     $sql = "SELECT MAX(codigo_tramite) AS maximo FROM amc_denuncias WHERE recepcion_documento > '" . date("Y") . "-01-03 01:01:01';";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -32,7 +31,6 @@ function generaNuevoCodigoInspeccion()
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
-    //$sql = "SELECT MAX(codigo_tramite) AS maximo FROM amc_denuncias";
     $sql = "SELECT MAX(id_inspeccion) AS maximo FROM amc_inspeccion WHERE fecha_recepcion_documento > '" . date("Y") . "-01-01 01:01:01';";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -69,7 +67,6 @@ function generaNuevoCodigoConstrucciones()
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
-    //$sql = "SELECT MAX(codigo_tramite) AS maximo FROM amc_denuncias";
     $sql = "SELECT COUNT(num_nio) AS cant_nio FROM amc_inspeccion_nio WHERE fecha_ingreso > '" . date("Y") . "-01-01 01:01:01';";
     $result = $os->db->conn->query($sql);
     $row1 = $result->fetch(PDO::FETCH_ASSOC);
@@ -100,7 +97,6 @@ function generaNuevoCodigoControlProgramado()
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
-    //$sql = "SELECT MAX(codigo_tramite) AS maximo FROM amc_denuncias";
     $sql = "SELECT COUNT(id) AS cant_cp FROM amc_inspeccion_control_programado WHERE fecha_recepcion_documento > '" . date("Y") . "-01-01 01:01:01';";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -183,7 +179,6 @@ function generaCodigoProcesoDenuncia()
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
-    //$sql = "SELECT MAX(codigo_tramite) AS maximo FROM amc_denuncias";
     $anio = date('Y');
     if ($anio == 2019)
         $sql = "SELECT MAX(codigo_tramite) AS maximo FROM amc_denuncias WHERE  recepcion_documento > '" . $anio . "-01-03 00:00:01'";
@@ -244,4 +239,22 @@ function calcularActivitiesTotal($id)
     $sql->execute();
 
     return $id_pma_contribuciones_detalle;
+};
+
+// funcion usada para generar la busqueda
+function retornaWhereBusqueda($campo, $columnaBusqueda){
+    $campo = str_replace(" ", "%", $campo);
+    $where = " WHERE $columnaBusqueda LIKE '%$campo%' OR
+                                    estado LIKE '%$campo%' OR
+                                    crn  LIKE '%$campo%' OR
+                                    donor LIKE '%$campo%' OR
+                                    comments LIKE '%$campo%' OR
+                                    year_contribution LIKE '%$campo%' OR
+                                    isc LIKE '%$campo%' OR
+                                    total_grant LIKE '%$campo%' OR
+                                    grant_tod LIKE '%$campo%' OR
+                                    grant_tdd LIKE '%$campo%' OR
+                                    grant_specific LIKE '%$campo%' OR
+                                    activity LIKE '%$campo%' ";
+    return $where;
 };
