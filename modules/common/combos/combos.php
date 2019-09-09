@@ -150,17 +150,29 @@ function comboCostcode3()
     );
 }
 
+function recuperaCostCategory($idcost)
+{
+    global $os;
+    // $costCodeNuevo2 =
+    $sql = "SELECT cost FROM pma_cost_category WHERE id = $idcost";
+    $result = $os->db->conn->query($sql);
+    $data = $result->fetch(PDO::FETCH_ASSOC);
+    return $data['cost'];
+}
+
 function comboGLCode()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    // if (isset($_POST['costCodeNuevo3']))
-    //     $where = " AND parent = " . $_POST['costCodeNuevo3'];
-    // else
-    //     $where = '';
+    $where = '';
+    if (isset($_POST['costCodeNuevo3'])) {
+//         $where = " WHERE cost_category = 'FA'" ;
+        $cost = recuperaCostCategory($_POST['costCodeNuevo3']);
+        $where = " WHERE cost_category = '$cost'";
+     }
 
-    // $costCodeNuevo2 =
-    $sql = "SELECT id, commitment_description FROM pma_gl_codes WHERE availability_type = 1 $where ORDER BY id";
+    $sql = "SELECT id, commitment_description FROM pma_gl_codes $where ORDER BY id";
+
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -251,7 +263,7 @@ function comboSecretariaTramites()
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
   //  $sql = "SELECT id, codigo_tramite as nombre FROM amc_denuncias  ORDER BY id DESC ";
-    $sql = "SELECT id, CONCAT (codigo_tramite,' - ', YEAR (recepcion_documento)) as nombre FROM amc_denuncias ORDER BY id DESC";
+    $sql = "SELECT id, CONCAT(codigo_tramite, ' - ', YEAR(recepcion_documento)) as nombre FROM amc_denuncias ORDER BY id DESC";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -394,14 +406,14 @@ function comboPersonalSecretaria()
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT
-            a.id,
-            CONCAT(a.first_name,' ',a.last_name) AS nombre
+            a . id,
+            CONCAT(a . first_name, ' ', a . last_name) AS nombre
             FROM
             qo_members a,qo_groups_has_members b
             WHERE
-                a.id = b.qo_members_id AND a.active = 1
+                a . id = b . qo_members_id AND a . active = 1
             ORDER BY
-                a.last_name ASC,a.first_name ASC";
+                a . last_name ASC,a . first_name ASC";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -416,7 +428,7 @@ function comboPersonalSecretaria()
 function comboPersonalOperativos()
 {
     global $os;
-    $todos = " AND (b.qo_groups_id = 8 OR b.qo_groups_id = 9 OR b.qo_groups_id = 1) ";
+    $todos = " AND (b . qo_groups_id = 8 OR b . qo_groups_id = 9 OR b . qo_groups_id = 1) ";
     if (isset($_POST['todos'])) {
         if ($_POST['todos'] == 'true') {
             $todos = "";
@@ -427,19 +439,19 @@ function comboPersonalOperativos()
 
         if ($_POST['accesosOperativos'] == 'true') {
             $id_user = $os->get_member_id();
-            $todos = $todos . " AND a.id = $id_user ";
+            $todos = $todos . " AND a . id = $id_user ";
         }
     }
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT DISTINCT a.id,
-            CONCAT(a.last_name,' ',a.first_name) AS nombre
+    $sql = "SELECT DISTINCT a . id,
+            CONCAT(a . last_name, ' ', a . first_name) AS nombre
             FROM
             qo_members a,qo_groups_has_members b
             WHERE
-                a.id = b.qo_members_id AND a.active = 1 $todos
+                a . id = b . qo_members_id AND a . active = 1 $todos
             ORDER BY
-                a.last_name ASC,a.first_name ASC";
+                a . last_name ASC,a . first_name ASC";
 
     $result = $os->db->conn->query($sql);
     $data = array();
@@ -455,7 +467,7 @@ function comboPersonalInstruccion()
 {
     global $os;
     $todos = '';
-/*    $todos = " AND (b.qo_groups_id = 8 OR b.qo_groups_id = 9 OR b.qo_groups_id = 1) ";
+/*    $todos = " AND (b . qo_groups_id = 8 OR b . qo_groups_id = 9 OR b . qo_groups_id = 1) ";
     if (isset($_POST['todos'])) {
         if ($_POST['todos'] == 'true') {
             $todos = "";
@@ -468,19 +480,19 @@ function comboPersonalInstruccion()
 
         if ($_POST['accesosOperativos'] == 'true') {
             $id_user = $os->get_member_id();
-            $todos = $todos . " AND a.id = $id_user ";
+            $todos = $todos . " AND a . id = $id_user ";
         }
     }
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT DISTINCT a.id,
-            CONCAT(a.last_name,' ',a.first_name) AS nombre
+    $sql = "SELECT DISTINCT a . id,
+            CONCAT(a . last_name, ' ', a . first_name) AS nombre
             FROM
             qo_members a,qo_groups_has_members b
             WHERE
-                a.id = b.qo_members_id AND a.active = 1 $todos
+                a . id = b . qo_members_id AND a . active = 1 $todos
             ORDER BY
-                a.last_name ASC,a.first_name ASC";
+                a . last_name ASC,a . first_name ASC";
 
     $result = $os->db->conn->query($sql);
     $data = array();
@@ -573,13 +585,13 @@ function comboUnidadesTotal()
     }*/
 
     $zonal_funcionario = $os->get_zonal_id();
-    //$sql = "SELECT amc_unidades.id, CONCAT(amc_unidades.nombre, 'SSSS') AS nombre FROM amc_unidades WHERE activo = 1 ORDER BY id";
+    //$sql = "SELECT amc_unidades . id, CONCAT(amc_unidades . nombre, 'SSSS') AS nombre FROM amc_unidades WHERE activo = 1 ORDER BY id";
     $sql = "SELECT
-                b.id, IF((SELECT COUNT(*) FROM amc_denuncias as  a WHERE a.reasignacion = b.id AND despacho_secretaria <> 'true' ) = 0,b.nombre,
-                (CONCAT(b.nombre, ' ( ',(SELECT COUNT(*) FROM amc_denuncias as  a WHERE a.reasignacion = b.id AND despacho_secretaria <> 'true' ), ' ) '))) AS nombre
+                b . id, IF ((SELECT COUNT(*) FROM amc_denuncias as  a WHERE a . reasignacion = b . id AND despacho_secretaria <> 'true' ) = 0,b . nombre,
+                (CONCAT(b . nombre, ' ( ', (SELECT COUNT(*) FROM amc_denuncias as  a WHERE a . reasignacion = b . id AND despacho_secretaria <> 'true' ), ' ) '))) AS nombre
                 FROM amc_unidades b
-                WHERE b.activo = 1 AND id_zonal = " . $zonal_funcionario ."
-                 ORDER BY b.id ";
+                WHERE b . activo = 1 AND id_zonal = " . $zonal_funcionario ."
+                 ORDER BY b . id ";
 
     $result = $os->db->conn->query($sql);
     $data = array();
@@ -612,7 +624,7 @@ function comboGuia()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id, CONCAT(numero,' / ' ,unidad) as nombre FROM amc_guias ORDER BY id DESC LIMIT 60";
+    $sql = "SELECT id, CONCAT(numero, ' / ', unidad) as nombre FROM amc_guias ORDER BY id DESC LIMIT 60";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -628,7 +640,7 @@ function comboPersonalInspeccion()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id, CONCAT(a.last_name,' ',a.first_name) AS nombre  FROM amc_personal WHERE active = 1  AND unidad = 3 ORDER BY id";
+    $sql = "SELECT id, CONCAT(a . last_name, ' ', a . first_name) AS nombre  FROM amc_personal WHERE active = 1 AND unidad = 3 ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -720,7 +732,7 @@ function comboRemitente()
     $os->db->conn->query("SET NAMES 'utf8'");
 
     // limito la busqueda a los ultimos 200 dias
-    $sql = "SELECT DISTINCT  remitente AS nombre FROM amc_denuncias WHERE length(remitente) > 0 AND recepcion_documento  > DATE_ADD(NOW(), INTERVAL -200 DAY)  ORDER BY remitente";
+    $sql = "SELECT DISTINCT  remitente AS nombre FROM amc_denuncias WHERE length(remitente) > 0 AND recepcion_documento > DATE_ADD(NOW(), INTERVAL - 200 DAY)  ORDER BY remitente";
 //    $sql = "SELECT DISTINCT  remitente AS nombre FROM amc_denuncias WHERE length(remitente) > 0   ORDER BY remitente";
     $result = $os->db->conn->query($sql);
     $data = array();
@@ -787,7 +799,7 @@ function comboPersonalDistributivo()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT CONCAT(last_name,' ',first_name) as nombre,id FROM qo_members WHERE active=1 ORDER BY last_name";
+    $sql = "SELECT CONCAT(last_name, ' ', first_name) as nombre,id FROM qo_members WHERE active = 1 ORDER BY last_name";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {

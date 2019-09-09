@@ -281,6 +281,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         }
                     });
 
+                    costCodeNuevo3 = rs.data['cost_code3'];
+                    storeGLCode.load({
+                        params: {
+                            costCodeNuevo3: costCodeNuevo3
+                        }
+                    });
+
                 }
             }
         });
@@ -2503,7 +2510,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 100,
                     hidden: false,
-                    editor: storeGLCode,
+                    editor: comboGLCode,
                     renderer: glcode
                 },
                 {
