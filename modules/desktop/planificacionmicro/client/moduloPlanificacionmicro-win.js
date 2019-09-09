@@ -127,6 +127,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {name: 'grant_number', allowBlank: true},
                 {name: 'estado', allowBlank: true},
                 {name: 'crn', allowBlank: true},
+                {name: 'fund', allowBlank: true},
                 {name: 'donor', allowBlank: true},
                 {name: 'comments', allowBlank: true},
                 {name: 'isc', allowBlank: true},
@@ -415,13 +416,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             //baseParams: {}
         });
 
-        var checkHandler = function (item, checked) {
-            if (checked) {
-                var store = this.storeModuloPlanificacionmicro;
-                store.baseParams.filterField = item.key;
-                searchFieldBtn.setText(item.text);
-            }
-        };
+        // var checkHandler = function (item, checked) {
+        //     if (checked) {
+        //         var store = this.storeModuloPlanificacionmicro;
+        //         store.baseParams.filterField = item.key;
+        //         searchFieldBtn.setText(item.text);
+        //     }
+        // };
 
         var checkHandlerPlanificacionmicro = function (item, checked) {
             if (checked) {
@@ -1653,6 +1654,22 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             //storeACTUALIZARFECHA.load();
         })
 
+        var checkHandler = function (item, checked) {
+            if (checked) {
+                var store = this.storeContribuciones;
+                store.baseParams.filterField = item.key;
+                searchFieldBtn.setText(item.text);
+            }
+        };
+
+        var targetHandler = function (item, checked) {
+            if (checked) {
+                //var store = this.storeContribuciones;
+                this.seleccionDepar = item.key;
+                this.targetFieldBtn.setText(item.text);
+            }
+        };
+
         var searchFieldBtn = new Ext.Button({
             menu: new Ext.menu.Menu({
                 items: [
@@ -1662,70 +1679,19 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         group: 'filterField',
                         key: 'grant_number',
                         scope: this,
-                        text: 'Grant Number'
+                        text: 'Any column'
                     }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'num_documento',
-                        scope: this,
-                        text: 'Número documento'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'remitente',
-                        scope: this,
-                        text: 'Remitente'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'recepcion_documento',
-                        scope: this,
-                        text: 'Fecha Ingreso'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'cedula',
-                        scope: this,
-                        text: 'Cédula'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'email',
-                        scope: this,
-                        text: 'Email'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'institucion',
-                        scope: this,
-                        text: 'Entidad'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'asunto',
-                        scope: this,
-                        text: 'Asunto'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandler,
-                        group: 'filterField',
-                        key: 'guia',
-                        scope: this,
-                        text: 'Guía'
-                    }
+                    // , {
+                    //     checked: false,
+                    //     checkHandler: checkHandler,
+                    //     group: 'filterField',
+                    //     key: 'num_documento',
+                    //     scope: this,
+                    //     text: 'Número documento'
+                    // }
                 ]
             })
-            , text: 'Código trámite'
+            , text: 'Any column'
         });
 
         var searchListadoInpeccionesBtn = new Ext.Button({
@@ -1858,12 +1824,14 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 100
                 },
-                // {
-                //     header: 'Fund',
-                //     dataIndex: 'fund',
-                //     sortable: true,
-                //     width: 28
-                // },
+                {
+                    header: 'Fund',
+                    dataIndex: 'fund',
+                    sortable: true,
+                    width: 80,
+                    editor: textField
+                    // renderer: personaReceptaDenuncia
+                },
                 {
                     header: 'Donor',
                     dataIndex: 'donor',
@@ -1966,7 +1934,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                             Ext.getCmp('gridDetallePlanificacionmicro').setVisible(true);
                         }
                         //
-                        Ext.getCmp('paso1').setTitle("Step 1 - Contributions - " + rec.data['grant_number']);
+                        Ext.getCmp('paso1').setTitle("Step 1 - Contributions - Grant number: " + rec.data['grant_number']);
                         Ext.getCmp('paso2').setTitle("Step 2 - Activities");
                         Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
@@ -2219,6 +2187,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         });
 
+
         // Inicio mantenimiento CostoMacro
         this.gridCostoMacro = new Ext.grid.EditorGridPanel({
             id: 'gridCostoMacro',
@@ -2241,7 +2210,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Cost Code Macro',
                     dataIndex: 'cost_code',
                     sortable: true,
-                    width: 300,
+                    width: 250,
                     // editor: comboCOSTPARENTDET,
                     renderer: costparentAdmDet
                 },
@@ -2289,7 +2258,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     renderer: 'usMoney',
                     // editor: textFieldDetalle
                 },
-                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 300},
+                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 200},
                 {
                     header: 'Total adjusted',
                     dataIndex: 'total_adjusted',
@@ -2303,27 +2272,21 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Register date',
                     dataIndex: 'fecha_registro',
                     hidden: false,
-                    width: 150,
+                    width: 100,
                     renderer: formatDate,
                     // editor: new Ext.ux.form.DateTimeField({
                     //     dateFormat: 'Y-m-d',
                     //     timeFormat: 'H:i:s'
                     // })
                 },
-
-                // {header: 'Total Grant V. I Quarter', dataIndex: 'total_grant_q1', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. II Quarter', dataIndex: 'total_grant_q2', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. III Quarter', dataIndex: 'total_grant_q3', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. IV Quarter', dataIndex: 'total_grant_q4', hidden: false, width: 140, editor: textFieldDetalle},
-                // {header: 'Total Grant V. DOC ', dataIndex: 'total_grant_prog_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant V. DSC', dataIndex: 'total_grant_prog_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total PR and PO - DOC', dataIndex: 'total_pr_po_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Actuals DOC', dataIndex: 'total_actuals_doc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant Value Balance DOC', dataIndex: 'total_balance_doc', hidden: false, width: 170, editor: textFieldDetalle},
-                // {header: 'Total PR and PO - DSC', dataIndex: 'total_pr_po_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Actuals DSC ', dataIndex: 'total_actuals_dsc', hidden: false, width: 130, editor: textFieldDetalle},
-                // {header: 'Total Grant Value Balance DSC', dataIndex: 'total_grant_balance_dsc', hidden: false, width: 170, editor: textFieldDetalle}
-            ],
+                {
+                    header: 'Total Micro',
+                    dataIndex: 'total_micro',
+                    hidden: false,
+                    width: 100,
+                    renderer: formatDate,
+                },
+                ],
             viewConfig: {
                 forceFit: false
             },
@@ -2495,7 +2458,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Cost Code nivel 2',
                     dataIndex: 'cost_code2',
                     sortable: true,
-                    width: 150,
+                    width: 100,
                     editor: comboCostCode2,
                     renderer: costCode2
                 },
@@ -2518,7 +2481,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Cost Code nivel 4',
                     dataIndex: 'cost_code4',
                     sortable: true,
-                    width: 150,
+                    width: 100,
                     editor: comboCostCode4,
                     renderer: costCode4
                 },
@@ -2650,6 +2613,106 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         //Fin ventana Planificacionmicro
 
+
+                        //Definición de url CRUD Payroll
+                        var proxyPayroll = new Ext.data.HttpProxy({
+                            api: {
+                                create: urlPlanificacionmicro + "crudPayroll.php?operation=insert",
+                                read: urlPlanificacionmicro + "crudPayroll.php?operation=select",
+                                update: urlPlanificacionmicro + "crudPayroll.php?operation=update",
+                                destroy: urlPlanificacionmicro + "crudPayroll.php?operation=delete"
+                            }
+                        });
+
+                        //Definición de lectura de campos bdd Costcategory
+                        var readerPayroll = new Ext.data.JsonReader({
+                            totalProperty: 'total',
+                            successProperty: 'success',
+                            messageProperty: 'message',
+                            idProperty: 'id',
+                            root: 'data',
+                            fields: [
+                                {name: 'id', allowBlank: false},
+                                {name: 'location', allowBlank: false},
+                                {name: 'hr-position', allowBlank: false},
+                                {name: 'grade', allowBlank: true},
+                                {name: 'index-no', allowBlank: true},
+                                {name: 'hr-position', allowBlank: true},
+                                {name: 'number-months', allowBlank: true},
+                                {name: 'number-staff', allowBlank: true},
+                                {name: 'monthly-cost-2019', allowBlank: true},
+                                {name: 'monthly-cost-2018', allowBlank: true},
+                                {name: 'expected-cost-2019', allowBlank: true},
+                                {name: 'without-increase', allowBlank: true},
+                                {name: 'increase-2', allowBlank: true},
+                                {name: 'increase-5', allowBlank: true},
+                                {name: 'program-validation', allowBlank: true}
+                            ]
+                        });
+
+                        //Definición de escritura en campos bdd Payroll
+                        var writerPayroll = new Ext.data.JsonWriter({
+                            encode: true,
+                            writeAllFields: true
+                        });
+
+                        //Definición de store para módulo Payroll
+                        this.storePayroll = new Ext.data.Store({
+                            id: "id",
+                            proxy: proxyPayroll,
+                            reader: readerPayroll,
+                            writer: writerPayroll,
+                            // autoSave: acceso, // dependiendo de si se tiene acceso para grabar
+                            remoteSort: true,
+                            autoSave: true,
+                            baseParams: {}
+                        });
+                        storePayroll = this.storePayroll;
+                        limitemantenimiento = 100;
+                        storePayroll.baseParams = {
+                            limit: limitemantenimiento
+                        };
+
+                        this.storePayroll.load();
+
+                //Inicio formato grid Payroll
+                this.gridPayroll = new Ext.grid.EditorGridPanel({
+                    height: winHeight/2,
+                    // width: winWidth,
+                    store: this.storePayroll,
+                    columns: [
+                        //Definición de campos bdd Costcategory
+                        new Ext.grid.RowNumberer()
+                        // ,{header: 'ID', dataIndex: 'id', sortable: true, width: 10}
+                        // ,{header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
+                        ,{
+                            header: 'HR Description',
+                            dataIndex: 'hr-position',
+                            sortable: true,
+                            width: 200,
+                            editor: textField
+                        }
+                        ,{header: 'Monthly cost 2018', dataIndex: 'monthly-cost-2018', sortable: true, width: 100}
+
+
+                    ],
+                    viewConfig: {
+                        forceFit: true
+                    },
+                    sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
+                    border: false,
+                    stripeRows: true,
+                    //Definición de barra de paginado
+                    bbar: new Ext.PagingToolbar({
+                        pageSize: limitemantenimiento,
+                        store: storePayroll,
+                        displayInfo: true,
+                        displayMsg: 'Showing: {0} - {1} of {2} - PMA',
+                        emptyMsg: "No data to be shown"
+                    })
+                });
+                //Fin formato grid Payroll
+
         //Creación variable ventana
         var win = desktop.getWindow('layout-win');
 
@@ -2690,7 +2753,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                 {
                                     region: 'east',
                                     id: 'east-panel',
-                                    title: 'Totales',
+                                    title: 'Totals',
                                     width: 300,
                                     minSize: 175,
                                     maxSize: 400,
@@ -2707,7 +2770,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                         columnWidth: 1,
                                         baseCls: 'x-plain',
                                         bodyStyle: 'padding:0 0 0 0',
-                                        items: [{}]
+                                        items: this.gridPayroll
                                     }]
                                 },
                                 {
@@ -2726,7 +2789,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                 text: 'New',
                                                 scope: this,
                                                 handler: this.addModuloPlanificacionmicro,
-                                                disabled: false,
+                                                disabled: true,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
@@ -2810,7 +2873,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                 text: 'New',
                                                 scope: this,
                                                 handler: this.addDetallePlanificacionmicro,
-                                                disabled: false,
+                                                disabled: true,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
@@ -2850,7 +2913,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                 text: 'New',
                                                 scope: this,
                                                 handler: this.addCostoMacro,
-                                                disabled: false,
+                                                disabled: true,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',

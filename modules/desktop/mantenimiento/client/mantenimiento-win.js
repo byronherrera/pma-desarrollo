@@ -171,6 +171,117 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             })
         });
         //Fin formato grid Costcategory
+
+
+                //Definición de url CRUD Payroll
+                var proxyPayroll = new Ext.data.HttpProxy({
+                    api: {
+                        create: urlMantenimiento + "crudPayroll.php?operation=insert",
+                        read: urlMantenimiento + "crudPayroll.php?operation=select",
+                        update: urlMantenimiento + "crudPayroll.php?operation=update",
+                        destroy: urlMantenimiento + "crudPayroll.php?operation=delete"
+                    }
+                });
+
+                //Definición de lectura de campos bdd Costcategory
+                var readerPayroll = new Ext.data.JsonReader({
+                    totalProperty: 'total',
+                    successProperty: 'success',
+                    messageProperty: 'message',
+                    idProperty: 'id',
+                    root: 'data',
+                    fields: [
+                        {name: 'id', allowBlank: false},
+                        {name: 'location', allowBlank: false},
+                        {name: 'hr-position', allowBlank: false},
+                        {name: 'grade', allowBlank: true},
+                        {name: 'index-no', allowBlank: true},
+                        {name: 'hr-position', allowBlank: true},
+                        {name: 'number-months', allowBlank: true},
+                        {name: 'number-staff', allowBlank: true},
+                        {name: 'monthly-cost-2019', allowBlank: true},
+                        {name: 'monthly-cost-2018', allowBlank: true},
+                        {name: 'expected-cost-2019', allowBlank: true},
+                        {name: 'without-increase', allowBlank: true},
+                        {name: 'increase-2', allowBlank: true},
+                        {name: 'increase-5', allowBlank: true},
+                        {name: 'program-validation', allowBlank: true}
+                    ]
+                });
+
+                //Definición de escritura en campos bdd Payroll
+                var writerPayroll = new Ext.data.JsonWriter({
+                    encode: true,
+                    writeAllFields: true
+                });
+
+                //Definición de store para módulo Payroll
+                this.storePayroll = new Ext.data.Store({
+                    id: "id",
+                    proxy: proxyPayroll,
+                    reader: readerPayroll,
+                    writer: writerPayroll,
+                    autoSave: acceso, // dependiendo de si se tiene acceso para grabar
+                    remoteSort: true,
+                    autoSave: true,
+                    baseParams: {}
+                });
+                storePayroll = this.storePayroll;
+                limitemantenimiento = 100;
+                storePayroll.baseParams = {
+                    limit: limitemantenimiento
+                };
+
+                this.storePayroll.load();
+
+        //Inicio formato grid Payroll
+        this.gridPayroll = new Ext.grid.EditorGridPanel({
+            height: '100%',
+            store: this.storePayroll,
+            columns: [
+                //Definición de campos bdd Costcategory
+                new Ext.grid.RowNumberer()
+                ,{header: 'ID', dataIndex: 'id', sortable: true, width: 10}
+                ,{header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
+                ,{header: 'Grade', dataIndex: 'grade', sortable: true, width: 100}
+                ,{header: 'Index-no', dataIndex: 'index-no', sortable: true, width: 100}
+                ,{
+                    header: 'HR Description',
+                    dataIndex: 'hr-position',
+                    sortable: true,
+                    width: 200,
+                    editor: textField
+                }
+                ,{header: 'Number months', dataIndex: 'number-months', sortable: true, width: 100}
+                ,{header: 'Number staff', dataIndex: 'number-staff', sortable: true, width: 100}
+                ,{header: 'Monthly cost 2019', dataIndex: 'monthly-cost-2019', sortable: true, width: 100}
+                ,{header: 'Monthly cost 2018', dataIndex: 'monthly-cost-2018', sortable: true, width: 100}
+                ,{header: 'Expected cost 2019', dataIndex: 'expected-cost-2019', sortable: true, width: 100}
+                ,{header: 'Without increase', dataIndex: 'without-increase', sortable: true, width: 100}
+                ,{header: 'Increase-2', dataIndex: 'increase-2', sortable: true, width: 100}
+                ,{header: 'Increase-5', dataIndex: 'increase-5', sortable: true, width: 100}
+                ,{header: 'Program Validation', dataIndex: 'program-validation', sortable: true, width: 100}
+
+
+            ],
+            viewConfig: {
+                forceFit: true
+            },
+            sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
+            border: false,
+            stripeRows: true,
+            //Definición de barra de paginado
+            bbar: new Ext.PagingToolbar({
+                pageSize: limitemantenimiento,
+                store: storePayroll,
+                displayInfo: true,
+                displayMsg: 'Showing: {0} - {1} of {2} - PMA',
+                emptyMsg: "No data to be shown"
+            })
+        });
+        //Fin formato grid Payroll
+
+
         //Definición de url CRUD
         var proxyOrdenanzas = new Ext.data.HttpProxy({
             api: {
@@ -961,6 +1072,43 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                             ]
                             //Llamado a función que arma la tabla de datos
                             , items: this.gridCostcategory
+                        },
+
+                        //Pestaña Payroll
+                        {
+                            autoScroll: true,
+                            title: 'Payroll',
+                            closable: true,
+                            layout: 'fit',
+                            height: winHeight - 65,
+                            //Barra de botones
+                            tbar: [
+                                //Definición de botón nuevo
+                                {
+                                    text: 'New',
+                                    scope: this,
+                                    handler: this.addPayroll,
+                                    iconCls: 'save-icon'
+                                },
+                                '-',
+                                {
+                                    //Definición de botón Delete
+                                    text: "Delete",
+                                    scope: this,
+                                    handler: this.deletePayroll,
+                                    iconCls: 'delete-icon'
+                                },
+                                '-',
+                                //Definición de botón regargar datos
+                                {
+                                    iconCls: 'reload-icon',
+                                    handler: this.requestGridDataPayroll,
+                                    scope: this,
+                                    text: 'Reload data'
+                                }
+                            ]
+                            //Llamado a función que arma la tabla de datos
+                            , items: this.gridPayroll
                         }
 
 

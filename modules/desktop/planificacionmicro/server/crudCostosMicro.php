@@ -7,6 +7,24 @@ if (!$os->session_exists()) {
     die('No existe sesión!');
 }
 
+function calcularTotal($id)
+{
+    // aca el calculo
+    global $os;
+
+    $sql = "SELECT SUM(total_after_adjust) as total  FROM pma_costos_micro where id = $id ";
+    $result = $os->db->conn->query($sql);
+    $total = 0;
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+
+        if (!is_null($row ['total']))
+        $total = $row ['total'];
+
+    }
+
+    return $total;
+};
+
 function selectDetalleInspecciones()
 {
     global $os;
@@ -31,6 +49,10 @@ function selectDetalleInspecciones()
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+      $total = calcularTotal($row['id']);
+      echo $total;
+      // echo $row['id'];
+      $row['total_micro'] = $total;
         $data[] = $row;
     }
     echo json_encode(array(
@@ -172,7 +194,6 @@ function updateDetalleInspecciones()
     $data = json_decode($_POST["data"]);
     // calculo el valor de total en base de amount - adjust
      $data->total_after_adjust = $data->total_micro + $data->adjust;
-
      // if (isset($data->despacho_secretaria)) {
     //     if (!$data->despacho_secretaria)
     //         $data->despacho_secretaria = 'false';

@@ -242,8 +242,8 @@ function updateDenuncias()
     //         }
     // }
 
-    if ($data->id_ordenanza == NULL)
-        unset($data->id_ordenanza);
+    // if ($data->id_ordenanza == NULL)
+    //     unset($data->id_ordenanza);
 
 
     // genero el listado de valores a insertar

@@ -2002,7 +2002,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                             group: 'filterField',
                             key: 'grant_number',
                             scope: this,
-                            text: 'Grant number'
+                            text: 'Any column'
                         },
                         // {
                         //     checked: false,
@@ -2020,58 +2020,9 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                         //     scope: this,
                         //     text: 'Remitente/ Denunciante'
                         // },
-                        // {
-                        //     checked: false,
-                        //     checkHandler: checkHandler,
-                        //     group: 'filterField',
-                        //     key: 'descripcion_anexos',
-                        //     scope: this,
-                        //     text: 'Descripcion Anexos'
-                        // }
-                        //
-                        // ,
-                        // {
-                        //     checked: false,
-                        //     checkHandler: checkHandler,
-                        //     group: 'filterField',
-                        //     key: 'recepcion_documento',
-                        //     scope: this,
-                        //     text: 'Fecha'
-                        // }, {
-                        //     checked: false,
-                        //     checkHandler: checkHandler,
-                        //     group: 'filterField',
-                        //     key: 'cedula',
-                        //     scope: this,
-                        //     text: 'Cédula'
-                        // },
-                        // {
-                        //     checked: false,
-                        //     checkHandler: checkHandler,
-                        //     group: 'filterField',
-                        //     key: 'guia',
-                        //     scope: this,
-                        //     text: 'Guía'
-                        // },
-                        // {
-                        //     checked: false,
-                        //     checkHandler: checkHandler,
-                        //     group: 'filterField',
-                        //     key: 'institucion',
-                        //     scope: this,
-                        //     text: 'Institución'
-                        // },
-                        // {
-                        //     checked: false,
-                        //     checkHandler: checkHandler,
-                        //     group: 'filterField',
-                        //     key: 'asunto',
-                        //     scope: this,
-                        //     text: 'Asunto'
-                        // }
                     ]
                 })
-                , text: 'Grant number'
+                , text: 'Any column'
             });
             var targetFieldBtn = new Ext.Button({
                 menu: new Ext.menu.Menu({
