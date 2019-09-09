@@ -295,6 +295,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {name: 'id_pma_costos_micro', allowBlank: true},
                 {name: 'cost_code2', allowBlank: true},
                 {name: 'cost_code3', allowBlank: true},
+                {name: 'glcode', allowBlank: true},
                 {name: 'cost_code4', allowBlank: true},
                 {name: 'cost_code5', allowBlank: true},
                 {name: 'description_micro', allowBlank: true},
@@ -601,6 +602,32 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
         }
         //fin combo costCode3
+
+        //inicio combo glcode
+        storeGLCode = new Ext.data.JsonStore({
+            root: 'data',
+            fields: ['id', 'description'],
+            autoLoad: true,
+            url: 'modules/common/combos/combos.php?tipo=glcode'
+        });
+
+        var comboGLCode = new Ext.form.ComboBox({
+            id: 'comboGLCode',
+            store: storeGLCode,
+            valueField: 'id',
+            displayField: 'description',
+            triggerAction: 'all',
+            mode: 'local'
+        });
+
+        function glcode(id) {
+            var index = storeGLCode.findExact('id', id);
+            if (index > -1) {
+                var record = storeGLCode.getAt(index);
+                return record.get('description');
+            }
+        }
+        //fin combo gl code
 
         //inicio combo costCode4
         storeCostCode4 = new Ext.data.JsonStore({
@@ -2475,7 +2502,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'glcode',
                     sortable: true,
                     width: 100,
-                    hidden: true
+                    hidden: false
                 },
                 {
                     header: 'Cost Code nivel 4',
@@ -2541,6 +2568,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     rowselect: function (sm, row, rec) {
                         //storePlanificacionmicrodetSimple.load({params: {filterField: 'guia', filterText: rec.get("numero")}})
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs- " + costCode2(rec.data['cost_code2']));
+                        rec.data['glcode']=rec.data['cost_code3']
                     }
                 }
             }),
@@ -2675,7 +2703,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
                         this.storePayroll.load();
 
-                //Inicio formato grid Payroll
                 this.gridPayroll = new Ext.grid.EditorGridPanel({
                     height: winHeight/2,
                     // width: winWidth,
@@ -3286,6 +3313,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         var planificacionmicro = new this.storePlanificacionmicrodet.recordType({
             cost_code2: 1,
             cost_code3: 1,
+            glcode: 1,
             cost_code4: 1,
             cost_code5: 1,
             description_micro: '',
