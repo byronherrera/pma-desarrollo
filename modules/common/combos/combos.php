@@ -150,6 +150,28 @@ function comboCostcode3()
     );
 }
 
+function comboGLCode()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    // if (isset($_POST['costCodeNuevo3']))
+    //     $where = " AND parent = " . $_POST['costCodeNuevo3'];
+    // else
+    //     $where = '';
+
+    // $costCodeNuevo2 =
+    $sql = "SELECT id, commitment_description FROM pma_gl_codes WHERE availability_type = 1 $where ORDER BY id";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
 function comboCostcode4()
 {
     global $os;
@@ -912,5 +934,8 @@ switch ($_GET['tipo']) {
         break;
     case 'costcode5' :
         comboCostcode5();
+        break;
+    case 'glcode' :
+        comboGLCode();
         break;
 }

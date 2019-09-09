@@ -606,7 +606,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //inicio combo glcode
         storeGLCode = new Ext.data.JsonStore({
             root: 'data',
-            fields: ['id', 'description'],
+            fields: ['id', 'commitment_description'],
             autoLoad: true,
             url: 'modules/common/combos/combos.php?tipo=glcode'
         });
@@ -615,7 +615,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             id: 'comboGLCode',
             store: storeGLCode,
             valueField: 'id',
-            displayField: 'description',
+            displayField: 'commitment_description',
             triggerAction: 'all',
             mode: 'local'
         });
@@ -624,7 +624,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             var index = storeGLCode.findExact('id', id);
             if (index > -1) {
                 var record = storeGLCode.getAt(index);
-                return record.get('description');
+                return record.get('commitment_description');
             }
         }
         //fin combo gl code
@@ -2502,7 +2502,9 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'glcode',
                     sortable: true,
                     width: 100,
-                    hidden: false
+                    hidden: false,
+                    editor: storeGLCode,
+                    renderer: glcode
                 },
                 {
                     header: 'Cost Code nivel 4',
@@ -2568,7 +2570,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     rowselect: function (sm, row, rec) {
                         //storePlanificacionmicrodetSimple.load({params: {filterField: 'guia', filterText: rec.get("numero")}})
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs- " + costCode2(rec.data['cost_code2']));
-                        rec.data['glcode']=rec.data['cost_code3']
+                        // rec.data['glcode']=rec.data['cost_code3']
                     }
                 }
             }),
