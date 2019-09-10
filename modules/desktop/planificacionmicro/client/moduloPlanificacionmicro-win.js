@@ -2578,6 +2578,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         //storePlanificacionmicrodetSimple.load({params: {filterField: 'guia', filterText: rec.get("numero")}})
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs- " + costCode2(rec.data['cost_code2']));
                         // rec.data['glcode']=rec.data['cost_code3']
+                        costCodeNuevo3 = row.data['cost_code3'];
+                        storeGLCode.load({
+                            params: {
+                                costCodeNuevo3: costCodeNuevo3
+                            }
+                        });
+
                     }
                 }
             }),
