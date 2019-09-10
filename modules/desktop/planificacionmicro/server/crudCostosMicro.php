@@ -50,7 +50,7 @@ function selectDetalleInspecciones()
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
       $total = calcularTotal($row['id']);
-      echo $total;
+
       // echo $row['id'];
       $row['total_micro'] = $total;
         $data[] = $row;
