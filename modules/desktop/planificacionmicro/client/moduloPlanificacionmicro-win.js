@@ -2496,7 +2496,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'glcode',
                     sortable: true,
                     width: 100,
-                    hidden: false,
+                    hidden: true,
                     editor: comboGLCode,
                     renderer: glcode
                 },
