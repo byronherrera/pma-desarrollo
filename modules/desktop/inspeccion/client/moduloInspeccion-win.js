@@ -360,6 +360,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 var record = storeActivities.getAt(index);
                 return record.get('subcategory_name');
             }
+
         }
 
         //fin combo ACTIVITIES
