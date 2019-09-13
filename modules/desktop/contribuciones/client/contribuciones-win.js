@@ -970,11 +970,11 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 28,
                     renderer: 'usMoney',
-                    editor: new Ext.form.NumberField({
-                        allowBlank: false,
-                        allowNegative: false,
-                        maxValue: 100000000
-                    }),
+                    // editor: new Ext.form.NumberField({
+                    //     allowBlank: false,
+                    //     allowNegative: false,
+                    //     maxValue: 100000000
+                    // }),
                     align: 'right'
                 },
                 {
@@ -983,11 +983,11 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 28,
                     renderer: 'usMoney',
-                    editor: new Ext.form.NumberField({
-                        allowBlank: false,
-                        allowNegative: false,
-                        maxValue: 100000000
-                    }),
+                    // editor: new Ext.form.NumberField({
+                    //     allowBlank: false,
+                    //     allowNegative: false,
+                    //     maxValue: 100000000
+                    // }),
                     align: 'right'
                 },
                 {
