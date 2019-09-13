@@ -1889,35 +1889,40 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'ISC',
                     dataIndex: 'isc',
                     sortable: true,
-                    width: 80
+                    width: 80,
+                    align: 'right'
                 },
                 {
                     header: 'Total Direct Cost',
                     dataIndex: 'total_grant',
                     sortable: true,
                     width: 100,
-                    renderer: 'usMoney'
+                    renderer: 'usMoney',
+                    align: 'right'
                 },
                 {
                     header: 'Total Contribution',
                     dataIndex: 'total_contribution',
                     sortable: true,
                     width: 100,
-                    renderer: 'usMoney'
+                    renderer: 'usMoney',
+                    align: 'right'
                 },
                 {
                     header: 'Total Programmed',
                     dataIndex: 'total_programmed',
                     sortable: true,
                     width: 100,
-                    renderer: 'usMoney'
+                    renderer: 'usMoney',
+                    align: 'right'
                 },
                 {
                     header: 'Unprogrammed',
                     dataIndex: 'total_unprogrammed',
                     sortable: true,
                     width: 80,
-                    renderer: 'usMoney'
+                    renderer: 'usMoney',
+                    align: 'right'
                 },
                 {
                     header: 'Grant TOD',
@@ -1937,13 +1942,15 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Grant Specific',
                     dataIndex: 'grant_specific',
                     sortable: true,
-                    width: 100
+                    width: 100,
+                    align: 'center'
                 },
                 {
                     header: 'Status',
                     dataIndex: 'estado',
                     sortable: true,
-                    width: 80
+                    width: 80,
+                    align: 'center'
                 },
                 {
                     header: 'Comments',
