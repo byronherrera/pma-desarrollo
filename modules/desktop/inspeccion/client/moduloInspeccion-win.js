@@ -336,27 +336,12 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         //fin combo COSTPARENTDET
 
         //inicio combo ACTIVITIES
-        // storeSO = new Ext.data.JsonStore({
-        //     root: 'data',
-        //     fields: ['id', 'category_name'],
-        //     autoLoad: true,
-        //     url: 'modules/common/combos/combos.php?tipo=so'
-        // });
+
         storeActivities = new Ext.data.JsonStore({
-            root: 'datos',
+            root: 'data',
             fields: ['id', 'subcategory_name'],
             autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 1, "subcategory_name": "Activity 1"},
-                    {"id": 2, "subcategory_name": "Activity 3"},
-                    {"id": 3, "subcategory_name": "Activity 4"},
-                    {"id": 4, "subcategory_name": "Activity 5"},
-                    {"id": 5, "subcategory_name": "Activity 6"},
-                    {"id": 6, "subcategory_name": "Activity 7"},
-                    {"id": 7, "subcategory_name": "Activity 8"}
-                ]
-            }
+            url: 'modules/common/combos/combos.php?tipo=activities'
         });
 
         var comboActivities = new Ext.form.ComboBox({
@@ -458,25 +443,13 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         //fin combo Status
 
         //inicio combo SO
-        // storeSO = new Ext.data.JsonStore({
-        //     root: 'data',
-        //     fields: ['id', 'category_name'],
-        //     autoLoad: true,
-        //     url: 'modules/common/combos/combos.php?tipo=so'
-        // });
         storeSO = new Ext.data.JsonStore({
-            root: 'datos',
+            root: 'data',
             fields: ['id', 'category_name'],
             autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 1, "category_name": "SO1"},
-                    {"id": 2, "category_name": "SO2"},
-                    {"id": 3, "category_name": "SO3"},
-                    {"id": 4, "category_name": "SO4"}
-                ]
-            }
+            url: 'modules/common/combos/combos.php?tipo=so'
         });
+
 
         var comboSO = new Ext.form.ComboBox({
             id: 'comboSO',
@@ -1273,18 +1246,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         //fin  combo denuncias ordenanza
 
-        //inicio combo reasignacion  REA
-        storeREA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre', 'orden'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=unidades',
-            remoteSort: true, //true for server sorting
-            sorters: [{
-                property: 'orden',
-                direction: 'ASC' // or 'ASC'
-            }],
-        });
 
         //inicio combo instituciones INST
         storeINST = new Ext.data.JsonStore({
@@ -1302,29 +1263,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             displayField: 'nombre',
             triggerAction: 'all',
             mode: 'local',
-            allowBlank: false
-        });
-
-
-        function departamentoReasignacion(id) {
-            var index = storeREA.find('id', id);
-            if (index > -1) {
-                var record = storeREA.getAt(index);
-                return record.get('nombre');
-            } else {
-                return ''
-            }
-
-        }
-
-        storeREA.sort('orden', 'ASC');
-        var comboREA = new Ext.form.ComboBox({
-            id: 'comboREA',
-            store: storeREA,
-            valueField: 'id',
-            displayField: 'nombre',
-            mode: 'local',
-            forceSelection: true,
             allowBlank: false
         });
 
@@ -1476,7 +1414,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'isc',
                     sortable: true,
                     width: 28,
-                    editor: textField
+                    editor: textField,
+                    align: 'right'
                     // renderer: personaReceptaDenuncia
                 },
                 {
@@ -1867,7 +1806,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     renderer: 'usMoney',
                     editor: textFieldDetalle, align: 'right'
                 },
-                {header: 'Total adjusted', dataIndex: 'total_adjusted',align: 'right', hidden: false, width: 100, renderer: 'usMoney'},
+                {
+                    header: 'Total adjusted',
+                    dataIndex: 'total_adjusted',
+                    align: 'right',
+                    hidden: false,
+                    width: 100,
+                    renderer: 'usMoney'
+                },
                 {header: 'Comment', dataIndex: 'comment', hidden: false, width: 150, editor: textFieldDetalle},
                 {
                     header: 'Register Date',
@@ -1958,7 +1904,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     editor: comboActivities,
                     renderer: costActivities
                 },
-                {header: 'Total macro', dataIndex: 'total',  renderer: 'usMoney', width: 100, align: 'right'}
+                {header: 'Total macro', dataIndex: 'total', renderer: 'usMoney', width: 100, align: 'right'}
             ],
             viewConfig: {
                 forceFit: false
@@ -2331,40 +2277,40 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                 region: 'center',
                                                 items: [
                                                     {
-                                                    tbar: [
-                                                        //Definición de botón nuevo
-                                                        {
-                                                            id: 'btnNuevoCostoMacro',
-                                                            text: 'New',
-                                                            scope: this,
-                                                            handler: this.addCostoMacro,
-                                                            disabled: false,
-                                                            iconCls: 'save-icon'
-                                                        },
-                                                        '-',
-                                                        //Definición de botón Delete
-                                                        {
-                                                            id: 'btnEliminarCostoMacro',
-                                                            text: "Eliminar",
-                                                            scope: this,
-                                                            handler: this.deleteCostoMacro,
-                                                            disabled: false,
-                                                            iconCls: 'delete-icon'
-                                                        },
-                                                        '-',
-                                                        //Definición de botón Reload data datos
-                                                        {
-                                                            id: 'btnRecargarDatosCostoMacro',
-                                                            iconCls: 'reload-icon',
-                                                            handler: this.requestGridDataCostoMacro,
-                                                            disabled: false,
-                                                            scope: this,
-                                                            text: 'Reload data'
-                                                        }
+                                                        tbar: [
+                                                            //Definición de botón nuevo
+                                                            {
+                                                                id: 'btnNuevoCostoMacro',
+                                                                text: 'New',
+                                                                scope: this,
+                                                                handler: this.addCostoMacro,
+                                                                disabled: false,
+                                                                iconCls: 'save-icon'
+                                                            },
+                                                            '-',
+                                                            //Definición de botón Delete
+                                                            {
+                                                                id: 'btnEliminarCostoMacro',
+                                                                text: "Eliminar",
+                                                                scope: this,
+                                                                handler: this.deleteCostoMacro,
+                                                                disabled: false,
+                                                                iconCls: 'delete-icon'
+                                                            },
+                                                            '-',
+                                                            //Definición de botón Reload data datos
+                                                            {
+                                                                id: 'btnRecargarDatosCostoMacro',
+                                                                iconCls: 'reload-icon',
+                                                                handler: this.requestGridDataCostoMacro,
+                                                                disabled: false,
+                                                                scope: this,
+                                                                text: 'Reload data'
+                                                            }
 
-                                                    ],
-                                                    items: this.gridCostoMacro
-                                                }]
+                                                        ],
+                                                        items: this.gridCostoMacro
+                                                    }]
 
 
                                             }]

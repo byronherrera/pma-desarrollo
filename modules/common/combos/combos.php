@@ -183,7 +183,6 @@ function comboGLCode()
             "data" => $data)
     );
 }
-
 function comboCostcode4()
 {
     global $os;
@@ -245,7 +244,7 @@ function comboActivities()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id,subcategory_name cost FROM pma_activities ORDER BY id";
+    $sql = "SELECT id,subcategory_name   FROM pma_activities ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -950,4 +949,5 @@ switch ($_GET['tipo']) {
     case 'glcode' :
         comboGLCode();
         break;
+
 }
