@@ -196,54 +196,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             writeAllFields: true
         });
 
-        //Definición de url CRUD
-        var proxyListadoInspeccion = new Ext.data.HttpProxy({
-            api: {
-                create: urlInspeccion + "crudListadoInspecciones.php?operation=insert",
-                read: urlInspeccion + "crudListadoInspecciones.php?operation=select",
-                update: urlInspeccion + "crudListadoInspecciones.php?operation=update",
-                destroy: urlInspeccion + "crudListadoInspecciones.php?operation=delete"
-            }
-        });
-
-        //Definición de lectura de campos bdd Inspeccion
-        var readerListadoInspeccion = new Ext.data.JsonReader({
-            successProperty: 'success',
-            messageProperty: 'message',
-            idProperty: 'id',
-            root: 'data',
-            fields: [
-                {name: 'codigo_tramite', readOnly: false, allowBlank: true},
-                {name: 'id_denuncia', readOnly: false, allowBlank: true},
-                {name: 'id_inspeccion', readOnly: false, allowBlank: true},
-                {name: 'nombre_denunciado', readOnly: false, allowBlank: true},
-                {name: 'fecha_despacho', type: 'date', dateFormat: 'c', allowBlank: true},
-                {name: 'id_actividad', readOnly: false, allowBlank: true},
-                {name: 'funcionario_entrega', readOnly: false, allowBlank: true},
-                {name: 'funcionario_reasignacion', readOnly: false, allowBlank: true},
-                {name: 'guia', readOnly: false, allowBlank: true},
-                {name: 'id_zona', readOnly: false, allowBlank: true},
-                {name: 'predio', readOnly: false, allowBlank: true},
-                {name: 'id_control_programado', readOnly: false, allow: true},
-                {name: 'id_motivo_acta', readOnly: false, allow: true},
-                {name: 'id_tipo_acta', readOnly: false, allow: true},
-                {name: 'id_acta', readOnly: false, allow: true},
-                {name: 'num_fojas', readOnly: false, allowBlank: true},
-                {name: 'acta_verificacion', readOnly: false, allowBlank: true},
-                {name: 'prioridad', readOnly: false, allowBlank: true},
-                {name: 'fecha_acta', type: 'date', dateFormat: 'c', allowBlank: true},
-                {name: 'inspeccion_finalizada', readOnly: false, allowBlank: true},
-                {name: 'infraccion', readOnly: false, allowBlank: true},
-                {name: 'observaciones', readOnly: false, allowBlank: true}
-
-            ]
-        });
-
-        //Definición de escritura en campos bdd Inspeccion
-        var writerListadoInspeccion = new Ext.data.JsonWriter({
-            encode: true,
-            writeAllFields: true
-        });
 
         //Definición de store para módulo Inspeccion
         this.storeModuloInspeccion = new Ext.data.Store({
@@ -279,14 +231,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             //baseParams: {}
         });
 
-        this.storeListadoInspeccion = new Ext.data.Store({
-            id: "id",
-            proxy: proxyListadoInspeccion,
-            reader: readerListadoInspeccion,
-            writer: writerListadoInspeccion,
-            autoSave: !accesosSupervision,
 
-        });
 
 
         var checkHandler = function (item, checked) {
@@ -297,16 +242,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             }
         };
 
-        var checkHandlerInspecciones = function (item, checked) {
-            if (checked) {
-                // if (todosInspectores == true) {
-                var store = this.storeListadoInspeccion;
 
-
-                store.baseParams.filterField = item.key;
-                searchListadoInpeccionesBtn.setText(item.text);
-            }
-        };
 
         //inicio combo COSTPARENTDET
         storeCOSTPARENTDET = new Ext.data.JsonStore({
@@ -544,27 +480,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         //fin combo Razon Devolucion
 
-        //inicio combo reasignacion  REATOT
-        storeREATOT = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=unidadestotal'
-        });
-
-
-        //inicio combo caracter del tramite CDT
-        storeCDT = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 1, "nombre": "Ordinario"},
-                    {"id": 2, "nombre": "Urgente"}
-                ]
-            }
-        });
 
         //inicio combo caracter del tramite CDT
         storePRIORIDAD = new Ext.data.JsonStore({
@@ -754,111 +669,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             }
         }
 
-        //inicio combo aprobación secretaría inspección
-        storeMOTIVOACTA = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 0, "nombre": "De oficio"},
-                    {"id": 1, "nombre": "Atención a trámite"},
-                    {"id": 2, "nombre": "Denuncia"},
-                    {"id": 3, "nombre": "Denuncia redes sociales"},
-                    {"id": 4, "nombre": "Operativo"},
-                    {"id": 5, "nombre": "Pedido del director"},
-                    {"id": 6, "nombre": "Pedido de instrucción"},
-                    {"id": 7, "nombre": "Pedido de resolución"},
-                ]
-            }
-        });
-
-        //inicio combo aprobación secretaría inspección
-        storeACTAVERIFICACION = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 0, "nombre": "Otro"},
-                    {"id": 1, "nombre": "Acta"},
-                    {"id": 2, "nombre": "Memo"},
-                    {"id": 3, "nombre": "Oficio"},
-                    {"id": 4, "nombre": "Informe"},
-                    {"id": 5, "nombre": "Guía"}
-                ]
-            }
-        });
-
-        var comboMOTIVOACTA = new Ext.form.ComboBox({
-            id: 'comboMOTIVOACTA',
-            store: storeMOTIVOACTA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-
-        var comboACTAVERIFICACION = new Ext.form.ComboBox({
-            id: 'comboACTAVERIFICACION',
-            store: storeACTAVERIFICACION,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-
-        function motivoActa(id) {
-            var index = storeMOTIVOACTA.find('id', id);
-            if (index > -1) {
-                var record = storeMOTIVOACTA.getAt(index);
-                return record.get('nombre');
-            } else {
-                return ''
-            }
-        }
-
-        function actaVerificacion(id) {
-            var index = storeACTAVERIFICACION.find('id', id);
-            if (index > -1) {
-                var record = storeACTAVERIFICACION.getAt(index);
-                return record.get('nombre');
-            } else {
-                return ''
-            }
-        }
 
 
-        //inicio combo unidad asignada Inspección
-        storeACTUALIZARFECHA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'fecha_asignacion'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=actualizar_fecha'
-        });
 
-        //inicio combo unidad asignada Inspección
-        storeFUNREA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=personal_distributivo'
-        });
-
-        //inicio combo activo
-
-        storeOFAC = new Ext.data.JsonStore({
-            root: 'users',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                users: [
-                    {"id": 'true', "nombre": "Si"},
-                    {"id": 'false', "nombre": "No"},
-                    {"id": '', "nombre": "No"}
-                ]
-            }
-        });
 
         //inicio combo Estado Recepcion Información Inspeccion ESREA
         storeESREA = new Ext.data.JsonStore({
@@ -874,205 +687,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             }
         });
 
-        //inicio combo actividad  ACTA
-        storeACTA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=depInspeccion'
-        });
-
-        //inicio combo ZONA
-        storeZONA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=zonas'
-        });
-
-        var comboZONA = new Ext.form.ComboBox({
-            id: 'comboZONA',
-            store: storeZONA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-        var comboZONA2 = new Ext.form.ComboBox({
-            id: 'comboZONA24',
-            store: storeZONA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            listeners: {
-                select: function (combo, record) {
-                    comboPARROQUIA.enable();			//step 2
-                    comboPARROQUIA.clearValue();		//step 3
-                    storePARROQUIA.load({			//step 4
-                        params: {
-                            id: record.get('id')	//step 5
-                        }
-                    });
-                }
-            }
-        });
-        var comboZONA3 = new Ext.form.ComboBox({
-            id: 'comboZONA3',
-            store: storeZONA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            listeners: {
-                select: function (combo, record) {
-                    comboPARROQUIA2.enable();			//step 2
-                    comboPARROQUIA2.clearValue();		//step 3
-                    storePARROQUIA.load({			//step 4
-                        params: {
-                            id: record.get('id')	//step 5
-                        }
-                    });
-                }
-            }
-        });
-
-        function zonaAdm(id) {
-            var index = storeZONA.find('id', id);
-            if (index > -1) {
-                var record = storeZONA.getAt(index);
-                return record.get('nombre');
-            }
-        }
-
-        //fin combo ZONA
-
-        //inicio combo PARROQUIA
-        storePARROQUIA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=parroquias'
-        });
-
-        this.storePARROQUIA = storePARROQUIA;
-
-        var comboPARROQUIA = new Ext.form.ComboBox({
-            id: 'comboPARROQUIA',
-            store: storePARROQUIA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            listeners: {
-                select: function (combo, record) {
-                    comboSECTORES.enable();			//step 2
-                    comboSECTORES.clearValue();		//step 3
-                    storeSECTORES.load({			//step 4
-                        params: {
-                            id: record.get('id')	//step 5
-                        }
-                    });
-                }
-            }
-        });
-
-        var comboPARROQUIA2 = new Ext.form.ComboBox({
-            id: 'comboPARROQUIA2',
-            store: storePARROQUIA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            listeners: {
-                select: function (combo, record) {
-                    comboSECTORES2.enable();			//step 2
-                    comboSECTORES2.clearValue();		//step 3
-                    storeSECTORES.load({			//step 4
-                        params: {
-                            id: record.get('id')	//step 5
-                        }
-                    });
-                }
-            }
-        });
 
 
-        function parroquiaAdm(id) {
-            var index = storePARROQUIA.findExact('id', id);
-            if (index > -1) {
-                var record = storePARROQUIA.getAt(index);
-                return record.get('nombre');
-            }
-        }
-
-        //fin combo
-
-        //inicio combo SECTORES
-        storeSECTORES = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=sectores'
-        });
-
-        var comboSECTORES = new Ext.form.ComboBox({
-            id: 'comboSECTORES',
-            store: storeSECTORES,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
 
 
-        var comboSECTORES2 = new Ext.form.ComboBox({
-            id: 'comboSECTORES2',
-            store: storeSECTORES,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-
-        function sectoresAdm(id) {
-            var index = storeSECTORES.findExact('id', id);
-            if (index > -1) {
-                var record = storeSECTORES.getAt(index);
-                return record.get('nombre');
-            }
-        }
-
-        //fin combo
-
-
-        //inicio combo denuncias ordenanza DETIORD
-        storeINSPORD = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=ordenanzas'
-        });
-
-        var comboINSPORD = new Ext.form.ComboBox({
-            id: 'comboINSPORD',
-            store: storeINSPORD,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            //forceSelection: true,
-            //allowBlank: false
-        });
-
-        var comboCDT = new Ext.form.ComboBox({
-            id: 'comboCDT',
-            store: storeCDT,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
 
         var comboPRIORIDAD = new Ext.form.ComboBox({
             id: 'comboPRIORIDAD',
@@ -1195,7 +813,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 return record.get('nombre');
             }
         }
-
+/*
         function caracterTramite(id) {
             var index = storeCDT.find('id', id);
             if (index > -1) {
@@ -1208,7 +826,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 }
             }
         }
-
+*/
         function prioridad(id) {
             var index = storePRIORIDAD.find('id', id);
             if (index > -1) {
@@ -1248,46 +866,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         //fin  combo denuncias ordenanza
 
 
-        //inicio combo instituciones INST
-        storeINST = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=instituciones'
-
-        });
-
-        var comboINST = new Ext.form.ComboBox({
-            id: 'comboINST',
-            store: storeINST,
-            valueField: 'nombre',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            allowBlank: false
-        });
-
-
-        storeFUNREA.sort('orden', 'ASC');
-        var comboFUNREA = new Ext.form.ComboBox({
-            id: 'comboFUNREA',
-            store: storeFUNREA,
-            valueField: 'id',
-            displayField: 'nombre',
-            //mode: 'local',
-            forceSelection: false,
-            triggerAction: 'all',
-            allowBlank: true
-        });
-
-
-        function tipoFuncionarioReasignacion(id) {
-            var index = storeFUNREA.find('id', id);
-            if (index > -1) {
-                var record = storeFUNREA.getAt(index);
-                return record.get('nombre');
-            }
-        }
 
 
         var searchFieldBtn = new Ext.Button({
@@ -1307,47 +885,13 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             , text: 'All columns'
         });
 
-        var searchListadoInpeccionesBtn = new Ext.Button({
-            menu: new Ext.menu.Menu({
-                items: [
-                    {
-                        checked: true,
-                        checkHandler: checkHandlerInspecciones,
-                        group: 'filterField',
-                        key: 'all_columns',
-                        scope: this,
-                        text: 'All columns'
-                    }
-                ]
-            })
-            , text: 'All columns'
-        });
 
-        var searchInspeccionesBtn = new Ext.Button({
-            menu: new Ext.menu.Menu({
-                items: [
-                    {
-                        checked: true,
-                        checkHandler: checkHandlerInspecciones,
-                        group: 'filterField',
-                        key: 'id_inspeccion',
-                        scope: this,
-                        text: 'All columns'
-                    }
-                ]
-            })
-            , text: 'All columns'
-        });
 
-        this.storeModuloInspeccion.load();
-        //this.storeDetalleInspeccion.load();
-        // this.storeCostoMacro.load();
 
-        // if (todosInspectores == true) {
-        this.storeListadoInspeccion.load();
-        // } else {
-        // this.storeListadoTodosInspectores.load();
-        // }
+
+       // this.storeModuloInspeccion.load();
+
+
 
         storeModuloInspeccion = this.storeModuloInspeccion;
         limiteModuloInspeccion = 100;
@@ -1375,14 +919,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     header: 'Grant Number',
                     dataIndex: 'grant_number',
                     sortable: true,
-                    width: 38,
+                    width: 30,
                     editor: textField
                 },
                 {
                     header: 'CRN',
                     dataIndex: 'crn',
                     sortable: true,
-                    width: 28,
+                    width: 35,
                     editor: textField
                     // renderer: personaReceptaDenuncia
                 },
@@ -1398,7 +942,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     header: 'Donor',
                     dataIndex: 'donor',
                     sortable: true,
-                    width: 28,
+                    width: 30,
                     editor: textField
                     // renderer: personaReceptaDenuncia
                 },
@@ -1406,15 +950,16 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     header: 'Year',
                     dataIndex: 'year_contribution',
                     sortable: true,
-                    width: 20,
-                    editor: textField
+                    width: 15,
+                    editor: textField,
+                    align: 'center'
                     // renderer: personaReceptaDenuncia
                 },
                 {
                     header: 'ISC',
                     dataIndex: 'isc',
                     sortable: true,
-                    width: 28,
+                    width: 20,
                     editor: textField,
                     align: 'right'
                     // renderer: personaReceptaDenuncia
@@ -1466,7 +1011,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     renderer: Ext.util.Format.dateRenderer('Y-m-d'),
                     editor: new Ext.form.DateField({
                         format: 'Y-m-d'
-                    })
+                    }),
+                    align: 'center'
                 },
                 {
                     header: 'Grant TDD',
@@ -1476,7 +1022,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     renderer: Ext.util.Format.dateRenderer('Y-m-d'),
                     editor: new Ext.form.DateField({
                         format: 'Y-m-d'
-                    })
+                    }),
+                    align: 'center'
                 },
                 {
                     header: 'Grant Specific',
@@ -1521,8 +1068,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         if (creacionDatosInspeccion) {
                             Ext.getCmp('btnNuevoDetalleInspeccion').setDisabled(false);
                             Ext.getCmp('btnEliminarDetalleInspeccion').setDisabled(false);
-                            // Ext.getCmp('checkTodasInspecciones').setValue(false);
-                            // Ext.getCmp('gridDetalleTodasInspecciones').setVisible(false);
                             Ext.getCmp('gridDetalleInspeccion').setVisible(true);
                         }
                     }
@@ -1540,230 +1085,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             })
         });
         //Fin formato grid Inspeccion
-
-        //inicio mantenimiento InspeccionActa
-        var proxyInspeccionActa = new Ext.data.HttpProxy({
-            api: {
-                create: urlInspeccion + "crudInspeccionActa.php?operation=insert",
-                read: urlInspeccion + "crudInspeccionActa.php?operation=select",
-                update: urlInspeccion + "crudInspeccionActa.php?operation=update",
-                destroy: urlInspeccion + "crudInspeccionActa.php?operation=delete"
-            }
-        });
-
-        var readerInspeccionActa = new Ext.data.JsonReader({
-            successProperty: 'success',
-            messageProperty: 'message',
-            idProperty: 'id',
-            root: 'data',
-            fields: [
-                {name: 'id', allowBlank: false},
-                {name: 'numero', allowBlank: false},
-                {name: 'unidad', allowBlank: false},
-                {name: 'id_member', allowBlank: false},
-                {name: 'creado', allowBlank: false}
-            ]
-        });
-
-        var writerInspeccionActa = new Ext.data.JsonWriter({
-            encode: true,
-            writeAllFields: true
-        });
-
-        this.storeInspeccionActa = new Ext.data.Store({
-            id: "id",
-            proxy: proxyInspeccionActa,
-            reader: readerInspeccionActa,
-            writer: writerInspeccionActa,
-            autoSave: true
-        });
-        this.storeInspeccionActa.load();
-
-        this.gridInspeccionActa = new Ext.grid.EditorGridPanel({
-            id: 'gridInspeccionActa',
-            xtype: "grid",
-            height: 200,
-            store: this.storeInspeccionActa,
-            columns: [
-                new Ext.grid.RowNumberer(),
-                {
-                    header: 'id',
-                    dataIndex: 'id',
-                    sortable: true,
-                    width: 5
-                }, {
-                    header: 'Número',
-                    dataIndex: 'numero',
-                    sortable: true,
-                    width: 30
-                },
-                {
-                    header: 'Unidad Enviada',
-                    dataIndex: 'unidad',
-                    sortable: true,
-                    width: 40
-                },
-                {
-                    header: 'Fecha',
-                    dataIndex: 'creado',
-                    sortable: true,
-                    width: 30
-                },
-                {
-                    header: 'Encargado',
-                    dataIndex: 'id_member',
-                    sortable: true,
-                    width: 40
-                }
-            ],
-            viewConfig: {forceFit: true},
-            sm: new Ext.grid.RowSelectionModel({
-                singleSelect: false,
-                listeners: {
-                    rowselect: function (sm, row, rec) {
-                        storeInspeccionActaSimple.load({params: {filterField: 'guia', filterText: rec.get("numero")}})
-                    }
-                }
-            }),
-            border: false,
-            stripeRows: true,
-            bbar: new Ext.PagingToolbar({
-                pageSize: 100,
-                store: this.storeInspeccionActa,
-                displayInfo: true,
-                displayMsg: 'Mostrando actas {0} - {1} de {2} PMA',
-                emptyMsg: "No existen nada  que mostrar"
-            }),
-        });
-
-        //fin mantenimiento InspeccionActa
-
-
-        // Inicio mantenimiento InspeccionActa simple
-        this.storeInspeccionActaSimple = new Ext.data.Store({
-            id: "id",
-            proxy: proxyDetalleInspeccion,
-            reader: readerDetalleInspeccion,
-            writer: writerDetalleInspeccion,
-            autoSave: accesosSupervision, // dependiendo de si se tiene acceso para grabar
-            remoteSort: true
-        });
-        storeInspeccionActaSimple = this.storeInspeccionActaSimple
-        this.gridInspeccionActaSimple = new Ext.grid.EditorGridPanel({
-            autoHeight: true,
-            autoScroll: true,
-            height: 100,
-            store: this.storeInspeccionActaSimple,
-            columns: [
-                new Ext.grid.RowNumberer(),
-                {header: 'Código trámite', dataIndex: 'id_denuncia', hidden: true},
-                {header: 'Cod. inspección', dataIndex: 'id_inspeccion', sortable: true, width: 90},
-                //{header: 'Codificacion', dataIndex: 'codificacion', sortable: true, width: 200, editor: textFieldDetalle, autoSave:true},
-                {
-                    header: 'Codificacion',
-                    dataIndex: 'id_actividad',
-                    sortable: true,
-                    width: 140,
-
-                },
-                {
-                    header: 'Nombre denunciado',
-                    dataIndex: 'nombre_denunciado',
-                    sortable: true,
-                    width: 180,
-                },
-                {
-                    header: 'Zonal', dataIndex: 'id_zona', sortable: true, width: 120,
-                    renderer: zonaAdm
-                },
-                {header: 'Predio', dataIndex: 'predio', sortable: true, width: 150},
-                {
-                    header: 'Inspector',
-                    dataIndex: 'funcionario_entrega',
-                    sortable: true,
-                    width: 200
-                },
-                {
-                    header: 'Fecha asignación',
-                    dataIndex: 'fecha_asignacion',
-                    sortable: true,
-                    width: 120,
-                    allowBlank: true
-                    ,
-                    renderer: formatDate
-                },
-                {
-                    header: 'Funcionario Reasignación',
-                    dataIndex: 'funcionario_reasignacion',
-                    sortable: true,
-                    width: 200,
-                    renderer: tipoFuncionarioReasignacion
-                },
-                {header: 'Guia', dataIndex: 'guia', sortable: true, width: 100},
-                {header: 'Sumilla DMI', dataIndex: 'fecha_despacho', sortable: true, width: 120, allowBlank: true},
-                //{header: 'Acta', dataIndex: 'id_acta', sortable: true, width: 100 },
-                {
-                    header: 'Prioridad', dataIndex: 'prioridad', sortable: true, width: 100,
-                    renderer: prioridad
-                },
-                {
-                    header: 'Fecha memo/oficio',
-                    dataIndex: 'fecha_memo_oficio',
-                    sortable: true,
-                    width: 150,
-                    allowBlank: true
-                    ,
-                    renderer: formatDate
-                },
-                {
-                    header: 'Num memo/oficio',
-                    dataIndex: 'numero_memo_oficio',
-                    sortable: true,
-                    width: 150
-                },
-                {
-                    header: 'Cargo (enviado)',
-                    dataIndex: 'cargo_enviado',
-                    sortable: true,
-                    width: 150
-                },
-                {
-                    header: 'Institución recibe',
-                    dataIndex: 'institucion_recibe',
-                    sortable: true,
-                    width: 150
-                },
-                {header: 'Num acta', dataIndex: 'numero_acta', sortable: true, width: 150, editor: textFieldDetalle},
-                {
-                    header: 'Num informe',
-                    dataIndex: 'numero_informe',
-                    sortable: true,
-                    width: 150
-                },
-
-                {header: 'Infraccion', dataIndex: 'infraccion', sortable: true, width: 150},
-                {
-                    header: 'Observaciones',
-                    dataIndex: 'observaciones',
-                    sortable: true,
-                    width: 150
-                }
-            ],
-
-            viewConfig: {
-                forceFit: true
-            },
-            sm: new Ext.grid.RowSelectionModel(
-                {
-                    singleSelect: true
-                }),
-            border: false,
-            stripeRows: true,
-            // paging bar on the bottom
-
-        });
-        // Inicio mantenimiento InspeccionActa simple
-
 
         this.gridCostoMacro = new Ext.grid.EditorGridPanel({
             id: 'gridCostoMacro',
@@ -1790,7 +1111,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     editor: comboCOSTPARENTDET,
                     renderer: costparentAdmDet
                 },
-                // {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
                 {
                     header: 'Amount Programmed',
                     dataIndex: 'total',
@@ -1959,7 +1279,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         //Fin formato grid detalle inspeccion
 
-        this.tree = new Ext.ux.tree.TreeGrid({
+     /*   this.tree = new Ext.ux.tree.TreeGrid({
             title: 'Core Team Projects',
             width: 500,
             height: winHeight * 0.42,
@@ -1993,67 +1313,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 width: 150,
                 dataIndex: 'cost'
             }],
-
             dataUrl: urlInspeccion + 'treegrid-data.php'
         });
-
-
-        //Inicio pestaña inspecciones
-        this.gridListadoInspeccion = new Ext.grid.EditorGridPanel({
-            id: 'gridListadoInspeccion',
-            //Calculo de tamaño vertical frame inferior de pestaña Inspecciones
-            height: winHeight * 0.85,
-            //Calculo de tamaño vertical frame inferior de pestaña Inspecciones
-            width: winWidth * 0.99,
-            //readOnly: accesosSupervision,
-            store: this.storeListadoInspeccion,
-            columns: [
-                new Ext.grid.RowNumberer(),
-                {header: 'Total Grant Value Programmed I Quarter', dataIndex: 'total_grant_q1', hidden: true},
-                {header: 'Total Grant Value Programmed II Quarter', dataIndex: 'total_grant_q2', hidden: true},
-                {header: 'Total Grant Value Programmed III Quarter', dataIndex: 'total_grant_q3', hidden: true},
-                {header: 'Total Grant Value Programmed IV Quarter', dataIndex: 'total_grant_q4', hidden: true},
-                {header: 'Total Grant Value Programmed DOC ', dataIndex: 'total_grant_prog_doc', hidden: true},
-                {header: 'Total Grant Value Programmed DSC', dataIndex: 'total_grant_prog_dsc', hidden: true},
-                {header: 'Total PR and PO linked to programmed amount DOC', dataIndex: 'total_pr_po_doc', hidden: true},
-                {header: 'Total Actuals DOC', dataIndex: 'total_actuals_doc', hidden: true},
-                {
-                    header: 'Total Grant Value Balance DOC (programmed -actuals - PR - PO)',
-                    dataIndex: 'total_balance_doc',
-                    hidden: true
-                },
-                {header: 'Total PR and PO linked to programmed amount DSC', dataIndex: 'total_pr_po_dsc', hidden: true},
-                {header: 'Total Actuals DSC ', dataIndex: 'total_actuals_dsc', hidden: true},
-                {
-                    header: 'Total Grant Value Balance DSC (programmed -actuals - PR - PO)',
-                    dataIndex: 'total_grant_balance_dsc',
-                    hidden: true
-                }
-
-            ],
-            viewConfig: {
-                forceFit: false
-            },
-            sm: new Ext.grid.RowSelectionModel(
-                {
-                    singleSelect: true
-                }
-            ),
-            border: false,
-            stripeRows: true,
-            //Definición de barra de paginado
-            bbar: new Ext.PagingToolbar({
-                pageSize: limiteModuloInspeccion,
-                store: this.storeListadoInspeccion,
-                displayInfo: true,
-                displayMsg: 'Mostrando trámites: {0} - {1} de {2} - PMA',
-                emptyMsg: "Seleccione un trámite"
-            })
-        });
-
-        //Fin ventana Inspeccion
-
-        //Creación variable ventana
+*/
+         //Creación variable ventana
         var win = desktop.getWindow('layout-win');
 
         if (!win) {
@@ -2137,7 +1400,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                         storeModuloInspeccion.baseParams = {
                                             pendientesAprobar: isChecked
                                         };
-                                        storeModuloInspeccion.load();
+
                                         // if (!this.checked) {
                                         //Ext.getCmp('tb_seleccionarUnidad').setValue('Seleccionar Unidad');
                                         //}
@@ -2431,7 +1694,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     pendientesAprobar: isChecked
                 }
             });
-        }, 1500);
+        },  500);
     },
 
     //Función para eliminación de registros de Inspeccion
@@ -2465,27 +1728,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             year_contribution: (new Date().getFullYear()),
             // isc: ' ',
             total_grant: 0,
-            total_programmed: 0,
-            // total_unprogrammed: 0,
-            // grant_tod: (new Date()),
-            // grant_tdd: (new Date()),
-            // grant_specific: ' ',
-            // comments: ' ',
-            // estado: ' ',
+            total_programmed: 0
 
-            // codigo_tramite: '',
-            // recepción_documento: '',
-            // //id_ordenanza: '0',
-            // id_tipo_documento: '40',
-            // num_documento: 's/n',
-            // remitente: ' ',
-            // //cedula: '',
-            // //email: '',
-            // //institucion: '',
-            // //asunto: '',
-            // id_caracter_tramite: '1',
-            // cantidad_fojas: '0',
-            // procesado_inspeccion: '1'
         });
         this.gridModuloInspeccion.stopEditing();
         this.storeModuloInspeccion.insert(0, inspeccion);
@@ -2497,7 +1741,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         this.storeModuloInspeccion.load();
     },
 
-    f1: function () {
+   /* f1: function () {
         var format;
         format = SerializationMode.TabDelimited;
         //var s = Ext.getCmp('gridListadoTodosInspectores').store.serializeData(format);
@@ -2506,12 +1750,12 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             window.clipboardData.setData('text', s);
         else
             return (s);
-    },
+    },*/
     //Función para actualizar los datos mostrados en pantalla de la pestaña de ModuloInspeccion
-    requestGridDataDenunciasActa: function () {
+/*    requestGridDataDenunciasActa: function () {
 
         this.storeInspeccionActa.load();
-    },
+    },*/
 
     //Función para eliminación de registros de Inspeccion
     deleteDetalleInspeccion: function () {
@@ -2650,7 +1894,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
 
     // bh boton generar nueva guía
-    botonGenerarActa: function () {
+   /* botonGenerarActa: function () {
         Ext.Msg.show({
             title: 'Advertencia',
             msg: 'Descargar acta<br>El estado del trámite será actualizado.<br>¿Desea continuar?',
@@ -2668,7 +1912,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             }
         });
     },
-
+*/
 
     // bh boton migrar informacion wings
     botonImportarWings: function () {
@@ -2692,8 +1936,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                             //params: {data: selectOperativos},
                             success: function (fp, o) {
 
-                                //   storeModuloInspeccion.load();
-                                //storeOperativosImagenes.load({params: {id_operativo: selectPlanificaion}});
+
                                 Ext.getCmp('fp').getForm().reset();
                             },
                             failure: function (form, action) {
@@ -2717,7 +1960,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
     // bh boton generar nueva guía
     // ?reimpresion=true&guia=' + rows[0].get('id')
-    botonImprimirActa: function () {
+    /*botonImprimirActa: function () {
         // recuperamos registro seleccionado de datagrid denunciaguia
         var rows = this.gridInspeccionActa.getSelectionModel().getSelections();
         //validamos si existe seleccion  y mensaje error
@@ -2731,10 +1974,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             return false;
         }
         window.location.href = 'modules/desktop/inspeccion/server/generarNuevasGuias.php?reimpresion=true&guia=' + rows[0].get('id');
-    },
+    },*/
 
     //bh boton generar nueva guía
-    botonGenerarHojaRuta: function () {
+    /*botonGenerarHojaRuta: function () {
         Ext.Msg.show({
             title: 'Advertencia',
             msg: 'Descargar hoja de ruta<br>El estado de la inspección será actualizado.<br>¿Desea continuar?',
@@ -2744,14 +1987,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             fn: function (btn) {
                 if (btn === 'yes') {
                     window.location.href = 'modules/desktop/inspeccion/server/generarHojaRuta.php';
-                    /*setTimeout(function () {
+                    /!*setTimeout(function () {
                         AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
                         storeModuloInspeccion.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
                     }, 1500);
-                    */
+                    *!/
                 }
             }
         });
-    }
+    }*/
 
 });
