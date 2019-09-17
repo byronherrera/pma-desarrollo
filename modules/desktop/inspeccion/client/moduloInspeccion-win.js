@@ -314,8 +314,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             autoLoad: true,
             data: {
                 datos: [
-                    {"id": 1, "subcategory_name": "Si"},
-                    {"id": 2, "subcategory_name": "No"}
+                    {"id": 'Si', "subcategory_name": "Si"},
+                    {"id": 'No', "subcategory_name": "No"}
                 ]
             }
         });
@@ -353,8 +353,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             autoLoad: true,
             data: {
                 datos: [
-                    {"id": 1, "subcategory_name": "Vigente"},
-                    {"id": 2, "subcategory_name": "Cerrada"}
+                    {"id": 'Vigente', "subcategory_name": "Vigente"},
+                    {"id": 'Cerrada', "subcategory_name": "Cerrada"}
                 ]
             }
         });
