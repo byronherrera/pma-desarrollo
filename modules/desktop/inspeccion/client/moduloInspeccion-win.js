@@ -314,7 +314,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             autoLoad: true,
             data: {
                 datos: [
-                    {"id": 'Si', "subcategory_name": "Si"},
+                    {"id": 'Yes', "subcategory_name": "Yes"},
                     {"id": 'No', "subcategory_name": "No"}
                 ]
             }
@@ -1064,12 +1064,15 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
                         contribucionSeleccionada = rec.id;
                         inspeccionSeleccionada = rec.id_denuncia;
+
                         //storeDetalleInspeccion.load({params: {filterText: rec.data.codigo_tramite}});
                         if (creacionDatosInspeccion) {
                             Ext.getCmp('btnNuevoDetalleInspeccion').setDisabled(false);
                             Ext.getCmp('btnEliminarDetalleInspeccion').setDisabled(false);
                             Ext.getCmp('gridDetalleInspeccion').setVisible(true);
                         }
+                        //
+                        storeCostoMacro.load({params: {id: 0}});
                     }
                 }
             }),
@@ -1781,26 +1784,12 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addDetalleInspeccion: function () {
         var inspeccion = new this.storeDetalleInspeccion.recordType({
-            year: '',
+            year: (new Date().getFullYear()),
             so: 1,
             activity: 1,
             id_cost: '',
             id_pma_contribuciones_detalle: selectContribuciones,
-            //category_name: '',
-            total: 0,
-            // total_grant_q1: '0',
-            // total_grant_q2: '0',
-            // total_grant_q3: '0',
-            // total_grant_q4: '0',
-            // total_grant_prog_doc: '0',
-            // total_grant_prog_dsc: '0',
-            // total_pr_po_doc: '0',
-            // total_actuals_doc: '0',
-            // total_balance_doc: '0',
-            // total_pr_po_dsc: '0',
-            // total_actuals_dsc: '0',
-            // total_grant_balance_dsc: '0',
-
+            total: 0
         });
         this.gridDetalleInspeccion.stopEditing();
         this.storeDetalleInspeccion.insert(0, inspeccion);

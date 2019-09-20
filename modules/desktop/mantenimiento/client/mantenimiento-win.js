@@ -237,8 +237,11 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 this.storePayroll.load();
 
         //Inicio formato grid Payroll
+        var winWidth = desktop.getWinWidth();
+        var winHeight = desktop.getWinHeight();
+
         this.gridPayroll = new Ext.grid.EditorGridPanel({
-            height: '100%',
+            height:  winHeight - 124,
             store: this.storePayroll,
             columns: [
                 //Definición de campos bdd Costcategory
@@ -346,7 +349,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
 
         //Inicio formato grid Payroll
         this.gridDetailPayroll = new Ext.grid.EditorGridPanel({
-            height: '100%',
+            height:  winHeight - 124,
             store: this.storeDetailPayroll,
             columns: [
                 //Definición de campos bdd Costcategory
@@ -715,8 +718,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
 
         if (!win) {
             //Creación variables de tamaño vertical y horizontal en función del espacio utilizado por el browser en la pantalla
-            var winWidth = desktop.getWinWidth();
-            var winHeight = desktop.getWinHeight();
+
             //this.seleccionDepar = 3;
             var checkHandler = function (item, checked) {
                 if (checked) {
@@ -966,7 +968,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                                     items: [{
                                         region: 'west',
                                         id: 'west-panel',
-                                        title: 'Payroll list',
+                                        title: 'Payroll List',
                                         split: true,
                                         // width: 200,
                                         height: 800,
