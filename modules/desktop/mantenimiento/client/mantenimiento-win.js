@@ -1,4 +1,4 @@
-var payrollSeleccionado = '';
+var selectedPayroll = '';
 
 QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
     id: 'mantenimiento',
@@ -226,7 +226,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                     autoSave: acceso, // dependiendo de si se tiene acceso para grabar
                     remoteSort: true,
                     autoSave: true,
-                    baseParams: {}
+                    baseParams: {id:selectedPayroll}
                 });
                 storePayroll = this.storePayroll;
                 limitemantenimiento = 100;
@@ -272,7 +272,17 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             viewConfig: {
                 forceFit: false
             },
-            sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
+            sm: new Ext.grid.RowSelectionModel({
+              singleSelect: true,
+              listeners: {
+                  rowselect: function (sm, row, rec) {
+                      // recuperamos la informacion de ese payroll
+                      selectedPayroll = rec.id;
+                      storeDetailPayroll.baseParams.id = selectedPayroll;
+                      storeDetailPayroll.load();
+                  }
+              }
+            }),
             border: false,
             // stripeRows: true,
             //Definición de barra de paginado
@@ -289,10 +299,10 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 //Definición de url CRUD Payroll
                 var proxyDetailPayroll = new Ext.data.HttpProxy({
                     api: {
-                        create: urlMantenimiento + "crudPayroll.php?operation=insert",
-                        read: urlMantenimiento + "crudPayroll.php?operation=select",
-                        update: urlMantenimiento + "crudPayroll.php?operation=update",
-                        destroy: urlMantenimiento + "crudPayroll.php?operation=delete"
+                        create: urlMantenimiento + "crudPayrollDetail.php?operation=insert",
+                        read: urlMantenimiento + "crudPayrollDetail.php?operation=select",
+                        update: urlMantenimiento + "crudPayrollDetail.php?operation=update",
+                        destroy: urlMantenimiento + "crudPayrollDetail.php?operation=delete"
                     }
                 });
 
