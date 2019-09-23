@@ -269,6 +269,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 // ,{header: 'Expected cost 2019', dataIndex: 'expected-cost-2019', sortable: true, width: 100}
                 // ,{header: 'Without increase', dataIndex: 'without-increase', sortable: true, width: 100}
                 // ,{header: 'Increase-2', dataIndex: 'increase-2', sortable: true, width: 100}
+
                 // ,{header: 'Increase-5', dataIndex: 'increase-5', sortable: true, width: 100}
                 // ,{header: 'Program Validation', dataIndex: 'program-validation', sortable: true, width: 100}
 
