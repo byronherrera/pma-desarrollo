@@ -98,14 +98,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'grant_number', allowBlank: true},
+                {name: 'grant_number', type: 'string', allowBlank: false},
                 {name: 'estado', allowBlank: true},
                 {name: 'crn', allowBlank: true},
                 {name: 'fund', allowBlank: true},
                 {name: 'donor', allowBlank: true},
                 {name: 'comments', allowBlank: true},
                 {name: 'isc', allowBlank: true},
-                {name: 'total_grant', allowBlank: true},
+                {name: 'total_grant', allowBlank: false},
                 {name: 'total_programmed', allowBlank: true},
                 {name: 'total_unprogrammed', allowBlank: true},
                 {name: 'grant_tod', type: 'date', dateFormat: 'c', allowBlank: true},
@@ -113,7 +113,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {name: 'grant_specific', allowBlank: true},
                 {name: 'year_contribution', allowBlank: true}
             ]
-
         });
 
         //Definición de escritura en campos bdd Inspeccion
@@ -129,7 +128,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 create: urlInspeccion + "crudDetalleContribuciones.php?operation=insert",
                 read: urlInspeccion + "crudDetalleContribuciones.php?operation=select",
                 update: urlInspeccion + "crudDetalleContribuciones.php?operation=update",
-                destroy: urlInspeccion + "crudDetalleContribuciones-.php?operation=delete"
+                destroy: urlInspeccion + "crudDetalleContribuciones.php?operation=delete"
             }
         });
 
@@ -141,10 +140,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'id_pma_contribuciones_detalle', allowBlank: true},
+                {name: 'id_pma_contribuciones_detalle', allowBlank: false},
                 {name: 'year', allowBlank: false},
-                {name: 'so', allowBlank: true},
-                {name: 'activity', allowBlank: true},
+                {name: 'so', allowBlank: false},
+                {name: 'activity', allowBlank: false},
                 {name: 'total', allowBlank: true},
             ]
         });
@@ -1724,19 +1723,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de Inspeccion
     addModuloInspeccion: function () {
         var inspeccion = new this.storeModuloInspeccion.recordType({
-            grant_number: ' ',
-            crn: ' ',
+            grant_number: '',
+            crn: '',
             fund: 0,
-            donor: ' ',
+            donor: '',
             year_contribution: (new Date().getFullYear()),
-            // isc: ' ',
+             isc: '',
             total_grant: 0,
             total_programmed: 0
-
         });
         this.gridModuloInspeccion.stopEditing();
         this.storeModuloInspeccion.insert(0, inspeccion);
-        this.gridModuloInspeccion.startEditing(0, 0);
+        this.gridModuloInspeccion.startEditing(0, 1);
     },
 
     //Función para actualizar los datos mostrados en pantalla de la pestaña de ModuloInspeccion
@@ -1785,15 +1783,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     addDetalleInspeccion: function () {
         var inspeccion = new this.storeDetalleInspeccion.recordType({
             year: (new Date().getFullYear()),
-            so: 1,
-            activity: 1,
-            id_cost: '',
-            id_pma_contribuciones_detalle: selectContribuciones,
-            total: 0
+            so: '',
+            activity: '',
+            //id_cost: '',
+            id_pma_contribuciones_detalle: selectContribuciones
         });
         this.gridDetalleInspeccion.stopEditing();
         this.storeDetalleInspeccion.insert(0, inspeccion);
-        this.gridDetalleInspeccion.startEditing(0, 0);
+        this.gridDetalleInspeccion.startEditing(0, 1);
     },
 
     //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle inspeccion
@@ -1852,13 +1849,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             // activity: 1,
             // id_cost: ' ',
             fecha_registro: (new Date())
-            ,
-
-
         });
         this.gridCostoMacro.stopEditing();
         this.storeCostoMacro.insert(0, inspeccion);
-        this.gridCostoMacro.startEditing(0, 0);
+        this.gridCostoMacro.startEditing(0, 1);
     },
 
     //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle inspeccion
