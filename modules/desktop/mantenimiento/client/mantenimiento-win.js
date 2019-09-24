@@ -1406,6 +1406,45 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
     //Función para actualizar los datos mostrados en pantalla de la pestaña de DetailPayroll
     requestGridDataDetailPayroll: function () {
         this.storeDetailPayroll.load();
-    }
+    },
 
+    //Función para eliminación de registros de GlCodes
+    deleteGlCodes: function () {
+        //Popup de confirmación
+        Ext.Msg.show({
+            title: 'Confirmación',
+            msg: 'Está seguro de querer borrar?',
+            scope: this,
+            buttons: Ext.Msg.YESNO,
+            //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
+            fn: function (btn) {
+                if (btn == 'yes') {
+                    var rows = this.gridGlCodes.getSelectionModel().getSelections();
+                    if (rows.length === 0) {
+                        return false;
+                    }
+                    this.storeGlCodes.remove(rows);
+                }
+            }
+        });
+    },
+
+    //Función para inserción de registros de GlCodes
+    addGlCodes: function () {
+        var dataGlCodes = new this.storeGlCodes.recordType({
+            id: ' ',
+            location: '',
+            grade: '',
+            index_no: '',
+            hr_position: '',
+            monthly_cost_2018: 0
+        });
+        this.gridGlCodes.stopEditing();
+        this.storeGlCodes.insert(0, dataGlCodes);
+        this.gridGlCodes.startEditing(0, 0);
+    },
+    //Función para actualizar los datos mostrados en pantalla de la pestaña de GlCodes
+    requestGridDataGlCodes: function () {
+        this.storeGlCodes.load();
+    },
 });
