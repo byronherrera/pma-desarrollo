@@ -120,6 +120,20 @@ function updateDetailPayroll()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
 
+    $data->expected_cost_2019 = $data->number_months * $data->monthly_cost_2019;
+    $data->total = $data->january
+     + $data->february
+     + $data->march
+     + $data->april
+     + $data->may
+     + $data->june
+     + $data->july
+     + $data->august
+     + $data->september
+     + $data->october
+     + $data->november
+     + $data->december;
+
     if (isset($data->despacho_secretaria)) {
         if (!$data->despacho_secretaria)
             $data->despacho_secretaria = 'false';
