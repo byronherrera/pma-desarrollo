@@ -94,6 +94,7 @@ function insertDetailPayroll()
             $cadenaCampos = $cadenaCampos . $clave . ',';
             $cadenaDatos = $cadenaDatos . "'" . $valor . "',";
         }
+
     }
     $cadenaCampos = substr($cadenaCampos, 0, -1);
     $cadenaDatos = substr($cadenaDatos, 0, -1);
