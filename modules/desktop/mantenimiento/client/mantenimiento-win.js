@@ -126,7 +126,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 //Definición de campos bdd Costcategory
                 new Ext.grid.RowNumberer()
-                , {header: 'ID', dataIndex: 'id', sortable: true, width: 10}
+                , {header: 'ID', dataIndex: 'id', sortable: true, hidden:true, width: 10}
                 , {header: 'Cost Code', dataIndex: 'cost', sortable: true, width: 40, editor: textField}
                 , {
                     header: 'Description',
@@ -195,7 +195,15 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 read: urlMantenimiento + "crudDetailPayroll.php?operation=select",
                 update: urlMantenimiento + "crudDetailPayroll.php?operation=update",
                 destroy: urlMantenimiento + "crudDetailPayroll.php?operation=delete"
-            }
+            },
+            listeners: {
+                write: function (proxy, action, result, res, rs) {
+                    // en caso que la accion sea update
+                    if (action = 'update') {
+                      storeDetailPayroll.load();
+                    }
+                  }
+                }
         });
 
         //Definición de lectura de campos bdd DetailPayroll
@@ -213,16 +221,31 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 // {name: 'grade', allowBlank: true},
                 // {name: 'index_no', allowBlank: true},
                 // {name: 'hr_position', allowBlank: true},
+                {name: 'year', allowBlank: false},
                 {name: 'number_months', allowBlank: false},
                 {name: 'number_staff', allowBlank: false},
                 {name: 'monthly_cost_2019', allowBlank: false},
                 // {name: 'monthly_cost_2018', allowBlank: true},
                 {name: 'expected_cost_2019', allowBlank: false},
-                {name: 'without_increase', allowBlank: false},
-                {name: 'increase_2', allowBlank: true},
-                {name: 'increase_5', allowBlank: true},
-                {name: 'program_validation', allowBlank: true},
-                {name: 'id_pma_payroll', allowBlank: false}
+                {name: 'january', allowBlank: false},
+                {name: 'february', allowBlank: false},
+                {name: 'march', allowBlank: false},
+                {name: 'april', allowBlank: false},
+                {name: 'may', allowBlank: false},
+                {name: 'june', allowBlank: false},
+                {name: 'july', allowBlank: false},
+                {name: 'august', allowBlank: false},
+                {name: 'september', allowBlank: false},
+                {name: 'october', allowBlank: false},
+                {name: 'november', allowBlank: false},
+                {name: 'december', allowBlank: false},
+                {name: 'total', allowBlank: false}
+
+                // {name: 'without_increase', allowBlank: false},
+                // {name: 'increase_2', allowBlank: true},
+                // {name: 'increase_5', allowBlank: true},
+                // {name: 'program_validation', allowBlank: true},
+                // {name: 'id_pma_payroll', allowBlank: false}
             ],
             totalProperty: 'total',
         });
@@ -251,22 +274,37 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 //Definición de campos bdd DetailPayroll
                 new Ext.grid.RowNumberer()
-                , {header: 'ID', dataIndex: 'id', sortable: true, width: 10, editor: textField}
+                , {header: 'ID', dataIndex: 'id', sortable: true, width: 10, hidden:true, editor: textField}
                 // ,{header: 'ID', dataIndex: 'id', sortable: true, width: 10}
                 // ,{header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
                 // ,{header: 'Grade', dataIndex: 'grade', sortable: true, width: 100}
                 // ,{header: 'Index_no', dataIndex: 'index_no', sortable: true, width: 100}
 
+                , {header: 'Year', dataIndex: 'year', sortable: true, width: 100, editor: textField}
                 , {header: 'Number months', dataIndex: 'number_months', sortable: true, width: 100, editor: textField}
-                , {header: 'Number staff', dataIndex: 'number_staff', sortable: true, width: 100, editor: textField}
-                , {header: 'Monthly cost 2019', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
-                // ,{header: 'Monthly cost 2018', dataIndex: 'monthly_cost_2018', sortable: true, width: 100}
-                , {header: 'Expected cost 2019', dataIndex: 'expected_cost_2019', sortable: true, width: 100, editor: textField}
-                , {header: 'Without increase', dataIndex: 'without_increase', sortable: true, width: 100, editor: textField}
-                , {header: 'Increase_2', dataIndex: 'increase_2', sortable: true, width: 100, editor: textField}
-                , {header: 'Increase_5', dataIndex: 'increase_5', sortable: true, width: 100, editor: textField}
-                , {header: 'Program Validation', dataIndex: 'program_validation', sortable: true, width: 100, editor: textField}
-                , {header: 'Program Validation', dataIndex: 'id_pma_payroll', hidden: true}
+                // , {header: 'Number staff', dataIndex: 'number_staff', sortable: true, width: 100, editor: textField}
+                // , {header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
+                ,{header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
+                , {header: 'Expected cost', dataIndex: 'expected_cost_2019', sortable: true, width: 100, editor: textField}
+                , {header: 'January', dataIndex: 'january', sortable: true, width: 100, editor: textField}
+                , {header: 'February', dataIndex: 'february', sortable: true, width: 100, editor: textField}
+                , {header: 'March', dataIndex: 'march', sortable: true, width: 100, editor: textField}
+                , {header: 'April', dataIndex: 'april', sortable: true, width: 100, editor: textField}
+                , {header: 'May', dataIndex: 'may', sortable: true, width: 100, editor: textField}
+                , {header: 'June', dataIndex: 'june', sortable: true, width: 100, editor: textField}
+                , {header: 'July', dataIndex: 'july', sortable: true, width: 100, editor: textField}
+                , {header: 'August', dataIndex: 'august', sortable: true, width: 100, editor: textField}
+                , {header: 'September', dataIndex: 'september', sortable: true, width: 100, editor: textField}
+                , {header: 'October', dataIndex: 'october', sortable: true, width: 100, editor: textField}
+                , {header: 'November', dataIndex: 'november', sortable: true, width: 100, editor: textField}
+                , {header: 'December', dataIndex: 'december', sortable: true, width: 100, editor: textField}
+                , {header: 'Total', dataIndex: 'total', sortable: true, width: 100, editor: textField}
+
+                // , {header: 'Without increase', dataIndex: 'without_increase', sortable: true, width: 100, editor: textField}
+                // , {header: 'Increase_2', dataIndex: 'increase_2', sortable: true, width: 100, editor: textField}
+                // , {header: 'Increase_5', dataIndex: 'increase_5', sortable: true, width: 100, editor: textField}
+                // , {header: 'Program Validation', dataIndex: 'program_validation', sortable: true, width: 100, editor: textField}
+                // , {header: 'Program Validation', dataIndex: 'id_pma_payroll', hidden: true}
             ],
             viewConfig: {forceFit: true},
             sm: new Ext.grid.RowSelectionModel({
@@ -341,20 +379,20 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 //Definición de campos bdd Payroll
                 new Ext.grid.RowNumberer()
-                , {header: 'ID', dataIndex: 'id', sortable: true, width: 10}
+                , {header: 'ID', dataIndex: 'id', sortable: true, hidden:true, width: 10}
                 , {header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
                 , {header: 'Grade', dataIndex: 'grade', sortable: true, width: 70, editor: textField}
-                , {header: 'Index-no', dataIndex: 'index_no', sortable: true, width: 70, editor: textField}
-                , {header: 'HR Description', dataIndex: 'hr_position', sortable: true, width: 140, editor: textField}
+                , {header: 'Index-no', dataIndex: 'index_no', sortable: true, width: 60, editor: textField}
+                , {header: 'HR Description', dataIndex: 'hr_position', sortable: true, width: 150, editor: textField}
                 , {
-                    header: 'Monthly cost 2018',
+                    header: 'Monthly cost',
                     dataIndex: 'monthly_cost_2018',
                     sortable: true,
                     width: 100,
                     editor: textField
                 }
             ],
-            viewConfig: {forceFit: true},
+            viewConfig: {forceFit: false},
             sm: new Ext.grid.RowSelectionModel({
                 singleSelect: true,
                 listeners: {
