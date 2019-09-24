@@ -66,35 +66,31 @@ function selectPayroll()
     );
 }
 
-function insertOrdenanzas()
+
+function insertPayroll()
 {
     global $os;
 
-    $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
-    //$data->despacho_secretaria = 'false';
-    $data->id = generaCodigoProcesoOrdenanza();
-    $data->orden = generaCodigoProcesoOrdenanza();
-    //$data->id_persona = $os->get_member_id();
-    //genero el listado de nombre de campos
 
     $cadenaDatos = '';
     $cadenaCampos = '';
     foreach ($data as $clave => $valor) {
-        $cadenaCampos = $cadenaCampos . $clave . ',';
-        $cadenaDatos = $cadenaDatos . "'" . $valor . "',";
+        if ($clave != 'id') {
+            $cadenaCampos = $cadenaCampos . $clave . ',';
+            $cadenaDatos = $cadenaDatos . "'" . $valor . "',";
+        }
     }
     $cadenaCampos = substr($cadenaCampos, 0, -1);
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    $sql = "INSERT INTO pma_payroll($cadenaCampos)
-	values($cadenaDatos);";
-     $sql = $os->db->conn->prepare($sql);
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "INSERT INTO pma_payroll($cadenaCampos) VALUES ($cadenaDatos);";
+    $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
     $data->id = $os->db->conn->lastInsertId();
     // genero el nuevo codigo de proceso
-
 
     echo json_encode(array(
         "success" => true,
@@ -103,27 +99,8 @@ function insertOrdenanzas()
     ));
 }
 
-function generaCodigoProcesoOrdenanza()
-{
-    global $os;
 
-    $usuario = $os->get_member_id();
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id) AS maximo FROM pma_payroll";
-    $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (isset($row['maximo'])) {
-        $nuevoCodogo = $row['maximo'] + 1;
-        return $nuevoCodogo;
-    } else {
-        // valor inicial proceso
-
-        return 10759;
-
-    }
-}
-
-function updateOrdenanzas()
+function updatePayroll()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
@@ -182,7 +159,7 @@ function validarCedulaCorreo($id)
 }
 
 
-function selectOrdenanzasForm()
+function selectPayrollForm()
 {
     global $os;
     $id = (int)$_POST ['id'];
@@ -200,7 +177,7 @@ function selectOrdenanzasForm()
     );
 }
 
-function updateOrdenanzasForm()
+function updatePayrollForm()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
@@ -251,7 +228,7 @@ function updateOrdenanzasForm()
     ));
 }
 
-function deleteOrdenanzas()
+function deletePayroll()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
@@ -269,18 +246,18 @@ switch ($_GET['operation']) {
         selectPayroll();
         break;
     case 'insert' :
-        insertOrdenanzas();
+        insertPayroll();
         break;
     case 'update' :
-        updateOrdenanzas();
+        updatePayroll();
         break;
     case 'selectForm' :
-        selectOrdenanzasForm();
+        selectPayrollForm();
         break;
     case 'updateForm' :
-        updateOrdenanzasForm();
+        updatePayrollForm();
         break;
     case 'delete' :
-        deleteOrdenanzas();
+        deletePayroll();
         break;
 }
