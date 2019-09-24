@@ -968,7 +968,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                                             tbar: [
                                                 //Definición de botón nuevo
                                                 {
-                                                    text: 'Nuevo',
+                                                    text: 'New',
                                                     scope: this,
                                                     handler: this.addPayroll,
                                                     iconCls: 'save-icon'
@@ -976,7 +976,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                                                 '-',
                                                 //Definición de botón eliminar
                                                 {
-                                                    text: "Eliminar",
+                                                    text: "Delete",
                                                     scope: this,
                                                     handler: this.deletePayroll,
                                                     iconCls: 'delete-icon'
@@ -1001,7 +1001,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                                                 tbar: [
                                                     //Definición de botón nuevo
                                                     {
-                                                        text: 'Nuevo',
+                                                        text: 'New',
                                                         scope: this,
                                                         handler: this.addDetailPayroll,
                                                         iconCls: 'save-icon'
@@ -1009,7 +1009,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                                                     '-',
                                                     //Definición de botón eliminar
                                                     {
-                                                        text: "Eliminar",
+                                                        text: "Delete",
                                                         scope: this,
                                                         handler: this.deleteDetailPayroll,
                                                         iconCls: 'delete-icon'
@@ -1371,7 +1371,3 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
     }
 
 });
-
-
-
-
