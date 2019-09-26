@@ -102,7 +102,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
 
         //Definición de store para módulo Costcategory
         this.storeCostcategory = new Ext.data.Store({
-            id: "id",
+            id: 'storeCostcategory',
             proxy: proxyCostcategory,
             reader: readerCostcategory,
             writer: writerCostcategory,
@@ -239,7 +239,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 {name: 'october', allowBlank: false},
                 {name: 'november', allowBlank: false},
                 {name: 'december', allowBlank: false},
-                {name: 'total', allowBlank: false}
+                {name: 'total', allowBlank: true}
 
                 // {name: 'without_increase', allowBlank: false},
                 // {name: 'increase_2', allowBlank: true},
@@ -258,7 +258,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
 
         //Definición de store para pestaña DetailPayroll
         this.storeDetailPayroll = new Ext.data.Store({
-            id: "id",
+            id: 'storeDetailPayroll',
             proxy: proxyDetailPayroll,
             reader: readerDetailPayroll,
             writer: writerDetailPayroll,
@@ -269,6 +269,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
         storeDetailPayroll =this.storeDetailPayroll
         //Inicio formato grid pestaña DetailPayroll
         this.gridDetailPayroll = new Ext.grid.EditorGridPanel({
+            id: 'gridDetailPayroll',
             height: winHeight - 124,
             store: this.storeDetailPayroll,
             columns: [
@@ -298,7 +299,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 , {header: 'October', dataIndex: 'october', sortable: true, width: 100, editor: textField}
                 , {header: 'November', dataIndex: 'november', sortable: true, width: 100, editor: textField}
                 , {header: 'December', dataIndex: 'december', sortable: true, width: 100, editor: textField}
-                , {header: 'Total', dataIndex: 'total', sortable: true, width: 100, editor: textField}
+                , {header: 'Total', dataIndex: 'total', sortable: true, width: 100 }
 
                 // , {header: 'Without increase', dataIndex: 'without_increase', sortable: true, width: 100, editor: textField}
                 // , {header: 'Increase_2', dataIndex: 'increase_2', sortable: true, width: 100, editor: textField}
@@ -361,7 +362,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
 
         //Definición de store para pestaña Payroll
         this.storePayroll = new Ext.data.Store({
-            id: "id",
+            id: 'storePayroll',
             proxy: proxyPayroll,
             reader: readerPayroll,
             writer: writerPayroll,
@@ -459,7 +460,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
 
         //Definición de store para módulo GlCodes
         this.storeGlCodes = new Ext.data.Store({
-            id: "id",
+            id: 'storeGlCodes',
             proxy: proxyGlCodes,
             reader: readerGlCodes,
             writer: writerGlCodes,
@@ -569,7 +570,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
 
         //Definición de store para módulo Ordenanzas
         this.storeOrdenanzas = new Ext.data.Store({
-            id: "id",
+            id: 'storeOrdenanzas',
             proxy: proxyOrdenanzas,
             reader: readerOrdenanzas,
             writer: writerOrdenanzas,
@@ -673,7 +674,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
 
         //Definición de store para pestaña Unidades
         this.storeUnidades = new Ext.data.Store({
-            id: "id",
+            id: 'storeUnidades',
             proxy: proxyUnidades,
             reader: readerUnidades,
             writer: writerUnidades,
