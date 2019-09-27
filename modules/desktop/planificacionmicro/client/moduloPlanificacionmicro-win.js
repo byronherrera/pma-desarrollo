@@ -1957,6 +1957,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 80
                 },
+
                 {
                     header: 'Comments',
                     dataIndex: 'comments',
