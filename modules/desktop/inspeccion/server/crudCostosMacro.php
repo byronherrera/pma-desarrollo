@@ -194,6 +194,8 @@ function updateDetalleInspecciones()
     $sql->execute();
 
     // actualizar el total en el padre
+//    $idMicro = calcularMicroTotal ($data->id_pma_costos_micro);
+
     $idActivities = calcularActivitiesTotal ($data->id_pma_costos_macro);
     calcularContribucionesTotal ($idActivities);
 

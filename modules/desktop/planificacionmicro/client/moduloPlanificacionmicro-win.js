@@ -122,18 +122,19 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'grant_number', allowBlank: true},
+                {name: 'grant_number', type: 'string', allowBlank: false},
                 {name: 'estado', allowBlank: true},
                 {name: 'crn', allowBlank: true},
                 {name: 'fund', allowBlank: true},
                 {name: 'donor', allowBlank: true},
                 {name: 'comments', allowBlank: true},
                 {name: 'isc', allowBlank: true},
-                {name: 'total_grant', allowBlank: true},
+                {name: 'total_grant', allowBlank: false},
+                {name: 'total_programmed', allowBlank: true},
+                {name: 'total_unprogrammed', allowBlank: true},
                 {name: 'grant_tod', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_tdd', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_specific', allowBlank: true},
-                {name: 'activity', allowBlank: true},
                 {name: 'year_contribution', allowBlank: true}
             ]
 
@@ -284,7 +285,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                 costCodeNuevo3: costCodeNuevo3
                             }
                         });
-                        }, 300);
+                        }, 700);
 
                     }
 
@@ -1895,29 +1896,40 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Total Direct Cost',
                     dataIndex: 'total_grant',
                     sortable: true,
-                    width: 100,
-                    renderer: 'usMoney'
-                },
-                {
-                    header: 'Total Contribution',
-                    dataIndex: 'total_contribution',
-                    sortable: true,
-                    width: 100,
-                    renderer: 'usMoney'
+                    align: 'right',
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: new Ext.form.NumberField({
+                        allowBlank: false,
+                        allowNegative: false,
+                        maxValue: 100000000
+                    })
                 },
                 {
                     header: 'Total Programmed',
                     dataIndex: 'total_programmed',
                     sortable: true,
-                    width: 100,
-                    renderer: 'usMoney'
+                    width: 28,
+                    renderer: 'usMoney',
+                    align: 'right'
+                    /*editor: new Ext.form.NumberField({
+                        allowBlank: false,
+                        allowNegative: false,
+                        maxValue: 100000000
+                    })*/
                 },
                 {
                     header: 'Unprogrammed',
                     dataIndex: 'total_unprogrammed',
                     sortable: true,
-                    width: 80,
-                    renderer: 'usMoney'
+                    width: 28,
+                    renderer: 'usMoney',
+                    align: 'right'
+                    /* editor: new Ext.form.NumberField({
+                        allowBlank: false,
+                        allowNegative: false,
+                        maxValue: 100000000
+                    })*/
                 },
                 {
                     header: 'Grant TOD',
@@ -1975,7 +1987,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         }
 
                         Ext.getCmp('paso2').expand();
-                        Ext.getCmp('paso1').setTitle("Step 1 - Contributions - Grant number: " + rec.data['grant_number']);
+                        Ext.getCmp('paso1').setTitle("Step 1 - Contributions - Grant number: " + rec.data['grant_number']  + " - Total: " + rec.data['total_programmed'] );
                         Ext.getCmp('paso2').setTitle("Step 2 - Activities");
                         Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
@@ -2572,6 +2584,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                             }
                         });
 
+
                     }
                 }
             }),
@@ -3038,7 +3051,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                         tbar: [
                                             //Definición de botón nuevo
                                             {
-                                                id: 'btnNuevoDetallePlanificacionmicro2',
+                                                id: 'btnNuevoDetallePlanificacionmicro3',
                                                 text: 'New',
                                                 scope: this,
                                                 handler: this.addPlanificacionmicrodet,
@@ -3048,7 +3061,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             '-',
                                             //Definición de botón Delete
                                             {
-                                                id: 'btnEliminarDetallePlanificacionmicro2',
+                                                id: 'btnEliminarDetallePlanificacionmicro3',
                                                 text: "Delete",
                                                 scope: this,
                                                 handler: this.deletePlanificacionmicrodet,
@@ -3058,7 +3071,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             '-',
                                             //Definición de botón Reload data
                                             {
-                                                id: 'btnRecargarDatosDetallePlanificacionmicro2',
+                                                id: 'btnRecargarDatosDetallePlanificacionmicro3',
                                                 iconCls: 'reload-icon',
                                                 handler: this.requestGridDataPlanificacionmicrodet,
                                                 disabled: false,

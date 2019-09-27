@@ -89,6 +89,10 @@ function insertDetailPayroll()
 
     $cadenaDatos = '';
     $cadenaCampos = '';
+
+
+    $data->expected_cost_2019 = $data->number_months * $data->monthly_cost_2019;
+
     foreach ($data as $clave => $valor) {
         if ($clave != 'id') {
             $cadenaCampos = $cadenaCampos . $clave . ',';
@@ -159,7 +163,8 @@ function updateDetailPayroll()
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_payroll_detalle actualizado exitosamente" : $sql->errorCode(),
-        "message" => $message
+        "message" => $message,
+        "data" => array($data)
     ));
 }
 

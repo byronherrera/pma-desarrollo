@@ -200,7 +200,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 write: function (proxy, action, result, res, rs) {
                     // en caso que la accion sea update
                     if (action = 'update') {
-                      storeDetailPayroll.load();
+                      //storeDetailPayroll.load();
                     }
                   }
                 }
@@ -223,29 +223,29 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 // {name: 'hr_position', allowBlank: true},
                 {name: 'year', allowBlank: false},
                 {name: 'number_months', allowBlank: false},
-                {name: 'number_staff', allowBlank: false},
+                //{name: 'number_staff', allowBlank: true},
                 {name: 'monthly_cost_2019', allowBlank: false},
                 // {name: 'monthly_cost_2018', allowBlank: true},
-                {name: 'expected_cost_2019', allowBlank: false},
-                {name: 'january', allowBlank: false},
-                {name: 'february', allowBlank: false},
-                {name: 'march', allowBlank: false},
-                {name: 'april', allowBlank: false},
-                {name: 'may', allowBlank: false},
-                {name: 'june', allowBlank: false},
-                {name: 'july', allowBlank: false},
-                {name: 'august', allowBlank: false},
-                {name: 'september', allowBlank: false},
-                {name: 'october', allowBlank: false},
-                {name: 'november', allowBlank: false},
-                {name: 'december', allowBlank: false},
-                {name: 'total', allowBlank: true}
+                {name: 'expected_cost_2019', allowBlank: true},
+                {name: 'january', allowBlank: true},
+                {name: 'february', allowBlank: true},
+                {name: 'march', allowBlank: true},
+                {name: 'april', allowBlank: true},
+                {name: 'may', allowBlank: true},
+                {name: 'june', allowBlank: true},
+                {name: 'july', allowBlank: true},
+                {name: 'august', allowBlank: true},
+                {name: 'september', allowBlank: true},
+                {name: 'october', allowBlank: true},
+                {name: 'november', allowBlank: true},
+                {name: 'december', allowBlank: true},
+                {name: 'total', allowBlank: true},
 
                 // {name: 'without_increase', allowBlank: false},
                 // {name: 'increase_2', allowBlank: true},
                 // {name: 'increase_5', allowBlank: true},
                 // {name: 'program_validation', allowBlank: true},
-                // {name: 'id_pma_payroll', allowBlank: false}
+                 {name: 'id_pma_payroll', allowBlank: true}
             ],
             totalProperty: 'total',
         });
@@ -286,7 +286,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 // , {header: 'Number staff', dataIndex: 'number_staff', sortable: true, width: 100, editor: textField}
                 // , {header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
                 ,{header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
-                , {header: 'Expected cost', dataIndex: 'expected_cost_2019', sortable: true, width: 100, editor: textField}
+                , {header: 'Expected cost', dataIndex: 'expected_cost_2019', sortable: true, width: 100 }
                 , {header: 'January', dataIndex: 'january', sortable: true, width: 100, editor: textField}
                 , {header: 'February', dataIndex: 'february', sortable: true, width: 100, editor: textField}
                 , {header: 'March', dataIndex: 'march', sortable: true, width: 100, editor: textField}
@@ -1390,14 +1390,15 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
         var dataDetailPayroll = new this.storeDetailPayroll.recordType({
             id: ' ',
             number_months: '',
-            number_staff : '',
+         //   number_staff : '',
             monthly_cost_2019 : '',
             expected_cost_2019 : '',
             without_increase : '',
             increase_2 : '',
             increase_5 : '',
             program_validation: '',
-            id_pma_payroll : selectedPayroll
+            id_pma_payroll : selectedPayroll,
+            total : 0
         });
         this.gridDetailPayroll.stopEditing();
         this.storeDetailPayroll.insert(0, dataDetailPayroll);

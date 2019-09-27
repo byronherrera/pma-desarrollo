@@ -72,7 +72,7 @@ function    selectDetalleTodasInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
 
     $sql = "SELECT * FROM pma_costos_macro $where $orderby LIMIT $start, $limit";
-    //$sql = "SELECT * FROM amc_inspeccion";
+
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -91,11 +91,7 @@ function insertDetalleInspecciones()
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
-    $data->id = generaCodigoCostoMacro();
-    // $data->id_pma_costos_macro = generaidpmaCostoMacro();
     $data->fecha_registro = date('Y-m-d H:i:s');
-    // $data->id_inspeccion = generaNuevoCodigoInspeccion();
-    //$data->fecha_recepcion_documento = date('Y-m-d H:i:s');
     //genero el listado de nombre de campos
 
     $cadenaDatos = '';
@@ -122,6 +118,7 @@ function insertDetalleInspecciones()
 
     $sql1 = "INSERT INTO pma_costos_macro($cadenaCampos)
 	values($cadenaDatos);";
+
     $sql = $os->db->conn->prepare($sql1);
 
     $verificaInsert = $sql->execute();
@@ -143,27 +140,6 @@ function insertDetalleInspecciones()
             "msg" => $sql->errorCode() . $sql1,
             "data" => array($data)
         ));
-    }
-}
-
-
-function generaCodigoCostoMacro()
-{
-    global $os;
-
-    $usuario = $os->get_member_id();
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id) AS maximo FROM pma_costos_macro";
-    $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (isset($row['maximo'])) {
-        $nuevoCodogo = $row['maximo'] + 1;
-        return $nuevoCodogo;
-    } else {
-        // valor inicial proceso
-
-        return 1;
-
     }
 }
 
@@ -193,21 +169,9 @@ function updateDetalleInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
 
-    // if (isset($data->despacho_secretaria)) {
-    //     if (!$data->despacho_secretaria)
-    //         $data->despacho_secretaria = 'false';
-    //     else
-    //         $data->despacho_secretaria = 'true';
-    // }
+    $data->total_adjusted = $data->total + $data->adjust;
 
     $message = '';
-    // if (isset($data->id_tipo_documento)) {
-    //     if ($data->id_tipo_documento == '1')
-    //         if (validarCedulaCorreo($data->id)) {
-    //             $message = 'Ingresar número de cédula y correo electrónico';
-    //         }
-    // }
-
     // genero el listado de valores a insertar
     $cadenaDatos = '';
     foreach ($data as $clave => $valor) {
@@ -216,7 +180,6 @@ function updateDetalleInspecciones()
                 $valor = 'NULL';
             }
         }
-
         if ($valor === 'NULL') {
             $cadenaDatos = $cadenaDatos . $clave . " = " . $valor . " ,";
         } else {
@@ -226,21 +189,26 @@ function updateDetalleInspecciones()
     }
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    // cambioEstadoAsignacion ($data->funcionario_entrega, $data->id);
-    // cambioEstadoReasignacion ($data->funcionario_reasignacion, $data->id);
-
     $sql = "UPDATE pma_costos_macro SET  $cadenaDatos  WHERE pma_costos_macro.id = '$data->id' ";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
+    // actualizar el total en el padre
+//    $idMicro = calcularMicroTotal ($data->id_pma_costos_micro);
+
+    $idActivities = calcularActivitiesTotal ($data->id_pma_costos_macro);
+    calcularContribucionesTotal ($idActivities);
+
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_macro actualizado exitosamente" : $sql->errorCode(),
-        "message" => $message
+        "message" => $message,
+        "data" => array($data),
+        "aa" => $idActivities
     ));
-
-
 }
+
+
 
 function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
     global $os;
@@ -250,7 +218,7 @@ function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
         // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
 
         if ( verificaAnteriorReasignacion ($id_asignacion, $idInspeccion)) {
-            $sql = "UPDATE `amc_inspeccion` SET `estado_asignacion` = 1 WHERE `id` = $idInspeccion";
+            $sql = "UPDATE `pma_costos_macro` SET `estado_asignacion` = 1 WHERE `id` = $idInspeccion";
             $sql = $os->db->conn->prepare($sql);
             $sql->execute();
         }
@@ -260,7 +228,7 @@ function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
 function verificaAnteriorAsignacion ($id_reasignacion, $idInspeccion) {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT funcionario_entrega FROM  `amc_inspeccion` WHERE  id = $idInspeccion";
+    $sql = "SELECT funcionario_entrega FROM  `pma_costos_macro` WHERE  id = $idInspeccion";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     if ($row['funcionario_entrega'] === $id_reasignacion )
@@ -316,14 +284,13 @@ function validarCedulaCorreo($id)
     }
 }
 
-
 function selectDetalleInspeccionesForm()
 {
     global $os;
     $id = (int)$_POST ['id'];
     if ($id != 0) {
         $os->db->conn->query("SET NAMES 'utf8'");
-        $sql = "SELECT * FROM amc_inspeccion WHERE amc_inspeccion.id_denuncia = $id";
+        $sql = "SELECT * FROM pma_costos_macro WHERE pma_costos_macro.id_denuncia = $id";
         $result = $os->db->conn->query($sql);
         $data = array();
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -378,7 +345,7 @@ function deleteDetalleInspecciones()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM amc_inspeccion WHERE id = $id";
+    $sql = "DELETE FROM pma_costos_macro WHERE id = $id";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
     echo json_encode(array(
@@ -386,7 +353,6 @@ function deleteDetalleInspecciones()
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_macro, eliminado exitosamente" : $sql->errorCode()
     ));
 }
-
 
 switch ($_GET['operation']) {
     case 'select' :

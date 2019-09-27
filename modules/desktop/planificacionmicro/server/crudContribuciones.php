@@ -15,49 +15,13 @@ function selectContribuciones()
     $columnaBusqueda = 'grant_number';
     $where = '';
 
-    // if (isset($_POST['filterField'])) {
-    //     $columnaBusqueda = $_POST['filterField'];
-    //
-    // }
-    //
-    // if (isset($_POST['filterText'])) {
-    //     $campo = $_POST['filterText'];
-    //     $campo = str_replace(" ", "%", $campo);
-    //
-    //     //para el caso de busqueda por guia, recuperamos el id de la guia
-    //     if ($columnaBusqueda == 'guia') {
-    //         // $sql = "SELECT id FROM pma_contribuciones WHERE numero = '$campo'";
-    //         $sql = "SELECT id FROM pma_contribuciones";
-    //         $numguia = $os->db->conn->query($sql);
-    //         if ($numguia) {
-    //             $row = $numguia->fetch(PDO::FETCH_ASSOC);
-    //             if ($row) {
-    //                 $campo = $row['id'];
-    //             }
-    //         }
-    //         // $where = " WHERE $columnaBusqueda LIKE '%$campo%'";
-    //     } else
-    //         // $where = " WHERE $columnaBusqueda LIKE '%$campo%'";
-    // }
-    //
-    // if (isset($_POST['unidadfiltro'])) {
-    //     $unidad = $_POST['unidadfiltro'];
-    //     if ($where == '') {
-    //         $where = "WHERE reasignacion = $unidad ";
-    //     } else {
-    //         $where = " AND reasignacion = $unidad ";
-    //     }
-    // }
-    //
-    // if (isset($_POST['noenviados'])) {
-    //     if ($_POST['noenviados'] == 'true') {
-    //         if ($where == '') {
-    //             $where = " WHERE despacho_secretaria <> 'true'";
-    //         } else {
-    //             $where = $where . " AND despacho_secretaria <> 'true' ";
-    //         }
-    //     }
-    // }
+    if (isset($_POST['filterField'])) {
+        $columnaBusqueda = $_POST['filterField'];
+    }
+    if (isset($_POST['filterText'])) {
+        $where =  retornaWhereBusqueda($_POST['filterText'], $columnaBusqueda);
+    }
+
 
     if (isset ($_POST['start']))
         $start = $_POST['start'];
@@ -69,10 +33,10 @@ function selectContribuciones()
     else
         $limit = 100;
 
-    // $orderby = 'ORDER BY recepcion_documento DESC, codigo_tramite DESC';
-    // if (isset($_POST['sort'])) {
-    //     $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
-    // }
+    $orderby = '';
+     if (isset($_POST['sort'])) {
+         $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
+     }
 
     // para los reportes
     // if (isset($_POST['busqueda_tipo_documento']) and ($_POST['busqueda_tipo_documento'] != '')) {
@@ -134,19 +98,17 @@ function selectContribuciones()
     //     }
     // }
 
-
     $os->db->conn->query("SET NAMES 'utf8'");
-    // $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
-    $sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
+    $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
+//    $sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
+
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-
         $data[] = $row;
     };
 
-    // $sql = "SELECT count(*) AS total FROM pma_contribuciones $where";
-    $sql = "SELECT count(*) AS total FROM pma_contribuciones";
+    $sql = "SELECT count(*) AS total FROM pma_contribuciones $where";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     $total = $row['total'];
@@ -157,6 +119,7 @@ function selectContribuciones()
             "data" => $data)
     );
 }
+
 
 function insertDenuncias()
 {
@@ -183,14 +146,10 @@ function insertDenuncias()
 
     $sql = "INSERT INTO pma_contribuciones($cadenaCampos)
 	values($cadenaDatos);";
-
-
-
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
     $data->id = $os->db->conn->lastInsertId();
-
     // genero el nuevo codigo de proceso
 
     $message = '';
@@ -242,8 +201,7 @@ function updateDenuncias()
     //         }
     // }
 
-    // if ($data->id_ordenanza == NULL)
-    //     unset($data->id_ordenanza);
+
 
 
     // genero el listado de valores a insertar
