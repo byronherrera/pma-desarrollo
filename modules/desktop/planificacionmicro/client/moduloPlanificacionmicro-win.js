@@ -2507,7 +2507,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     renderer: costCode3
                 },
                 {
-                    header: 'Commitment description',
+                    header: 'GL description',
                     dataIndex: 'glcode',
                     sortable: true,
                     width: 100,
