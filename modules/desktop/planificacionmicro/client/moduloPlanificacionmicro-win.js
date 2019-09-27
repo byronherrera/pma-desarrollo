@@ -307,6 +307,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {name: 'cost_code2', allowBlank: true},
                 {name: 'cost_code3', allowBlank: true},
                 {name: 'glcode', allowBlank: true},
+                {name: 'commitment_description', allowBlank: true},
+                {name: 'gl_description', allowBlank: true},
                 {name: 'cost_code4', allowBlank: true},
                 {name: 'cost_code5', allowBlank: true},
                 {name: 'description_micro', allowBlank: true},
@@ -2505,13 +2507,31 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     renderer: costCode3
                 },
                 {
-                    header: 'GL Code',
+                    header: 'Commitment description',
                     dataIndex: 'glcode',
                     sortable: true,
                     width: 100,
                     hidden: false,
                     editor: comboGLCode,
                     renderer: glcode
+                },
+                {
+                    header: 'GL code',
+                    dataIndex: 'gl_description',
+                    sortable: true,
+                    width: 100,
+                    hidden: false,
+                    // editor: comboGLCode,
+                    // renderer: glcode
+                },
+                {
+                    header: 'Commitment description',
+                    dataIndex: 'commitment_description',
+                    sortable: true,
+                    width: 100,
+                    hidden: false,
+                    // editor: comboGLCode,
+                    // renderer: glcode
                 },
                 {
                     header: 'Cost Code nivel 4',
