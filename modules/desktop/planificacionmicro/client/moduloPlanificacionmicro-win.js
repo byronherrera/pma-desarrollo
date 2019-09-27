@@ -1889,40 +1889,35 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'ISC',
                     dataIndex: 'isc',
                     sortable: true,
-                    width: 80,
-                    align: 'right'
+                    width: 80
                 },
                 {
                     header: 'Total Direct Cost',
                     dataIndex: 'total_grant',
                     sortable: true,
                     width: 100,
-                    renderer: 'usMoney',
-                    align: 'right'
+                    renderer: 'usMoney'
                 },
                 {
                     header: 'Total Contribution',
                     dataIndex: 'total_contribution',
                     sortable: true,
                     width: 100,
-                    renderer: 'usMoney',
-                    align: 'right'
+                    renderer: 'usMoney'
                 },
                 {
                     header: 'Total Programmed',
                     dataIndex: 'total_programmed',
                     sortable: true,
                     width: 100,
-                    renderer: 'usMoney',
-                    align: 'right'
+                    renderer: 'usMoney'
                 },
                 {
                     header: 'Unprogrammed',
                     dataIndex: 'total_unprogrammed',
                     sortable: true,
                     width: 80,
-                    renderer: 'usMoney',
-                    align: 'right'
+                    renderer: 'usMoney'
                 },
                 {
                     header: 'Grant TOD',
@@ -1942,15 +1937,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Grant Specific',
                     dataIndex: 'grant_specific',
                     sortable: true,
-                    width: 100,
-                    align: 'center'
+                    width: 100
                 },
                 {
                     header: 'Status',
                     dataIndex: 'estado',
                     sortable: true,
-                    width: 80,
-                    align: 'center'
+                    width: 80
                 },
                 {
                     header: 'Comments',
@@ -2503,7 +2496,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'glcode',
                     sortable: true,
                     width: 100,
-                    hidden: true,
+                    hidden: false,
                     editor: comboGLCode,
                     renderer: glcode
                 },
@@ -3035,7 +3028,58 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             //     , formBind: true
                                             // }
                                         ]
-                                    }]
+                                    }
+                                    , {
+                                        title: 'Step 5 - Micro Costs Detail',
+                                        border: false,
+                                        autoScroll: true,
+                                        id : 'paso5',
+                                        items: [this.gridPlanificacionmicroActa],
+                                        tbar: [
+                                            //Definición de botón nuevo
+                                            {
+                                                id: 'btnNuevoDetallePlanificacionmicro2',
+                                                text: 'New',
+                                                scope: this,
+                                                handler: this.addPlanificacionmicrodet,
+                                                disabled: false,
+                                                iconCls: 'save-icon'
+                                            },
+                                            '-',
+                                            //Definición de botón Delete
+                                            {
+                                                id: 'btnEliminarDetallePlanificacionmicro2',
+                                                text: "Delete",
+                                                scope: this,
+                                                handler: this.deletePlanificacionmicrodet,
+                                                disabled: false,
+                                                iconCls: 'delete-icon'
+                                            },
+                                            '-',
+                                            //Definición de botón Reload data
+                                            {
+                                                id: 'btnRecargarDatosDetallePlanificacionmicro2',
+                                                iconCls: 'reload-icon',
+                                                handler: this.requestGridDataPlanificacionmicrodet,
+                                                disabled: false,
+                                                scope: this,
+                                                text: 'Reload data'
+                                            }
+                                            // ,
+                                            // '-',
+                                            // //Definición de botón guardar datos
+                                            // {
+                                            //     text: 'Guardar datos Inspección',
+                                            //     scope: this,
+                                            //     handler: this.grabardenuncias,
+                                            //     iconCls: 'save-icon',
+                                            //     //disabled: !acceso,
+                                            //     id: 'tb_grabardenuncias'
+                                            //     , formBind: true
+                                            // }
+                                        ]
+                                    }
+                                  ]
                                 }
                             ]
                         },
