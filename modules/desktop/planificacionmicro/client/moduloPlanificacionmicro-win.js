@@ -623,7 +623,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //inicio combo glcode
         storeGLCode = new Ext.data.JsonStore({
             root: 'data',
-            fields: ['id', 'commitment_description', 'commitment_code', 'gl_description'],
+            fields: ['id', 'commitment_description', 'glcode', 'gl_description'],
             autoLoad: true,
             url: 'modules/common/combos/combos.php?tipo=glcode'
         });
@@ -648,7 +648,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             var index = storeGLCode.findExact('id', id);
             if (index > -1) {
                 var record = storeGLCode.getAt(index);
-                return record.get('commitment_code');
+                return record.get('glcode');
             }
         }
         function glcode2(id) {
