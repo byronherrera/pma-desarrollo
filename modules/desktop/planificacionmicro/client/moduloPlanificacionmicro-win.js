@@ -623,7 +623,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //inicio combo glcode
         storeGLCode = new Ext.data.JsonStore({
             root: 'data',
-            fields: ['id', 'commitment_description', 'commitment_code', 'gl_description'],
+            fields: ['id', 'commitment_description', 'glcode', 'gl_description'],
             autoLoad: true,
             url: 'modules/common/combos/combos.php?tipo=glcode'
         });
@@ -648,7 +648,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             var index = storeGLCode.findExact('id', id);
             if (index > -1) {
                 var record = storeGLCode.getAt(index);
-                return record.get('commitment_code');
+                return record.get('glcode');
             }
         }
         function glcode2(id) {
@@ -1906,14 +1906,14 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'ISC',
                     dataIndex: 'isc',
                     sortable: true,
-                    width: 80
+                    width: 70
                 },
                 {
                     header: 'Total Direct Cost',
                     dataIndex: 'total_grant',
                     sortable: true,
                     align: 'right',
-                    width: 28,
+                    width: 110,
                     renderer: 'usMoney',
                     editor: new Ext.form.NumberField({
                         allowBlank: false,
@@ -1925,7 +1925,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Total Programmed',
                     dataIndex: 'total_programmed',
                     sortable: true,
-                    width: 28,
+                    width: 120,
                     renderer: 'usMoney',
                     align: 'right'
                     /*editor: new Ext.form.NumberField({
@@ -1938,7 +1938,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Unprogrammed',
                     dataIndex: 'total_unprogrammed',
                     sortable: true,
-                    width: 28,
+                    width: 110,
                     renderer: 'usMoney',
                     align: 'right'
                     /* editor: new Ext.form.NumberField({
@@ -2004,7 +2004,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         }
 
                         Ext.getCmp('paso2').expand();
-                        Ext.getCmp('paso1').setTitle("Step 1 - Contributions - Grant number: " + rec.data['grant_number']  + " - Total: " + rec.data['total_programmed'] );
+                        Ext.getCmp('paso1').setTitle("Step 1 - Contributions - Grant number: " + rec.data['grant_number']  + " - Total: " + rec.data['total_grant'] + " - Total programmed: " + rec.data['total_programmed'] );
                         Ext.getCmp('paso2').setTitle("Step 2 - Activities");
                         Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
@@ -2347,7 +2347,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
                         // fin actualizar combo
                         Ext.getCmp('paso4').expand();
-                        Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs - " + costparentAdmDet(rec.data['cost_code']));
+                        Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs - " + costparentAdmDet(rec.data['cost_code']) + " - Total: " + rec.data['total_adjusted']);
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
 
                         // actualizamos el combo box
@@ -2445,7 +2445,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         select_SO = rec.id;
                         storeCostoMacro.load({params: {id: rec.id}});
                         Ext.getCmp('paso3').expand();
-                        Ext.getCmp('paso2').setTitle("Step 2 - Activities - " + costSO(rec.data['so']) + " - " +costActivities(rec.data['activity']));
+                        Ext.getCmp('paso2').setTitle("Step 2 - Activities - " + costSO(rec.data['so']) + " - " +costActivities(rec.data['activity']) + " - Total: " + rec.data['total']);
                         Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
 
@@ -2610,7 +2610,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 listeners: {
                     rowselect: function (sm, row, rec) {
                         //storePlanificacionmicrodetSimple.load({params: {filterField: 'guia', filterText: rec.get("numero")}})
-                        Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs- " + costCode2(rec.data['cost_code2']));
+                        Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs- " + costCode2(rec.data['cost_code2']) + " - Total: " + rec.data['total_after_adjust']);
                         // rec.data['glcode']=rec.data['cost_code3']
                         costCodeNuevo3 = rec.data['cost_code3'];
                         storeGLCode.load({
