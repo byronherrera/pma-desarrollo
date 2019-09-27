@@ -307,8 +307,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {name: 'cost_code2', allowBlank: true},
                 {name: 'cost_code3', allowBlank: true},
                 {name: 'glcode', allowBlank: true},
-                {name: 'commitment_description', allowBlank: true},
-                {name: 'gl_description', allowBlank: true},
+                //{name: 'commitment_description', allowBlank: true},
+                //{name: 'gl_description', allowBlank: true},
                 {name: 'cost_code4', allowBlank: true},
                 {name: 'cost_code5', allowBlank: true},
                 {name: 'description_micro', allowBlank: true},
@@ -623,7 +623,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //inicio combo glcode
         storeGLCode = new Ext.data.JsonStore({
             root: 'data',
-            fields: ['id', 'commitment_description'],
+            fields: ['id', 'commitment_description', 'commitment_code', 'gl_description'],
             autoLoad: true,
             url: 'modules/common/combos/combos.php?tipo=glcode'
         });
@@ -642,6 +642,20 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             if (index > -1) {
                 var record = storeGLCode.getAt(index);
                 return record.get('commitment_description');
+            }
+        }
+        function glcode1(id) {
+            var index = storeGLCode.findExact('id', id);
+            if (index > -1) {
+                var record = storeGLCode.getAt(index);
+                return record.get('commitment_code');
+            }
+        }
+        function glcode2(id) {
+            var index = storeGLCode.findExact('id', id);
+            if (index > -1) {
+                var record = storeGLCode.getAt(index);
+                return record.get('gl_description');
             }
         }
         //fin combo gl code
@@ -2517,21 +2531,21 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 },
                 {
                     header: 'GL code',
-                    dataIndex: 'gl_description',
+                    dataIndex: 'glcode',
                     sortable: true,
                     width: 100,
                     hidden: false,
                     // editor: comboGLCode,
-                    // renderer: glcode
+                     renderer: glcode1
                 },
                 {
                     header: 'Commitment description',
-                    dataIndex: 'commitment_description',
+                    dataIndex: 'glcode',
                     sortable: true,
                     width: 100,
                     hidden: false,
                     // editor: comboGLCode,
-                    // renderer: glcode
+                     renderer: glcode2
                 },
                 {
                     header: 'Cost Code nivel 4',
