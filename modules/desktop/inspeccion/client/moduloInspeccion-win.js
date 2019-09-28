@@ -1437,11 +1437,11 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                         {
                                             xtype: 'fileuploadfield',
                                             id: 'form-file',
-                                            emptyText: 'Seleccione archivo a importar',
+                                            emptyText: 'Select file to import',
                                             fieldLabel: 'Excel File',
                                             name: 'photo-path',
                                             regex: /^.*.(xls|XLS|xlsx|XLSX)$/,
-                                            regexText: 'Solo Excel',
+                                            regexText: 'Only Excel',
                                             buttonText: '',
                                             //buttonOnly: true,
                                             buttonCfg: {

@@ -329,8 +329,9 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             autoLoad: true,
             data: {
                 datos: [
-                    {"id": "Vigente", "subcategory_name": "Vigente"},
-                    {"id": "Cerrada", "subcategory_name": "Cerrada"}
+                    {"id": "Ongoing", "subcategory_name": "Ongoing"},
+                    {"id": "Closed", "subcategory_name": "Closed"},
+                    {"id": "Pending", "subcategory_name": "Pending"}
                 ]
             }
         });
@@ -362,7 +363,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             autoLoad: true,
             data: {
                 datos: [
-                    {"id": "Si", "subcategory_name": "Si"},
+                    {"id": "Yes", "subcategory_name": "Yes"},
                     {"id":  "No", "subcategory_name": "No"}
                 ]
             }
@@ -384,7 +385,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         //fin combo GRANT
 
         //inicio combo Estado Recepcion Información Inspeccion ESREA
-        storeESREA = new Ext.data.JsonStore({
+       /* storeESREA = new Ext.data.JsonStore({
             root: 'datos',
             fields: ['id', 'nombre'],
             autoLoad: true,
@@ -412,7 +413,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 var record = storeESREA.getAt(index);
                 return record.get('nombre');
             }
-        }
+        }*/
 
         //fin combo Estado Recepcion Información Inspeccion ESREA
 
@@ -623,7 +624,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     width: 28,
                     editor: textField,
                     align: 'right'
-                    // renderer: personaReceptaDenuncia
                 },
                 {
                     header: 'Total Direct Cost',
@@ -713,9 +713,19 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 //para dar color a la fila
                 forceFit: true,
                 getRowClass: function (record, index) {
-                    /*if (record.get('despacho_secretaria') == false) {
+                    // si el valor es negativo
+                    if (record.get('despacho_secretaria') == false) {
                         return 'gold';
-                    }*/
+                    }
+                    // si la fecha esta proxima a su vencimiento 30 dias
+                    if (record.get('despacho_secretaria') == false) {
+                        return 'gold';
+                    }
+                    // si la fecha esta proxima a su vencimiento 60 dias
+                    if (record.get('despacho_secretaria') == false) {
+                        return 'gold';
+                    }
+
                 }
             },
             sm: new Ext.grid.RowSelectionModel(
@@ -731,7 +741,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             // paging bar on the bottom
             bbar: new Ext.PagingToolbar({
                 pageSize: limitecontribuciones,
-                store: this.storeContribuciones,
+                store: storeContribuciones,
                 displayInfo: true,
                 displayMsg: 'Showing contributions  {0} - {1} of {2}',
                 emptyMsg: "No contributions to be shown"
@@ -793,7 +803,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     , align: 'center'
                     , falseText: 'No'
                     , menuDisabled: true
-                    , trueText: 'Si'
+                    , trueText: 'Yes'
                     , sortable: true
                     , width: 20
                     , xtype: 'booleancolumn'
