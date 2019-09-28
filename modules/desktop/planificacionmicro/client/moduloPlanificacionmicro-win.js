@@ -2713,19 +2713,19 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                             fields: [
                                 {name: 'id', allowBlank: false},
                                 {name: 'location', allowBlank: false},
-                                {name: 'hr-position', allowBlank: false},
+                                {name: 'hr_position', allowBlank: false},
                                 {name: 'grade', allowBlank: true},
-                                {name: 'index-no', allowBlank: true},
-                                {name: 'hr-position', allowBlank: true},
-                                {name: 'number-months', allowBlank: true},
-                                {name: 'number-staff', allowBlank: true},
-                                {name: 'monthly-cost-2019', allowBlank: true},
-                                {name: 'monthly-cost-2018', allowBlank: true},
-                                {name: 'expected-cost-2019', allowBlank: true},
-                                {name: 'without-increase', allowBlank: true},
-                                {name: 'increase-2', allowBlank: true},
-                                {name: 'increase-5', allowBlank: true},
-                                {name: 'program-validation', allowBlank: true}
+                                {name: 'index_no', allowBlank: true},
+                                {name: 'hr_position', allowBlank: true},
+                                {name: 'number_months', allowBlank: true},
+                                {name: 'number_staff', allowBlank: true},
+                                {name: 'monthly_cost_2019', allowBlank: true},
+                                {name: 'monthly_cost_2018', allowBlank: true},
+                                {name: 'expected_cost_2019', allowBlank: true},
+                                {name: 'without_increase', allowBlank: true},
+                                {name: 'increase_2', allowBlank: true},
+                                {name: 'increase_5', allowBlank: true},
+                                {name: 'program_validation', allowBlank: true}
                             ]
                         });
 
@@ -2765,12 +2765,12 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         // ,{header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
                         ,{
                             header: 'HR Description',
-                            dataIndex: 'hr-position',
+                            dataIndex: 'hr_position',
                             sortable: true,
                             width: 200,
                             editor: textField
                         }
-                        ,{header: 'Monthly cost 2018', dataIndex: 'monthly-cost-2018', sortable: true, width: 100}
+                        ,{header: 'Monthly cost 2018', dataIndex: 'monthly_cost_2018', sortable: true, width: 100}
 
 
                     ],
