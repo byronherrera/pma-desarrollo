@@ -70,6 +70,12 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
         var textFieldDetalle = new Ext.form.TextField({allowBlank: true, readOnly: false});
 
+        var numero = new Ext.form.NumberField({
+            allowBlank: false,
+            allowNegative: false,
+            maxValue: 100000000
+        });
+
         //Definición del formato de fecha
         function formatDate(value) {
             return value ? value.dateFormat('Y-m-d') : '';
@@ -958,10 +964,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     header: 'ISC',
                     dataIndex: 'isc',
                     sortable: true,
-                    width: 20,
-                    editor: textField,
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: numero,
                     align: 'right'
-                    // renderer: personaReceptaDenuncia
                 },
                 {
                     header: 'Total Direct Cost',

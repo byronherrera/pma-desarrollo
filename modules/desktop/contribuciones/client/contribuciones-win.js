@@ -599,7 +599,9 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     header: 'ISC',
                     dataIndex: 'isc',
                     sortable: true,
-                    width: 28
+                    width: 28,
+                    renderer: 'usMoney',
+                    align: 'right'
                 },
                 {
                     header: 'Total Grant Value without ISC',
@@ -1103,11 +1105,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             grant_tdd: (new Date()),
             grant_specific: ' ',
             year_contribution: (new Date().getFullYear()),
-            // id_tipo: '',
             crn: '',
             recepcion_documento: (new Date())
-
-
         });
         this.gridContribuciones.stopEditing();
         this.storeContribuciones.insert(0, contribuciones);

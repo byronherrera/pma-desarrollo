@@ -71,6 +71,12 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
         var textFieldDetalle = new Ext.form.TextField({allowBlank: true, readOnly: false});
 
+        var numero = new Ext.form.NumberField({
+            allowBlank: false,
+            allowNegative: false,
+            maxValue: 100000000
+        });
+
         //Definición del formato de fecha
         function formatDate(value) {
             return value ? value.dateFormat('Y-m-d') : '';
@@ -1906,7 +1912,11 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'ISC',
                     dataIndex: 'isc',
                     sortable: true,
-                    width: 70
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: numero,
+                    align: 'right'
+
                 },
                 {
                     header: 'Total Direct Cost',
@@ -1915,11 +1925,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     align: 'right',
                     width: 110,
                     renderer: 'usMoney',
-                    editor: new Ext.form.NumberField({
-                        allowBlank: false,
-                        allowNegative: false,
-                        maxValue: 100000000
-                    })
+                    editor: numero
                 },
                 {
                     header: 'Total Programmed',
