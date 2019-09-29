@@ -22,6 +22,9 @@
 .x-toolbar-cell .x-form-checkbox  {
     margin-top: 0px !important;
 }
-.gold  { background-color: bisque !important;}
+.goldstate  { background-color: rgba(255, 246, 123, 0.84) !important;}
+.bluestate  { background-color: #67df59 !important;}
+.redstate  { background-color: #df3c3f !important;}
+
 
 .x-combo-list-inner, .x-combo-list {min-width: 220px !important;}

@@ -1934,11 +1934,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     width: 120,
                     renderer: 'usMoney',
                     align: 'right'
-                    /*editor: new Ext.form.NumberField({
-                        allowBlank: false,
-                        allowNegative: false,
-                        maxValue: 100000000
-                    })*/
+
                 },
                 {
                     header: 'Unprogrammed',
@@ -1947,11 +1943,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     width: 110,
                     renderer: 'usMoney',
                     align: 'right'
-                    /* editor: new Ext.form.NumberField({
-                        allowBlank: false,
-                        allowNegative: false,
-                        maxValue: 100000000
-                    })*/
+
                 },
                 {
                     header: 'Grant TOD',
