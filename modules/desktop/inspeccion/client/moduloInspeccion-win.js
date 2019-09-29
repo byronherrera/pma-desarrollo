@@ -114,6 +114,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {name: 'total_grant', allowBlank: false},
                 {name: 'total_programmed', allowBlank: true},
                 {name: 'total_unprogrammed', allowBlank: true},
+                {name: 'total_contribution', allowBlank: true},
                 {name: 'grant_tod', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_tdd', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_specific', allowBlank: true},
@@ -150,6 +151,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {name: 'year', allowBlank: false},
                 {name: 'so', allowBlank: false},
                 {name: 'activity', allowBlank: false},
+                {name: 'total_planned', allowBlank: true},
                 {name: 'total', allowBlank: true},
             ]
         });
@@ -1754,6 +1756,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             year_contribution: (new Date().getFullYear()),
              isc: '',
             total_grant: 0,
+            total_contribution: 0,
             total_programmed: 0
         });
         this.gridModuloInspeccion.stopEditing();
@@ -1809,6 +1812,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             year: (new Date().getFullYear()),
             so: '',
             activity: '',
+            total_planned: 0,
             //id_cost: '',
             id_pma_contribuciones_detalle: selectContribuciones
         });
