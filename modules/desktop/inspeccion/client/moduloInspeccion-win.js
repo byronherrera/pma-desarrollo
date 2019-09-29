@@ -983,6 +983,15 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     })
                 },
                 {
+                    header: 'Total contribution',
+                    dataIndex: 'total_contribution',
+                    sortable: true,
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: numero,
+                    align: 'right'
+                },
+                {
                     header: 'Total Programmed',
                     dataIndex: 'total_programmed',
                     sortable: true,
@@ -1221,7 +1230,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     header: 'Strategic Objectives',
                     dataIndex: 'so',
                     sortable: true,
-                    width: 120,
+                    width: 110,
                     editor: comboSO,
                     renderer: costSO
                 },
@@ -1229,9 +1238,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     header: 'Activity',
                     dataIndex: 'activity',
                     sortable: true,
-                    width: 100,
+                    width: 60,
                     editor: comboActivities,
                     renderer: costActivities
+                },
+                {
+                    header: 'Total planned',
+                    dataIndex: 'total_planned',
+                    sortable: true,
+                    width: 100,
+                    renderer: 'usMoney',
+                    editor: numero,
+                    align: 'right'
                 },
                 {header: 'Total macro', dataIndex: 'total', renderer: 'usMoney', width: 100, align: 'right'}
             ],
@@ -1368,7 +1386,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                     text: 'New',
                                     scope: this,
                                     handler: this.addModuloInspeccion,
-                                    disabled: false,
+                                    disabled: true,
                                     iconCls: 'save-icon'
                                 },
                                 '-',
@@ -1377,7 +1395,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                     text: "Delete",
                                     scope: this,
                                     handler: this.deleteModuloInspeccion,
-                                    //disabled: true,
+                                    disabled: true,
                                     //disabled: !creacionTramites,
                                     iconCls: 'delete-icon'
                                 },
