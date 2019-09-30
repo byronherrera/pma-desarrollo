@@ -61,64 +61,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         }
         //fin variables visualizacion
 
-
-
         // inicio combos contribuciones
-
-        //inicio combo tipo documento  TID
-        storeGrant = new Ext.data.JsonStore({
-            root: 'documento',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                documento: [
-                    {"id": "Ongoing", "subcategory_name": "Ongoing"},
-                    {"id": "Closed", "subcategory_name": "Closed"},
-                    {"id": "Pending", "subcategory_name": "Pending"}
-                ]
-            }
-        });
-
-        function personaTipoDocumento(id) {
-            var index = storeGrant.find('id', id);
-            if (index > -1) {
-                var record = storeGrant.getAt(index);
-                return record.get('nombre');
-            }
-        }
-
-        //fin combo tipo documento  TID
-
-        //inicio combo guia  REAGUIA
-        storeREAGUIA = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                datos: [
-                    {"id": "Yes", "nombre": "Yes"},
-                    {"id": "No", "nombre": "No"}
-                ]
-            }
-        });
-
-
-        var comboREAGUIA = new Ext.form.ComboBox({
-            id: 'comboREAGUIA',
-            store: storeREAGUIA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-
-        function departamentoREAGUIAS(id) {
-            var index = storeREAGUIA.findExact('id', id);
-            var record = storeREAGUIA.getAt(index);
-            return record.get('nombre');
-        }
-
-        //fin combo reasignacion REAGUIA
 
 
         //inicio combo caracter del tramite CDT
@@ -129,14 +72,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             url: 'modules/common/combos/combos.php?tipo=yearcontribution'
         });
 
-        var comboCDT = new Ext.form.ComboBox({
-            id: 'comboCDT',
-            store: storeCDT,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
+
 
         //inicio combo instituciones INST
         storeINST = new Ext.data.JsonStore({
@@ -189,6 +125,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         }
         //fin combo Status
 
+        //inicio combo grant
         storeGrant = new Ext.data.JsonStore({
             root: 'datos',
             fields: ['id', 'subcategory_name'],
@@ -823,21 +760,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
 
                                 store: storeCDT,
                                 valueField: 'nombre',
-                                displayField: 'nombre',
-                                typeAhead: true,
-                                triggerAction: 'all',
-                                mode: 'local'
-                            },
-                            {
-                                xtype: 'combo',
-                                fieldLabel: 'Grant specific',
-                                name: 'busqueda_guia',
-                                id: 'busqueda_guia',
-                                anchor: '95%',
-                                hiddenName: 'busqueda_guia',
-
-                                store: storeREAGUIA,
-                                valueField: 'id',
                                 displayField: 'nombre',
                                 typeAhead: true,
                                 triggerAction: 'all',

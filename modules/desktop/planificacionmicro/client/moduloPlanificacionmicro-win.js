@@ -67,9 +67,21 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         //Ubicación de la carpeta de Planificacionmicro
         var urlPlanificacionmicro = "modules/desktop/planificacionmicro/server/";
-        // todasPlanificacionmicro = todosInspectores;
+
+        var intervalo1 = 30;
+        var intervalo2 = 90;
+
+
+        //incio variables visualizacion
         var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
-        var textFieldDetalle = new Ext.form.TextField({allowBlank: true, readOnly: false});
+        var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 10});
+
+        var anio = new Ext.ux.form.SpinnerField({
+            fieldLabel: 'Year',
+            name: 'year',
+            minValue: 2000,
+            maxValue: 2030
+        });
 
         var numero = new Ext.form.NumberField({
             allowBlank: false,
@@ -77,7 +89,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             maxValue: 100000000
         });
 
-        //Definición del formato de fecha
+        var fecha = new Ext.form.DateField({format: 'Y-m-d'});
+
         function formatDate(value) {
             return value ? value.dateFormat('Y-m-d') : '';
         }
@@ -90,67 +103,63 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
             return val;
         }
+        //fin variables visualizacion
 
-        //Inicio ventana planificacionmicro
-        //Definición de url CRUD
-        var proxyModuloPlanificacionmicro = new Ext.data.HttpProxy({
-            api: {
-                create: urlPlanificacionmicro + "crudContribuciones.php?operation=insert",
-                read: urlPlanificacionmicro + "crudContribuciones.php?operation=select",
-                update: urlPlanificacionmicro + "crudContribuciones.php?operation=update",
-                destroy: urlPlanificacionmicro + "crudContribuciones.php?operation=delete"
-            },
-            listeners: {
-                write: function (proxy, action, result, res, rs) {
-                    costCodeNuevo3 = rs.data['cost_code2'];
-                    comboCostCode3.clearValue();
-                    storeCostCode3.load({
-                        params: {
-                            costCodeNuevo3: costCodeNuevo3
-                        }
-                    });
-                    costCodeNuevo5 = rs.data['cost_code4'];
-                    comboCostCode5.clearValue();
-                    storeCostCode5.load({
-                        params: {
-                            costCodeNuevo5: costCodeNuevo5
-                        }
-                    });
-                }
+        //Inicio Combos
+        storeStatus = new Ext.data.JsonStore({
+            root: 'datos',
+            fields: ['id', 'subcategory_name'],
+            autoLoad: true,
+            data: {
+                datos: [
+                    {"id": "Ongoing", "subcategory_name": "Ongoing"},
+                    {"id": "Closed", "subcategory_name": "Closed"},
+                    {"id": "Pending", "subcategory_name": "Pending"}
+                ]
             }
         });
 
-        //Definición de lectura de campos bdd Planificacionmicro
-        var readerModuloPlanificacionmicro = new Ext.data.JsonReader({
-            //totalProperty: 'total',
-            successProperty: 'success',
-            messageProperty: 'message',
-            idProperty: 'id',
-            root: 'data',
-            fields: [
-                {name: 'grant_number', type: 'string', allowBlank: false},
-                {name: 'estado', allowBlank: true},
-                {name: 'crn', allowBlank: true},
-                {name: 'fund', allowBlank: true},
-                {name: 'donor', allowBlank: true},
-                {name: 'comments', allowBlank: true},
-                {name: 'isc', allowBlank: true},
-                {name: 'total_grant', allowBlank: false},
-                {name: 'total_programmed', allowBlank: true},
-                {name: 'total_unprogrammed', allowBlank: true},
-                {name: 'grant_tod', type: 'date', dateFormat: 'c', allowBlank: true},
-                {name: 'grant_tdd', type: 'date', dateFormat: 'c', allowBlank: true},
-                {name: 'grant_specific', allowBlank: true},
-                {name: 'year_contribution', allowBlank: true}
-            ]
-
+        var comboStatus = new Ext.form.ComboBox({
+            id: 'comboStatus',
+            store: storeStatus,
+            valueField: 'id',
+            displayField: 'subcategory_name',
+            triggerAction: 'all',
+            mode: 'local'
         });
 
-        //Definición de escritura en campos bdd Planificacionmicro
-        var writerModuloPlanificacionmicro = new Ext.data.JsonWriter({
-            encode: true,
-            writeAllFields: true
+        function costStatus(id) {
+            return id;
+        }
+        //fin combo Status
+
+        //inicio combo grant
+        storeGrant = new Ext.data.JsonStore({
+            root: 'datos',
+            fields: ['id', 'subcategory_name'],
+            autoLoad: true,
+            data: {
+                datos: [
+                    {"id": "Yes", "subcategory_name": "Yes"},
+                    {"id": "No", "subcategory_name": "No"}
+                ]
+            }
         });
+
+        var comboGrant = new Ext.form.ComboBox({
+            id: 'comboGrant',
+            store: storeGrant,
+            valueField: 'id',
+            displayField: 'subcategory_name',
+            triggerAction: 'all',
+            mode: 'local'
+        });
+
+        function costGrant(id) {
+            return id
+        }
+        //fin combo GRANT
+        //fin combos
 
         //Inicio ventana planificacionmicro
         //Definición de url CRUD
@@ -202,6 +211,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             encode: true,
             writeAllFields: true
         });
+        //Fin ventana planificacionmicro
 
         //Definición de url CRUD
         var proxyListadoPlanificacionmicro = new Ext.data.HttpProxy({
@@ -268,7 +278,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                             }
                         }
 
-                        setTimeout(function(){
+                        setTimeout(function () {
                             costCodeNuevo3 = rs.data['cost_code2'];
                             comboCostCode3.clearValue();
                             storeCostCode3.load({
@@ -277,20 +287,20 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                 }
                             });
 
-                        costCodeNuevo5 = rs.data['cost_code4'];
-                        comboCostCode5.clearValue();
-                        storeCostCode5.load({
-                            params: {
-                                costCodeNuevo5: costCodeNuevo5
-                            }
-                        });
+                            costCodeNuevo5 = rs.data['cost_code4'];
+                            comboCostCode5.clearValue();
+                            storeCostCode5.load({
+                                params: {
+                                    costCodeNuevo5: costCodeNuevo5
+                                }
+                            });
 
-                        costCodeNuevo3 = rs.data['cost_code3'];
-                        storeGLCode.load({
-                            params: {
-                                costCodeNuevo3: costCodeNuevo3
-                            }
-                        });
+                            costCodeNuevo3 = rs.data['cost_code3'];
+                            storeGLCode.load({
+                                params: {
+                                    costCodeNuevo3: costCodeNuevo3
+                                }
+                            });
                         }, 700);
 
                     }
@@ -336,9 +346,9 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             writer: writerPlanificacionmicrodet,
             autoSave: true,
             listeners: {
-            load: function(){
+                load: function () {
+                }
             }
-        }
         });
         this.storePlanificacionmicrodet.load();
 
@@ -396,17 +406,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         });
 
 
-        //Definición de store para módulo Planificacionmicro
-        this.storeModuloPlanificacionmicro = new Ext.data.Store({
-            id: "storeModuloPlanificacionmicro",
-            proxy: proxyModuloPlanificacionmicro,
-            reader: readerModuloPlanificacionmicro,
-            writer: writerModuloPlanificacionmicro,
-            autoSave: !accesosSupervision, // dependiendo de si se tiene acceso para grabar
-            //remoteSort: true,
-            //autoSave: true
-            //baseParams: {}
-        });
+
 
         //Definición de store para módulo Planificacionmicro
         this.storeDetallePlanificacionmicro = new Ext.data.Store({
@@ -439,14 +439,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             //remoteSort: true,
             //baseParams: {}
         });
-
-        // var checkHandler = function (item, checked) {
-        //     if (checked) {
-        //         var store = this.storeModuloPlanificacionmicro;
-        //         store.baseParams.filterField = item.key;
-        //         searchFieldBtn.setText(item.text);
-        //     }
-        // };
 
         var checkHandlerPlanificacionmicro = function (item, checked) {
             if (checked) {
@@ -624,6 +616,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 return record.get('description');
             }
         }
+
         //fin combo costCode3
 
         //inicio combo glcode
@@ -650,6 +643,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 return record.get('commitment_description');
             }
         }
+
         function glcode1(id) {
             var index = storeGLCode.findExact('id', id);
             if (index > -1) {
@@ -657,6 +651,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 return record.get('glcode');
             }
         }
+
         function glcode2(id) {
             var index = storeGLCode.findExact('id', id);
             if (index > -1) {
@@ -664,6 +659,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 return record.get('gl_description');
             }
         }
+
         //fin combo gl code
 
         //inicio combo costCode4
@@ -690,6 +686,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 return record.get('description');
             }
         }
+
         //fin combo costCode4
 
         //inicio combo costCode5
@@ -716,6 +713,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 return record.get('description');
             }
         }
+
         //fin combo costCode5
 
 
@@ -756,57 +754,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //fin combo tipo documento  TID
 
 
-        //inicio combo RAZON DEVOLUCIÓN
-        storeRazonDevolucion = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 1, "nombre": "No es competencia de PMA (humedad)"},
-                    {"id": 2, "nombre": "Requisitos incompletos"},
-                    {"id": 3, "nombre": "Inicio de trámite en otra dependencia"},
-                ]
-            }
-        });
 
-        var comboRazonDevolucion = new Ext.form.ComboBox({
-            id: 'comboRazonDevolucion',
-            store: storeRazonDevolucion,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            //forceSelection: true,
-            //allowBlank: true
-        });
 
-        function razonDevolucion(id) {
-            var index = storeRazonDevolucion.find('id', id);
-            if (index > -1) {
-                var record = storeRazonDevolucion.getAt(index);
-                return record.get('nombre');
-            }
-        }
+
 
         //fin combo Razon Devolucion
 
-        //inicio combo reasignacion  REATOT
-        storeREATOT = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=unidadestotal'
-        });
 
-        //inicio combo persona recepta la denuncia PRD
-        storePRD = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=personalsecretaria'
-
-        });
 
 
         //inicio combo caracter del tramite CDT
@@ -864,151 +818,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
         });
 
-        //Inicio combo Asunto - Control programado
-        storeASUNTO = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 8, "nombre": "Construcción informal"},
-                    {"id": 7, "nombre": "Anulado"},
-                    {"id": 6, "nombre": "Actualización/homologación"},
-                    {"id": 5, "nombre": "Alcance informe anterior"},
-                    {"id": 4, "nombre": "Anulado por usuario"},
-                    {"id": 3, "nombre": "Edificaciones - seguimiento"},
-                    {"id": 2, "nombre": "Contestación a oficio"},
-                    {"id": 1, "nombre": "Control edificaciones"},
-                    {"id": 0, "nombre": "Sin selección"}
-                ]
-            }
-        });
 
-        //Inicio combo Asunto - Tipo trámite
-        storeTIPOTRAMITE = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 0, "nombre": "Sin selección"},
-                    {"id": 1, "nombre": "Control programado 1"},
-                    {"id": 2, "nombre": "Control programado 2"},
-                    {"id": 3, "nombre": "Control programado 3"},
-                    {"id": 4, "nombre": "Control programado 4"},
-                    {"id": 5, "nombre": "Control programado 5"},
-                    {"id": 6, "nombre": "Control programado 6"},
-                    {"id": 7, "nombre": "Control programado 7"},
-                    {"id": 8, "nombre": "Control programado 8"},
-                    {"id": 9, "nombre": "Control final"},
-                    {"id": 10, "nombre": "Control rutinario"},
-                    {"id": 11, "nombre": "Control seguimientos"},
-                    {"id": 12, "nombre": "Control técnico"},
-                    {"id": 13, "nombre": "Contestación a oficio"},
-                    {"id": 14, "nombre": "Control documentos"},
-                    {"id": 15, "nombre": "Control medidas de mitigación EPMMOP"},
-                    {"id": 16, "nombre": "Control áreas históricas"},
-                    {"id": 17, "nombre": "Alcance informe anterior"},
-                    {"id": 18, "nombre": "Informe de verificación"},
-                    {"id": 19, "nombre": "Anulado mediante documento"},
-                    {"id": 20, "nombre": "Homologación por pedido de administración zonal"}
-                ]
-            }
-        });
 
-        //inicio combo aprobación o registro de planos
-        storeAPROBACIONPLANOS = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 7, "nombre": "Unificación de predios"},
-                    {"id": 6, "nombre": "Actualización/reconocimiento edificaciones"},
-                    {"id": 5, "nombre": "Ampliatorio"},
-                    {"id": 4, "nombre": "Nuevo"},
-                    {"id": 3, "nombre": "Modificatorio-apliatorio"},
-                    {"id": 2, "nombre": "Modificatorio"},
-                    {"id": 1, "nombre": "Aprobado"},
-                    {"id": 0, "nombre": "Sin selección"}
-                ]
-            }
-        });
-
-        //inicio combo estado de obra
-        storeESTADOOBRA = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 14, "nombre": "Derrocamiento"},
-                    {"id": 13, "nombre": "Obra suspendida"},
-                    {"id": 12, "nombre": "No fue posible ubicar el predio"},
-                    {"id": 11, "nombre": "No se permitió ingreso a obra"},
-                    {"id": 10, "nombre": "Revisión en planos"},
-                    {"id": 9, "nombre": "Terminada y/o en funcionamiento"},
-                    {"id": 8, "nombre": "Terminada y/o habitada"},
-                    {"id": 7, "nombre": "Terminada"},
-                    {"id": 6, "nombre": "En acabados"},
-                    {"id": 5, "nombre": "Obra gris"},
-                    {"id": 4, "nombre": "Mampostería"},
-                    {"id": 3, "nombre": "Estructura y losas"},
-                    {"id": 2, "nombre": "Cimentación"},
-                    {"id": 1, "nombre": "No construida"},
-                    {"id": 0, "nombre": "Sin selección"}
-                ]
-            }
-        });
-
-        //Inicio combo Asunto - Control programado
-        storeINVENTARIADO = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 2, "nombre": "No"},
-                    {"id": 1, "nombre": "Si"},
-                    {"id": 0, "nombre": "Sin selección"}
-                ]
-            }
-        });
-
-        //inicio combo tipo acta inspección
-        storeTIPOACTAINSP = new Ext.data.JsonStore({
-            root: 'datos',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 0, "nombre": "Otro tipo"},
-                    {"id": 1, "nombre": "Infracción"},
-                    {"id": 7, "nombre": "Advertencia"},
-                    {"id": 5, "nombre": "Conformidad"},
-                    {"id": 4, "nombre": "Obstrucción"}
-                ]
-            }
-        });
-
-        var comboTIPOACTAINSP = new Ext.form.ComboBox({
-            id: 'comboTIPOACTAINSP',
-            store: storeTIPOACTAINSP,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-
-        function tipoActaPlanificacionmicro(id) {
-            var index = storeTIPOACTAINSP.find('id', id);
-            if (index > -1) {
-                var record = storeTIPOACTAINSP.getAt(index);
-                return record.get('nombre');
-            } else {
-                return ''
-            }
-        }
 
         //inicio combo aprobación secretaría inspección
         storeMOTIVOACTA = new Ext.data.JsonStore({
@@ -1398,67 +1209,11 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             mode: 'local'
         });
 
-        var comboASUNTO = new Ext.form.ComboBox({
-            id: 'comboASUNTO',
-            store: storeASUNTO,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
 
-        var comboTIPOTRAMITE = new Ext.form.ComboBox({
-            id: 'comboTIPOTRAMITE',
-            store: storeTIPOTRAMITE,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
 
-        var comboAPROBACIONPLANOS = new Ext.form.ComboBox({
-            id: 'comboAPROBACIONPLANOS',
-            store: storeAPROBACIONPLANOS,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
 
-        var comboESTADOOBRA = new Ext.form.ComboBox({
-            id: 'comboESTADOOBRA',
-            store: storeESTADOOBRA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
 
-        var comboLISTADOESTADOOBRA = new Ext.form.ComboBox({
-            id: 'comboLISTADOESTADOOBRA',
-            store: storeESTADOOBRA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
 
-        var comboINVENTARIADO = new Ext.form.ComboBox({
-            id: 'comboINVENTARIADO',
-            store: storeINVENTARIADO,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-
-        function inventariado(id) {
-            var index = storeINVENTARIADO.find('id', id);
-            if (index > -1) {
-                var record = storeINVENTARIADO.getAt(index);
-                return record.get('nombre');
-            }
-        }
 
         function listaOrdenanzas(id) {
             var index = storeORD.find('id', id);
@@ -1468,37 +1223,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
         }
 
-        function asunto(id) {
-            var index = storeASUNTO.find('id', id);
-            if (index > -1) {
-                var record = storeASUNTO.getAt(index);
-                return record.get('nombre');
-            }
-        }
 
-        function tipoTramite(id) {
-            var index = storeTIPOTRAMITE.find('id', id);
-            if (index > -1) {
-                var record = storeTIPOTRAMITE.getAt(index);
-                return record.get('nombre');
-            }
-        }
 
-        function aprobacionPlanos(id) {
-            var index = storeAPROBACIONPLANOS.find('id', id);
-            if (index > -1) {
-                var record = storeAPROBACIONPLANOS.getAt(index);
-                return record.get('nombre');
-            }
-        }
 
-        function estadoObra(id) {
-            var index = storeESTADOOBRA.find('id', id);
-            if (index > -1) {
-                var record = storeESTADOOBRA.getAt(index);
-                return record.get('nombre');
-            }
-        }
+
 
         function caracterTramite(id) {
             var index = storeCDT.find('id', id);
@@ -1745,282 +1473,28 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         scope: this,
                         text: 'Any column'
                     }
-                    // , {
-                    //     checked: false,
-                    //     checkHandler: checkHandler,
-                    //     group: 'filterField',
-                    //     key: 'num_documento',
-                    //     scope: this,
-                    //     text: 'Número documento'
-                    // }
+
                 ]
             })
             , text: 'Any column'
         });
 
-        var searchListadoInpeccionesBtn = new Ext.Button({
-            menu: new Ext.menu.Menu({
-                items: [
-                    {
-                        checked: true,
-                        checkHandler: checkHandlerPlanificacionmicro,
-                        group: 'filterField',
-                        key: 'codigo_tramite',
-                        scope: this,
-                        text: 'Código trámite'
-                    }
-                    , {
-                        checked: true,
-                        checkHandler: checkHandlerPlanificacionmicro,
-                        group: 'filterField',
-                        key: 'id_planificacionmicro',
-                        scope: this,
-                        text: 'Código inspección'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandlerPlanificacionmicro,
-                        group: 'filterField',
-                        key: 'nombre_denunciado',
-                        scope: this,
-                        text: 'Nombre denunciado'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandlerPlanificacionmicro,
-                        group: 'filterField',
-                        key: 'funcionario_entrega',
-                        scope: this,
-                        text: 'Inspector'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandlerPlanificacionmicro,
-                        group: 'filterField',
-                        key: 'predio',
-                        scope: this,
-                        text: 'Predio'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandlerPlanificacionmicro,
-                        group: 'filterField',
-                        key: 'guia',
-                        scope: this,
-                        text: 'Guia'
-                    }, {
-                        checked: false,
-                        checkHandler: checkHandlerPlanificacionmicro,
-                        group: 'filterField',
-                        key: 'id_acta',
-                        scope: this,
-                        text: 'Número documento'
-                    }
-                ]
-            })
-            , text: 'Código trámite'
-        });
-
-        var searchPlanificacionmicroBtn = new Ext.Button({
-            menu: new Ext.menu.Menu({
-                items: [
-                    {
-                        checked: true,
-                        checkHandler: checkHandlerPlanificacionmicro,
-                        group: 'filterField',
-                        key: 'id_planificacionmicro',
-                        scope: this,
-                        text: 'Código inspección'
-                    }
-                    , {
-                        checked: false,
-                        checkHandler: checkHandlerPlanificacionmicro,
-                        group: 'filterField',
-                        key: 'nombre_denunciado',
-                        scope: this,
-                        text: 'Nombre denunciado'
-                    }
-                ]
-            })
-            , text: 'Código trámite'
-        });
-        this.storeModuloPlanificacionmicro.load();
-       this.storeDetallePlanificacionmicro.load();
-       this.storeCostoMacro.load();
-       this.storePlanificacionmicrodet.load();
-       // this.storeListadoPlanificacionmicro.load();
 
 
-        storeModuloPlanificacionmicro = this.storeModuloPlanificacionmicro;
-        limiteModuloPlanificacionmicro = 100;
+        this.storeDetallePlanificacionmicro.load();
+        this.storeCostoMacro.load();
+        this.storePlanificacionmicrodet.load();
+        // this.storeListadoPlanificacionmicro.load();
+
+
         storeDetallePlanificacionmicro = this.storeDetallePlanificacionmicro;
-        limiteDetallePlanificacionmicro = 10;
-        limiteDetallePlanificacionmicroLarge = 100;
         storeCostoMacro = this.storeCostoMacro;
-        var anchoHelp = 43;
-        var altoHelp = 188;
         storePlanificacionmicrodet = this.storePlanificacionmicrodet;
 
-        storeModuloPlanificacionmicro.baseParams = {
-            limit: limiteModuloPlanificacionmicro
-        };
+        limiteModuloPlanificacionmicro = 100;
+        var anchoHelp = 43;
+        var altoHelp = 210;
 
-        //Inicio formato grid Planificacionmicro
-        this.gridModuloPlanificacionmicro = new Ext.grid.EditorGridPanel({
-            id: 'gridModuloPlanificacionmicro',
-            xtype: "grid",
-            //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight - altoHelp,
-            //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
-            width: winWidth - anchoHelp,
-            store: this.storeModuloPlanificacionmicro,
-            columns: [
-                //Definición de campos bdd Planificacionmicro
-                new Ext.grid.RowNumberer(),
-                {
-                    header: 'Grant Number',
-                    dataIndex: 'grant_number',
-                    sortable: true,
-                    width: 80
-                },
-                {
-                    header: 'CRN',
-                    dataIndex: 'crn',
-                    sortable: true,
-                    width: 100
-                },
-                {
-                    header: 'Fund',
-                    dataIndex: 'fund',
-                    sortable: true,
-                    width: 80,
-                    editor: textField
-                    // renderer: personaReceptaDenuncia
-                },
-                {
-                    header: 'Donor',
-                    dataIndex: 'donor',
-                    sortable: true,
-                    width: 80
-                },
-                {
-                    header: 'Year',
-                    dataIndex: 'year_contribution',
-                    sortable: true,
-                    width: 40
-                },
-                {
-                    header: 'ISC',
-                    dataIndex: 'isc',
-                    sortable: true,
-                    width: 28,
-                    renderer: 'usMoney',
-                    editor: numero,
-                    align: 'right'
-
-                },
-                {
-                    header: 'Total Direct Cost',
-                    dataIndex: 'total_grant',
-                    sortable: true,
-                    align: 'right',
-                    width: 110,
-                    renderer: 'usMoney',
-                    editor: numero
-                },
-                {
-                    header: 'Total Programmed',
-                    dataIndex: 'total_programmed',
-                    sortable: true,
-                    width: 120,
-                    renderer: 'usMoney',
-                    align: 'right'
-
-                },
-                {
-                    header: 'Unprogrammed',
-                    dataIndex: 'total_unprogrammed',
-                    sortable: true,
-                    width: 110,
-                    renderer: 'usMoney',
-                    align: 'right'
-
-                },
-                {
-                    header: 'Grant TOD',
-                    dataIndex: 'grant_tod',
-                    sortable: true,
-                    width: 100,
-                    renderer: formatDate
-                },
-                {
-                    header: 'Grant TDD',
-                    dataIndex: 'grant_tdd',
-                    sortable: true,
-                    width: 100,
-                    renderer: formatDate
-                },
-                {
-                    header: 'Grant Specific',
-                    dataIndex: 'grant_specific',
-                    sortable: true,
-                    width: 100
-                },
-                {
-                    header: 'Status',
-                    dataIndex: 'estado',
-                    sortable: true,
-                    width: 80
-                },
-
-                {
-                    header: 'Comments',
-                    dataIndex: 'comments',
-                    sortable: true,
-                    width: 158
-                },
-
-            ],
-            viewConfig: {
-                // forceFit: winWidth > 1024 ? true : false
-                forceFit:false
-            },
-            sm: new Ext.grid.RowSelectionModel({
-                singleSelect: true,
-                listeners: {
-                    rowselect: function (sm, row, rec) {
-                        // recuperamos la informacion de personal asignado a ese operativo
-                        //select_codigo_tramite = rec.id;
-                        storeDetallePlanificacionmicro.load({params: {id: rec.id}});
-                        contribucionSeleccionada = rec.id;
-                        planificacionmicroSeleccionada = rec.id_denuncia;
-                        if (creacionDatosPlanificacionmicro) {
-                            Ext.getCmp('btnNuevoDetallePlanificacionmicro').setDisabled(false);
-                            Ext.getCmp('btnEliminarDetallePlanificacionmicro').setDisabled(false);
-                            // Ext.getCmp('checkTodasPlanificacionmicro').setValue(false);
-                            // Ext.getCmp('gridDetalleTodasPlanificacionmicro').setVisible(false);
-                            Ext.getCmp('gridDetallePlanificacionmicro').setVisible(true);
-                        }
-
-                        Ext.getCmp('paso2').expand();
-                        Ext.getCmp('paso1').setTitle("Step 1 - Contributions - Grant number: " + rec.data['grant_number']  + " - Total: " + rec.data['total_grant'] + " - Total programmed: " + rec.data['total_programmed'] );
-                        Ext.getCmp('paso2').setTitle("Step 2 - Activities");
-                        Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
-                        Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
-                    }
-                }
-            }),
-            border: false,
-            stripeRows: true,
-            //Definición de barra de paginado
-            bbar: new Ext.PagingToolbar({
-                pageSize: limiteModuloPlanificacionmicro,
-                store: storeModuloPlanificacionmicro,
-                displayInfo: true,
-                displayMsg: 'Showing contributions: {0} - {1} of {2} - PMA',
-                emptyMsg: "No contributions to be shown"
-            })
-        });
-        //Fin formato grid Planificacionmicro
 
         //inicio mantenimiento PlanificacionmicroActa
         var proxyPlanificacionmicroActa = new Ext.data.HttpProxy({
@@ -2058,7 +1532,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             writer: writerPlanificacionmicroActa,
             autoSave: true
         });
-       // this.storePlanificacionmicroActa.load();
 
         this.gridPlanificacionmicroActa = new Ext.grid.EditorGridPanel({
             id: 'gridPlanificacionmicroActa',
@@ -2121,7 +1594,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 emptyMsg: "No existen nada  que mostrar"
             }),
         });
-
         //fin mantenimiento PlanificacionmicroActa
 
         // Inicio mantenimiento PlanificacionmicroActa simple
@@ -2133,6 +1605,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             autoSave: accesosSupervision, // dependiendo de si se tiene acceso para grabar
             remoteSort: true
         });
+
         storePlanificacionmicroActaSimple = this.storePlanificacionmicroActaSimple
         this.gridPlanificacionmicroActaSimple = new Ext.grid.EditorGridPanel({
             autoHeight: true,
@@ -2143,7 +1616,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 new Ext.grid.RowNumberer(),
                 {header: 'Código trámite', dataIndex: 'id_denuncia', hidden: true},
                 {header: 'Cod. inspección', dataIndex: 'id_planificacionmicro', sortable: true, width: 90},
-                //{header: 'Codificacion', dataIndex: 'codificacion', sortable: true, width: 200, editor: textFieldDetalle, autoSave:true},
+                //{header: 'Codificacion', dataIndex: 'codificacion', sortable: true, width: 200, editor: textField, autoSave:true},
                 {
                     header: 'Codificacion',
                     dataIndex: 'id_actividad',
@@ -2219,7 +1692,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 150
                 },
-                {header: 'Num acta', dataIndex: 'numero_acta', sortable: true, width: 150, editor: textFieldDetalle},
+                {header: 'Num acta', dataIndex: 'numero_acta', sortable: true, width: 150, editor: textField},
                 {
                     header: 'Num informe',
                     dataIndex: 'numero_informe',
@@ -2272,7 +1745,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'id_pma_costos_macro',
                     hidden: true,
                     width: 80,
-                    // editor: textFieldDetalle
+                    // editor: textField
                 },
                 {
                     header: 'Cost Code Macro',
@@ -2289,7 +1762,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     hidden: false,
                     width: 150,
                     renderer: 'usMoney',
-                    // editor: textFieldDetalle
+                    // editor: textField
                 },
 
                 {
@@ -2298,7 +1771,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     hidden: false,
                     width: 150,
                     renderer: 'usMoney',
-                    // editor: textFieldDetalle
+                    // editor: textField
                 },
                 {header: 'Comment', dataIndex: 'comment', hidden: false, width: 200},
                 {
@@ -2307,7 +1780,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     hidden: false,
                     width: 150,
                     renderer: 'usMoney',
-                    // editor: textFieldDetalle
+                    // editor: textField
                 },
 
                 {
@@ -2328,7 +1801,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     width: 100,
                     renderer: formatDate,
                 },
-                ],
+            ],
             viewConfig: {
                 forceFit: false
             },
@@ -2365,7 +1838,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             //Definición de barra de paginado
             bbar: new Ext.PagingToolbar({
-                pageSize: limiteDetallePlanificacionmicro,
+                pageSize: limiteModuloPlanificacionmicro,
                 store: storeCostoMacro,
                 displayInfo: true,
                 displayMsg: 'Showing macro costs: {0} - {1} of {2} - PMA',
@@ -2428,7 +1901,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     // editor: comboActivities,
                     renderer: costActivities
                 },
-                {header: 'Total macro', dataIndex: 'total', hidden: false, renderer: valueColor,  width: 150},
+                {header: 'Total macro', dataIndex: 'total', hidden: false, renderer: valueColor, width: 150},
 
             ],
             viewConfig: {
@@ -2443,7 +1916,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         select_SO = rec.id;
                         storeCostoMacro.load({params: {id: rec.id}});
                         Ext.getCmp('paso3').expand();
-                        Ext.getCmp('paso2').setTitle("Step 2 - Activities - " + costSO(rec.data['so']) + " - " +costActivities(rec.data['activity']) + " - Total: " + rec.data['total']);
+                        Ext.getCmp('paso2').setTitle("Step 2 - Activities - " + costSO(rec.data['so']) + " - " + costActivities(rec.data['activity']) + " - Total: " + rec.data['total']);
                         Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
 
@@ -2454,7 +1927,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             //Definición de barra de paginado
             bbar: new Ext.PagingToolbar({
-                pageSize: limiteDetallePlanificacionmicro,
+                pageSize: limiteModuloPlanificacionmicro,
                 store: storeDetallePlanificacionmicro,
                 displayInfo: true,
                 displayMsg: 'Showing activities: {0} - {1} of {2} - PMA',
@@ -2496,11 +1969,11 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
-                     header: 'id_pma_costos_micro',
-                     dataIndex: 'id_pma_costos_micro',
-                     sortable: false,
-                     width: 15,
-                     hidden: true
+                    header: 'id_pma_costos_micro',
+                    dataIndex: 'id_pma_costos_micro',
+                    sortable: false,
+                    width: 15,
+                    hidden: true
                 },
                 {
                     header: 'Cost Code nivel 2',
@@ -2534,7 +2007,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     width: 100,
                     hidden: false,
                     // editor: comboGLCode,
-                     renderer: glcode1
+                    renderer: glcode1
                 },
                 {
                     header: 'Commitment description',
@@ -2543,7 +2016,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     width: 100,
                     hidden: false,
                     // editor: comboGLCode,
-                     renderer: glcode2
+                    renderer: glcode2
                 },
                 {
                     header: 'Cost Code nivel 4',
@@ -2566,7 +2039,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'description_micro',
                     sortable: true,
                     width: 200,
-                    editor: textFieldDetalle
+                    editor: textField
                 },
                 {
                     header: 'Total micro',
@@ -2574,7 +2047,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 100,
                     renderer: 'usMoney',
-                    editor: textFieldDetalle
+                    editor: textField
                 },
                 {
                     header: 'Adjust',
@@ -2582,7 +2055,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 100,
                     renderer: 'usMoney',
-                    editor: textFieldDetalle
+                    editor: textField
                 },
                 {
                     header: 'Total after adjustment',
@@ -2691,103 +2164,435 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //Fin ventana Planificacionmicro
 
 
-                        //Definición de url CRUD Payroll
-                        var proxyPayroll = new Ext.data.HttpProxy({
-                            api: {
-                                create: urlPlanificacionmicro + "crudPayroll.php?operation=insert",
-                                read: urlPlanificacionmicro + "crudPayroll.php?operation=select",
-                                update: urlPlanificacionmicro + "crudPayroll.php?operation=update",
-                                destroy: urlPlanificacionmicro + "crudPayroll.php?operation=delete"
-                            }
-                        });
+        //Definición de url CRUD Payroll
+        var proxyPayroll = new Ext.data.HttpProxy({
+            api: {
+                create: urlPlanificacionmicro + "crudPayroll.php?operation=insert",
+                read: urlPlanificacionmicro + "crudPayroll.php?operation=select",
+                update: urlPlanificacionmicro + "crudPayroll.php?operation=update",
+                destroy: urlPlanificacionmicro + "crudPayroll.php?operation=delete"
+            }
+        });
 
-                        //Definición de lectura de campos bdd Costcategory
-                        var readerPayroll = new Ext.data.JsonReader({
-                            totalProperty: 'total',
-                            successProperty: 'success',
-                            messageProperty: 'message',
-                            idProperty: 'id',
-                            root: 'data',
-                            fields: [
-                                {name: 'id', allowBlank: false},
-                                {name: 'location', allowBlank: false},
-                                {name: 'hr_position', allowBlank: false},
-                                {name: 'grade', allowBlank: true},
-                                {name: 'index_no', allowBlank: true},
-                                {name: 'hr_position', allowBlank: true},
-                                {name: 'number_months', allowBlank: true},
-                                {name: 'number_staff', allowBlank: true},
-                                {name: 'monthly_cost_2019', allowBlank: true},
-                                {name: 'monthly_cost_2018', allowBlank: true},
-                                {name: 'expected_cost_2019', allowBlank: true},
-                                {name: 'without_increase', allowBlank: true},
-                                {name: 'increase_2', allowBlank: true},
-                                {name: 'increase_5', allowBlank: true},
-                                {name: 'program_validation', allowBlank: true}
-                            ]
-                        });
+        //Definición de lectura de campos bdd Costcategory
+        var readerPayroll = new Ext.data.JsonReader({
+            totalProperty: 'total',
+            successProperty: 'success',
+            messageProperty: 'message',
+            idProperty: 'id',
+            root: 'data',
+            fields: [
+                {name: 'id', allowBlank: false},
+                {name: 'location', allowBlank: false},
+                {name: 'hr_position', allowBlank: false},
+                {name: 'grade', allowBlank: true},
+                {name: 'index_no', allowBlank: true},
+                {name: 'hr_position', allowBlank: true},
+                {name: 'number_months', allowBlank: true},
+                {name: 'number_staff', allowBlank: true},
+                {name: 'monthly_cost_2019', allowBlank: true},
+                {name: 'monthly_cost_2018', allowBlank: true},
+                {name: 'expected_cost_2019', allowBlank: true},
+                {name: 'without_increase', allowBlank: true},
+                {name: 'increase_2', allowBlank: true},
+                {name: 'increase_5', allowBlank: true},
+                {name: 'program_validation', allowBlank: true}
+            ]
+        });
 
-                        //Definición de escritura en campos bdd Payroll
-                        var writerPayroll = new Ext.data.JsonWriter({
-                            encode: true,
-                            writeAllFields: true
-                        });
+        //Definición de escritura en campos bdd Payroll
+        var writerPayroll = new Ext.data.JsonWriter({
+            encode: true,
+            writeAllFields: true
+        });
 
-                        //Definición de store para módulo Payroll
-                        this.storePayroll = new Ext.data.Store({
-                            id: "storePayroll",
-                            proxy: proxyPayroll,
-                            reader: readerPayroll,
-                            writer: writerPayroll,
-                            // autoSave: acceso, // dependiendo de si se tiene acceso para grabar
-                            remoteSort: true,
-                            autoSave: true,
-                            baseParams: {}
-                        });
-                        storePayroll = this.storePayroll;
-                        limitemantenimiento = 100;
-                        storePayroll.baseParams = {
-                            limit: limitemantenimiento
-                        };
+        //Definición de store para módulo Payroll
+        this.storePayroll = new Ext.data.Store({
+            id: "storePayroll",
+            proxy: proxyPayroll,
+            reader: readerPayroll,
+            writer: writerPayroll,
+            // autoSave: acceso, // dependiendo de si se tiene acceso para grabar
+            remoteSort: true,
+            autoSave: true,
+            baseParams: {}
+        });
+        storePayroll = this.storePayroll;
+        limitemantenimiento = 100;
+        storePayroll.baseParams = {
+            limit: limitemantenimiento
+        };
 
-                        this.storePayroll.load();
+        this.storePayroll.load();
 
-                this.gridPayroll = new Ext.grid.EditorGridPanel({
-                    height: winHeight/2,
-                    // width: winWidth,
-                    store: this.storePayroll,
-                    columns: [
-                        //Definición de campos bdd Costcategory
-                        new Ext.grid.RowNumberer()
-                        // ,{header: 'ID', dataIndex: 'id', sortable: true, width: 10}
-                        // ,{header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
-                        ,{
-                            header: 'HR Description',
-                            dataIndex: 'hr_position',
-                            sortable: true,
-                            width: 200,
-                            editor: textField
+        this.gridPayroll = new Ext.grid.EditorGridPanel({
+            height: winHeight / 2,
+            // width: winWidth,
+            store: this.storePayroll,
+            columns: [
+                //Definición de campos bdd Costcategory
+                new Ext.grid.RowNumberer()
+                // ,{header: 'ID', dataIndex: 'id', sortable: true, width: 10}
+                // ,{header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
+                , {
+                    header: 'HR Description',
+                    dataIndex: 'hr_position',
+                    sortable: true,
+                    width: 200,
+                    editor: textField
+                }
+                , {header: 'Monthly cost 2018', dataIndex: 'monthly_cost_2018', sortable: true, width: 100}
+
+
+            ],
+            viewConfig: {
+                forceFit: true
+            },
+            sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
+            border: false,
+            stripeRows: true,
+            //Definición de barra de paginado
+            bbar: new Ext.PagingToolbar({
+                pageSize: limitemantenimiento,
+                store: storePayroll,
+                displayInfo: true,
+                displayMsg: 'Showing: {0} - {1} of {2} - PMA',
+                emptyMsg: "No data to be shown"
+            })
+        });
+        //Fin formato grid Payroll
+
+        //Inicio ventana planificacionmicro
+        //Definición de url CRUD
+        var proxyModuloPlanificacionmicro = new Ext.data.HttpProxy({
+            api: {
+                create: urlPlanificacionmicro + "crudContribuciones.php?operation=insert",
+                read: urlPlanificacionmicro + "crudContribuciones.php?operation=select",
+                update: urlPlanificacionmicro + "crudContribuciones.php?operation=update",
+                destroy: urlPlanificacionmicro + "crudContribuciones.php?operation=delete"
+            },
+            listeners: {
+                write: function (proxy, action, result, res, rs) {
+                    costCodeNuevo3 = rs.data['cost_code2'];
+                    comboCostCode3.clearValue();
+                    storeCostCode3.load({
+                        params: {
+                            costCodeNuevo3: costCodeNuevo3
                         }
-                        ,{header: 'Monthly cost 2018', dataIndex: 'monthly_cost_2018', sortable: true, width: 100}
+                    });
+                    costCodeNuevo5 = rs.data['cost_code4'];
+                    comboCostCode5.clearValue();
+                    storeCostCode5.load({
+                        params: {
+                            costCodeNuevo5: costCodeNuevo5
+                        }
+                    });
+                }
+            }
+        });
+
+        //Definición de lectura de campos bdd Planificacionmicro
+        var readerModuloPlanificacionmicro = new Ext.data.JsonReader({
+            //totalProperty: 'total',
+            successProperty: 'success',
+            messageProperty: 'message',
+            idProperty: 'id',
+            root: 'data',
+            fields: [
+                {name: 'grant_number', allowBlank: false},
+                {name: 'estado', allowBlank: false},
+                {name: 'crn', allowBlank: false},
+                {name: 'donor', allowBlank: false},
+                {name: 'fund', allowBlank: true},
+                {name: 'comments', allowBlank: true},
+                {name: 'isc', allowBlank: false},
+                {name: 'total_grant', allowBlank: true},
+                {name: 'total_programmed', allowBlank: true},
+                {name: 'total_unprogrammed', allowBlank: true},
+                {name: 'total_contribution', allowBlank: true},
+                {name: 'grant_tod', type: 'date', dateFormat: 'c', allowBlank: true},
+                {name: 'grant_tdd', type: 'date', dateFormat: 'c', allowBlank: true},
+                {name: 'grant_specific', allowBlank: true},
+                {name: 'activity', allowBlank: true},
+                {name: 'year_contribution', allowBlank: true},
+                {name: 'recepcion_documento', type: 'date', dateFormat: 'c', allowBlank: true}
+            ]
+
+        });
+
+        //Definición de escritura en campos bdd Planificacionmicro
+        var writerModuloPlanificacionmicro = new Ext.data.JsonWriter({
+            encode: true,
+            writeAllFields: true
+        });
+        //Definición de store para módulo Planificacionmicro
+        this.storeModuloPlanificacionmicro = new Ext.data.Store({
+            id: "storeModuloPlanificacionmicro",
+            proxy: proxyModuloPlanificacionmicro,
+            reader: readerModuloPlanificacionmicro,
+            writer: writerModuloPlanificacionmicro,
+            //autoSave: !accesosSupervision, // dependiendo de si se tiene acceso para grabar
+            autoSave: true, // dependiendo de si se tiene acceso para grabar
+            //remoteSort: true,
+            //autoSave: true
+            //baseParams: {}
+        });
+
+        this.storeModuloPlanificacionmicro.load();
+        storeModuloPlanificacionmicro = this.storeModuloPlanificacionmicro;
+        storeModuloPlanificacionmicro.baseParams = {
+            limit: limiteModuloPlanificacionmicro
+        };
+
+        var filters = new Ext.ux.grid.GridFilters({
+            // encode and local configuration options defined previously for easier reuse
+            encode: false, // json encode the filter query
+            local: true,   // defaults to false (remote filtering) // TODO campbiar por false para cargar
+            filters: [
+                {type: 'string', dataIndex: 'grant_number'},
+                {type: 'string', dataIndex: 'crn'},
+                {type: 'string', dataIndex: 'fund'},
+                {type: 'string', dataIndex: 'donor'},
+                {type: 'string', dataIndex: 'year_contribution'},
+                {type: 'string', dataIndex: 'comments'},
+
+                {type: 'numeric', dataIndex: 'isc'},
+                {type: 'numeric', dataIndex: 'total_grant'},
+                {type: 'numeric', dataIndex: 'total_programmed'},
+                {type: 'numeric', dataIndex: 'total_unprogrammed'},
+                {type: 'numeric', dataIndex: 'total_contribution'},
+
+                {type: 'date', dataIndex: 'grant_tod'},
+                {type: 'date', dataIndex: 'grant_tdd'},
+
+                {
+                    type: 'list',
+                    dataIndex: 'grant_specific',
+                    options: ['Yes', 'No'],
+                    phpMode: true
+                },
+                {
+                    type: 'list',
+                    dataIndex: 'estado',
+                    options: ['Closed', 'Ongoing'],
+                    phpMode: true
+                },
+                {
+                    type: 'boolean',
+                    dataIndex: 'visible'
+                }
+            ]
+        });
+
+        var createColModel = function () {
+            var columns = [
+                new Ext.grid.RowNumberer(),
+                {
+                    header: 'Grant Number',
+                    dataIndex: 'grant_number',
+                    id: 'grant_number',
+                    width: 38,
+                    editor: textField10
+                },
+                {
+                    header: 'CRN',
+                    dataIndex: 'crn',
+                    width: 28,
+                    editor: textField
+                },
+                {
+                    header: 'Fund',
+                    dataIndex: 'fund',
+                    width: 28,
+                    editor: textField
+                },
+                {
+                    header: 'Donor',
+                    dataIndex: 'donor',
+                    width: 28,
+                    editor: textField
+                },
+                {
+                    header: 'Year',
+                    dataIndex: 'year_contribution',
+                    width: 20,
+                    editor: anio,
+                    align: 'right'
+                },
+                {
+                    header: 'ISC',
+                    dataIndex: 'isc',
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: numero,
+                    align: 'right'
+                },
+                {
+                    header: 'Total Direct Cost',
+                    dataIndex: 'total_grant',
+                    width: 28,
+                    align: 'right',
+                    renderer: 'usMoney',
+                    editor: numero,
+                },
+                {
+                    header: 'Total contribution',
+                    dataIndex: 'total_contribution',
+                    sortable: true,
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: numero,
+                    align: 'right'
+                },
+                {
+                    header: 'Total Programmed',
+                    dataIndex: 'total_programmed',
+                    width: 28,
+                    renderer: 'usMoney',
+                    align: 'right'
+                },
+                {
+                    header: 'Unprogrammed',
+                    dataIndex: 'total_unprogrammed',
+                    width: 28,
+                    renderer: 'usMoney',
+                    align: 'right'
+                },
+                {
+                    header: 'Grant TOD',
+                    dataIndex: 'grant_tod',
+                    width: 40,
+                    renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+                    editor: fecha,
+                    align: 'right'
+                },
+                {
+                    header: 'Grant TDD',
+                    dataIndex: 'grant_tdd',
+                    width: 40,
+                    renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+                    editor: fecha,
+                    align: 'right'
+                },
+                {
+                    header: 'Grant Specific',
+                    dataIndex: 'grant_specific',
+                    width: 28,
+                    editor: comboGrant,
+                    renderer: costGrant
+                },
+                {
+                    header: 'Status',
+                    dataIndex: 'estado',
+                    width: 28,
+                    editor: comboStatus,
+                    renderer: costStatus
+                },
+                {
+                    header: 'Comments',
+                    dataIndex: 'comments',
+                    width: 28,
+                    editor: textField
+                }
+            ];
+
+            return new Ext.grid.ColumnModel({
+                columns: columns,
+                defaults: {
+                    sortable: true,
+                    filter: {type: 'string'}
+                }
+            });
+        };
 
 
-                    ],
-                    viewConfig: {
-                        forceFit: true
-                    },
-                    sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
-                    border: false,
-                    stripeRows: true,
-                    //Definición de barra de paginado
-                    bbar: new Ext.PagingToolbar({
-                        pageSize: limitemantenimiento,
-                        store: storePayroll,
-                        displayInfo: true,
-                        displayMsg: 'Showing: {0} - {1} of {2} - PMA',
-                        emptyMsg: "No data to be shown"
-                    })
-                });
-                //Fin formato grid Payroll
+        //Inicio formato grid Planificacionmicro
+        this.gridModuloPlanificacionmicro = new Ext.grid.EditorGridPanel({
+            id: 'gridModuloPlanificacionmicro',
+            //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
+            height: winHeight - altoHelp,
+            //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
+            width: winWidth - anchoHelp,
+            store: this.storeModuloPlanificacionmicro,
+            colModel: createColModel(),
+            loadMask: true,
+            plugins: [filters],
+            autoExpandColumn: 'grant_number',
+
+            viewConfig: {
+                // forceFit: winWidth > 1024 ? true : false
+                forceFit: true,
+                getRowClass: function (record, index) {
+                    // si estado es cerrado retorna amarillo
+                    recuperaEstado = record.get('estado');
+                    if (recuperaEstado === 'Closed') {
+                        return 'goldstate';
+                    }
+
+                    // si la fecha esta proxima a su vencimiento 30 dias
+                    fecha_actual = new Date();
+                    var diff = Math.abs(record.get('grant_tdd') - fecha_actual) / 3600000 / 24;
+                    // regresa diff en dias
+
+                    if (diff < intervalo1) {
+                        return 'redstate';
+                    }
+                    // si la fecha esta proxima a su vencimiento 60 dias
+                    if (diff < intervalo2) {
+                        return 'bluestate';
+                    }
+                }
+            },
+            sm: new Ext.grid.RowSelectionModel({
+                singleSelect: true,
+                listeners: {
+                    rowselect: function (sm, row, rec) {
+                        // recuperamos la informacion de personal asignado a ese operativo
+                        //select_codigo_tramite = rec.id;
+                        storeDetallePlanificacionmicro.load({params: {id: rec.id}});
+                        contribucionSeleccionada = rec.id;
+                        planificacionmicroSeleccionada = rec.id_denuncia;
+                        if (creacionDatosPlanificacionmicro) {
+                            Ext.getCmp('btnNuevoDetallePlanificacionmicro').setDisabled(false);
+                            Ext.getCmp('btnEliminarDetallePlanificacionmicro').setDisabled(false);
+                            // Ext.getCmp('checkTodasPlanificacionmicro').setValue(false);
+                            // Ext.getCmp('gridDetalleTodasPlanificacionmicro').setVisible(false);
+                            Ext.getCmp('gridDetallePlanificacionmicro').setVisible(true);
+                        }
+
+                        //Ext.getCmp('paso2').expand();
+                        Ext.getCmp('paso1').setTitle("Step 1 - Contributions - Grant number: " + rec.data['grant_number'] + " - Total: " + rec.data['total_grant'] + " - Total programmed: " + rec.data['total_programmed']);
+                        Ext.getCmp('paso2').setTitle("Step 2 - Activities");
+                        Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
+                        Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
+                    }
+                }
+            }),
+            border: false,
+            stripeRows: true,
+            //Definición de barra de paginado
+            bbar: new Ext.PagingToolbar({
+                pageSize: limiteModuloPlanificacionmicro,
+                store: storeModuloPlanificacionmicro,
+                displayInfo: true,
+                displayMsg: 'Showing contributions: {0} - {1} of {2} - PMA',
+                emptyMsg: "No contributions to be shown"
+            })
+        });
+        gridModuloPlanificacionmicro = this.gridModuloPlanificacionmicro;
+        this.gridModuloPlanificacionmicro.getBottomToolbar().add([
+            '->', {
+                text: 'Clear Filter Data',
+                handler: function () {
+                    gridModuloPlanificacionmicro.filters.clearFilters();
+                }
+            }
+        ]);
+
+        //Fin formato grid Planificacionmicro
+        //Fin ventana planificacionmicro
+
+
 
         //Creación variable ventana
         var win = desktop.getWindow('layout-win');
@@ -2855,7 +2660,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     layout: 'accordion',
                                     items: [{
                                         title: 'Step 1 - Contributions',
-                                        id : 'paso1',
+                                        id: 'paso1',
                                         autoScroll: true,
                                         border: false,
                                         items: this.gridModuloPlanificacionmicro,
@@ -2939,7 +2744,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     }, {
                                         title: 'Step 2 - Activities',
                                         border: false,
-                                        id : 'paso2',
+                                        id: 'paso2',
                                         autoScroll: true,
                                         items: [this.gridDetallePlanificacionmicro],
                                         tbar: [
@@ -2977,7 +2782,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     }, {
                                         title: 'Step 3 - Macro Costs',
                                         border: false,
-                                        id : 'paso3',
+                                        id: 'paso3',
                                         autoScroll: true,
                                         items: this.gridCostoMacro,
                                         tbar: [
@@ -3029,7 +2834,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                         title: 'Step 4 - Micro Costs',
                                         border: false,
                                         autoScroll: true,
-                                        id : 'paso4',
+                                        id: 'paso4',
                                         items: [this.gridPlanificacionmicrodet],
                                         tbar: [
                                             //Definición de botón nuevo
@@ -3075,57 +2880,57 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             // }
                                         ]
                                     }
-                                    , {
-                                        title: 'Step 5 - Micro Costs Detail',
-                                        border: false,
-                                        autoScroll: true,
-                                        id : 'paso5',
-                                        items: [this.gridPlanificacionmicroActa],
-                                        tbar: [
-                                            //Definición de botón nuevo
-                                            {
-                                                id: 'btnNuevoDetallePlanificacionmicro3',
-                                                text: 'New',
-                                                scope: this,
-                                                handler: this.addPlanificacionmicrodet,
-                                                disabled: false,
-                                                iconCls: 'save-icon'
-                                            },
-                                            '-',
-                                            //Definición de botón Delete
-                                            {
-                                                id: 'btnEliminarDetallePlanificacionmicro3',
-                                                text: "Delete",
-                                                scope: this,
-                                                handler: this.deletePlanificacionmicrodet,
-                                                disabled: false,
-                                                iconCls: 'delete-icon'
-                                            },
-                                            '-',
-                                            //Definición de botón Reload data
-                                            {
-                                                id: 'btnRecargarDatosDetallePlanificacionmicro3',
-                                                iconCls: 'reload-icon',
-                                                handler: this.requestGridDataPlanificacionmicrodet,
-                                                disabled: false,
-                                                scope: this,
-                                                text: 'Reload data'
-                                            }
-                                            // ,
-                                            // '-',
-                                            // //Definición de botón guardar datos
-                                            // {
-                                            //     text: 'Guardar datos Inspección',
-                                            //     scope: this,
-                                            //     handler: this.grabardenuncias,
-                                            //     iconCls: 'save-icon',
-                                            //     //disabled: !acceso,
-                                            //     id: 'tb_grabardenuncias'
-                                            //     , formBind: true
-                                            // }
-                                        ]
-                                    }
-                                  ]
+                                        , {
+                                            title: 'Step 5 - Micro Costs Detail',
+                                            border: false,
+                                            autoScroll: true,
+                                            id: 'paso5',
+                                            items: [this.gridPlanificacionmicroActa],
+                                            tbar: [
+                                                //Definición de botón nuevo
+                                                {
+                                                    id: 'btnNuevoDetallePlanificacionmicro3',
+                                                    text: 'New',
+                                                    scope: this,
+                                                    handler: this.addPlanificacionmicrodet,
+                                                    disabled: false,
+                                                    iconCls: 'save-icon'
+                                                },
+                                                '-',
+                                                //Definición de botón Delete
+                                                {
+                                                    id: 'btnEliminarDetallePlanificacionmicro3',
+                                                    text: "Delete",
+                                                    scope: this,
+                                                    handler: this.deletePlanificacionmicrodet,
+                                                    disabled: false,
+                                                    iconCls: 'delete-icon'
+                                                },
+                                                '-',
+                                                //Definición de botón Reload data
+                                                {
+                                                    id: 'btnRecargarDatosDetallePlanificacionmicro3',
+                                                    iconCls: 'reload-icon',
+                                                    handler: this.requestGridDataPlanificacionmicrodet,
+                                                    disabled: false,
+                                                    scope: this,
+                                                    text: 'Reload data'
+                                                }
+                                                // ,
+                                                // '-',
+                                                // //Definición de botón guardar datos
+                                                // {
+                                                //     text: 'Guardar datos Inspección',
+                                                //     scope: this,
+                                                //     handler: this.grabardenuncias,
+                                                //     iconCls: 'save-icon',
+                                                //     //disabled: !acceso,
+                                                //     id: 'tb_grabardenuncias'
+                                                //     , formBind: true
+                                                // }
+                                            ]
+                                        }
+                                    ]
                                 }
                             ]
                         },
@@ -3273,30 +3078,22 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de Planificacionmicro
     addModuloPlanificacionmicro: function () {
         var planificacionmicro = new this.storeModuloPlanificacionmicro.recordType({
-            grant_number: 0,
-            estado: ' ',
-            donor: ' ',
-            comments: ' ',
+            grant_number: null,
+            estado: '',
+            donor: '',
+            fund: '',
+            comments: '',
             isc: 0,
             total_grant: 0,
-            activity: ' ',
+            total_programmed: 0,
+            total_unprogrammed: 0,
+            activity: '',
             grant_tod: (new Date()),
             grant_tdd: (new Date()),
             grant_specific: ' ',
             year_contribution: (new Date().getFullYear()),
-            // codigo_tramite: '',
-            // recepción_documento: '',
-            // //id_ordenanza: '0',
-            // id_tipo_documento: '40',
-            // num_documento: 's/n',
-            // remitente: ' ',
-            // //cedula: '',
-            // //email: '',
-            // //institucion: '',
-            // //asunto: '',
-            // id_caracter_tramite: '1',
-            // cantidad_fojas: '0',
-            // procesado_planificacionmicro: '1'
+            crn: '',
+            recepcion_documento: (new Date())
         });
         this.gridModuloPlanificacionmicro.stopEditing();
         this.storeModuloPlanificacionmicro.insert(0, planificacionmicro);
@@ -3321,7 +3118,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     //Función para actualizar los datos mostrados en pantalla de la pestaña de ModuloPlanificacionmicro
     requestGridDataDenunciasActa: function () {
 
-       // this.storePlanificacionmicroActa.load();
+        // this.storePlanificacionmicroActa.load();
     },
 
     //Función para eliminación de registros de Planificacionmicro
