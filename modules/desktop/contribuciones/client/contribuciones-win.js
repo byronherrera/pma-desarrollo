@@ -24,11 +24,12 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         var win = desktop.getWindow('grid-win-contribuciones');
         var urlContribuciones = "modules/desktop/contribuciones/server/";
 
-        var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
-        var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 10});
-
         var intervalo1 = 30;
         var intervalo2 = 90;
+
+        //incio variables visualizacion
+        var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
+        var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 10});
 
         var anio = new Ext.ux.form.SpinnerField({
             fieldLabel: 'Year',
@@ -43,15 +44,24 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             maxValue: 100000000
         });
 
-        var fecha = new Ext.form.DateField({format: 'Y-m-d'})
+        var fecha = new Ext.form.DateField({format: 'Y-m-d'});
 
         function formatDate(value) {
             return value ? value.dateFormat('Y-m-d') : '';
         }
 
-        function smalltext(id) {
-            return '<span style="font-size: 10px!important">' + id + '</span>';
+        // TODO usar funcion
+        function change(val) {
+            if (val > 0) {
+                return '<span style="color:green;">' + val + '</span>';
+            } else if (val < 0) {
+                return '<span style="color:red;">' + val + '</span>';
+            }
+            return val;
         }
+        //fin variables visualizacion
+
+
 
         // inicio combos contribuciones
 
@@ -128,21 +138,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             mode: 'local'
         });
 
-
-        //inicio combo caracter del tramite CDT
-        // TODO usar funcion
-        function change(val) {
-            if (val > 0) {
-                return '<span style="color:green;">' + val + '</span>';
-            } else if (val < 0) {
-                return '<span style="color:red;">' + val + '</span>';
-            }
-            return val;
-        }
-
-        //fin combo caracter del tramite CDT
-
-
         //inicio combo instituciones INST
         storeINST = new Ext.data.JsonStore({
             root: 'data',
@@ -192,7 +187,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         function costStatus(id) {
             return id;
         }
-
         //fin combo Status
 
         storeGrant = new Ext.data.JsonStore({
@@ -219,14 +213,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         function costGrant(id) {
             return id
         }
-
         //fin combo GRANT
-
-
-// inicio pestañas de mantenimiento
-
-
-// fin pestañas de mantenimiento
 
         // inicio ventana contribuciones
         var proxyContribuciones = new Ext.data.HttpProxy({
@@ -276,13 +263,13 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 {name: 'total_grant', allowBlank: true},
                 {name: 'total_programmed', allowBlank: true},
                 {name: 'total_unprogrammed', allowBlank: true},
+                {name: 'total_contribution', allowBlank: true},
                 {name: 'grant_tod', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_tdd', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_specific', allowBlank: true},
                 {name: 'activity', allowBlank: true},
                 {name: 'year_contribution', allowBlank: true},
                 {name: 'recepcion_documento', type: 'date', dateFormat: 'c', allowBlank: true}
-
             ]
         });
         var writerContribuciones = new Ext.data.JsonWriter({
@@ -322,6 +309,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 {type: 'numeric', dataIndex: 'total_grant'},
                 {type: 'numeric', dataIndex: 'total_programmed'},
                 {type: 'numeric', dataIndex: 'total_unprogrammed'},
+                {type: 'numeric', dataIndex: 'total_contribution'},
 
                 {type: 'date', dataIndex: 'grant_tod'},
                 {type: 'date', dataIndex: 'grant_tdd'},
@@ -345,10 +333,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             ]
         });
 
-        // use a factory method to reduce code while demonstrating
-        // that the GridFilter plugin may be configured with or without
-        // the filter types (the filters may be specified on the column model
-        var createColModel = function (finish, start) {
+        var createColModel = function () {
             var columns = [
                 new Ext.grid.RowNumberer(),
                 {
@@ -398,6 +383,15 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     align: 'right',
                     renderer: 'usMoney',
                     editor: numero,
+                },
+                {
+                    header: 'Total contribution',
+                    dataIndex: 'total_contribution',
+                    sortable: true,
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: numero,
+                    align: 'right'
                 },
                 {
                     header: 'Total Programmed',
@@ -452,7 +446,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             ];
 
             return new Ext.grid.ColumnModel({
-                columns: columns.slice(start || 0, finish),
+                columns: columns,
                 defaults: {
                     sortable: true,
                     filter: {type: 'string'}
@@ -461,140 +455,25 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         };
 
         this.gridContribuciones = new Ext.grid.EditorGridPanel({
-            colModel: createColModel(14),
+            colModel: createColModel(),
             loadMask: true,
             plugins: [filters],
             autoExpandColumn: 'id',
             height: 495,
             store: this.storeContribuciones,
-            /*columns: [
-                new Ext.grid.RowNumberer(),
-                {
-                    header: 'Grant Number',
-                    dataIndex: 'grant_number',
-                    sortable: true,
-                    width: 38,
-                    editor: textField10,
-                    filterable: true
-                },
-                {
-                    header: 'CRN',
-                    dataIndex: 'crn',
-                    sortable: true,
-                    width: 28,
-                    editor: textField
-                },
-                {
-                    header: 'Fund',
-                    dataIndex: 'fund',
-                    sortable: true,
-                    width: 28,
-                    editor: textField
-                },
-                {
-                    header: 'Donor',
-                    dataIndex: 'donor',
-                    sortable: true,
-                    width: 28,
-                    editor: textField
-                },
-                {
-                    header: 'Year',
-                    dataIndex: 'year_contribution',
-                    sortable: true,
-                    width: 20,
-                    editor: anio,
-                    align: 'right'
-                },
-                {
-                    header: 'ISC',
-                    dataIndex: 'isc',
-                    sortable: true,
-                    width: 28,
-                    renderer: 'usMoney',
-                    editor: numero,
-                    align: 'right'
-                },
-                {
-                    header: 'Total Direct Cost',
-                    dataIndex: 'total_grant',
-                    sortable: true,
-                    width: 28,
-                    align: 'right',
-                    renderer: 'usMoney',
-                    editor: numero,
-                },
-                {
-                    header: 'Total Programmed',
-                    dataIndex: 'total_programmed',
-                    sortable: true,
-                    width: 28,
-                    renderer: 'usMoney',
-                    align: 'right'
-                },
-                {
-                    header: 'Unprogrammed',
-                    dataIndex: 'total_unprogrammed',
-                    sortable: true,
-                    width: 28,
-                    renderer: 'usMoney',
-                    align: 'right'
-                },
-                {
-                    header: 'Grant TOD',
-                    dataIndex: 'grant_tod',
-                    sortable: true,
-                    width: 40,
-                    renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-                    editor: fecha,
-                    align: 'right'
-                },
-                {
-                    header: 'Grant TDD',
-                    dataIndex: 'grant_tdd',
-                    sortable: true,
-                    width: 40,
-                    renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-                    editor: fecha,
-                    align: 'right'
-                },
-                {
-                    header: 'Grant Specific',
-                    dataIndex: 'grant_specific',
-                    sortable: true,
-                    width: 28,
-                    editor: comboGrant,
-                    renderer: costGrant
-                },
-                {
-                    header: 'Status',
-                    dataIndex: 'estado',
-                    sortable: true,
-                    width: 28,
-                    editor: comboStatus,
-                    renderer: costStatus
-                },
-                {
-                    header: 'Comments',
-                    dataIndex: 'comments',
-                    sortable: true,
-                    width: 28,
-                    editor: textField
-                }
-            ],*/
             viewConfig: {
                 //para dar color a la fila
                 forceFit: true,
                 getRowClass: function (record, index) {
                     // si estado es cerrado retorna amarillo
-                    if (record.get('estado') == 'Closed') {
+                    recuperaEstado = record.get('estado');
+                    if (recuperaEstado === 'Closed') {
                         return 'goldstate';
                     }
 
                     // si la fecha esta proxima a su vencimiento 30 dias
                     fecha_actual = new Date();
                     var diff = Math.abs(record.get('grant_tdd') - fecha_actual) / 3600000 / 24;
-
                     // regresa diff en dias
 
                     if (diff < intervalo1) {
@@ -640,61 +519,13 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             }
         });
         gridContribuciones = this.gridContribuciones;
-        var encode = false;
         this.gridContribuciones.getBottomToolbar().add([
-            '->'
-            /*           ,{
-                           text: 'Encode: ' + (encode ? 'On' : 'Off'),
-                           tooltip: 'Toggle Filter encoding on/off',
-                           enableToggle: true,
-                           handler: function (button, state) {
-                               var encode = (grid.filters.encode===true) ? false : true;
-                               var text = 'Encode: ' + (encode ? 'On' : 'Off');
-                               // remove the prior parameters from the last load options
-                               grid.filters.cleanParams(grid.getStore().lastOptions.params);
-                               grid.filters.encode = encode;
-                               button.setText(text);
-                               grid.getStore().reload();
-                           }
-                       },{
-                           text: 'Local Filtering: ' + (local ? 'On' : 'Off'),
-                           tooltip: 'Toggle Filtering between remote/local',
-                           enableToggle: true,
-                           handler: function (button, state) {
-                               var local = (grid.filters.local===true) ? false : true;
-                               var text = 'Local Filtering: ' + (local ? 'On' : 'Off');
-                               var newUrl = local ? url.local : url.remote;
-
-                               // update the GridFilter setting
-                               grid.filters.local = local;
-                               // bind the store again so GridFilters is listening to appropriate store event
-                               grid.filters.bindStore(grid.getStore());
-                               // update the url for the proxy
-                               grid.getStore().proxy.setApi('read', newUrl);
-
-                               button.setText(text);
-                               grid.getStore().reload();
-                           }
-                       },{
-                           text: 'All Filter Data',
-                           tooltip: 'Get Filter Data for Grid',
-                           handler: function () {
-                               var data = Ext.encode(grid.filters.getFilterData());
-                               Ext.Msg.alert('All Filter Data',data);
-                           }
-                       }*/
-            , {
+            '->', {
                 text: 'Clear Filter Data',
                 handler: function () {
                     gridContribuciones.filters.clearFilters();
                 }
             }
-            /*        ,{
-                        text: 'Reconfigure Grid',
-                        handler: function () {
-                            grid.reconfigure(store, createColModel(6));
-                        }
-                    }*/
         ]);
 
         // datastore and datagrid in Guia
