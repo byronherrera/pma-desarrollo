@@ -24,6 +24,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         this.selectContribuciones = 0;
         this.select_SO = 0;
 
+        var intervalo1 = 30;
+        var intervalo2 = 90;
+
         //Control en caso de tener asignado el perfil de administrador
         if (accesosCoordinadorInspeccion && accesosSecretaria && accesosInspectores && accesosSupervision == true) {
             accesosSecretaria = false;
@@ -58,8 +61,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var winHeight = desktop.getWinHeight();
         var winWidth = desktop.getWinWidth();
 
-        this.selectPlanificaion = 0;
-        selectPlanificaion = 0;
+
 
         var AppMsg = new Ext.AppMsg({});
         var win = desktop.getWindow('grid-win-moduloInspeccion');
@@ -206,7 +208,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         //Definición de store para módulo Inspeccion
         this.storeModuloInspeccion = new Ext.data.Store({
-            id: "id",
+            id: "storeModuloInspeccion",
             proxy: proxyModuloInspeccion,
             reader: readerModuloInspeccion,
             writer: writerModuloInspeccion,
@@ -218,7 +220,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         //Definición de store para módulo Inspeccion
         this.storeDetalleInspeccion = new Ext.data.Store({
-            id: "id",
+            id: "storeDetalleInspeccion",
             proxy: proxyDetalleInspeccion,
             reader: readerDetalleInspeccion,
             writer: writerDetalleInspeccion,
@@ -229,7 +231,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
         this.storeCostoMacro = new Ext.data.Store({
-            id: "id",
+            id: "storeCostoMacro",
             proxy: proxyCostoMacro,
             reader: readerCostoMacro,
             writer: writerCostoMacro,
@@ -337,12 +339,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
         function costGrant(id) {
-            //   var index = storeActivities.findExact('id', id);
-            var index = storeGrant.find('id', id);
-            if (index > -1) {
-                var record = storeGrant.getAt(index);
-                return record.get('subcategory_name');
-            }
+            return id;
         }
 
         //fin combo GRANT
@@ -360,8 +357,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             autoLoad: true,
             data: {
                 datos: [
-                    {"id": 'Vigente', "subcategory_name": "Vigente"},
-                    {"id": 'Cerrada', "subcategory_name": "Cerrada"}
+                    {"id": "Ongoing", "subcategory_name": "Ongoing"},
+                    {"id": "Closed", "subcategory_name": "Closed"},
+                    {"id": "Pending", "subcategory_name": "Pending"}
                 ]
             }
         });
@@ -376,12 +374,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
 
         function costStatus(id) {
-            //   var index = storeActivities.findExact('id', id);
-            var index = storeStatus.find('id', id);
-            if (index > -1) {
-                var record = storeStatus.getAt(index);
-                return record.get('subcategory_name');
-            }
+            return id;
         }
 
         //fin combo Status
@@ -911,8 +904,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         };
 
         //Inicio formato grid Inspeccion
-        this.gridModuloInspeccion = new Ext.grid.EditorGridPanel({
-            id: 'gridModuloInspeccion',
+        this.gridModuloContribuciones = new Ext.grid.EditorGridPanel({
+            id: 'gridModuloContribuciones',
             xtype: "grid",
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
             height: winHeight * 0.35,
@@ -1065,8 +1058,31 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     editor: textField
                 },
             ],
+
+
             viewConfig: {
-                forceFit: winWidth > 1024 ? true : false
+                //para dar color a la fila
+                forceFit: true,
+                getRowClass: function (record, index) {
+                    // si estado es cerrado retorna amarillo
+                    if (record.get('estado') == 'Closed') {
+                        return 'goldstate';
+                    }
+
+                    // si la fecha esta proxima a su vencimiento 30 dias
+                    fecha_actual = new Date();
+                    var diff = Math.abs(record.get('grant_tdd') - fecha_actual) / 3600000 / 24;
+
+                    // regresa diff en dias
+
+                    if (diff < intervalo1) {
+                        return 'redstate';
+                    }
+                    // si la fecha esta proxima a su vencimiento 60 dias
+                    if (diff < intervalo2) {
+                        return 'bluestate';
+                    }
+                }
             },
             sm: new Ext.grid.RowSelectionModel({
                 singleSelect: true,
@@ -1507,7 +1523,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                     flex: 1,
                                     autoScroll: false,
                                     layout: 'column',
-                                    items: this.gridModuloInspeccion
+                                    items: this.gridModuloContribuciones
                                 },
                                 {
                                     flex: 2,
@@ -1736,7 +1752,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
             fn: function (btn) {
                 if (btn == 'yes') {
-                    var rows = this.gridModuloInspeccion.getSelectionModel().getSelections();
+                    var rows = this.gridModuloContribuciones.getSelectionModel().getSelections();
                     if (rows.length === 0) {
                         return false;
                     }
@@ -1759,9 +1775,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             total_contribution: 0,
             total_programmed: 0
         });
-        this.gridModuloInspeccion.stopEditing();
+        this.gridModuloContribuciones.stopEditing();
         this.storeModuloInspeccion.insert(0, inspeccion);
-        this.gridModuloInspeccion.startEditing(0, 1);
+        this.gridModuloContribuciones.startEditing(0, 1);
     },
 
     //Función para actualizar los datos mostrados en pantalla de la pestaña de ModuloInspeccion

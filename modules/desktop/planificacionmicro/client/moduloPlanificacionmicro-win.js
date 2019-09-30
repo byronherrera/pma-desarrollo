@@ -330,7 +330,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         });
 
         this.storePlanificacionmicrodet = new Ext.data.Store({
-            id: "id",
+            id: "storePlanificacionmicrodet",
             proxy: proxyPlanificacionmicrodet,
             reader: readerPlanificacionmicrodet,
             writer: writerPlanificacionmicrodet,
@@ -398,7 +398,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         //Definición de store para módulo Planificacionmicro
         this.storeModuloPlanificacionmicro = new Ext.data.Store({
-            id: "id",
+            id: "storeModuloPlanificacionmicro",
             proxy: proxyModuloPlanificacionmicro,
             reader: readerModuloPlanificacionmicro,
             writer: writerModuloPlanificacionmicro,
@@ -410,7 +410,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         //Definición de store para módulo Planificacionmicro
         this.storeDetallePlanificacionmicro = new Ext.data.Store({
-            id: "id",
+            id: "storeDetallePlanificacionmicro",
             proxy: proxyDetallePlanificacionmicro,
             reader: readerDetallePlanificacionmicro,
             writer: writerDetallePlanificacionmicro,
@@ -421,7 +421,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         });
 
         this.storeListadoPlanificacionmicro = new Ext.data.Store({
-            id: "id",
+            id: "storeListadoPlanificacionmicro",
             proxy: proxyListadoPlanificacionmicro,
             reader: readerListadoPlanificacionmicro,
             writer: writerListadoPlanificacionmicro,
@@ -431,7 +431,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         });
 
         this.storeCostoMacro = new Ext.data.Store({
-            id: "id",
+            id: "storeCostoMacro",
             proxy: proxyCostoMacro,
             reader: readerCostoMacro,
             writer: writerCostoMacro,
@@ -2052,7 +2052,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         });
 
         this.storePlanificacionmicroActa = new Ext.data.Store({
-            id: "id",
+            id: "storePlanificacionmicroActa",
             proxy: proxyPlanificacionmicroActa,
             reader: readerPlanificacionmicroActa,
             writer: writerPlanificacionmicroActa,
@@ -2126,7 +2126,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         // Inicio mantenimiento PlanificacionmicroActa simple
         this.storePlanificacionmicroActaSimple = new Ext.data.Store({
-            id: "id",
+            id: "storePlanificacionmicroActaSimple",
             proxy: proxyDetallePlanificacionmicro,
             reader: readerDetallePlanificacionmicro,
             writer: writerDetallePlanificacionmicro,
@@ -2735,7 +2735,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
                         //Definición de store para módulo Payroll
                         this.storePayroll = new Ext.data.Store({
-                            id: "id",
+                            id: "storePayroll",
                             proxy: proxyPayroll,
                             reader: readerPayroll,
                             writer: writerPayroll,

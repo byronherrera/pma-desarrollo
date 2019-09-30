@@ -28,7 +28,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 10});
 
         var intervalo1 = 30;
-        var intervalo2 = 60;
+        var intervalo2 = 90;
 
         var anio = new Ext.ux.form.SpinnerField({
             fieldLabel: 'Year',
