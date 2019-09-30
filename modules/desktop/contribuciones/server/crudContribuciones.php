@@ -205,6 +205,7 @@ function updateDenuncias()
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
+    $data->total_contribution = $data->isc + $data->total_grant;
     //
     // if (isset($data->despacho_secretaria)) {
     //     if (!$data->despacho_secretaria)

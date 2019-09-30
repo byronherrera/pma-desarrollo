@@ -162,6 +162,10 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             },
             listeners: {
                 write: function (proxy, action, result, res, rs) {
+                  // storeContribucionesr.load();
+                  if (action = 'update') {
+                      storeContribuciones.load();
+                    }
                     if (typeof res.message !== 'undefined') {
                         /*if (res.message != '') {
                             AppMsg.setAlert(AppMsg.STATUS_NOTICE, res.message);
