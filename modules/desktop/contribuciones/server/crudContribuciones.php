@@ -146,6 +146,7 @@ function insertDenuncias()
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
+    $data->total_contribution = $data->isc + $data->total_grant;
     // $data->despacho_secretaria = 'false';
     $data->id = generaCodigoProcesoContribuciones();
     // $data->id_persona = $os->get_member_id();
