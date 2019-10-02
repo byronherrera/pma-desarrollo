@@ -196,15 +196,14 @@ function updateDetalleInspecciones()
     // actualizar el total en el padre
 //    $idMicro = calcularMicroTotal ($data->id_pma_costos_micro);
 
-    $idActivities = calcularActivitiesTotal ($data->id_pma_costos_macro);
-    calcularContribucionesTotal ($idActivities);
+//    $idActivities = calcularActivitiesTotal ($data->id_pma_costos_macro);
+//    calcularContribucionesTotal ($idActivities);
 
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_macro actualizado exitosamente" : $sql->errorCode(),
         "message" => $message,
-        "data" => array($data),
-        "aa" => $idActivities
+        "data" => array($data)
     ));
 }
 
