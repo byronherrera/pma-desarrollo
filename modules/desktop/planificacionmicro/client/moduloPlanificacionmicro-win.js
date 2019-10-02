@@ -2392,7 +2392,27 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'grant_number',
                     id: 'grant_number',
                     width: 38,
-                    editor: textField10
+                    editor: textField10,
+                    renderer: function (value, metaData, record, row, col, store, gridView) {
+                        // si estado es cerrado retorna amarillo
+                        recuperaEstado = record.get('estado');
+                        if (recuperaEstado === 'Closed') {
+                            return '<span class="circleBase goldstate"></span>' + value;
+                        }
+                        // si la fecha esta proxima a su vencimiento 30 dias
+                        fecha_actual = new Date();
+                        var diff = Math.abs(record.get('grant_tdd') - fecha_actual) / 3600000 / 24;
+                        // regresa diff en dias
+                        if (diff < intervalo1) {
+                            return '<span class="circleBase redstate"></span>' + value;
+                        }
+                        // si la fecha esta proxima a su vencimiento 60 dias
+                        if (diff < intervalo2) {
+                            return '<span class="circleBase bluestate"></span>' + value;
+                        }
+                        return value
+                    }
+
                 },
                 {
                     header: 'CRN',
@@ -2523,24 +2543,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 // forceFit: winWidth > 1024 ? true : false
                 forceFit: true,
                 getRowClass: function (record, index) {
-                    // si estado es cerrado retorna amarillo
-                    recuperaEstado = record.get('estado');
-                    if (recuperaEstado === 'Closed') {
-                        return 'goldstate';
-                    }
 
-                    // si la fecha esta proxima a su vencimiento 30 dias
-                    fecha_actual = new Date();
-                    var diff = Math.abs(record.get('grant_tdd') - fecha_actual) / 3600000 / 24;
-                    // regresa diff en dias
-
-                    if (diff < intervalo1) {
-                        return 'redstate';
-                    }
-                    // si la fecha esta proxima a su vencimiento 60 dias
-                    if (diff < intervalo2) {
-                        return 'bluestate';
-                    }
                 }
             },
             sm: new Ext.grid.RowSelectionModel({
