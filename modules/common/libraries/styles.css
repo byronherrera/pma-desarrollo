@@ -1,0 +1,24 @@
+.circleBase {
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    padding-right: 7px;
+    padding-left: 7px;
+    margin-right: 5px;
+}
+
+.goldstate {
+    background: rgba(255, 246, 123, 0.84);
+    border: 1px solid rgba(255, 246, 123, 0.84);
+}
+
+.bluestate  {
+    background: #67df59 ;
+    border: 1px solid 67df59;
+
+}
+.redstate  {
+    background: #df3c3f ;
+    border: 1px solid #df3c3f;
+
+}
