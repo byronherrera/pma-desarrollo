@@ -90,8 +90,33 @@ function insertDetailPayroll()
     $cadenaDatos = '';
     $cadenaCampos = '';
 
-
-    $data->expected_cost_2019 = $data->number_months * $data->monthly_cost_2019;
+    if($data->monthly_cost_2019){
+      $data->expected_cost_2019 = ($data->end_month - $data->starting_month) * $data->monthly_cost_2019;
+      $data->january = $data->monthly_cost_2019;
+      $data->february = $data->monthly_cost_2019;
+      $data->march = $data->monthly_cost_2019;
+      $data->april = $data->monthly_cost_2019;
+      $data->may = $data->monthly_cost_2019;
+      $data->june = $data->monthly_cost_2019;
+      $data->july = $data->monthly_cost_2019;
+      $data->august = $data->monthly_cost_2019;
+      $data->september = $data->monthly_cost_2019;
+      $data->october = $data->monthly_cost_2019;
+      $data->november = $data->monthly_cost_2019;
+      $data->december = $data->monthly_cost_2019;
+      $data->total = $data->january
+       + $data->february
+       + $data->march
+       + $data->april
+       + $data->may
+       + $data->june
+       + $data->july
+       + $data->august
+       + $data->september
+       + $data->october
+       + $data->november
+       + $data->december;
+    }
 
     foreach ($data as $clave => $valor) {
         if ($clave != 'id') {
@@ -125,7 +150,21 @@ function updateDetailPayroll()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
 
-    $data->expected_cost_2019 = $data->number_months * $data->monthly_cost_2019;
+    if($data->monthly_cost_2019){
+        $data->expected_cost_2019 = ($data->end_month - $data->starting_month) * $data->monthly_cost_2019;
+         $data->january = $data->monthly_cost_2019;
+         $data->february = $data->monthly_cost_2019;
+         $data->march = $data->monthly_cost_2019;
+         $data->april = $data->monthly_cost_2019;
+         $data->may = $data->monthly_cost_2019;
+         $data->june = $data->monthly_cost_2019;
+         $data->july = $data->monthly_cost_2019;
+         $data->august = $data->monthly_cost_2019;
+         $data->september = $data->monthly_cost_2019;
+         $data->october = $data->monthly_cost_2019;
+         $data->november = $data->monthly_cost_2019;
+         $data->december = $data->monthly_cost_2019;
+    }
     $data->total = $data->january
      + $data->february
      + $data->march

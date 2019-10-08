@@ -64,7 +64,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var win = desktop.getWindow('grid-win-moduloInspeccion');
 
 
-        var limiteModuloContribition = 100;
+        var limiteModuloContribution = 100;
 
         //Ubicación de la carpeta de Inspeccion
         var urlInspeccion = "modules/desktop/inspeccion/server/";
@@ -121,7 +121,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         //Inicio ventana contribuciones
         //Definición de url CRUD
-        var proxyModuloContribition = new Ext.data.HttpProxy({
+        var proxyModuloContribution = new Ext.data.HttpProxy({
             api: {
                 create: urlInspeccion + "crudContribuciones.php?operation=insert",
                 read: urlInspeccion + "crudContribuciones.php?operation=select",
@@ -130,7 +130,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             }
         });
         //Definición de lectura de campos bdd Inspeccion
-        var readerModuloContribition = new Ext.data.JsonReader({
+        var readerModuloContribution = new Ext.data.JsonReader({
             totalProperty: 'total',
             successProperty: 'success',
             messageProperty: 'message',
@@ -155,7 +155,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             ]
         });
         //Definición de escritura en campos bdd Inspeccion
-        var writerModuloContribition = new Ext.data.JsonWriter({
+        var writerModuloContribution = new Ext.data.JsonWriter({
             encode: true,
             writeAllFields: true
         });
@@ -202,7 +202,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             listeners: {
                 write: function (proxy, action, result, res, rs) {
                     storeDetalleInspeccion.load();
-                    storeModuloContribition.load();
+                    storeModuloContribution.load();
                 }
             }
         });
@@ -233,11 +233,11 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
 
         //Definición de store para módulo Inspeccion
-        this.storeModuloContribition = new Ext.data.Store({
+        this.storeModuloContribution = new Ext.data.Store({
             id: "id",
-            proxy: proxyModuloContribition,
-            reader: readerModuloContribition,
-            writer: writerModuloContribition,
+            proxy: proxyModuloContribution,
+            reader: readerModuloContribution,
+            writer: writerModuloContribution,
             autoSave: true, // dependiendo de si se tiene acceso para grabar
             //             //remoteSort: true,
             //             //autoSave: true
@@ -405,7 +405,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         // paar la busqueda
         var checkHandler = function (item, checked) {
             if (checked) {
-                var store = this.storeModuloContribition;
+                var store = this.storeModuloContribution;
                 store.baseParams.filterField = item.key;
                 searchFieldBtn.setText(item.text);
             }
@@ -427,9 +427,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             , text: 'All columns'
         });
 
-        storeModuloContribition = this.storeModuloContribition;
-        storeModuloContribition.baseParams = {
-            limit: limiteModuloContribition
+        storeModuloContribution = this.storeModuloContribution;
+        storeModuloContribution.baseParams = {
+            limit: limiteModuloContribution
         };
         storeDetalleInspeccion = this.storeDetalleInspeccion;
         storeCostoMacro = this.storeCostoMacro;
@@ -614,20 +614,20 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 }
             });
         };
-        this.gridModuloContribition = new Ext.grid.EditorGridPanel({
+        this.gridModuloContribution = new Ext.grid.EditorGridPanel({
             colModel: createColModel(),
             loadMask: true,
             plugins: [filters],
             autoExpandColumn: 'id',
 
-            id: 'gridModuloContribition',
+            id: 'gridModuloContribution',
             xtype: "grid",
 
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
             height: winHeight * 0.35,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
             width: winWidth - 16,
-            store: this.storeModuloContribition,
+            store: this.storeModuloContribution,
 
             viewConfig: {
                 forceFit: winWidth > 1024 ? true : false
@@ -660,8 +660,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             //Definición de barra de paginado
             bbar: new Ext.PagingToolbar({
-                pageSize: limiteModuloContribition,
-                store: storeModuloContribition,
+                pageSize: limiteModuloContribution,
+                store: storeModuloContribution,
                 displayInfo: true,
                 displayMsg: 'Showing contributions: {0} - {1} of {2} - PMA',
                 emptyMsg: "No contributions to be shown"
@@ -744,7 +744,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             //Definición de barra de paginado
             bbar: new Ext.PagingToolbar({
-                pageSize: limiteModuloContribition,
+                pageSize: limiteModuloContribution,
                 store: storeCostoMacro,
                 displayInfo: true,
                 displayMsg: 'Showing macro costs: {0} - {1} de {2} - PMA',
@@ -832,7 +832,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             //Definición de barra de paginado
             bbar: new Ext.PagingToolbar({
-                pageSize: limiteModuloContribition,
+                pageSize: limiteModuloContribution,
                 store: storeDetalleInspeccion,
                 displayInfo: true,
                 displayMsg: '{0} - {1} de {2} - PMA',
@@ -905,7 +905,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                 {
                                     text: 'New',
                                     scope: this,
-                                    handler: this.addModuloContribition,
+                                    handler: this.addModuloContribution,
                                     disabled: false,
                                     iconCls: 'save-icon'
                                 },
@@ -914,7 +914,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                 {
                                     text: "Delete",
                                     scope: this,
-                                    handler: this.deleteModuloContribition,
+                                    handler: this.deleteModuloContribution,
                                     //disabled: true,
                                     //disabled: !creacionTramites,
                                     iconCls: 'delete-icon'
@@ -923,7 +923,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                 //Definición de botón Recargar datos
                                 {
                                     iconCls: 'reload-icon',
-                                    handler: this.requestGridDataModuloContribition,
+                                    handler: this.requestGridDataModuloContribution,
                                     scope: this,
                                     text: 'Reload data'
                                 },
@@ -943,7 +943,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                         //Ext.getCmp('tb_seleccionarUnidad').setDisabled(!this.checked);
                                         //Ext.getCmp('tb_seleccionarUnidad').getValue();
                                         //storeDenuncias.load({params: {noenviados: isChecked}});
-                                        storeModuloContribition.baseParams = {
+                                        storeModuloContribution.baseParams = {
                                             pendientesAprobar: isChecked
                                         };
 
@@ -1014,18 +1014,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                 , ' ', ' '
                                 , new QoDesk.QoAdmin.SearchField({
                                     paramName: 'filterText'
-                                    , store: this.storeModuloContribition
+                                    , store: this.storeModuloContribution
                                 })
                             ],
                             //Llamado a función que arma la tabla de datos
                             items: [
                                 {
-                                    id: 'formModuloContribition',
+                                    id: 'formModuloContribution',
                                     titleCollapse: true,
                                     flex: 1,
                                     autoScroll: false,
                                     layout: 'column',
-                                    items: this.gridModuloContribition
+                                    items: this.gridModuloContribution
                                 },
                                 {
                                     flex: 2,
@@ -1233,10 +1233,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         win.show();
 
         setTimeout(function () {
-            this.storeModuloContribition.load({
+            this.storeModuloContribution.load({
                 params: {
                     start: 0,
-                    limit: limiteModuloContribition,
+                    limit: limiteModuloContribution,
                     pendientesAprobar: isChecked
                 }
             });
@@ -1244,7 +1244,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     },
 
     //Función para eliminación de registros de Inspeccion
-    deleteModuloContribition: function () {
+    deleteModuloContribution: function () {
         //Popup de confirmación
         Ext.Msg.show({
             title: 'Confirmación',
@@ -1254,18 +1254,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
             fn: function (btn) {
                 if (btn == 'yes') {
-                    var rows = this.gridModuloContribition.getSelectionModel().getSelections();
+                    var rows = this.gridModuloContribution.getSelectionModel().getSelections();
                     if (rows.length === 0) {
                         return false;
                     }
-                    this.storeModuloContribition.remove(rows);
+                    this.storeModuloContribution.remove(rows);
                 }
             }
         });
     },
     //Función para inserción de registros de Inspeccion
-    addModuloContribition: function () {
-        var inspeccion = new this.storeModuloContribition.recordType({
+    addModuloContribution: function () {
+        var inspeccion = new this.storeModuloContribution.recordType({
             grant_number: '',
             crn: '',
             fund: 0,
@@ -1276,13 +1276,13 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             total_contribution: 0,
             total_programmed: 0
         });
-        this.gridModuloContribition.stopEditing();
-        this.storeModuloContribition.insert(0, inspeccion);
-        this.gridModuloContribition.startEditing(0, 1);
+        this.gridModuloContribution.stopEditing();
+        this.storeModuloContribution.insert(0, inspeccion);
+        this.gridModuloContribution.startEditing(0, 1);
     },
-    //Función para actualizar los datos mostrados en pantalla de la pestaña de ModuloContribition
-    requestGridDataModuloContribition: function () {
-        this.storeModuloContribition.load();
+    //Función para actualizar los datos mostrados en pantalla de la pestaña de ModuloContribution
+    requestGridDataModuloContribution: function () {
+        this.storeModuloContribution.load();
     },
 
 
@@ -1391,7 +1391,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     //                window.location.href = 'modules/desktop/inspeccion/server/migrarWings.php';
                     //                setTimeout(function () {
                     //                    AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
-                    //                    storeModuloContribition.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
+                    //                    storeModuloContribution.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
                     //                }, 1500);
                     if (Ext.getCmp('fp').getForm().isValid()) {
                         Ext.getCmp('fp').getForm().submit({
