@@ -40,6 +40,81 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
 
         //Inicio ventana mantenimiento ordenanzas
 
+        //Inicio Combo starting_month
+        storeStarting_month = new Ext.data.JsonStore({
+            root: 'datos',
+            fields: ['id', 'month'],
+            autoLoad: true,
+            data: {
+                datos: [
+                    {"id": "1", "month": "January"},
+                    {"id": "2", "month": "February"},
+                    {"id": "3", "month": "March"},
+                    {"id": "4", "month": "April"},
+                    {"id": "5", "month": "May"},
+                    {"id": "6", "month": "June"},
+                    {"id": "7", "month": "July"},
+                    {"id": "8", "month": "August"},
+                    {"id": "9", "month": "September"},
+                    {"id": "10", "month": "October"},
+                    {"id": "11", "month": "November"},
+                    {"id": "12", "month": "December"}
+                ]
+            }
+        });
+
+        var comboStarting_month = new Ext.form.ComboBox({
+            id: 'comboStarting_month',
+            store: storeStarting_month,
+            valueField: 'id',
+            displayField: 'month',
+            triggerAction: 'all',
+            mode: 'local'
+        });
+
+        function rendererStarting_month(id) {
+            return id;
+        }
+        //fin combo Starting_month
+
+
+        //Inicio Combo ending_month
+        storeEnding_month = new Ext.data.JsonStore({
+            root: 'datos',
+            fields: ['id', 'month'],
+            autoLoad: true,
+            data: {
+                datos: [
+                  {"id": "1", "month": "January"},
+                  {"id": "2", "month": "February"},
+                  {"id": "3", "month": "March"},
+                  {"id": "4", "month": "April"},
+                  {"id": "5", "month": "May"},
+                  {"id": "6", "month": "June"},
+                  {"id": "7", "month": "July"},
+                  {"id": "8", "month": "August"},
+                  {"id": "9", "month": "September"},
+                  {"id": "10", "month": "October"},
+                  {"id": "11", "month": "November"},
+                  {"id": "12", "month": "December"}
+                ]
+            }
+        });
+
+        var comboEnding_month = new Ext.form.ComboBox({
+            id: 'comboEnding_month',
+            store: storeEnding_month,
+            valueField: 'id',
+            displayField: 'month',
+            triggerAction: 'all',
+            mode: 'local'
+        });
+
+        function rendererEnding_month(id) {
+            return id;
+        }
+        //fin combo Ending_month
+
         //inicio combo COSTPARENT
         storeCOSTPARENT = new Ext.data.JsonStore({
             root: 'data',
@@ -222,7 +297,8 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 // {name: 'index_no', allowBlank: true},
                 // {name: 'hr_position', allowBlank: true},
                 {name: 'year', allowBlank: false},
-                {name: 'number_months', allowBlank: false},
+                {name: 'starting_month', allowBlank: false},
+                {name: 'end_month', allowBlank: false},
                 //{name: 'number_staff', allowBlank: true},
                 {name: 'monthly_cost_2019', allowBlank: false},
                 // {name: 'monthly_cost_2018', allowBlank: true},
@@ -282,7 +358,8 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 // ,{header: 'Index_no', dataIndex: 'index_no', sortable: true, width: 100}
 
                 , {header: 'Year', dataIndex: 'year', sortable: true, width: 100, editor: textField}
-                , {header: 'Number months', dataIndex: 'number_months', sortable: true, width: 100, editor: textField}
+                , {header: 'Starting month', dataIndex: 'starting_month', sortable: true, width: 100, editor: comboStarting_month, renderer: rendererStarting_month}
+                , {header: 'Ending month', dataIndex: 'end_month', sortable: true, width: 100, editor: comboEnding_month, renderer: rendererEnding_month}
                 // , {header: 'Number staff', dataIndex: 'number_staff', sortable: true, width: 100, editor: textField}
                 // , {header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
                 ,{header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
@@ -1389,10 +1466,22 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
     addDetailPayroll: function () {
         var dataDetailPayroll = new this.storeDetailPayroll.recordType({
             id: ' ',
-            number_months: '',
+            starting_month: '',
+            end_month: '',
          //   number_staff : '',
-            monthly_cost_2019 : '',
-            expected_cost_2019 : '',
+            january : 0,
+            february : 0,
+            march : 0,
+            april : 0,
+            may : 0,
+            june : 0,
+            july : 0,
+            august : 0,
+            september : 0,
+            october : 0,
+            november : 0,
+            december : 0,
+            expected_cost_2019 : 0,
             without_increase : '',
             increase_2 : '',
             increase_5 : '',
