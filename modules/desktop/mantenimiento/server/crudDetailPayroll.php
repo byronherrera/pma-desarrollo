@@ -90,32 +90,32 @@ function insertDetailPayroll()
     $cadenaDatos = '';
     $cadenaCampos = '';
 
-    if($data->monthly_cost_2019){
-      $data->expected_cost_2019 = ($data->end_month - $data->starting_month) * $data->monthly_cost_2019;
-      $data->january = $data->monthly_cost_2019;
-      $data->february = $data->monthly_cost_2019;
-      $data->march = $data->monthly_cost_2019;
-      $data->april = $data->monthly_cost_2019;
-      $data->may = $data->monthly_cost_2019;
-      $data->june = $data->monthly_cost_2019;
-      $data->july = $data->monthly_cost_2019;
-      $data->august = $data->monthly_cost_2019;
-      $data->september = $data->monthly_cost_2019;
-      $data->october = $data->monthly_cost_2019;
-      $data->november = $data->monthly_cost_2019;
-      $data->december = $data->monthly_cost_2019;
-      $data->total = $data->january
-       + $data->february
-       + $data->march
-       + $data->april
-       + $data->may
-       + $data->june
-       + $data->july
-       + $data->august
-       + $data->september
-       + $data->october
-       + $data->november
-       + $data->december;
+    if ($data->monthly_cost_2019) {
+        $data->expected_cost_2019 = ($data->end_month - $data->starting_month) * $data->monthly_cost_2019;
+        $data->january = $data->monthly_cost_2019;
+        $data->february = $data->monthly_cost_2019;
+        $data->march = $data->monthly_cost_2019;
+        $data->april = $data->monthly_cost_2019;
+        $data->may = $data->monthly_cost_2019;
+        $data->june = $data->monthly_cost_2019;
+        $data->july = $data->monthly_cost_2019;
+        $data->august = $data->monthly_cost_2019;
+        $data->september = $data->monthly_cost_2019;
+        $data->october = $data->monthly_cost_2019;
+        $data->november = $data->monthly_cost_2019;
+        $data->december = $data->monthly_cost_2019;
+        $data->total = $data->january
+            + $data->february
+            + $data->march
+            + $data->april
+            + $data->may
+            + $data->june
+            + $data->july
+            + $data->august
+            + $data->september
+            + $data->october
+            + $data->november
+            + $data->december;
     }
 
     foreach ($data as $clave => $valor) {
@@ -147,36 +147,42 @@ function insertDetailPayroll()
 function updateDetailPayroll()
 {
     global $os;
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $data = json_decode($_POST["data"]);
 
-    if($data->monthly_cost_2019){
-        $data->expected_cost_2019 = ($data->end_month - $data->starting_month) * $data->monthly_cost_2019;
-         $data->january = $data->monthly_cost_2019;
-         $data->february = $data->monthly_cost_2019;
-         $data->march = $data->monthly_cost_2019;
-         $data->april = $data->monthly_cost_2019;
-         $data->may = $data->monthly_cost_2019;
-         $data->june = $data->monthly_cost_2019;
-         $data->july = $data->monthly_cost_2019;
-         $data->august = $data->monthly_cost_2019;
-         $data->september = $data->monthly_cost_2019;
-         $data->october = $data->monthly_cost_2019;
-         $data->november = $data->monthly_cost_2019;
-         $data->december = $data->monthly_cost_2019;
+    $data = json_decode($_POST["data"]);
+    $columna = $_POST["columna"];
+    // todo
+    // if  $data->end_month ,  $data->starting_month son nuevos valores o  mismos valores anteriores
+    if (($columna == 'starting_month') || ($columna == 'end_month') || ($columna == 'monthly_cost_2019')) {
+        if ($data->monthly_cost_2019) {
+            $data->expected_cost_2019 = ($data->end_month - $data->starting_month) * $data->monthly_cost_2019;
+            //TODO mandar el calculo mensual
+            $data->january = verificaMes(1, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+            $data->february = verificaMes(2, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+            $data->march = verificaMes(3, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+            $data->april = verificaMes(4, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+            $data->may = verificaMes(5, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+            $data->june = verificaMes(6, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+            $data->july = verificaMes(7, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+            $data->august = verificaMes(8, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+            $data->september = verificaMes(9, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+            $data->october = verificaMes(10, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+            $data->november = verificaMes(11, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+            $data->december = verificaMes(12, $data->starting_month, $data->end_month, $data->monthly_cost_2019);
+        }
     }
+
     $data->total = $data->january
-     + $data->february
-     + $data->march
-     + $data->april
-     + $data->may
-     + $data->june
-     + $data->july
-     + $data->august
-     + $data->september
-     + $data->october
-     + $data->november
-     + $data->december;
+        + $data->february
+        + $data->march
+        + $data->april
+        + $data->may
+        + $data->june
+        + $data->july
+        + $data->august
+        + $data->september
+        + $data->october
+        + $data->november
+        + $data->december;
 
     if (isset($data->despacho_secretaria)) {
         if (!$data->despacho_secretaria)
@@ -206,6 +212,17 @@ function updateDetailPayroll()
         "data" => array($data)
     ));
 }
+
+function verificaMes($mes, $starting_month, $end_month, $monthly_cost_2019)
+{
+    if (($starting_month <= $mes) && ($mes < $end_month)) {
+        return $monthly_cost_2019;
+    } else {
+        return 0;
+    }
+}
+
+;
 
 function validarCedulaCorreo($id)
 {

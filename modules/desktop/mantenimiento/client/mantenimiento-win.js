@@ -73,8 +73,14 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
         });
 
         function rendererStarting_month(id) {
-            return id;
+            var index = storeStarting_month.findExact('id', id);
+            if (index > -1) {
+                var record = storeStarting_month.getAt(index);
+                return record.get('month');
+            }
+
         }
+
         //fin combo Starting_month
 
 
@@ -85,18 +91,18 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             autoLoad: true,
             data: {
                 datos: [
-                  {"id": "1", "month": "January"},
-                  {"id": "2", "month": "February"},
-                  {"id": "3", "month": "March"},
-                  {"id": "4", "month": "April"},
-                  {"id": "5", "month": "May"},
-                  {"id": "6", "month": "June"},
-                  {"id": "7", "month": "July"},
-                  {"id": "8", "month": "August"},
-                  {"id": "9", "month": "September"},
-                  {"id": "10", "month": "October"},
-                  {"id": "11", "month": "November"},
-                  {"id": "12", "month": "December"}
+                    {"id": "1", "month": "January"},
+                    {"id": "2", "month": "February"},
+                    {"id": "3", "month": "March"},
+                    {"id": "4", "month": "April"},
+                    {"id": "5", "month": "May"},
+                    {"id": "6", "month": "June"},
+                    {"id": "7", "month": "July"},
+                    {"id": "8", "month": "August"},
+                    {"id": "9", "month": "September"},
+                    {"id": "10", "month": "October"},
+                    {"id": "11", "month": "November"},
+                    {"id": "12", "month": "December"}
                 ]
             }
         });
@@ -111,8 +117,13 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
         });
 
         function rendererEnding_month(id) {
-            return id;
+            var index = storeEnding_month.findExact('id', id);
+            if (index > -1) {
+                var record = storeEnding_month.getAt(index);
+                return record.get('month');
+            }
         }
+
         //fin combo Ending_month
 
         //inicio combo COSTPARENT
@@ -201,7 +212,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 //Definición de campos bdd Costcategory
                 new Ext.grid.RowNumberer()
-                , {header: 'ID', dataIndex: 'id', sortable: true, hidden:true, width: 10}
+                , {header: 'ID', dataIndex: 'id', sortable: true, hidden: true, width: 10}
                 , {header: 'Cost Code', dataIndex: 'cost', sortable: true, width: 40, editor: textField}
                 , {
                     header: 'Description',
@@ -248,7 +259,11 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             viewConfig: {
                 forceFit: true
             },
-            sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
+            sm: new Ext.grid.RowSelectionModel(
+                {
+                    singleSelect: true
+                }
+            ),
             border: false,
             stripeRows: true,
             //Definición de barra de paginado
@@ -275,10 +290,10 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 write: function (proxy, action, result, res, rs) {
                     // en caso que la accion sea update
                     if (action = 'update') {
-                      //storeDetailPayroll.load();
+                        //storeDetailPayroll.load();
                     }
-                  }
                 }
+            }
         });
 
         //Definición de lectura de campos bdd DetailPayroll
@@ -321,7 +336,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 // {name: 'increase_2', allowBlank: true},
                 // {name: 'increase_5', allowBlank: true},
                 // {name: 'program_validation', allowBlank: true},
-                 {name: 'id_pma_payroll', allowBlank: true}
+                {name: 'id_pma_payroll', allowBlank: true}
             ],
             totalProperty: 'total',
         });
@@ -338,32 +353,61 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             proxy: proxyDetailPayroll,
             reader: readerDetailPayroll,
             writer: writerDetailPayroll,
-            autoSave: true
-            //, baseParams: {limit: limitemantenimiento}
+            autoSave: true,
+            baseParams: {
+                limit: limitemantenimiento,
+                columna : ''
+            }
         });
         //Carga de datos al levantarse la pantalla
-        storeDetailPayroll =this.storeDetailPayroll
+        storeDetailPayroll = this.storeDetailPayroll
         //Inicio formato grid pestaña DetailPayroll
         this.gridDetailPayroll = new Ext.grid.EditorGridPanel({
             id: 'gridDetailPayroll',
             height: winHeight - 124,
             store: this.storeDetailPayroll,
+            listeners: {
+                beforeedit: function(o) {
+                    // se indica que columna se esta editanto
+                    storeDetailPayroll.baseParams.columna = o['field'];
+                }
+            },
             columns: [
                 //Definición de campos bdd DetailPayroll
                 new Ext.grid.RowNumberer()
-                , {header: 'ID', dataIndex: 'id', sortable: true, width: 10, hidden:true, editor: textField}
+                , {header: 'ID', dataIndex: 'id', sortable: true, width: 10, hidden: true, editor: textField}
                 // ,{header: 'ID', dataIndex: 'id', sortable: true, width: 10}
                 // ,{header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
                 // ,{header: 'Grade', dataIndex: 'grade', sortable: true, width: 100}
                 // ,{header: 'Index_no', dataIndex: 'index_no', sortable: true, width: 100}
 
                 , {header: 'Year', dataIndex: 'year', sortable: true, width: 100, editor: textField}
-                , {header: 'Starting month', dataIndex: 'starting_month', sortable: true, width: 100, editor: comboStarting_month, renderer: rendererStarting_month}
-                , {header: 'Ending month', dataIndex: 'end_month', sortable: true, width: 100, editor: comboEnding_month, renderer: rendererEnding_month}
+                , {
+                    header: 'Starting month',
+                    dataIndex: 'starting_month',
+                    sortable: true,
+                    width: 100,
+                    editor: comboStarting_month,
+                    renderer: rendererStarting_month
+                }
+                , {
+                    header: 'Ending month',
+                    dataIndex: 'end_month',
+                    sortable: true,
+                    width: 100,
+                    editor: comboEnding_month,
+                    renderer: rendererEnding_month
+                }
                 // , {header: 'Number staff', dataIndex: 'number_staff', sortable: true, width: 100, editor: textField}
                 // , {header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
-                ,{header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
-                , {header: 'Expected cost', dataIndex: 'expected_cost_2019', sortable: true, width: 100 }
+                , {
+                    header: 'Monthly cost',
+                    dataIndex: 'monthly_cost_2019',
+                    sortable: true,
+                    width: 100,
+                    editor: textField
+                }
+                , {header: 'Expected cost', dataIndex: 'expected_cost_2019', sortable: true, width: 100}
                 , {header: 'January', dataIndex: 'january', sortable: true, width: 100, editor: textField}
                 , {header: 'February', dataIndex: 'february', sortable: true, width: 100, editor: textField}
                 , {header: 'March', dataIndex: 'march', sortable: true, width: 100, editor: textField}
@@ -376,7 +420,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 , {header: 'October', dataIndex: 'october', sortable: true, width: 100, editor: textField}
                 , {header: 'November', dataIndex: 'november', sortable: true, width: 100, editor: textField}
                 , {header: 'December', dataIndex: 'december', sortable: true, width: 100, editor: textField}
-                , {header: 'Total', dataIndex: 'total', sortable: true, width: 100 }
+                , {header: 'Total', dataIndex: 'total', sortable: true, width: 100}
 
                 // , {header: 'Without increase', dataIndex: 'without_increase', sortable: true, width: 100, editor: textField}
                 // , {header: 'Increase_2', dataIndex: 'increase_2', sortable: true, width: 100, editor: textField}
@@ -401,7 +445,6 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
         });
         //Fin formato grid pestaña DetailPayroll
         //Fin ventana mantenimiento DetailPayroll
-
 
 
         //Inicio mantenimiento Payroll
@@ -457,7 +500,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 //Definición de campos bdd Payroll
                 new Ext.grid.RowNumberer()
-                , {header: 'ID', dataIndex: 'id', sortable: true, hidden:true, width: 10}
+                , {header: 'ID', dataIndex: 'id', sortable: true, hidden: true, width: 10}
                 , {header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
                 , {header: 'Grade', dataIndex: 'grade', sortable: true, width: 70, editor: textField}
                 , {header: 'Index-no', dataIndex: 'index_no', sortable: true, width: 60, editor: textField}
@@ -1468,26 +1511,26 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             id: ' ',
             starting_month: '',
             end_month: '',
-         //   number_staff : '',
-            january : 0,
-            february : 0,
-            march : 0,
-            april : 0,
-            may : 0,
-            june : 0,
-            july : 0,
-            august : 0,
-            september : 0,
-            october : 0,
-            november : 0,
-            december : 0,
-            expected_cost_2019 : 0,
-            without_increase : '',
-            increase_2 : '',
-            increase_5 : '',
+            //   number_staff : '',
+            january: 0,
+            february: 0,
+            march: 0,
+            april: 0,
+            may: 0,
+            june: 0,
+            july: 0,
+            august: 0,
+            september: 0,
+            october: 0,
+            november: 0,
+            december: 0,
+            expected_cost_2019: 0,
+            without_increase: '',
+            increase_2: '',
+            increase_5: '',
             program_validation: '',
-            id_pma_payroll : selectedPayroll,
-            total : 0
+            id_pma_payroll: selectedPayroll,
+            total: 0
         });
         this.gridDetailPayroll.stopEditing();
         this.storeDetailPayroll.insert(0, dataDetailPayroll);

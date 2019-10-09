@@ -1377,6 +1377,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         });
     },
 
+
     // bh boton migrar informacion wings
     botonImportarWings: function () {
         Ext.Msg.show({
