@@ -74,6 +74,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
         //incio variables visualizacion
         var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
+        var textField2 = new Ext.form.TextField({allowBlank: false, readOnly: false});
         var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 10});
 
         var anio = new Ext.ux.form.SpinnerField({
@@ -183,6 +184,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {name: 'so', allowBlank: false},
                 {name: 'activity', allowBlank: false},
                 {name: 'total', allowBlank: true},
+                {name: 'total_planned', allowBlank: true},
             ]
         });
         //Definición de escritura en campos bdd Inspeccion
@@ -683,8 +685,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     header: 'id_macro',
                     dataIndex: 'id_pma_costos_macro',
                     hidden: true,
-                    width: 80,
-                    editor: textField
+                    width: 80
                 },
                 {
                     header: 'Cost Code Macro',
@@ -700,7 +701,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     hidden: false,
                     width: 100,
                     renderer: 'usMoney',
-                    editor: textField, align: 'right'
+                    editor: textField2, align: 'right'
                 },
                 {
                     header: 'Adjust',
@@ -708,7 +709,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     hidden: false,
                     width: 100,
                     renderer: 'usMoney',
-                    editor: textField, align: 'right'
+                    editor: textField2, align: 'right'
                 },
                 {
                     header: 'Total adjusted',
@@ -718,7 +719,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     width: 100,
                     renderer: 'usMoney'
                 },
-                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 150, editor: textField},
+                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 150, editor: textField2},
                 {
                     header: 'Register Date',
                     dataIndex: 'fecha_registro',
@@ -804,11 +805,12 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     header: 'Activity',
                     dataIndex: 'activity',
                     sortable: true,
-                    width: 100,
+                    width: 60,
                     editor: comboActivities,
                     renderer: costActivities
                 },
-                {header: 'Total macro', dataIndex: 'total', renderer: 'usMoney', width: 100, align: 'right'}
+                {header: 'Total Planned', dataIndex: 'total_planned', renderer: 'usMoney', width: 100, align: 'right', editor: textField},
+                {header: 'Total macro', dataIndex: 'total', renderer: 'usMoney', width: 90, align: 'right'}
             ],
             viewConfig: {
                 forceFit: false
@@ -1312,6 +1314,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             year: (new Date().getFullYear()),
             so: '',
             activity: '',
+            total_planned: 0,
             //id_cost: '',
             id_pma_contribuciones_detalle: selectContribuciones
         });

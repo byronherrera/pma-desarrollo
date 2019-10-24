@@ -215,7 +215,7 @@ function updateDetailPayroll()
 
 function verificaMes($mes, $starting_month, $end_month, $monthly_cost_2019)
 {
-    if (($starting_month <= $mes) && ($mes < $end_month)) {
+    if (($starting_month <= $mes) && ($mes <= $end_month)) {
         return $monthly_cost_2019;
     } else {
         return 0;
