@@ -415,10 +415,11 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             root: 'data',
             fields: [
                 {name: 'id', allowBlank: false},
-                {name: 'numero', allowBlank: false},
-                {name: 'unidad', allowBlank: false},
-                {name: 'id_member', allowBlank: false},
-                {name: 'creado', allowBlank: false}
+                {name: 'id_pma_costos_micro', allowBlank: false},
+                {name: 'total', allowBlank: false},
+                {name: 'comment', allowBlank: false},
+                {name: 'total_adjusted', allowBlank: false},
+                {name: 'fecha_registro', allowBlank: false}
             ]
         });
 
