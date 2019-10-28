@@ -1564,6 +1564,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                             }
                         })*/
                     }
+
                 }
             }),
             border: false,
