@@ -258,10 +258,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         }, 700);
 
                     }
-
                     // fin  caso que la accion sea update
-
-
                 }
             }
         });
@@ -414,12 +411,14 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'id', allowBlank: false},
+                {name: 'id', allowBlank: true},
                 {name: 'id_pma_costos_micro', allowBlank: false},
                 {name: 'total', allowBlank: false},
+                {name: 'adjust', allowBlank: false},
                 {name: 'comment', allowBlank: false},
                 {name: 'total_adjusted', allowBlank: false},
-                {name: 'fecha_registro', allowBlank: false}
+                {name: 'fecha_registro', type: 'date', dateFormat: 'c', allowBlank: true}
+
             ]
         });
 
@@ -1490,8 +1489,15 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'id_pma_costos_detalle_micro',
-                    dataIndex: 'id_pma_costos_detalle_micro',
+                    header: 'id',
+                    dataIndex: 'id',
+                    hidden: true,
+                    width: 80,
+                    // editor: textField
+                },
+                {
+                    header: 'id_pma_costos_micro',
+                    dataIndex: 'id_pma_costos_micro',
                     hidden: true,
                     width: 80,
                     // editor: textField
@@ -1533,26 +1539,30 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     //     dateFormat: 'Y-m-d',
                     //     timeFormat: 'H:i:s'
                     // })
-                },
+                }
+                //TODO esto no existe en la tabla
+                /*,
                 {
                     header: 'Total Micro',
                     dataIndex: 'total_detalle_micro',
                     hidden: false,
                     width: 100,
                     renderer: formatDate,
-                },
+                },*/
             ],
             viewConfig: {forceFit: true},
             sm: new Ext.grid.RowSelectionModel({
                 singleSelect: false,
                 listeners: {
                     rowselect: function (sm, row, rec) {
-                        storePlanificacionmicroDetalle.load({
+
+                        //  TODO ESTO LO COMENTO
+                        /*storePlanificacionmicroDetalle.load({
                             params: {
                                 filterField: 'guia',
                                 filterText: rec.get("numero")
                             }
-                        })
+                        })*/
                     }
                 }
             }),
@@ -1562,7 +1572,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 pageSize: 100,
                 store: this.storePlanificacionmicroDetalle,
                 displayInfo: true,
-                displayMsg: 'Mostrando actas {0} - {1} de {2} PMA',
+                displayMsg: 'Mostrando detalle que mostrar {0} - {1} de {2} PMA',
                 emptyMsg: "No existen nada  que mostrar"
             }),
         });

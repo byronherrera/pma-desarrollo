@@ -1384,8 +1384,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     // bh boton migrar informacion wings
     botonImportarWings: function () {
         Ext.Msg.show({
-            title: 'Advertencia',
-            msg: 'La migración sobrescribirá la información anterior<br><br>¿Desea continuar?',
+            title: 'Warning',
+            msg: 'The migration will overwrite the previous information<br><br>Do you wish to continue?',
             scope: this,
             icon: Ext.Msg.WARNING,
             buttons: Ext.Msg.YESNO,
@@ -1399,7 +1399,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     if (Ext.getCmp('fp').getForm().isValid()) {
                         Ext.getCmp('fp').getForm().submit({
                             url: 'modules/desktop/inspeccion/server/migrarWings.php',
-                            waitMsg: 'Subiendo archivo...',
+                            waitMsg: 'Uploading file ...',
                             //params: {data: selectOperativos},
                             success: function (fp, o) {
 
