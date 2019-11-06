@@ -1,2 +1,13 @@
 
 server/os-config.php
+modules/desktop/payroll/server/descargaContribucionesNuevas.inc.php
+modules/desktop/payroll/server/descargaReporte.inc.php
+modules/desktop/payroll/server/exportarDenunciasNuevas.inc.php
+modules/desktop/planificacionmicro/client/moduloPlanificacionmicro-win.js
+modules/desktop/planificacionmicro/server/crudCostosMicroDetalle.php
+modules/desktop/planificacionmicro/client/moduloPlanificacionmicro-win.js
+server/os-config.php
+modules/desktop/planificacionmicro/client/moduloPlanificacionmicro-win.js
+modules/desktop/planificacionmicro/server/crudCostosMicroDetalle.php
+server/os-config.php
+server/os-config.php

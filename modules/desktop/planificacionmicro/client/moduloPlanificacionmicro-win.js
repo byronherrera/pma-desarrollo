@@ -1,6 +1,7 @@
 var contribucionSeleccionada = '';
 var planificacionmicroSeleccionada = '';
 var costoMacroSeleccionada = '';
+var costoMicroSeleccionada = '';
 
 QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     id: 'moduloPlanificacionmicro',
@@ -1936,6 +1937,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs- " + costCode2(rec.data['cost_code2']) + " - Total: " + rec.data['total_after_adjust']);
                         // rec.data['glcode']=rec.data['cost_code3']
                         costCodeNuevo3 = rec.data['cost_code3'];
+                        costoMicroSeleccionada = rec.id;
                         storeGLCode.load({
                             params: {
                                 costCodeNuevo3: costCodeNuevo3
@@ -2968,7 +2970,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addMicroDetalle: function () {
         var inspeccion = new this.storePlanificacionmicroDetalle.recordType({
-            id_pma_costos_micro: costCodeNuevo3,
+            id_pma_costos_micro: costoMacroSeleccionada,
             total: 0,
             adjust: 0,
             comment: '',

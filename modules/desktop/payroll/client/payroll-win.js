@@ -22,7 +22,9 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
         var AppMsg = new Ext.AppMsg({});
 
         var win = desktop.getWindow('grid-win-payroll');
-        var urlContribuciones = "modules/desktop/payroll/server/";
+        var urlPayroll = "modules/desktop/payroll/server/";
+
+        limitePayroll = 100;
 
         var intervalo1 = 30;
         var intervalo2 = 90;
@@ -66,6 +68,246 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
         //fin variables visualizacion
 
         // inicio combos payroll
+
+
+
+                //Inicio Combo starting_month
+                storeStarting_month = new Ext.data.JsonStore({
+                    root: 'datos',
+                    fields: ['id', 'month'],
+                    autoLoad: true,
+                    data: {
+                        datos: [
+                            {"id": "1", "month": "January"},
+                            {"id": "2", "month": "February"},
+                            {"id": "3", "month": "March"},
+                            {"id": "4", "month": "April"},
+                            {"id": "5", "month": "May"},
+                            {"id": "6", "month": "June"},
+                            {"id": "7", "month": "July"},
+                            {"id": "8", "month": "August"},
+                            {"id": "9", "month": "September"},
+                            {"id": "10", "month": "October"},
+                            {"id": "11", "month": "November"},
+                            {"id": "12", "month": "December"}
+                        ]
+                    }
+                });
+
+                var comboStarting_month = new Ext.form.ComboBox({
+                    id: 'comboStarting_month',
+                    store: storeStarting_month,
+                    valueField: 'id',
+                    displayField: 'month',
+                    triggerAction: 'all',
+                    mode: 'local'
+                });
+
+                function rendererStarting_month(id) {
+                    var index = storeStarting_month.findExact('id', id);
+                    if (index > -1) {
+                        var record = storeStarting_month.getAt(index);
+                        return record.get('month');
+                    }
+
+                }
+
+                //fin combo Starting_month
+
+
+                //Inicio Combo ending_month
+                storeEnding_month = new Ext.data.JsonStore({
+                    root: 'datos',
+                    fields: ['id', 'month'],
+                    autoLoad: true,
+                    data: {
+                        datos: [
+                            {"id": "1", "month": "January"},
+                            {"id": "2", "month": "February"},
+                            {"id": "3", "month": "March"},
+                            {"id": "4", "month": "April"},
+                            {"id": "5", "month": "May"},
+                            {"id": "6", "month": "June"},
+                            {"id": "7", "month": "July"},
+                            {"id": "8", "month": "August"},
+                            {"id": "9", "month": "September"},
+                            {"id": "10", "month": "October"},
+                            {"id": "11", "month": "November"},
+                            {"id": "12", "month": "December"}
+                        ]
+                    }
+                });
+
+                var comboEnding_month = new Ext.form.ComboBox({
+                    id: 'comboEnding_month',
+                    store: storeEnding_month,
+                    valueField: 'id',
+                    displayField: 'month',
+                    triggerAction: 'all',
+                    mode: 'local'
+                });
+
+                function rendererEnding_month(id) {
+                    var index = storeEnding_month.findExact('id', id);
+                    if (index > -1) {
+                        var record = storeEnding_month.getAt(index);
+                        return record.get('month');
+                    }
+                }
+
+                //fin combo Ending_month
+
+
+                //inicio combo costCode2
+                storeCostCode2 = new Ext.data.JsonStore({
+                    root: 'data',
+                    fields: ['id', 'description'],
+                    autoLoad: true,
+                    url: 'modules/common/combos/combos.php?tipo=costcode2'
+                });
+
+                var comboCostCode2 = new Ext.form.ComboBox({
+                    id: 'comboCostCode2',
+                    store: storeCostCode2,
+                    valueField: 'id',
+                    displayField: 'description',
+                    triggerAction: 'all',
+                    mode: 'local'
+                });
+
+                function costCode2(id) {
+                    var index = storeCostCode2.findExact('id', id);
+                    if (index > -1) {
+                        var record = storeCostCode2.getAt(index);
+                        return record.get('description');
+                    }
+                }
+
+                //fin combo costCode2
+
+                //inicio combo costCode3
+                storeCostCode3 = new Ext.data.JsonStore({
+                    root: 'data',
+                    fields: ['id', 'description'],
+                    autoLoad: true,
+                    url: 'modules/common/combos/combos.php?tipo=costcode3'
+                });
+
+                var comboCostCode3 = new Ext.form.ComboBox({
+                    id: 'comboCostCode3',
+                    store: storeCostCode3,
+                    valueField: 'id',
+                    displayField: 'description',
+                    triggerAction: 'all',
+                    mode: 'local'
+                });
+
+                function costCode3(id) {
+                    var index = storeCostCode3.findExact('id', id);
+                    if (index > -1) {
+                        var record = storeCostCode3.getAt(index);
+                        return record.get('description');
+                    }
+                }
+
+                //fin combo costCode3
+
+                //inicio combo glcode
+                storeGLCode = new Ext.data.JsonStore({
+                    root: 'data',
+                    fields: ['id', 'commitment_description', 'glcode', 'gl_description'],
+                    autoLoad: true,
+                    url: 'modules/common/combos/combos.php?tipo=glcode'
+                });
+
+                var comboGLCode = new Ext.form.ComboBox({
+                    id: 'comboGLCode',
+                    store: storeGLCode,
+                    valueField: 'id',
+                    displayField: 'commitment_description',
+                    triggerAction: 'all',
+                    mode: 'local'
+                });
+
+                function glcode(id) {
+                    var index = storeGLCode.findExact('id', id);
+                    if (index > -1) {
+                        var record = storeGLCode.getAt(index);
+                        return record.get('commitment_description');
+                    }
+                }
+
+                function glcode1(id) {
+                    var index = storeGLCode.findExact('id', id);
+                    if (index > -1) {
+                        var record = storeGLCode.getAt(index);
+                        return record.get('glcode');
+                    }
+                }
+
+                function glcode2(id) {
+                    var index = storeGLCode.findExact('id', id);
+                    if (index > -1) {
+                        var record = storeGLCode.getAt(index);
+                        return record.get('gl_description');
+                    }
+                }
+
+                //fin combo gl code
+
+                //inicio combo costCode4
+                storeCostCode4 = new Ext.data.JsonStore({
+                    root: 'data',
+                    fields: ['id', 'description'],
+                    autoLoad: true,
+                    url: 'modules/common/combos/combos.php?tipo=costcode4'
+                });
+
+                var comboCostCode4 = new Ext.form.ComboBox({
+                    id: 'comboCostCode4',
+                    store: storeCostCode4,
+                    valueField: 'id',
+                    displayField: 'description',
+                    triggerAction: 'all',
+                    mode: 'local'
+                });
+
+                function costCode4(id) {
+                    var index = storeCostCode4.findExact('id', id);
+                    if (index > -1) {
+                        var record = storeCostCode4.getAt(index);
+                        return record.get('description');
+                    }
+                }
+
+                //fin combo costCode4
+
+                //inicio combo costCode5
+                storeCostCode5 = new Ext.data.JsonStore({
+                    root: 'data',
+                    fields: ['id', 'description'],
+                    autoLoad: true,
+                    url: 'modules/common/combos/combos.php?tipo=costcode5'
+                });
+
+                var comboCostCode5 = new Ext.form.ComboBox({
+                    id: 'comboCostCode5',
+                    store: storeCostCode5,
+                    valueField: 'id',
+                    displayField: 'description',
+                    triggerAction: 'all',
+                    mode: 'local'
+                });
+
+                function costCode5(id) {
+                    var index = storeCostCode5.findExact('id', id);
+                    if (index > -1) {
+                        var record = storeCostCode5.getAt(index);
+                        return record.get('description');
+                    }
+                }
+
+                //fin combo costCode5
 
 
         //inicio combo caracter del tramite CDT
@@ -157,13 +399,278 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
 
         //fin combo GRANT
 
-        // inicio ventana payroll
+        // inicio ventana contribuciones
+
+
+                //Inicio mantenimiento DetailPayroll
+                //Definición de url CRUD
+                var proxyDetailPayroll = new Ext.data.HttpProxy({
+                    api: {
+                        create: urlPayroll + "crudDetailPayroll.php?operation=insert",
+                        read: urlPayroll + "crudDetailPayroll.php?operation=select",
+                        update: urlPayroll + "crudDetailPayroll.php?operation=update",
+                        destroy: urlPayroll + "crudDetailPayroll.php?operation=delete"
+                    },
+                    listeners: {
+                        write: function (proxy, action, result, res, rs) {
+                            // en caso que la accion sea update
+                            if (action = 'update') {
+                                //storeDetailPayroll.load();
+                            }
+                        }
+                    }
+                });
+
+                //Definición de lectura de campos bdd DetailPayroll
+                var readerDetailPayroll = new Ext.data.JsonReader({
+                    successProperty: 'success',
+                    messageProperty: 'message',
+                    idProperty: 'id',
+                    root: 'data',
+                    fields: [
+                        {name: 'id', allowBlank: false},
+
+                        // {name: 'id', allowBlank: false},
+                        // {name: 'location', allowBlank: false},
+                        // {name: 'hr_position', allowBlank: false},
+                        // {name: 'grade', allowBlank: true},
+                        // {name: 'index_no', allowBlank: true},
+                        // {name: 'hr_position', allowBlank: true},
+                        {name: 'year', allowBlank: false},
+                        {name: 'starting_month', allowBlank: false},
+                        {name: 'end_month', allowBlank: false},
+                        //{name: 'number_staff', allowBlank: true},
+                        {name: 'monthly_cost_2019', allowBlank: false},
+                        // {name: 'monthly_cost_2018', allowBlank: true},
+                        {name: 'expected_cost_2019', allowBlank: true},
+                        {name: 'january', allowBlank: true},
+                        {name: 'february', allowBlank: true},
+                        {name: 'march', allowBlank: true},
+                        {name: 'april', allowBlank: true},
+                        {name: 'may', allowBlank: true},
+                        {name: 'june', allowBlank: true},
+                        {name: 'july', allowBlank: true},
+                        {name: 'august', allowBlank: true},
+                        {name: 'september', allowBlank: true},
+                        {name: 'october', allowBlank: true},
+                        {name: 'november', allowBlank: true},
+                        {name: 'december', allowBlank: true},
+                        {name: 'total', allowBlank: true},
+
+                        // {name: 'without_increase', allowBlank: false},
+                        // {name: 'increase_2', allowBlank: true},
+                        // {name: 'increase_5', allowBlank: true},
+                        // {name: 'program_validation', allowBlank: true},
+                        {name: 'id_pma_payroll', allowBlank: true}
+                    ],
+                    totalProperty: 'total',
+                });
+
+                //Definición de escritura en campos bdd DetailPayroll
+                var writerDetailPayroll = new Ext.data.JsonWriter({
+                    encode: true,
+                    writeAllFields: true
+                });
+
+                //Definición de store para pestaña DetailPayroll
+                this.storeDetailPayroll = new Ext.data.Store({
+                    id: 'storeDetailPayroll',
+                    proxy: proxyDetailPayroll,
+                    reader: readerDetailPayroll,
+                    writer: writerDetailPayroll,
+                    autoSave: true,
+                    baseParams: {
+                        limit: limitePayroll,
+                        columna : ''
+                    }
+                });
+                //Carga de datos al levantarse la pantalla
+                storeDetailPayroll = this.storeDetailPayroll
+                //Inicio formato grid pestaña DetailPayroll
+                this.gridDetailPayroll = new Ext.grid.EditorGridPanel({
+                    id: 'gridDetailPayroll',
+                    height: winHeight - 124,
+                    store: this.storeDetailPayroll,
+                    listeners: {
+                        beforeedit: function(o) {
+                            // se indica que columna se esta editanto
+                            storeDetailPayroll.baseParams.columna = o['field'];
+                        }
+                    },
+                    columns: [
+                        //Definición de campos bdd DetailPayroll
+                        new Ext.grid.RowNumberer()
+                        , {header: 'ID', dataIndex: 'id', sortable: true, width: 10, hidden: true, editor: textField}
+                        // ,{header: 'ID', dataIndex: 'id', sortable: true, width: 10}
+                        // ,{header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
+                        // ,{header: 'Grade', dataIndex: 'grade', sortable: true, width: 100}
+                        // ,{header: 'Index_no', dataIndex: 'index_no', sortable: true, width: 100}
+
+                        , {header: 'Year', dataIndex: 'year', sortable: true, width: 100, editor: textField}
+                        , {
+                            header: 'Starting month',
+                            dataIndex: 'starting_month',
+                            sortable: true,
+                            width: 100,
+                            editor: comboStarting_month,
+                            renderer: rendererStarting_month
+                        }
+                        , {
+                            header: 'Ending month',
+                            dataIndex: 'end_month',
+                            sortable: true,
+                            width: 100,
+                            editor: comboEnding_month,
+                            renderer: rendererEnding_month
+                        }
+                        // , {header: 'Number staff', dataIndex: 'number_staff', sortable: true, width: 100, editor: textField}
+                        // , {header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
+                        , {
+                            header: 'Monthly cost',
+                            dataIndex: 'monthly_cost_2019',
+                            sortable: true,
+                            width: 100,
+                            editor: textField
+                        }
+                        , {header: 'Expected cost', dataIndex: 'expected_cost_2019', sortable: true, width: 100}
+                        , {header: 'January', dataIndex: 'january', sortable: true, width: 100, editor: textField}
+                        , {header: 'February', dataIndex: 'february', sortable: true, width: 100, editor: textField}
+                        , {header: 'March', dataIndex: 'march', sortable: true, width: 100, editor: textField}
+                        , {header: 'April', dataIndex: 'april', sortable: true, width: 100, editor: textField}
+                        , {header: 'May', dataIndex: 'may', sortable: true, width: 100, editor: textField}
+                        , {header: 'June', dataIndex: 'june', sortable: true, width: 100, editor: textField}
+                        , {header: 'July', dataIndex: 'july', sortable: true, width: 100, editor: textField}
+                        , {header: 'August', dataIndex: 'august', sortable: true, width: 100, editor: textField}
+                        , {header: 'September', dataIndex: 'september', sortable: true, width: 100, editor: textField}
+                        , {header: 'October', dataIndex: 'october', sortable: true, width: 100, editor: textField}
+                        , {header: 'November', dataIndex: 'november', sortable: true, width: 100, editor: textField}
+                        , {header: 'December', dataIndex: 'december', sortable: true, width: 100, editor: textField}
+                        , {header: 'Total', dataIndex: 'total', sortable: true, width: 100}
+
+                        // , {header: 'Without increase', dataIndex: 'without_increase', sortable: true, width: 100, editor: textField}
+                        // , {header: 'Increase_2', dataIndex: 'increase_2', sortable: true, width: 100, editor: textField}
+                        // , {header: 'Increase_5', dataIndex: 'increase_5', sortable: true, width: 100, editor: textField}
+                        // , {header: 'Program Validation', dataIndex: 'program_validation', sortable: true, width: 100, editor: textField}
+                        // , {header: 'Program Validation', dataIndex: 'id_pma_payroll', hidden: true}
+                    ],
+                    viewConfig: {forceFit: true},
+                    sm: new Ext.grid.RowSelectionModel({
+                        singleSelect: true
+                    }),
+                    border: false,
+                    stripeRows: true,
+                    //Definición de barra de paginado
+                    bbar: new Ext.PagingToolbar({
+                        pageSize: limitePayroll,
+                        store: this.storeDetailPayroll,
+                        displayInfo: true,
+                        displayMsg: 'Showing: {0} - {1} of {2} - PMA',
+                        emptyMsg: "No data to be shown"
+                    })
+                });
+                //Fin formato grid pestaña DetailPayroll
+                //Fin ventana mantenimiento DetailPayroll
+
+
+                //Inicio mantenimiento Payroll
+                //Definición de url CRUD
+                var proxyPayroll = new Ext.data.HttpProxy({
+                    api: {
+                        create: urlPayroll + "crudPayroll.php?operation=insert",
+                        read: urlPayroll + "crudPayroll.php?operation=select",
+                        update: urlPayroll + "crudPayroll.php?operation=update",
+                        destroy: urlPayroll + "crudPayroll.php?operation=delete"
+                    }
+                });
+
+                //Definición de lectura de campos bdd Payroll
+                var readerPayroll = new Ext.data.JsonReader({
+                    successProperty: 'success',
+                    messageProperty: 'message',
+                    idProperty: 'id',
+                    root: 'data',
+                    fields: [
+                        {name: 'id', allowBlank: false},
+                        {name: 'location', allowBlank: false},
+                        {name: 'grade', allowBlank: false},
+                        {name: 'index_no', allowBlank: false},
+                        {name: 'hr_position', allowBlank: false},
+                        {name: 'monthly_cost_2018', allowBlank: false}
+                    ]
+                });
+
+                //Definición de escritura en campos bdd Payroll
+                var writerPayroll = new Ext.data.JsonWriter({
+                    encode: true,
+                    writeAllFields: true
+                });
+
+                //Definición de store para pestaña Payroll
+                this.storePayroll = new Ext.data.Store({
+                    id: 'storePayroll',
+                    proxy: proxyPayroll,
+                    reader: readerPayroll,
+                    writer: writerPayroll,
+                    autoSave: true
+                    //, baseParams: {limit: limitePayroll}
+                });
+                //Carga de datos al levantarse la pantalla
+
+                this.storePayroll.load();
+
+                //Inicio formato grid pestaña Payroll
+                this.gridPayroll = new Ext.grid.EditorGridPanel({
+                    height: winHeight - 124,
+                    store: this.storePayroll,
+                    columns: [
+                        //Definición de campos bdd Payroll
+                        new Ext.grid.RowNumberer()
+                        , {header: 'ID', dataIndex: 'id', sortable: true, hidden: true, width: 10}
+                        , {header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
+                        , {header: 'Grade', dataIndex: 'grade', sortable: true, width: 70, editor: textField}
+                        , {header: 'Index-no', dataIndex: 'index_no', sortable: true, width: 60, editor: textField}
+                        , {header: 'HR Description', dataIndex: 'hr_position', sortable: true, width: 150, editor: textField}
+                        , {
+                            header: 'Monthly cost',
+                            dataIndex: 'monthly_cost_2018',
+                            sortable: true,
+                            width: 100,
+                            editor: textField
+                        }
+                    ],
+                    viewConfig: {forceFit: false},
+                    sm: new Ext.grid.RowSelectionModel({
+                        singleSelect: true,
+                        listeners: {
+                            rowselect: function (sm, row, rec) {
+                                // recuperamos la informacion de ese payroll
+                                selectedPayroll = rec.id;
+                                storeDetailPayroll.baseParams.id = selectedPayroll;
+                                storeDetailPayroll.load();
+                            }
+                        }
+                    }),
+                    border: false,
+                    stripeRows: true,
+                    //Definición de barra de paginado
+                    bbar: new Ext.PagingToolbar({
+                        pageSize: limitePayroll,
+                        store: this.storePayroll,
+                        displayInfo: true,
+                        displayMsg: 'Showing: {0} - {1} of {2} - PMA',
+                        emptyMsg: "No data to be shown"
+                    })
+                });
+                //Fin formato grid pestaña Payroll
+                //Fin ventana mantenimiento Payroll
+
+
         var proxyContribuciones = new Ext.data.HttpProxy({
             api: {
-                create: urlContribuciones + "crudContribuciones.php?operation=insert",
-                read: urlContribuciones + "crudContribuciones.php?operation=select",
-                update: urlContribuciones + "crudContribuciones.php?operation=update",
-                destroy: urlContribuciones + "crudContribuciones.php?operation=delete"
+                create: urlPayroll + "crudPayrollCosts.php?operation=insert",
+                read: urlPayroll + "crudPayrollCosts.php?operation=select",
+                update: urlPayroll + "crudPayrollCosts.php?operation=update",
+                destroy: urlPayroll + "crudPayrollCosts.php?operation=delete"
             },
             listeners: {
                 write: function (proxy, action, result, res, rs) {
@@ -202,23 +709,19 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'grant_number', allowBlank: false},
-                {name: 'estado', allowBlank: false},
-                {name: 'crn', allowBlank: false},
-                {name: 'donor', allowBlank: false},
-                {name: 'fund', allowBlank: true},
-                {name: 'comments', allowBlank: true},
-                {name: 'isc', allowBlank: false},
-                {name: 'total_grant', allowBlank: true},
-                {name: 'total_programmed', allowBlank: true},
-                {name: 'total_unprogrammed', allowBlank: true},
-                {name: 'total_contribution', allowBlank: true},
-                {name: 'grant_tod', type: 'date', dateFormat: 'c', allowBlank: true},
-                {name: 'grant_tdd', type: 'date', dateFormat: 'c', allowBlank: true},
-                {name: 'grant_specific', allowBlank: true},
-                {name: 'activity', allowBlank: true},
-                {name: 'year_contribution', allowBlank: true},
-                {name: 'recepcion_documento', type: 'date', dateFormat: 'c', allowBlank: true}
+              {name: 'id', allowBlank: true},
+              {name: 'id_pma_costos_micro', allowBlank: true},
+              {name: 'cost_code2', allowBlank: true},
+              {name: 'cost_code3', allowBlank: true},
+              {name: 'glcode', allowBlank: true},
+              //{name: 'commitment_description', allowBlank: true},
+              //{name: 'gl_description', allowBlank: true},
+              {name: 'cost_code4', allowBlank: true},
+              {name: 'cost_code5', allowBlank: true},
+              {name: 'description_micro', allowBlank: true},
+              {name: 'total_micro', allowBlank: true},
+              {name: 'adjust', allowBlank: true},
+              {name: 'total_after_adjust', allowBlank: true}
             ]
         });
         var writerContribuciones = new Ext.data.JsonWriter({
@@ -236,10 +739,10 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             baseParams: {}
         });
         storeContribuciones = this.storeContribuciones;
-        limitepayroll = 100;
+        // limitePayroll = 100;
 
         this.storeContribuciones.baseParams = {
-            limit: limitepayroll
+            limit: limitePayroll
         };
 
         var filters = new Ext.ux.grid.GridFilters({
@@ -286,11 +789,11 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             var columns = [
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'Grant Number',
-                    dataIndex: 'grant_number',
-                    id: 'grant_number',
-                    width: 38,
-                    editor: textField10,
+                  header: 'id_pma_costos_micro',
+                  dataIndex: 'id_pma_costos_micro',
+                  sortable: false,
+                  width: 15,
+                  hidden: true,
                     renderer: function (value, metaData, record, row, col, store, gridView) {
                         // si estado es cerrado retorna amarillo
                        recuperaEstado = record.get('estado');
@@ -312,104 +815,100 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     }
                 },
                 {
-                    header: 'CRN',
-                    dataIndex: 'crn',
-                    width: 28,
-                    editor: textField
+                    header: 'id_pma_costos_micro',
+                    dataIndex: 'id_pma_costos_micro',
+                    sortable: false,
+                    width: 15,
+                    hidden: true
                 },
                 {
-                    header: 'Fund',
-                    dataIndex: 'fund',
-                    width: 28,
-                    editor: textField
-                },
-                {
-                    header: 'Donor',
-                    dataIndex: 'donor',
-                    width: 28,
-                    editor: textField
-                },
-                {
-                    header: 'Year',
-                    dataIndex: 'year_contribution',
-                    width: 20,
-                    editor: anio,
-                    align: 'right'
-                },
-                {
-                    header: 'ISC',
-                    dataIndex: 'isc',
-                    width: 28,
-                    renderer: 'usMoney',
-                    editor: numero,
-                    align: 'right'
-                },
-                {
-                    header: 'Total Direct Cost',
-                    dataIndex: 'total_grant',
-                    width: 28,
-                    align: 'right',
-                    renderer: 'usMoney',
-                    editor: numero,
-                },
-                {
-                    header: 'Total contribution',
-                    dataIndex: 'total_contribution',
+                    header: 'Cost Code nivel 2',
+                    dataIndex: 'cost_code2',
                     sortable: true,
-                    width: 28,
+                    width: 100,
+                    // editor: comboCostCode2,
+                    renderer: costCode2
+                },
+                {
+                    header: 'Cost Code nivel 3',
+                    dataIndex: 'cost_code3',
+                    sortable: true,
+                    width: 150,
+                    // editor: comboCostCode3,
+                    renderer: costCode3
+                },
+                {
+                    header: 'GL description',
+                    dataIndex: 'glcode',
+                    sortable: true,
+                    width: 100,
+                    hidden: false,
+                    // editor: comboGLCode,
+                    renderer: glcode
+                },
+                {
+                    header: 'GL code',
+                    dataIndex: 'glcode',
+                    sortable: true,
+                    width: 100,
+                    hidden: false,
+                    // editor: comboGLCode,
+                    renderer: glcode1
+                },
+                {
+                    header: 'Commitment description',
+                    dataIndex: 'glcode',
+                    sortable: true,
+                    width: 100,
+                    hidden: false,
+                    // editor: comboGLCode,
+                    renderer: glcode2
+                },
+                {
+                    header: 'Cost Code nivel 4',
+                    dataIndex: 'cost_code4',
+                    sortable: true,
+                    width: 100,
+                    // editor: comboCostCode4,
+                    renderer: costCode4
+                },
+                {
+                    header: 'Cost Code nivel 5',
+                    dataIndex: 'cost_code5',
+                    sortable: true,
+                    width: 150,
+                    // editor: comboCostCode5,
+                    renderer: costCode5
+                },
+                {
+                    header: 'Descripción',
+                    dataIndex: 'description_micro',
+                    sortable: true,
+                    width: 200,
+                    // editor: textField
+                },
+                {
+                    header: 'Total micro',
+                    dataIndex: 'total_micro',
+                    sortable: true,
+                    width: 100,
                     renderer: 'usMoney',
-                    editor: numero,
-                    align: 'right'
-                },
-                {
-                    header: 'Total Programmed',
-                    dataIndex: 'total_programmed',
-                    width: 28,
-                    renderer: 'usMoney',
-                    align: 'right'
-                },
-                {
-                    header: 'Unprogrammed',
-                    dataIndex: 'total_unprogrammed',
-                    width: 28,
-                    renderer: 'usMoney',
-                    align: 'right'
-                },
-                {
-                    header: 'Grant TOD',
-                    dataIndex: 'grant_tod',
-                    width: 40,
-                    renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-                    editor: fecha,
-                    align: 'right'
-                },
-                {
-                    header: 'Grant TDD',
-                    dataIndex: 'grant_tdd',
-                    width: 40,
-                    renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-                    editor: fecha,
-                    align: 'right'
-                },
-                {
-                    header: 'Grant Specific',
-                    dataIndex: 'grant_specific',
-                    width: 28,
-                    editor: comboGrant,
-                    renderer: costGrant
-                },
-                {
-                    header: 'Status',
-                    dataIndex: 'estado',
-                    width: 28,
-                    editor: comboStatus,
-                    renderer: costStatus
-                },
-                {
-                    header: 'Comments',
-                    dataIndex: 'comments',
-                    width: 28,
                     editor: textField
+                },
+                {
+                    header: 'Adjust',
+                    dataIndex: 'adjust',
+                    sortable: true,
+                    width: 100,
+                    renderer: 'usMoney',
+                    editor: textField
+                },
+                {
+                    header: 'Total after adjustment',
+                    dataIndex: 'total_after_adjust',
+                    sortable: true,
+                    renderer: 'usMoney',
+                    width: 150
                 }
             ];
 
@@ -449,7 +948,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             // paging bar on the bottom
             bbar: new Ext.PagingToolbar({
-                pageSize: limitepayroll,
+                pageSize: limitePayroll,
                 store: storeContribuciones,
                 displayInfo: true,
                 displayMsg: 'Showing contributions  {0} - {1} of {2}',
@@ -692,7 +1191,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             this.formContribucionesDetalle = new Ext.FormPanel({
 //                id: 'formContribucionesDetalle',
                 cls: 'no-border',
-                id: 'formcabecerapayroll',
+                id: 'formcabeceracontribuciones',
                 items: this.gridContribuciones,
 //                titleCollapse: true,
 //                split: true,
@@ -874,10 +1373,10 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
 
             win = desktop.createWindow({
                 id: 'grid-win-payroll',
-                title: 'Contributions record',
+                title: 'Payroll Management',
                 width: winWidth,
                 height: winHeight,
-                iconCls: 'payroll-icon',
+                iconCls: 'contribuciones-icon',
                 shim: false,
                 animCollapse: false,
                 constrainHeader: true,
@@ -888,15 +1387,17 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     border: false,
                     id: 'panelPrincipal',
                     items: [
+                      //Pestaña Payroll
                         {
                             autoScroll: true,
-                            title: 'General',
+                            title: 'Payroll costs',
                             closable: true,
+                            height: winHeight - 70,
                             tbar: [
                                 {
                                     text: 'New',
                                     scope: this,
-                                    handler: this.addpayroll,
+                                    handler: this.addcontribuciones,
                                     iconCls: 'save-icon',
                                     disabled: !acceso
                                 },
@@ -904,7 +1405,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                                 {
                                     text: "Delete",
                                     scope: this,
-                                    handler: this.deletepayroll,
+                                    handler: this.deletecontribuciones,
                                     iconCls: 'delete-icon',
                                     //disabled: this.app.isAllowedTo('accesosAdministrador', this.id) ? false : true
                                     disabled: false
@@ -917,134 +1418,168 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                                     text: 'Reload data',
                                     tooltip: 'Reload data'
                                 },
-                                /*  {
-                                      iconCls: 'excel-icon',
-                                      handler: this.botonExportarReporte,
-                                      scope: this,
-                                      text: 'Generate Report',
-                                      tooltip: 'Generate Report',
-                                      id: 'tb_repoteContribuciones',
-                                      disabled: true
-                                  },*/
-                                '-',
-                                '->'
-                                , {
-                                    text: 'Search by:'
-                                    , xtype: 'tbtext'
-                                }
 
-                                , searchFieldBtn
-                                , ' ', ' '
-                                , new QoDesk.QoAdmin.SearchField({
-                                    paramName: 'filterText'
-                                    , store: this.storeContribuciones
-                                })
+                                //***********Search Section*********
+
+                                // '-',
+                                // '->'
+                                // , {
+                                //     text: 'Search by:'
+                                //     , xtype: 'tbtext'
+                                // }
+                                //
+                                // , searchFieldBtn
+                                // , ' ', ' '
+                                // , new QoDesk.QoAdmin.SearchField({
+                                //     paramName: 'filterText'
+                                //     , store: this.storeContribuciones
+                                // })
                             ],
                             items: this.formContribucionesDetalle
-                        }
-                        /*                        , {
-                                                    title: 'Guías',
-                                                    closable: true,
-                                                    layout: 'border',
-                                                    hidden: 'true', //TODO eliminar pestaña
-                                                    tbar: [
-                                                        {
-                                                            iconCls: 'reload-icon',
-                                                            handler: this.requestGridDataContribucionesGuia,
-                                                            scope: this,
-                                                            text: 'Reload data'
-
-                                                        },
-                                                        {
-                                                            iconCls: 'excel-icon',
-                                                            handler: this.botonExportarReporteReimpresion,
-                                                            scope: this,
-                                                            text: 'Generar Reporte',
-                                                            tooltip: 'Se genera el reporte de la guía seleccionada',
-                                                            id: 'tb_repoteContribucionesGuias',
-                                                            disabled: !acceso
-                                                        }
-                                                    ],
-                                                    items: [
-                                                        {
-                                                            region: 'north',
-                                                            height: 200,
-
-                                                            minSize: 100,
-                                                            maxSize: 150,
-                                                            closable: true,
-                                                            autoScroll: false,
-                                                            items: this.gridContribucionesGuia
-
-                                                        },
-                                                        // create instance immediately
-                                                        {
-                                                            // lazily created panel (xtype:'panel' is default)
-                                                            region: 'center',
-                                                            split: true,
-                                                            autoScroll: true,
-                                                            height: 300,
-                                                            minSize: 100,
-                                                            maxSize: 150,
-                                                            margins: '0 0 0 0',
-                                                            items: this.gridContribucionesSimple
-                                                        }
-                                                    ]
-
-                                                    //this.gridContribucionesGuia
-                                                }
-                        */
-                        , {
-                            title: 'Reports',
+                        },
+                        {
+                            autoScroll: true,
+                            title: 'Planification',
                             closable: true,
-                            layout: 'border',
-                            //disabled: this.app.isAllowedTo('accesosSecretaria', this.id) ? false : true,
-                            tbar: [
+                            layout: 'fit',
+                            height: winHeight - 65
+                            //Llamado a función que arma la tabla de datos
+                            , items: [
                                 {
-                                    iconCls: 'reload-icon',
-                                    handler: this.requestGridDataDocumentoReporte,
-                                    scope: this,
-                                    text: 'Buscar'
-                                },
-                                {
-                                    iconCls: 'reload-icon',
-                                    handler: this.requestGridDataDocumentoReporteReset,
-                                    scope: this,
-                                    text: 'Borrar formulario'
+                                    layout: 'border',
+                                    // height: winHeight,
+                                    items: [{
+                                        region: 'west',
+                                        id: 'west-panel',
+                                        title: 'Payroll List',
+                                        split: true,
+                                        width: winWidth * 0.3 - 100,
+                                        // minSize: 175,
+                                        // maxSize: 400,
+                                        // collapsible: true,
+                                        // layoutConfig: {
+                                        //     animate: true
+                                        // },
+                                        items: [{
+                                            tbar: [
+                                                //Definición de botón nuevo
+                                                {
+                                                    text: 'New',
+                                                    scope: this,
+                                                    handler: this.addPayroll,
+                                                    iconCls: 'save-icon'
+                                                },
+                                                '-',
+                                                //Definición de botón eliminar
+                                                {
+                                                    text: "Delete",
+                                                    scope: this,
+                                                    handler: this.deletePayroll,
+                                                    iconCls: 'delete-icon'
+                                                },
+                                                '-',
+                                                //Definición de botón regargar datos
+                                                {
+                                                    iconCls: 'reload-icon',
+                                                    handler: this.requestGridDataPayroll,
+                                                    scope: this,
+                                                    text: 'Reload data'
+                                                }
+                                            ],
+                                            //Llamado a función que arma la tabla de datos
+                                            items: this.gridPayroll
+                                        }]
+                                    }, {
+                                        title: 'Payroll detail',
+                                        region: 'center',
+                                        items: [
+                                            {
+                                                tbar: [
+                                                    //Definición de botón nuevo
+                                                    {
+                                                        text: 'New',
+                                                        scope: this,
+                                                        handler: this.addDetailPayroll,
+                                                        iconCls: 'save-icon'
+                                                    },
+                                                    '-',
+                                                    //Definición de botón eliminar
+                                                    {
+                                                        text: "Delete",
+                                                        scope: this,
+                                                        handler: this.deleteDetailPayroll,
+                                                        iconCls: 'delete-icon'
+                                                    },
+                                                    '-',
+                                                    //Definición de botón regargar datos
+                                                    {
+                                                        iconCls: 'reload-icon',
+                                                        handler: this.requestGridDataDetailPayroll,
+                                                        scope: this,
+                                                        text: 'Reload data'
+                                                    }
+                                                ],
+                                                //Llamado a función que arma la tabla de datos
+                                                items: this.gridDetailPayroll
+                                            }]
 
-                                },
-                                {
-                                    iconCls: 'excel-icon',
-                                    handler: this.botonExportarDocumentoReporte,
-                                    scope: this,
-                                    text: 'Exportar listado',
-                                    tooltip: 'Se genera archivo Excel con la información solicitada',
-                                    id: 'tb_repoteContribucionesGuias',
-                                }
-                            ],
-                            items: [
-                                {
-                                    region: 'north',
-                                    height: 'auto',
-                                    minSize: 100,
-                                    maxSize: 150,
-                                    closable: true,
-                                    border: false,
-                                    autoScroll: false,
-                                    items: this.formConsultaDocumentos
-                                },
-                                {
-                                    region: 'center',
-                                    split: true,
-                                    autoScroll: true,
-                                    height: 300,
-                                    minSize: 100,
-                                    maxSize: 150,
-                                    items: this.gridDocumentosReporte
+
+                                    }]
                                 }
                             ]
-                            //this.gridReportes
-                        }
+                        },
+
+                        // , {
+                        //     title: 'Reports',
+                        //     closable: true,
+                        //     layout: 'border',
+                        //     //disabled: this.app.isAllowedTo('accesosSecretaria', this.id) ? false : true,
+                        //     tbar: [
+                        //         {
+                        //             iconCls: 'reload-icon',
+                        //             handler: this.requestGridDataDocumentoReporte,
+                        //             scope: this,
+                        //             text: 'Buscar'
+                        //         },
+                        //         {
+                        //             iconCls: 'reload-icon',
+                        //             handler: this.requestGridDataDocumentoReporteReset,
+                        //             scope: this,
+                        //             text: 'Borrar formulario'
+                        //
+                        //         },
+                        //         {
+                        //             iconCls: 'excel-icon',
+                        //             handler: this.botonExportarDocumentoReporte,
+                        //             scope: this,
+                        //             text: 'Exportar listado',
+                        //             tooltip: 'Se genera archivo Excel con la información solicitada',
+                        //             id: 'tb_repoteContribucionesGuias',
+                        //         }
+                        //     ],
+                        //     items: [
+                        //         {
+                        //             region: 'north',
+                        //             height: 'auto',
+                        //             minSize: 100,
+                        //             maxSize: 150,
+                        //             closable: true,
+                        //             border: false,
+                        //             autoScroll: false,
+                        //             items: this.formConsultaDocumentos
+                        //         },
+                        //         {
+                        //             region: 'center',
+                        //             split: true,
+                        //             autoScroll: true,
+                        //             height: 300,
+                        //             minSize: 100,
+                        //             maxSize: 150,
+                        //             items: this.gridDocumentosReporte
+                        //         }
+                        //     ]
+                        //     //this.gridReportes
+                        // }
                     ]
                 })
             });
@@ -1056,14 +1591,14 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             this.storeContribuciones.load({
                 params: {
                     start: 0,
-                    limit: limitepayroll,
+                    limit: limitePayroll,
                     // noenviados: Ext.getCmp('checkNoEnviados').getValue()
                 }
             });
         }, 500);
 
     },
-    deletepayroll: function () {
+    deletecontribuciones: function () {
         Ext.Msg.show({
             title: 'Alert',
             msg: 'Are you sure you want to delete?',
@@ -1080,8 +1615,8 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             }
         });
     },
-    addpayroll: function () {
-        var payroll = new this.storeContribuciones.recordType({
+    addcontribuciones: function () {
+        var contribuciones = new this.storeContribuciones.recordType({
             grant_number: null,
             estado: '',
             donor: '',
@@ -1100,7 +1635,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             recepcion_documento: (new Date())
         });
         this.gridContribuciones.stopEditing();
-        this.storeContribuciones.insert(0, payroll);
+        this.storeContribuciones.insert(0, contribuciones);
         this.gridContribuciones.startEditing(0, 0);
 
     },
@@ -1127,7 +1662,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 buttons: Ext.Msg.YESNO,
                 fn: function (btn) {
                     if (btn == 'yes') {
-                        window.location.href = 'modules/desktop/payroll/server/descargaContribucionesNuevas.inc.php?unidad=' + Ext.getCmp('tb_seleccionarUnidad').getValue();
+                        window.location.href = 'modules/desktop/contribuciones/server/descargaContribucionesNuevas.inc.php?unidad=' + Ext.getCmp('tb_seleccionarUnidad').getValue();
                         setTimeout(function () {
                             storeContribuciones.load({params: {noenviados: Ext.getCmp('checkNoEnviados').getValue()}});
                         }, 1000);
@@ -1161,13 +1696,13 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             fn: function (btn) {
 
                 if (btn == 'yes') {
-                    window.location.href = 'modules/desktop/payroll/server/descargaContribucionesNuevas.inc.php?reimpresion=true&guia=' + rows[0].get('id');
+                    window.location.href = 'modules/desktop/contribuciones/server/descargaContribucionesNuevas.inc.php?reimpresion=true&guia=' + rows[0].get('id');
                 }
             }
         });
     },
 
-    grabarpayroll: function () {
+    grabarcontribuciones: function () {
         Ext.Msg.show({
             title: 'Alert',
             msg: 'Save?<br>Continue?',
@@ -1178,12 +1713,12 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 if (btn == 'yes') {
                     var myForm = Ext.getCmp('formContribucionesDetalle').getForm();
                     myForm.submit({
-                        url: 'modules/desktop/payroll/server/crudContribuciones.php?operation=updateForm',
+                        url: 'modules/desktop/contribuciones/server/crudContribuciones.php?operation=updateForm',
                         method: 'POST',
                         waitMsg: 'Saving data',
                         success: function (form, action) {
                             storeContribuciones.load({params: {noenviados: Ext.getCmp('checkNoEnviados').getValue()}});
-                            Ext.getCmp('tb_grabarpayroll').setDisabled(true);
+                            Ext.getCmp('tb_grabarcontribuciones').setDisabled(true);
                         },
                         failure: function (form, action) {
                             if (typeof action.response.responseText !== 'undefined') {
@@ -1245,7 +1780,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             fn: function (btn) {
                 if (btn == 'yes') {
                     valueParams = JSON.stringify(this.formConsultaDocumentos.getForm().getValues());
-                    window.location.href = 'modules/desktop/payroll/server/descargaReporte.inc.php?param=' + valueParams;
+                    window.location.href = 'modules/desktop/contribuciones/server/descargaReporte.inc.php?param=' + valueParams;
                 }
             }
         });

@@ -71,7 +71,7 @@ function generaidpmaCostoMacro()
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id_pma_costos_micro) AS maximo FROM pma_costos_micro_detalle";
+    $sql = "SELECT MAX(id) AS maximo FROM pma_costos_micro_detalle";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     if (isset($row['maximo'])) {

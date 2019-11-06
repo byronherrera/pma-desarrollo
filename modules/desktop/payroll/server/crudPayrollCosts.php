@@ -98,17 +98,18 @@ function selectContribuciones()
     }
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
-    // $sql = "SELECT * FROM pma_contribuciones $where LIMIT $start, $limit";
-    //$sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
+    $sql = "SELECT * FROM pma_costos_micro where cost_code2 in (SELECT id FROM `pma_cost_category` WHERE description = 'Staff cost' ) $where $orderby LIMIT $start, $limit";
+    // $sql = "SELECT * FROM pma_costos_micro $where LIMIT $start, $limit";
+    //$sql = "SELECT * FROM pma_costos_micro LIMIT $start, $limit";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $row;
     };
 
-    // $sql = "SELECT count(*) AS total FROM pma_contribuciones $where";
-    $sql = "SELECT count(*) AS total FROM pma_contribuciones $where";
+    // $sql = "SELECT count(*) AS total FROM pma_costos_micro $where";
+    // SELECT * FROM `pma_costos_micro` where cost_code2 in (SELECT id FROM `pma_cost_category` WHERE description = 'Staff cost' )
+    $sql = "SELECT count(*) AS total FROM pma_costos_micro $where";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     $total = $row['total'];
@@ -126,7 +127,7 @@ function generaCodigoProcesoContribuciones()
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id) AS maximo FROM pma_contribuciones";
+    $sql = "SELECT MAX(id) AS maximo FROM pma_costos_micro";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     if (isset($row['maximo'])) {
@@ -164,7 +165,7 @@ function insertDenuncias()
     $cadenaCampos = substr($cadenaCampos, 0, -1);
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    $sql = "INSERT INTO pma_contribuciones($cadenaCampos)
+    $sql = "INSERT INTO pma_costos_micro($cadenaCampos)
 	values($cadenaDatos);";
     $sql = $os->db->conn->prepare($sql);
     $success = $sql->execute();
@@ -206,7 +207,7 @@ function updateDenuncias()
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
-    $data->total_contribution = $data->isc + $data->total_grant;
+    $data->total_after_adjust = $data->total_micro + $data->adjust;
     //
     // if (isset($data->despacho_secretaria)) {
     //     if (!$data->despacho_secretaria)
@@ -254,7 +255,7 @@ function updateDenuncias()
     // }
 
     // if ($grabar) {
-    $sql = "UPDATE pma_contribuciones SET  $cadenaDatos  WHERE pma_contribuciones.id = '$data->id' ";
+    $sql = "UPDATE pma_costos_micro SET  $cadenaDatos  WHERE pma_costos_micro.id = '$data->id' ";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
     echo json_encode(array(
@@ -416,12 +417,12 @@ function deleteDenuncias()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM pma_contribuciones WHERE id = $id";
+    $sql = "DELETE FROM pma_costos_micro WHERE id = $id";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_contribuciones, eliminado exitosamente" : $sql->errorCode()
+        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_micro, eliminado exitosamente" : $sql->errorCode()
     ));
 }
 
