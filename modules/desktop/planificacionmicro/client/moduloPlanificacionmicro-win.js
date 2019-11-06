@@ -275,8 +275,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {name: 'cost_code2', allowBlank: true},
                 {name: 'cost_code3', allowBlank: true},
                 {name: 'glcode', allowBlank: true},
+                {name: 'glcode1', allowBlank: true},
+                {name: 'glcode2', allowBlank: true},
                 //{name: 'commitment_description', allowBlank: true},
-                //{name: 'gl_description', allowBlank: true},
+                {name: 'gl_description', allowBlank: true},
                 {name: 'cost_code4', allowBlank: true},
                 {name: 'cost_code5', allowBlank: true},
                 {name: 'description_micro', allowBlank: true},
@@ -327,6 +329,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                             costCodeNuevo2: costCodeNuevo2
                         }
                     });
+
+
                 }
             }
         });
@@ -604,7 +608,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //inicio combo glcode
         storeGLCode = new Ext.data.JsonStore({
             root: 'data',
-            fields: ['id', 'commitment_description', 'glcode', 'gl_description'],
+            fields: ['id', 'commitment_description', 'gl_account', 'gl_description'],
             autoLoad: true,
             url: 'modules/common/combos/combos.php?tipo=glcode'
         });
@@ -613,7 +617,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             id: 'comboGLCode',
             store: storeGLCode,
             valueField: 'id',
-            displayField: 'commitment_description',
+            displayField: 'gl_description',
             triggerAction: 'all',
             mode: 'local'
         });
@@ -622,7 +626,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             var index = storeGLCode.findExact('id', id);
             if (index > -1) {
                 var record = storeGLCode.getAt(index);
-                return record.get('commitment_description');
+                return record.get('gl_description');
             }
         }
 
@@ -630,7 +634,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             var index = storeGLCode.findExact('id', id);
             if (index > -1) {
                 var record = storeGLCode.getAt(index);
-                return record.get('glcode');
+                return record.get('gl_account');
             }
         }
 
@@ -638,7 +642,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             var index = storeGLCode.findExact('id', id);
             if (index > -1) {
                 var record = storeGLCode.getAt(index);
-                return record.get('gl_description');
+                return record.get('commitment_description');
             }
         }
 
@@ -1855,7 +1859,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 },
                 {
                     header: 'GL code',
-                    dataIndex: 'glcode',
+                    dataIndex: 'glcode1',
                     sortable: true,
                     width: 100,
                     hidden: false,
@@ -1864,7 +1868,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 },
                 {
                     header: 'Commitment description',
-                    dataIndex: 'glcode',
+                    dataIndex: 'glcode2',
                     sortable: true,
                     width: 100,
                     hidden: false,
@@ -2077,6 +2081,15 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                             costCodeNuevo3: costCodeNuevo3
                         }
                     });
+
+                    glDescription = rs.data['glcode'];
+                    comboCostCode3.clearValue();
+                    storeCostCode3.load({
+                        params: {
+                            costCodeNuevo3: costCodeNuevo3
+                        }
+                    });
+
                     costCodeNuevo5 = rs.data['cost_code4'];
                     comboCostCode5.clearValue();
                     storeCostCode5.load({

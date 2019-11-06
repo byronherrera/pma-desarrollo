@@ -215,7 +215,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 //inicio combo glcode
                 storeGLCode = new Ext.data.JsonStore({
                     root: 'data',
-                    fields: ['id', 'commitment_description', 'glcode', 'gl_description'],
+                    fields: ['id', 'commitment_description', 'gl_account', 'gl_description'],
                     autoLoad: true,
                     url: 'modules/common/combos/combos.php?tipo=glcode'
                 });
@@ -224,7 +224,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     id: 'comboGLCode',
                     store: storeGLCode,
                     valueField: 'id',
-                    displayField: 'commitment_description',
+                    displayField: 'gl_description',
                     triggerAction: 'all',
                     mode: 'local'
                 });
@@ -233,7 +233,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     var index = storeGLCode.findExact('id', id);
                     if (index > -1) {
                         var record = storeGLCode.getAt(index);
-                        return record.get('commitment_description');
+                        return record.get('gl_description');
                     }
                 }
 
@@ -241,7 +241,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     var index = storeGLCode.findExact('id', id);
                     if (index > -1) {
                         var record = storeGLCode.getAt(index);
-                        return record.get('glcode');
+                        return record.get('gl_account');
                     }
                 }
 
@@ -249,7 +249,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     var index = storeGLCode.findExact('id', id);
                     if (index > -1) {
                         var record = storeGLCode.getAt(index);
-                        return record.get('gl_description');
+                        return record.get('commitment_description');
                     }
                 }
 
@@ -1490,7 +1490,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                                             items: this.gridPayroll
                                         }]
                                     }, {
-                                        title: 'Payroll detail',
+                                        title: 'Payroll Detail',
                                         region: 'center',
                                         items: [
                                             {

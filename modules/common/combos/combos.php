@@ -171,7 +171,7 @@ function comboGLCode()
         $where = " WHERE cost_category = '$cost'";
      }
 
-    $sql = "SELECT id, commitment_description, glcode, gl_description FROM pma_gl_codes $where ORDER BY id";
+    $sql = "SELECT id, gl_account, gl_description, commitment_description FROM pma_gl_codes $where ORDER BY id";
 
     $result = $os->db->conn->query($sql);
     $data = array();
