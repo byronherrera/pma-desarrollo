@@ -1,25 +1,25 @@
 var contribucionSeleccionada = '';
-var planificacionmicroSeleccionada = '';
+var forecastSeleccionada = '';
 var costoMacroSeleccionada = '';
 var costoMicroSeleccionada = '';
 
-QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
-    id: 'moduloPlanificacionmicro',
-    type: 'desktop/moduloPlanificacionmicro',
+QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
+    id: 'moduloForecast',
+    type: 'desktop/moduloForecast',
 
     init: function () {
         this.launcher = {
-            text: 'Planificacionmicro',
-            iconCls: 'mantenimiento-icon',
+            text: 'Forecast',
+            iconCls: 'forecast-icon',
             handler: this.createWindow,
             scope: this
         }
     },
     createWindow: function () {
         //Variables de acceso
-        var accesosCoordinadorPlanificacionmicro = this.app.isAllowedTo('accesosAdministrador', this.id); //Todos los accesos, visualiza todos los trámites
+        var accesosCoordinadorForecast = this.app.isAllowedTo('accesosAdministrador', this.id); //Todos los accesos, visualiza todos los trámites
         var accesosSecretaria = this.app.isAllowedTo('accesosSecretaria', this.id); //Todos los accesos, visualiza trámites pendientes
-        var accesosInspectores = this.app.isAllowedTo('accesosPlanificacionmicro', this.id); //Sin acceso a pestaña trámites pendientes, acceso a planificacionmicroes asignadas
+        var accesosInspectores = this.app.isAllowedTo('accesosForecast', this.id); //Sin acceso a pestaña trámites pendientes, acceso a forecastes asignadas
         var accesosSupervision = this.app.isAllowedTo('accesosSupervision', this.id); //Solo modo lectura
 
         this.selectContribuciones = 0;
@@ -27,21 +27,21 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         this.select_macro = 0;
 
         //Control en caso de tener asignado el perfil de administrador
-        if (accesosCoordinadorPlanificacionmicro && accesosSecretaria && accesosInspectores && accesosSupervision == true) {
+        if (accesosCoordinadorForecast && accesosSecretaria && accesosInspectores && accesosSupervision == true) {
             accesosSecretaria = false;
             accesosInspectores = false;
             accesosSupervision = false;
         }
         //Acceso para creación y edición en pestaña Datos inspección
-        if (accesosCoordinadorPlanificacionmicro || accesosInspectores == true) {
-            var creacionDatosPlanificacionmicro = true;
+        if (accesosCoordinadorForecast || accesosInspectores == true) {
+            var creacionDatosForecast = true;
         }
         else {
-            var creacionDatosPlanificacionmicro = false;
+            var creacionDatosForecast = false;
         }
 
         //Acceso para creación y edición en pestaña Trámites pendientes
-        if (accesosCoordinadorPlanificacionmicro || accesosSecretaria == true) {
+        if (accesosCoordinadorForecast || accesosSecretaria == true) {
             var creacionTramites = true;
         }
         else {
@@ -57,17 +57,17 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             isChecked = false;
         }
 
-        var bloqueo = (accesosCoordinadorPlanificacionmicro || accesosSecretaria || accesosInspectores || accesosSupervision) ? true : false
+        var bloqueo = (accesosCoordinadorForecast || accesosSecretaria || accesosInspectores || accesosSupervision) ? true : false
 
         var desktop = this.app.getDesktop();
         var winHeight = desktop.getWinHeight();
         var winWidth = desktop.getWinWidth();
 
         var AppMsg = new Ext.AppMsg({});
-        var win = desktop.getWindow('grid-win-moduloPlanificacionmicro');
+        var win = desktop.getWindow('grid-win-moduloForecast');
 
-        //Ubicación de la carpeta de Planificacionmicro
-        var urlPlanificacionmicro = "modules/desktop/planificacionmicro/server/";
+        //Ubicación de la carpeta de Forecast
+        var urlForecast = "modules/desktop/forecast/server/";
 
         var intervalo1 = 30;
         var intervalo2 = 90;
@@ -162,19 +162,19 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //fin combo GRANT
         //fin combos
 
-        //Inicio ventana planificacionmicro
+        //Inicio ventana forecast
         //Definición de url CRUD
-        var proxyDetallePlanificacionmicro = new Ext.data.HttpProxy({
+        var proxyDetalleForecast = new Ext.data.HttpProxy({
             api: {
-                create: urlPlanificacionmicro + "crudDetalleContribuciones.php?operation=insert",
-                read: urlPlanificacionmicro + "crudDetalleContribuciones.php?operation=select",
-                update: urlPlanificacionmicro + "crudDetalleContribuciones.php?operation=update",
-                destroy: urlPlanificacionmicro + "crudDetalleContribuciones-.php?operation=delete"
+                create: urlForecast + "crudDetalleContribuciones.php?operation=insert",
+                read: urlForecast + "crudDetalleContribuciones.php?operation=select",
+                update: urlForecast + "crudDetalleContribuciones.php?operation=update",
+                destroy: urlForecast + "crudDetalleContribuciones-.php?operation=delete"
             }
         });
 
-        //Definición de lectura de campos bdd Planificacionmicro
-        var readerDetallePlanificacionmicro = new Ext.data.JsonReader({
+        //Definición de lectura de campos bdd Forecast
+        var readerDetalleForecast = new Ext.data.JsonReader({
             //totalProperty: 'total',
             successProperty: 'success',
             messageProperty: 'message',
@@ -208,20 +208,20 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             ]
         });
 
-        //Definición de escritura en campos bdd Planificacionmicro
-        var writerDetallePlanificacionmicro = new Ext.data.JsonWriter({
+        //Definición de escritura en campos bdd Forecast
+        var writerDetalleForecast = new Ext.data.JsonWriter({
             encode: true,
             writeAllFields: true
         });
-        //Fin ventana planificacionmicro
+        //Fin ventana forecast
 
-        //inicio mantenimiento Planificacionmicro
-        var proxyPlanificacionmicro = new Ext.data.HttpProxy({
+        //inicio mantenimiento Forecast
+        var proxyForecast = new Ext.data.HttpProxy({
             api: {
-                create: urlPlanificacionmicro + "crudCostosMicro.php?operation=insert",
-                read: urlPlanificacionmicro + "crudCostosMicro.php?operation=select",
-                update: urlPlanificacionmicro + "crudCostosMicro.php?operation=update",
-                destroy: urlPlanificacionmicro + "crudCostosMicro.php?operation=delete"
+                create: urlForecast + "crudCostosMicro.php?operation=insert",
+                read: urlForecast + "crudCostosMicro.php?operation=select",
+                update: urlForecast + "crudCostosMicro.php?operation=update",
+                destroy: urlForecast + "crudCostosMicro.php?operation=delete"
             },
             listeners: {
                 write: function (proxy, action, result, res, rs) {
@@ -264,7 +264,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
         });
 
-        var readerPlanificacionmicro = new Ext.data.JsonReader({
+        var readerForecast = new Ext.data.JsonReader({
             successProperty: 'success',
             messageProperty: 'message',
             idProperty: 'id',
@@ -288,26 +288,26 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             ]
         });
 
-        var writerPlanificacionmicro = new Ext.data.JsonWriter({
+        var writerForecast = new Ext.data.JsonWriter({
             encode: true,
             writeAllFields: true
         });
 
-        this.storePlanificacionmicro = new Ext.data.Store({
-            id: "storePlanificacionmicro",
-            proxy: proxyPlanificacionmicro,
-            reader: readerPlanificacionmicro,
-            writer: writerPlanificacionmicro,
+        this.storeForecast = new Ext.data.Store({
+            id: "storeForecast",
+            proxy: proxyForecast,
+            reader: readerForecast,
+            writer: writerForecast,
             autoSave: true,
             listeners: {
                 load: function () {
                 }
             }
         });
-        this.storePlanificacionmicro.load();
+        this.storeForecast.load();
 
-        //Definición de escritura en campos bdd Planificacionmicro
-        var writerListadoPlanificacionmicro = new Ext.data.JsonWriter({
+        //Definición de escritura en campos bdd Forecast
+        var writerListadoForecast = new Ext.data.JsonWriter({
             encode: true,
             writeAllFields: true
         });
@@ -315,10 +315,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         var proxyCostoMacro = new Ext.data.HttpProxy({
             api: {
-                create: urlPlanificacionmicro + "crudCostosMacro.php?operation=insert",
-                read: urlPlanificacionmicro + "crudCostosMacro.php?operation=select",
-                update: urlPlanificacionmicro + "crudCostosMacro.php?operation=update",
-                destroy: urlPlanificacionmicro + "crudCostosMacro.php?operation=delete"
+                create: urlForecast + "crudCostosMacro.php?operation=insert",
+                read: urlForecast + "crudCostosMacro.php?operation=select",
+                update: urlForecast + "crudCostosMacro.php?operation=update",
+                destroy: urlForecast + "crudCostosMacro.php?operation=delete"
             },
             listeners: {
                 write: function (proxy, action, result, res, rs) {
@@ -329,8 +329,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                             costCodeNuevo2: costCodeNuevo2
                         }
                     });
-
-
                 }
             }
         });
@@ -364,12 +362,12 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
 
 
-        //Definición de store para módulo Planificacionmicro
-        this.storeDetallePlanificacionmicro = new Ext.data.Store({
-            id: "storeDetallePlanificacionmicro",
-            proxy: proxyDetallePlanificacionmicro,
-            reader: readerDetallePlanificacionmicro,
-            writer: writerDetallePlanificacionmicro,
+        //Definición de store para módulo Forecast
+        this.storeDetalleForecast = new Ext.data.Store({
+            id: "storeDetalleForecast",
+            proxy: proxyDetalleForecast,
+            reader: readerDetalleForecast,
+            writer: writerDetalleForecast,
             autoSave: true, // dependiendo de si se tiene acceso para grabar
             // autoSave: !accesosSupervision, // dependiendo de si se tiene acceso para grabar
             //remoteSort: true,
@@ -386,31 +384,31 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             //baseParams: {}
         });
 
-        var checkHandlerPlanificacionmicro = function (item, checked) {
+        var checkHandlerForecast = function (item, checked) {
             if (checked) {
                 // if (todosInspectores == true) {
-    //cc    //var store = this.storeListadoPlanificacionmicro;
+                //cc    //var store = this.storeListadoForecast;
                 // } else {
                 // var store = this.storeListadoTodosInspectores;
                 // }
-                //var store = this.storeModuloPlanificacionmicro;
+                //var store = this.storeModuloForecast;
 
                 store.baseParams.filterField = item.key;
                 searchListadoInpeccionesBtn.setText(item.text);
             }
         };
 
-        //inicio mantenimiento PlanificacionmicroDetalle
-        var proxyPlanificacionmicroDetalle = new Ext.data.HttpProxy({
+        //inicio mantenimiento ForecastDetalle
+        var proxyForecastDetalle = new Ext.data.HttpProxy({
             api: {
-                create: urlPlanificacionmicro + "crudCostosMicroDetalle.php?operation=insert",
-                read: urlPlanificacionmicro + "crudCostosMicroDetalle.php?operation=select",
-                update: urlPlanificacionmicro + "crudCostosMicroDetalle.php?operation=update",
-                destroy: urlPlanificacionmicro + "crudCostosMicroDetalle.php?operation=delete"
+                create: urlForecast + "crudCostosMicroDetalle.php?operation=insert",
+                read: urlForecast + "crudCostosMicroDetalle.php?operation=select",
+                update: urlForecast + "crudCostosMicroDetalle.php?operation=update",
+                destroy: urlForecast + "crudCostosMicroDetalle.php?operation=delete"
             }
         });
 
-        var readerPlanificacionmicroDetalle = new Ext.data.JsonReader({
+        var readerForecastDetalle = new Ext.data.JsonReader({
             successProperty: 'success',
             messageProperty: 'message',
             idProperty: 'id',
@@ -427,16 +425,16 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             ]
         });
 
-        var writerPlanificacionmicroDetalle = new Ext.data.JsonWriter({
+        var writerForecastDetalle = new Ext.data.JsonWriter({
             encode: true,
             writeAllFields: true
         });
 
-        this.storePlanificacionmicroDetalle = new Ext.data.Store({
-            id: "storePlanificacionmicroDetalle",
-            proxy: proxyPlanificacionmicroDetalle,
-            reader: readerPlanificacionmicroDetalle,
-            writer: writerPlanificacionmicroDetalle,
+        this.storeForecastDetalle = new Ext.data.Store({
+            id: "storeForecastDetalle",
+            proxy: proxyForecastDetalle,
+            reader: readerForecastDetalle,
+            writer: writerForecastDetalle,
             autoSave: true
         });
 
@@ -936,7 +934,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
         });
 
-        //inicio combo Estado Recepcion Información Planificacionmicro ESREA
+        //inicio combo Estado Recepcion Información Forecast ESREA
         storeESREA = new Ext.data.JsonStore({
             root: 'datos',
             fields: ['id', 'nombre'],
@@ -955,7 +953,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             root: 'data',
             fields: ['id', 'nombre'],
             autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=depPlanificacionmicro'
+            url: 'modules/common/combos/combos.php?tipo=depForecast'
         });
 
         //inicio combo ZONA
@@ -1242,7 +1240,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
         }
 
-        function planificacionmicroFin(id) {
+        function forecastFin(id) {
             var index = storeINSPECCIONFIN.find('id', id);
             if (index > -1) {
                 var record = storeINSPECCIONFIN.getAt(index);
@@ -1349,8 +1347,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         });
         comboINSPECTOR.on('select', function () {
             AppMsg.setAlert("Alerta ", 'Funcionario asignado');
-            // this.gridCCFPlanificacionmicro.stopEditing();
-            // this.storeCCFPlanificacionmicro.insert(0, planificacionmicro);
+            // this.gridCCFForecast.stopEditing();
+            // this.storeCCFForecast.insert(0, forecast);
 
         })
 
@@ -1405,9 +1403,9 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             disabled: false
         });
         comboPERDIS.on('select', function () {
-            //AppMsg.setAlert("Alerta ", planificacionmicroSeleccionada);
+            //AppMsg.setAlert("Alerta ", forecastSeleccionada);
             //AppMsg.setAlert("Alerta ", contribucionSeleccionada);
-            //storeACTUALIZARFECHA.load({params: {id_planificacionmicro: planificacionmicroSeleccionada}});
+            //storeACTUALIZARFECHA.load({params: {id_forecast: forecastSeleccionada}});
             //storeACTUALIZARFECHA.load();
         })
 
@@ -1426,9 +1424,9 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             disabled: false
         });
         comboINSP.on('select', function () {
-            //AppMsg.setAlert("Alerta ", planificacionmicroSeleccionada);
+            //AppMsg.setAlert("Alerta ", forecastSeleccionada);
             //AppMsg.setAlert("Alerta ", contribucionSeleccionada);
-            //storeACTUALIZARFECHA.load({params: {id_planificacionmicro: planificacionmicroSeleccionada}});
+            //storeACTUALIZARFECHA.load({params: {id_forecast: forecastSeleccionada}});
             //storeACTUALIZARFECHA.load();
         })
 
@@ -1467,30 +1465,30 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
 
 
-        this.storeDetallePlanificacionmicro.load();
+        this.storeDetalleForecast.load();
         this.storeCostoMacro.load();
-        this.storePlanificacionmicro.load();
-        this.storePlanificacionmicroDetalle.load();
-        // this.storeListadoPlanificacionmicro.load();
+        this.storeForecast.load();
+        this.storeForecastDetalle.load();
+        // this.storeListadoForecast.load();
 
 
-        storeDetallePlanificacionmicro = this.storeDetallePlanificacionmicro;
+        storeDetalleForecast = this.storeDetalleForecast;
         storeCostoMacro = this.storeCostoMacro;
-        storePlanificacionmicro = this.storePlanificacionmicro;
-        storePlanificacionmicroDetalle = this.storePlanificacionmicroDetalle;
+        storeForecast = this.storeForecast;
+        storeForecastDetalle = this.storeForecastDetalle;
 
-        limiteModuloPlanificacionmicro = 100;
+        limiteModuloForecast = 100;
         var anchoHelp = 43;
         var altoHelp = 210;
 
 
 
 
-        this.gridPlanificacionmicroDetalle = new Ext.grid.EditorGridPanel({
-            id: 'gridPlanificacionmicroDetalle',
+        this.gridForecastDetalle = new Ext.grid.EditorGridPanel({
+            id: 'gridForecastDetalle',
             xtype: "grid",
             height: 200,
-            store: this.storePlanificacionmicroDetalle,
+            store: this.storeForecastDetalle,
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
@@ -1562,7 +1560,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     rowselect: function (sm, row, rec) {
 
                         //  TODO ESTO LO COMENTO
-                        /*storePlanificacionmicroDetalle.load({
+                        /*storeForecastDetalle.load({
                             params: {
                                 filterField: 'guia',
                                 filterText: rec.get("numero")
@@ -1576,13 +1574,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             bbar: new Ext.PagingToolbar({
                 pageSize: 100,
-                store: this.storePlanificacionmicroDetalle,
+                store: this.storeForecastDetalle,
                 displayInfo: true,
                 displayMsg: 'Mostrando detalle que mostrar {0} - {1} de {2} PMA',
                 emptyMsg: "No existen nada  que mostrar"
             }),
         });
-        //fin mantenimiento PlanificacionmicroDetalle
+        //fin mantenimiento ForecastDetalle
 
 
         // Inicio mantenimiento CostoMacro
@@ -1667,7 +1665,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     rowselect: function (sm, row, rec) {
                         // recuperamos la informacion de personal asignado a ese operativo
                         select_macro = rec.id;
-                        storePlanificacionmicro.load({
+                        storeForecast.load({
                             params: {id: rec.id}
                         });
                         costoMacroSeleccionada = rec.id;
@@ -1694,7 +1692,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             //Definición de barra de paginado
             bbar: new Ext.PagingToolbar({
-                pageSize: limiteModuloPlanificacionmicro,
+                pageSize: limiteModuloForecast,
                 store: storeCostoMacro,
                 displayInfo: true,
                 displayMsg: 'Showing macro costs: {0} - {1} of {2} - PMA',
@@ -1723,15 +1721,15 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         });
         //Fin CostoMacro
 
-        // Inicio mantenimiento Planificacionmicro
-        this.gridDetallePlanificacionmicro = new Ext.grid.EditorGridPanel({
-            id: 'gridDetallePlanificacionmicro',
+        // Inicio mantenimiento Forecast
+        this.gridDetalleForecast = new Ext.grid.EditorGridPanel({
+            id: 'gridDetalleForecast',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
             height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
             width: winWidth - anchoHelp,
             readOnly: false,
-            store: this.storeDetallePlanificacionmicro,
+            store: this.storeDetalleForecast,
             columns: [
                 new Ext.grid.RowNumberer(),
                 {header: 'Year', dataIndex: 'year', hidden: false, width: 100},
@@ -1784,8 +1782,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             //Definición de barra de paginado
             bbar: new Ext.PagingToolbar({
-                pageSize: limiteModuloPlanificacionmicro,
-                store: storeDetallePlanificacionmicro,
+                pageSize: limiteModuloForecast,
+                store: storeDetalleForecast,
                 displayInfo: true,
                 displayMsg: 'Showing activities: {0} - {1} of {2} - PMA',
                 emptyMsg: "No activities to be shown"
@@ -1813,16 +1811,16 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         });
 
 
-        //Fin formato grid detalle planificacionmicro
+        //Fin formato grid detalle forecast
 
 
-        this.gridPlanificacionmicro = new Ext.grid.EditorGridPanel({
-            id: 'gridPlanificacionmicro',
+        this.gridForecast = new Ext.grid.EditorGridPanel({
+            id: 'gridForecast',
             xtype: "grid",
             height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
             width: winWidth - anchoHelp,
-            store: this.storePlanificacionmicro,
+            store: this.storeForecast,
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
@@ -1937,7 +1935,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 singleSelect: false,
                 listeners: {
                     rowselect: function (sm, row, rec) {
-                        //storePlanificacionmicrodetSimple.load({params: {filterField: 'guia', filterText: rec.get("numero")}})
+                        //storeForecastdetSimple.load({params: {filterField: 'guia', filterText: rec.get("numero")}})
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs- " + costCode2(rec.data['cost_code2']) + " - Total: " + rec.data['total_after_adjust']);
                         // rec.data['glcode']=rec.data['cost_code3']
                         costCodeNuevo3 = rec.data['cost_code3'];
@@ -1947,7 +1945,16 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                 costCodeNuevo3: costCodeNuevo3
                             }
                         });
+                        // aca se carga el micro cost detail step 5
+                        costoMicroSeleccionada = rec.data['id'];
+                        console.log (costoMicroSeleccionada);
 
+
+                        storeForecastDetalle.load({
+                            params: {
+                                costCodeNuevo2: costCodeNuevo2
+                            }
+                        });
 
                     }
                 }
@@ -1956,22 +1963,22 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             bbar: new Ext.PagingToolbar({
                 pageSize: 100,
-                store: this.storePlanificacionmicro,
+                store: this.storeForecast,
                 displayInfo: true,
                 displayMsg: 'Showing micro costs {0} - {1} of {2} PMA',
                 emptyMsg: "No micro costs to be shown"
             }),
         });
 
-        //fin mantenimiento Planificacionmicro
+        //fin mantenimiento Forecast
 
         //Definición de url CRUD Payroll
         var proxyPayroll = new Ext.data.HttpProxy({
             api: {
-                create: urlPlanificacionmicro + "crudPayroll.php?operation=insert",
-                read: urlPlanificacionmicro + "crudPayroll.php?operation=select",
-                update: urlPlanificacionmicro + "crudPayroll.php?operation=update",
-                destroy: urlPlanificacionmicro + "crudPayroll.php?operation=delete"
+                create: urlForecast + "crudPayroll.php?operation=insert",
+                read: urlForecast + "crudPayroll.php?operation=select",
+                update: urlForecast + "crudPayroll.php?operation=update",
+                destroy: urlForecast + "crudPayroll.php?operation=delete"
             }
         });
 
@@ -2063,14 +2070,14 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         });
         //Fin formato grid Payroll
 
-        //Inicio ventana planificacionmicro
+        //Inicio ventana forecast
         //Definición de url CRUD
-        var proxyModuloPlanificacionmicro = new Ext.data.HttpProxy({
+        var proxyModuloForecast = new Ext.data.HttpProxy({
             api: {
-                create: urlPlanificacionmicro + "crudContribuciones.php?operation=insert",
-                read: urlPlanificacionmicro + "crudContribuciones.php?operation=select",
-                update: urlPlanificacionmicro + "crudContribuciones.php?operation=update",
-                destroy: urlPlanificacionmicro + "crudContribuciones.php?operation=delete"
+                create: urlForecast + "crudContribuciones.php?operation=insert",
+                read: urlForecast + "crudContribuciones.php?operation=select",
+                update: urlForecast + "crudContribuciones.php?operation=update",
+                destroy: urlForecast + "crudContribuciones.php?operation=delete"
             },
             listeners: {
                 write: function (proxy, action, result, res, rs) {
@@ -2101,8 +2108,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
         });
 
-        //Definición de lectura de campos bdd Planificacionmicro
-        var readerModuloPlanificacionmicro = new Ext.data.JsonReader({
+        //Definición de lectura de campos bdd Forecast
+        var readerModuloForecast = new Ext.data.JsonReader({
             //totalProperty: 'total',
             successProperty: 'success',
             messageProperty: 'message',
@@ -2130,17 +2137,17 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         });
 
-        //Definición de escritura en campos bdd Planificacionmicro
-        var writerModuloPlanificacionmicro = new Ext.data.JsonWriter({
+        //Definición de escritura en campos bdd Forecast
+        var writerModuloForecast = new Ext.data.JsonWriter({
             encode: true,
             writeAllFields: true
         });
-        //Definición de store para módulo Planificacionmicro
-        this.storeModuloPlanificacionmicro = new Ext.data.Store({
-            id: "storeModuloPlanificacionmicro",
-            proxy: proxyModuloPlanificacionmicro,
-            reader: readerModuloPlanificacionmicro,
-            writer: writerModuloPlanificacionmicro,
+        //Definición de store para módulo Forecast
+        this.storeModuloForecast = new Ext.data.Store({
+            id: "storeModuloForecast",
+            proxy: proxyModuloForecast,
+            reader: readerModuloForecast,
+            writer: writerModuloForecast,
             //autoSave: !accesosSupervision, // dependiendo de si se tiene acceso para grabar
             autoSave: true, // dependiendo de si se tiene acceso para grabar
             //remoteSort: true,
@@ -2148,10 +2155,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             //baseParams: {}
         });
 
-        this.storeModuloPlanificacionmicro.load();
-        storeModuloPlanificacionmicro = this.storeModuloPlanificacionmicro;
-        storeModuloPlanificacionmicro.baseParams = {
-            limit: limiteModuloPlanificacionmicro
+        this.storeModuloForecast.load();
+        storeModuloForecast = this.storeModuloForecast;
+        storeModuloForecast.baseParams = {
+            limit: limiteModuloForecast
         };
 
         var filters = new Ext.ux.grid.GridFilters({
@@ -2336,14 +2343,14 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         };
 
 
-        //Inicio formato grid Planificacionmicro
-        this.gridModuloPlanificacionmicro = new Ext.grid.EditorGridPanel({
-            id: 'gridModuloPlanificacionmicro',
+        //Inicio formato grid Forecast
+        this.gridModuloForecast = new Ext.grid.EditorGridPanel({
+            id: 'gridModuloForecast',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
             height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
             width: winWidth - anchoHelp,
-            store: this.storeModuloPlanificacionmicro,
+            store: this.storeModuloForecast,
             colModel: createColModel(),
             loadMask: true,
             plugins: [filters],
@@ -2362,13 +2369,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     rowselect: function (sm, row, rec) {
                         // recuperamos la informacion de personal asignado a ese operativo
                         //select_codigo_tramite = rec.id;
-                        storeDetallePlanificacionmicro.load({params: {id: rec.id}});
+                        storeDetalleForecast.load({params: {id: rec.id}});
                         contribucionSeleccionada = rec.id;
-                        planificacionmicroSeleccionada = rec.id_denuncia;
-                        if (creacionDatosPlanificacionmicro) {
-                            Ext.getCmp('btnNuevoDetallePlanificacionmicro').setDisabled(false);
-                            Ext.getCmp('btnEliminarDetallePlanificacionmicro').setDisabled(false);
-                            Ext.getCmp('gridDetallePlanificacionmicro').setVisible(true);
+                        forecastSeleccionada = rec.id_denuncia;
+                        if (creacionDatosForecast) {
+                            Ext.getCmp('btnNuevoDetalleForecast').setDisabled(false);
+                            Ext.getCmp('btnEliminarDetalleForecast').setDisabled(false);
+                            Ext.getCmp('gridDetalleForecast').setVisible(true);
                         }
 
                         //Ext.getCmp('paso2').expand();
@@ -2383,25 +2390,25 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             //Definición de barra de paginado
             bbar: new Ext.PagingToolbar({
-                pageSize: limiteModuloPlanificacionmicro,
-                store: storeModuloPlanificacionmicro,
+                pageSize: limiteModuloForecast,
+                store: storeModuloForecast,
                 displayInfo: true,
                 displayMsg: 'Showing contributions: {0} - {1} of {2} - PMA',
                 emptyMsg: "No contributions to be shown"
             })
         });
-        gridModuloPlanificacionmicro = this.gridModuloPlanificacionmicro;
-        this.gridModuloPlanificacionmicro.getBottomToolbar().add([
+        gridModuloForecast = this.gridModuloForecast;
+        this.gridModuloForecast.getBottomToolbar().add([
             '->', {
                 text: 'Clear Filter Data',
                 handler: function () {
-                    gridModuloPlanificacionmicro.filters.clearFilters();
+                    gridModuloForecast.filters.clearFilters();
                 }
             }
         ]);
 
-        //Fin formato grid Planificacionmicro
-        //Fin ventana planificacionmicro
+        //Fin formato grid Forecast
+        //Fin ventana forecast
 
 
 
@@ -2415,13 +2422,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
             //Creación de la ventana win
             win = desktop.createWindow({
-                id: 'grid-win-moduloPlanificacionmicro',
+                id: 'grid-win-moduloForecast',
                 //Definición del título de la ventana
                 title: 'MICRO PLANIFICATION',
                 //Definición de tamaños de la ventana
                 width: winWidth,
                 height: winHeight,
-                iconCls: 'mantenimiento-icon',
+                iconCls: 'forecast-icon',
                 shim: false,
                 animCollapse: false,
                 constrainHeader: true,
@@ -2474,13 +2481,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                         id: 'paso1',
                                         autoScroll: true,
                                         border: false,
-                                        items: this.gridModuloPlanificacionmicro,
+                                        items: this.gridModuloForecast,
                                         tbar: [
                                             //Definición de botón nuevo
                                             {
                                                 text: 'New',
                                                 scope: this,
-                                                handler: this.addModuloPlanificacionmicro,
+                                                handler: this.addModuloForecast,
                                                 disabled: true,
                                                 iconCls: 'save-icon'
                                             },
@@ -2489,7 +2496,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             {
                                                 text: "Delete",
                                                 scope: this,
-                                                handler: this.deleteModuloPlanificacionmicro,
+                                                handler: this.deleteModuloForecast,
                                                 disabled: true,
                                                 //disabled: !creacionTramites,
                                                 iconCls: 'delete-icon'
@@ -2498,7 +2505,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             //Definición de botón Reload data
                                             {
                                                 iconCls: 'reload-icon',
-                                                handler: this.requestGridDataModuloPlanificacionmicro,
+                                                handler: this.requestGridDataModuloForecast,
                                                 scope: this,
                                                 text: 'Reload data'
                                             },
@@ -2518,10 +2525,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                     //Ext.getCmp('tb_seleccionarUnidad').setDisabled(!this.checked);
                                                     //Ext.getCmp('tb_seleccionarUnidad').getValue();
                                                     //storeDenuncias.load({params: {noenviados: isChecked}});
-                                                    storeModuloPlanificacionmicro.baseParams = {
+                                                    storeModuloForecast.baseParams = {
                                                         pendientesAprobar: isChecked
                                                     };
-                                                    storeModuloPlanificacionmicro.load();
+                                                    storeModuloForecast.load();
                                                 }
                                             },
                                             '-',
@@ -2535,7 +2542,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             , ' ', ' '
                                             , new QoDesk.QoAdmin.SearchField({
                                                 paramName: 'filterText'
-                                                , store: this.storeModuloPlanificacionmicro
+                                                , store: this.storeModuloForecast
                                             })
                                         ],
                                     }, {
@@ -2543,33 +2550,33 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                         border: false,
                                         id: 'paso2',
                                         autoScroll: true,
-                                        items: [this.gridDetallePlanificacionmicro],
+                                        items: [this.gridDetalleForecast],
                                         tbar: [
                                             //Definición de botón nuevo
                                             {
-                                                id: 'btnNuevoDetallePlanificacionmicro',
+                                                id: 'btnNuevoDetalleForecast',
                                                 text: 'New',
                                                 scope: this,
-                                                handler: this.addDetallePlanificacionmicro,
+                                                handler: this.addDetalleForecast,
                                                 disabled: true,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
                                             //Definición de botón Delete
                                             {
-                                                id: 'btnEliminarDetallePlanificacionmicro',
+                                                id: 'btnEliminarDetalleForecast',
                                                 text: "Delete",
                                                 scope: this,
-                                                handler: this.deleteDetallePlanificacionmicro,
+                                                handler: this.deleteDetalleForecast,
                                                 disabled: true,
                                                 iconCls: 'delete-icon'
                                             },
                                             '-',
                                             //Definición de botón Reload data
                                             {
-                                                id: 'btnRecargarDatosDetallePlanificacionmicro',
+                                                id: 'btnRecargarDatosDetalleForecast',
                                                 iconCls: 'reload-icon',
-                                                handler: this.requestGridDataDetallePlanificacionmicro,
+                                                handler: this.requestGridDataDetalleForecast,
                                                 disabled: false,
                                                 scope: this,
                                                 text: 'Reload data'
@@ -2620,33 +2627,33 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                         border: false,
                                         autoScroll: true,
                                         id: 'paso4',
-                                        items: [this.gridPlanificacionmicro],
+                                        items: [this.gridForecast],
                                         tbar: [
                                             //Definición de botón nuevo
                                             {
-                                                id: 'btnNuevoDetallePlanificacionmicro2',
+                                                id: 'btnNuevoDetalleForecast2',
                                                 text: 'New',
                                                 scope: this,
-                                                handler: this.addPlanificacionmicro,
+                                                handler: this.addForecast,
                                                 disabled: false,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
                                             //Definición de botón Delete
                                             {
-                                                id: 'btnEliminarDetallePlanificacionmicro2',
+                                                id: 'btnEliminarDetalleForecast2',
                                                 text: "Delete",
                                                 scope: this,
-                                                handler: this.deletePlanificacionmicro,
+                                                handler: this.deleteForecast,
                                                 disabled: false,
                                                 iconCls: 'delete-icon'
                                             },
                                             '-',
                                             //Definición de botón Reload data
                                             {
-                                                id: 'btnRecargarDatosDetallePlanificacionmicro2',
+                                                id: 'btnRecargarDatosDetalleForecast2',
                                                 iconCls: 'reload-icon',
-                                                handler: this.requestGridDataPlanificacionmicro,
+                                                handler: this.requestGridDataForecast,
                                                 disabled: false,
                                                 scope: this,
                                                 text: 'Reload data'
@@ -2658,269 +2665,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                             border: false,
                                             autoScroll: true,
                                             id: 'paso5',
-                                            items: [this.gridPlanificacionmicroDetalle],
-                                            tbar: [
-                                                //Definición de botón nuevo
-                                                {
-                                                    id: 'btnNuevoMicroDetalle',
-                                                    text: 'New',
-                                                    scope: this,
-                                                    handler: this.addMicroDetalle,
-                                                    disabled: false,
-                                                    iconCls: 'save-icon'
-                                                },
-                                                '-',
-                                                //Definición de botón Delete
-                                                {
-                                                    id: 'btnEliminarMicroDetalle',
-                                                    text: "Delete",
-                                                    scope: this,
-                                                    handler: this.deleteMicroDetalle,
-                                                    disabled: false,
-                                                    iconCls: 'delete-icon'
-                                                },
-                                                '-',
-                                                //Definición de botón Reload data
-                                                {
-                                                    id: 'btnRecargarDatosMicroDetalle',
-                                                    iconCls: 'reload-icon',
-                                                    handler: this.requestGridDataMicroDetalle,
-                                                    disabled: false,
-                                                    scope: this,
-                                                    text: 'Reload data'
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            title: 'Forecast',
-                            autoScroll: true,
-                            closable: false,
-                            layout: 'border',
-//                          disabled: accesosInspectores,
-                            hidden: true,
-                            id: 'tramites-pendientes',
-                            items: [
-                                {
-                                    region: 'east',
-                                    id: 'east-panel',
-                                    title: 'Totals',
-                                    width: 300,
-                                    minSize: 175,
-                                    maxSize: 400,
-                                    margins: '0 0 0 0',
-                                    cmargins: '0 0 0 0',
-                                    collapsible: true,
-                                    split: true,
-                                    layoutConfig: {
-                                        animate: true
-                                    },
-                                    layout: 'column',
-                                    autoScroll: true,
-                                    items: [{
-                                        columnWidth: 1,
-                                        baseCls: 'x-plain',
-                                        bodyStyle: 'padding:0 0 0 0',
-                                        items: this.gridPayroll
-                                    }]
-                                },
-                                {
-                                    region: 'center',
-                                    margins: '0 5 0 0',
-                                    layout: 'accordion',
-                                    items: [{
-                                        title: 'Step 1 - Contributions',
-                                        id: 'paso1',
-                                        autoScroll: true,
-                                        border: false,
-                                        items: this.gridModuloPlanificacionmicro,
-                                        tbar: [
-                                            //Definición de botón nuevo
-                                            {
-                                                text: 'New',
-                                                scope: this,
-                                                handler: this.addModuloPlanificacionmicro,
-                                                disabled: true,
-                                                iconCls: 'save-icon'
-                                            },
-                                            '-',
-                                            //Definición de botón Delete
-                                            {
-                                                text: "Delete",
-                                                scope: this,
-                                                handler: this.deleteModuloPlanificacionmicro,
-                                                disabled: true,
-                                                //disabled: !creacionTramites,
-                                                iconCls: 'delete-icon'
-                                            },
-                                            '-',
-                                            //Definición de botón Reload data
-                                            {
-                                                iconCls: 'reload-icon',
-                                                handler: this.requestGridDataModuloPlanificacionmicro,
-                                                scope: this,
-                                                text: 'Reload data'
-                                            },
-                                            '-',
-                                            {
-                                                xtype: 'checkbox',
-                                                boxLabel: 'Filter',
-                                                id: 'checkPendientesAprobar',
-                                                name: 'pendientesAprobar',
-                                                checked: accesosSecretaria,
-                                                inputValue: '1',
-                                                tooltip: 'Reload data',
-                                                //disabled: !acceso,
-                                                cls: 'barramenu',
-                                                handler: function (checkbox, isChecked) {
-                                                    //Ext.getCmp('tb_repoteDenuncias').setDisabled(!this.checked);
-                                                    //Ext.getCmp('tb_seleccionarUnidad').setDisabled(!this.checked);
-                                                    //Ext.getCmp('tb_seleccionarUnidad').getValue();
-                                                    //storeDenuncias.load({params: {noenviados: isChecked}});
-                                                    storeModuloPlanificacionmicro.baseParams = {
-                                                        pendientesAprobar: isChecked
-                                                    };
-                                                    storeModuloPlanificacionmicro.load();
-                                                }
-                                            },
-                                            '-',
-                                            '->'
-                                            , {
-                                                text: 'Search by:'
-                                                , xtype: 'tbtext'
-                                            }
-
-                                            , searchFieldBtn
-                                            , ' ', ' '
-                                            , new QoDesk.QoAdmin.SearchField({
-                                                paramName: 'filterText'
-                                                , store: this.storeModuloPlanificacionmicro
-                                            })
-                                        ],
-                                    }, {
-                                        title: 'Step 2 - Activities',
-                                        border: false,
-                                        id: 'paso2',
-                                        autoScroll: true,
-                                        items: [this.gridDetallePlanificacionmicro],
-                                        tbar: [
-                                            //Definición de botón nuevo
-                                            {
-                                                id: 'btnNuevoDetallePlanificacionmicro',
-                                                text: 'New',
-                                                scope: this,
-                                                handler: this.addDetallePlanificacionmicro,
-                                                disabled: true,
-                                                iconCls: 'save-icon'
-                                            },
-                                            '-',
-                                            //Definición de botón Delete
-                                            {
-                                                id: 'btnEliminarDetallePlanificacionmicro',
-                                                text: "Delete",
-                                                scope: this,
-                                                handler: this.deleteDetallePlanificacionmicro,
-                                                disabled: true,
-                                                iconCls: 'delete-icon'
-                                            },
-                                            '-',
-                                            //Definición de botón Reload data
-                                            {
-                                                id: 'btnRecargarDatosDetallePlanificacionmicro',
-                                                iconCls: 'reload-icon',
-                                                handler: this.requestGridDataDetallePlanificacionmicro,
-                                                disabled: false,
-                                                scope: this,
-                                                text: 'Reload data'
-                                            }
-
-                                        ]
-                                    }, {
-                                        title: 'Step 3 - Macro Costs',
-                                        border: false,
-                                        id: 'paso3',
-                                        autoScroll: true,
-                                        items: this.gridCostoMacro,
-                                        tbar: [
-                                            //Definición de botón nuevo
-                                            // tbar: [
-                                            //Definición de botón nuevo
-                                            {
-                                                id: 'btnNuevoCostoMacro',
-                                                text: 'New',
-                                                scope: this,
-                                                handler: this.addCostoMacro,
-                                                disabled: true,
-                                                iconCls: 'save-icon'
-                                            },
-                                            '-',
-                                            //Definición de botón Delete
-                                            {
-                                                id: 'btnEliminarCostoMacro',
-                                                text: "Delete",
-                                                scope: this,
-                                                handler: this.deleteCostoMacro,
-                                                disabled: true,
-                                                iconCls: 'delete-icon'
-                                            },
-                                            '-',
-                                            //Definición de botón Reload data
-                                            {
-                                                id: 'btnRecargarDatosCostoMacro',
-                                                iconCls: 'reload-icon',
-                                                handler: this.requestGridDataCostoMacro,
-                                                disabled: false,
-                                                scope: this,
-                                                text: 'Reload data'
-                                            }
-                                        ]
-                                    }, {
-                                        title: 'Step 4 - Micro Costs',
-                                        border: false,
-                                        autoScroll: true,
-                                        id: 'paso4',
-                                        items: [this.gridPlanificacionmicro],
-                                        tbar: [
-                                            //Definición de botón nuevo
-                                            {
-                                                id: 'btnNuevoDetallePlanificacionmicro2',
-                                                text: 'New',
-                                                scope: this,
-                                                handler: this.addPlanificacionmicro,
-                                                disabled: false,
-                                                iconCls: 'save-icon'
-                                            },
-                                            '-',
-                                            //Definición de botón Delete
-                                            {
-                                                id: 'btnEliminarDetallePlanificacionmicro2',
-                                                text: "Delete",
-                                                scope: this,
-                                                handler: this.deletePlanificacionmicro,
-                                                disabled: false,
-                                                iconCls: 'delete-icon'
-                                            },
-                                            '-',
-                                            //Definición de botón Reload data
-                                            {
-                                                id: 'btnRecargarDatosDetallePlanificacionmicro2',
-                                                iconCls: 'reload-icon',
-                                                handler: this.requestGridDataPlanificacionmicro,
-                                                disabled: false,
-                                                scope: this,
-                                                text: 'Reload data'
-                                            }
-                                        ]
-                                    }
-                                        , {
-                                            title: 'Step 5 - Micro Costs Detail',
-                                            border: false,
-                                            autoScroll: true,
-                                            id: 'paso5',
-                                            items: [this.gridPlanificacionmicroDetalle],
+                                            items: [this.gridForecastDetalle],
                                             tbar: [
                                                 //Definición de botón nuevo
                                                 {
@@ -2965,18 +2710,18 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         win.show();
 
         setTimeout(function () {
-            this.storeModuloPlanificacionmicro.load({
+            this.storeModuloForecast.load({
                 params: {
                     start: 0,
-                    limit: limiteModuloPlanificacionmicro,
+                    limit: limiteModuloForecast,
                     pendientesAprobar: isChecked
                 }
             });
         }, 1500);
     },
 
-    //Función para eliminación de registros de Planificacionmicro
-    deleteModuloPlanificacionmicro: function () {
+    //Función para eliminación de registros de Forecast
+    deleteModuloForecast: function () {
         //Popup de confirmación
         Ext.Msg.show({
             title: 'Confirmación',
@@ -2986,19 +2731,19 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
             fn: function (btn) {
                 if (btn == 'yes') {
-                    var rows = this.gridModuloPlanificacionmicro.getSelectionModel().getSelections();
+                    var rows = this.gridModuloForecast.getSelectionModel().getSelections();
                     if (rows.length === 0) {
                         return false;
                     }
-                    this.storeModuloPlanificacionmicro.remove(rows);
+                    this.storeModuloForecast.remove(rows);
                 }
             }
         });
     },
 
-    //Función para inserción de registros de Planificacionmicro
-    addModuloPlanificacionmicro: function () {
-        var planificacionmicro = new this.storeModuloPlanificacionmicro.recordType({
+    //Función para inserción de registros de Forecast
+    addModuloForecast: function () {
+        var forecast = new this.storeModuloForecast.recordType({
             grant_number: null,
             estado: '',
             donor: '',
@@ -3016,14 +2761,14 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             crn: '',
             recepcion_documento: (new Date())
         });
-        this.gridModuloPlanificacionmicro.stopEditing();
-        this.storeModuloPlanificacionmicro.insert(0, planificacionmicro);
-        this.gridModuloPlanificacionmicro.startEditing(0, 0);
+        this.gridModuloForecast.stopEditing();
+        this.storeModuloForecast.insert(0, forecast);
+        this.gridModuloForecast.startEditing(0, 0);
     },
 
-    //Función para actualizar los datos mostrados en pantalla de la pestaña de ModuloPlanificacionmicro
-    requestGridDataModuloPlanificacionmicro: function () {
-        this.storeModuloPlanificacionmicro.load();
+    //Función para actualizar los datos mostrados en pantalla de la pestaña de ModuloForecast
+    requestGridDataModuloForecast: function () {
+        this.storeModuloForecast.load();
     },
 
     f1: function () {
@@ -3036,14 +2781,14 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         else
             return (s);
     },
-    //Función para actualizar los datos mostrados en pantalla de la pestaña de ModuloPlanificacionmicro
+    //Función para actualizar los datos mostrados en pantalla de la pestaña de ModuloForecast
     requestGridDataDenunciasActa: function () {
 
-        // this.storePlanificacionmicroDetalle.load();
+        // this.storeForecastDetalle.load();
     },
 
-    //Función para eliminación de registros de Planificacionmicro
-    deleteDetallePlanificacionmicro: function () {
+    //Función para eliminación de registros de Forecast
+    deleteDetalleForecast: function () {
         //Popup de confirmación
         Ext.Msg.show({
             title: 'Confirmación',
@@ -3053,19 +2798,19 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
             fn: function (btn) {
                 if (btn == 'yes') {
-                    var rows = this.gridDetallePlanificacionmicro.getSelectionModel().getSelections();
+                    var rows = this.gridDetalleForecast.getSelectionModel().getSelections();
                     if (rows.length === 0) {
                         return false;
                     }
-                    this.storeDetallePlanificacionmicro.remove(rows);
+                    this.storeDetalleForecast.remove(rows);
                 }
             }
         });
     },
 
-    //Función para inserción de registros de detalle de planificacionmicro
-    addDetallePlanificacionmicro: function () {
-        var planificacionmicro = new this.storeDetallePlanificacionmicro.recordType({
+    //Función para inserción de registros de detalle de forecast
+    addDetalleForecast: function () {
+        var forecast = new this.storeDetalleForecast.recordType({
             id_pma_contribuciones_detalle: contribucionSeleccionada,
             year: ' ',
             so: 1,
@@ -3091,14 +2836,14 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             // total_grant_balance_dsc: '0',
 
         });
-        this.gridDetallePlanificacionmicro.stopEditing();
-        this.storeDetallePlanificacionmicro.insert(0, planificacionmicro);
-        this.gridDetallePlanificacionmicro.startEditing(0, 0);
+        this.gridDetalleForecast.stopEditing();
+        this.storeDetalleForecast.insert(0, forecast);
+        this.gridDetalleForecast.startEditing(0, 0);
     },
 
-    //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle planificacionmicro
-    requestGridDataDetallePlanificacionmicro: function () {
-        this.storeDetallePlanificacionmicro.load({
+    //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle forecast
+    requestGridDataDetalleForecast: function () {
+        this.storeDetalleForecast.load({
             params: {
                 id: contribucionSeleccionada
             }
@@ -3106,8 +2851,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     },
 
 
-    //Función para eliminación de registros de Planificacionmicro
-    deletePlanificacionmicro: function () {
+    //Función para eliminación de registros de Forecast
+    deleteForecast: function () {
         //Popup de confirmación
         Ext.Msg.show({
             title: 'Confirmación',
@@ -3117,19 +2862,19 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
             fn: function (btn) {
                 if (btn == 'yes') {
-                    var rows = this.gridPlanificacionmicro.getSelectionModel().getSelections();
+                    var rows = this.gridForecast.getSelectionModel().getSelections();
                     if (rows.length === 0) {
                         return false;
                     }
-                    this.storePlanificacionmicro.remove(rows);
+                    this.storeForecast.remove(rows);
                 }
             }
         });
     },
 
-    //Función para inserción de registros de detalle de planificacionmicro
-    addPlanificacionmicro: function () {
-        var planificacionmicro = new this.storePlanificacionmicro.recordType({
+    //Función para inserción de registros de detalle de forecast
+    addForecast: function () {
+        var forecast = new this.storeForecast.recordType({
             cost_code2: 1,
             cost_code3: 1,
             glcode: 1,
@@ -3142,14 +2887,14 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             id_pma_costos_micro: costoMacroSeleccionada,
 
         });
-        this.gridPlanificacionmicro.stopEditing();
-        this.storePlanificacionmicro.insert(0, planificacionmicro);
-        this.gridPlanificacionmicro.startEditing(0, 0);
+        this.gridForecast.stopEditing();
+        this.storeForecast.insert(0, forecast);
+        this.gridForecast.startEditing(0, 0);
     },
 
-    //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle planificacionmicro
-    requestGridPlanificacionmicro: function () {
-        this.storePlanificacionmicro.load({
+    //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle forecast
+    requestGridForecast: function () {
+        this.storeForecast.load({
             params: {
                 id: contribucionSeleccionada
             }
@@ -3232,11 +2977,11 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
             fn: function (btn) {
                 if (btn == 'yes') {
-                    var rows = this.gridPlanificacionmicroDetalle.getSelectionModel().getSelections();
+                    var rows = this.gridForecastDetalle.getSelectionModel().getSelections();
                     if (rows.length === 0) {
                         return false;
                     }
-                    this.storePlanificacionmicroDetalle.remove(rows);
+                    this.storeForecastDetalle.remove(rows);
                 }
             }
         });
@@ -3244,7 +2989,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
     //Función para inserción de registros de detalle de inspeccion
     addMicroDetalle: function () {
-        var inspeccion = new this.storePlanificacionmicroDetalle.recordType({
+        var inspeccion = new this.storeForecastDetalle.recordType({
             id_pma_costos_micro: costoMacroSeleccionada,
             total: 0,
             adjust: 0,
@@ -3252,14 +2997,14 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             total_adjusted: 0,
             fecha_registro: (new Date()),
         });
-        this.gridPlanificacionmicroDetalle.stopEditing();
-        this.storePlanificacionmicroDetalle.insert(0, inspeccion);
-        this.gridPlanificacionmicroDetalle.startEditing(0, 0);
+        this.gridForecastDetalle.stopEditing();
+        this.storeForecastDetalle.insert(0, inspeccion);
+        this.gridForecastDetalle.startEditing(0, 0);
     },
 
     //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle inspeccion
     requestGridDataCostoMacro: function () {
-        this.storePlanificacionmicroDetalle.load({
+        this.storeForecastDetalle.load({
             params: {
                 id: costCodeNuevo3
             }
@@ -3277,10 +3022,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             buttons: Ext.Msg.YESNO,
             fn: function (btn) {
                 if (btn == 'yes') {
-                    window.location.href = 'modules/desktop/planificacionmicro/server/generarNuevasGuias.php';
+                    window.location.href = 'modules/desktop/forecast/server/generarNuevasGuias.php';
                     setTimeout(function () {
                         AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
-                        storeModuloPlanificacionmicro.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
+                        storeModuloForecast.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
                     }, 1500);
                 }
             }
@@ -3291,7 +3036,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     // ?reimpresion=true&guia=' + rows[0].get('id')
     botonImprimirActa: function () {
         // recuperamos registro seleccionado de datagrid denunciaguia
-        var rows = this.gridPlanificacionmicroDetalle.getSelectionModel().getSelections();
+        var rows = this.gridForecastDetalle.getSelectionModel().getSelections();
         //validamos si existe seleccion  y mensaje error
         if (rows.length === 0) {
             Ext.Msg.show({
@@ -3302,7 +3047,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             });
             return false;
         }
-        window.location.href = 'modules/desktop/planificacionmicro/server/generarNuevasGuias.php?reimpresion=true&guia=' + rows[0].get('id');
+        window.location.href = 'modules/desktop/forecast/server/generarNuevasGuias.php?reimpresion=true&guia=' + rows[0].get('id');
     },
 
     //bh boton generar nueva guía
@@ -3315,10 +3060,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             buttons: Ext.Msg.YESNO,
             fn: function (btn) {
                 if (btn === 'yes') {
-                    window.location.href = 'modules/desktop/planificacionmicro/server/generarHojaRuta.php';
+                    window.location.href = 'modules/desktop/forecast/server/generarHojaRuta.php';
                     /*setTimeout(function () {
                         AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
-                        storeModuloPlanificacionmicro.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
+                        storeModuloForecast.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
                     }, 1500);
                     */
                 }

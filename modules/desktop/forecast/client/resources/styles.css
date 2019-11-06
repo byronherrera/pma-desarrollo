@@ -1,7 +1,7 @@
-.planificacionmicro-icon { background-image: url(images/planificacionmicro.png) !important; }
-.x-btn-large .planificacionmicro-icon { background-image: url(images/planificacionmicro32.png) !important; }
-.planificacionmicro-shortcut { background-image: url(images/planificacionmicro48.png) !important; }
-#planificacionmicro-nav-panel li { margin-bottom:5px; }
+.forecast-icon { background-image: url(images/forecast.png) !important; }
+.x-btn-large .forecast-icon { background-image: url(images/forecast32.png) !important; }
+.forecast-shortcut { background-image: url(images/forecast48.png) !important; }
+#forecast-nav-panel li { margin-bottom:5px; }
 .save-icon{background:transparent url(images/add.png) 0 0 no-repeat !important;}
 .delete-icon{background:transparent url(images/delete.png) 0 0 no-repeat !important;}
 .print-icon{background:transparent url(images/printer.png) 0 0 no-repeat !important;}
