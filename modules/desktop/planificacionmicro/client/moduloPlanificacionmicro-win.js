@@ -1947,7 +1947,16 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                 costCodeNuevo3: costCodeNuevo3
                             }
                         });
+                        // aca se carga el micro cost detail step 5
+                        costoMicroSeleccionada = rec.data['id'];
+                        console.log (costoMicroSeleccionada);
 
+
+                        storePlanificacionmicroDetalle.load({
+                            params: {
+                                costCodeNuevo2: costCodeNuevo2
+                            }
+                        });
 
                     }
                 }
