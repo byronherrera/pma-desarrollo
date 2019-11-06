@@ -1,7 +1,7 @@
-.contribuciones-icon { background-image: url(images/contribuciones.png) !important; }
-.x-btn-large .contribuciones-icon { background-image: url(images/contribuciones32.png) !important; }
-.contribuciones-shortcut { background-image: url(images/contribuciones48.png) !important; }
-#contribuciones-nav-panel li { margin-bottom:5px; }
+.payroll-icon { background-image: url(images/payroll.png) !important; }
+.x-btn-large .payroll-icon { background-image: url(images/payroll32.png) !important; }
+.payroll-shortcut { background-image: url(images/payroll48.png) !important; }
+#payroll-nav-panel li { margin-bottom:5px; }
 .save-icon{background:transparent url(images/add.png) 0 0 no-repeat !important;}
 .delete-icon{background:transparent url(images/delete.png) 0 0 no-repeat !important;}
 .print-icon{background:transparent url(images/printer.png) 0 0 no-repeat !important;}

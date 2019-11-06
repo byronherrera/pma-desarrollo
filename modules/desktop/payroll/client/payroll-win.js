@@ -5,7 +5,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
     init: function () {
         this.launcher = {
             text: 'Payroll',
-            iconCls: 'contribuciones-icon',
+            iconCls: 'payroll-icon',
             handler: this.createWindow,
             scope: this
         }
@@ -21,8 +21,8 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
         var desktop = this.app.getDesktop();
         var AppMsg = new Ext.AppMsg({});
 
-        var win = desktop.getWindow('grid-win-contribuciones');
-        var urlContribuciones = "modules/desktop/contribuciones/server/";
+        var win = desktop.getWindow('grid-win-payroll');
+        var urlContribuciones = "modules/desktop/payroll/server/";
 
         var intervalo1 = 30;
         var intervalo2 = 90;
@@ -65,7 +65,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
 
         //fin variables visualizacion
 
-        // inicio combos contribuciones
+        // inicio combos payroll
 
 
         //inicio combo caracter del tramite CDT
@@ -157,7 +157,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
 
         //fin combo GRANT
 
-        // inicio ventana contribuciones
+        // inicio ventana payroll
         var proxyContribuciones = new Ext.data.HttpProxy({
             api: {
                 create: urlContribuciones + "crudContribuciones.php?operation=insert",
@@ -236,10 +236,10 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             baseParams: {}
         });
         storeContribuciones = this.storeContribuciones;
-        limitecontribuciones = 100;
+        limitepayroll = 100;
 
         this.storeContribuciones.baseParams = {
-            limit: limitecontribuciones
+            limit: limitepayroll
         };
 
         var filters = new Ext.ux.grid.GridFilters({
@@ -449,7 +449,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             stripeRows: true,
             // paging bar on the bottom
             bbar: new Ext.PagingToolbar({
-                pageSize: limitecontribuciones,
+                pageSize: limitepayroll,
                 store: storeContribuciones,
                 displayInfo: true,
                 displayMsg: 'Showing contributions  {0} - {1} of {2}',
@@ -692,7 +692,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             this.formContribucionesDetalle = new Ext.FormPanel({
 //                id: 'formContribucionesDetalle',
                 cls: 'no-border',
-                id: 'formcabeceracontribuciones',
+                id: 'formcabecerapayroll',
                 items: this.gridContribuciones,
 //                titleCollapse: true,
 //                split: true,
@@ -873,11 +873,11 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             this.targetFieldBtn = targetFieldBtn;
 
             win = desktop.createWindow({
-                id: 'grid-win-contribuciones',
+                id: 'grid-win-payroll',
                 title: 'Contributions record',
                 width: winWidth,
                 height: winHeight,
-                iconCls: 'contribuciones-icon',
+                iconCls: 'payroll-icon',
                 shim: false,
                 animCollapse: false,
                 constrainHeader: true,
@@ -896,7 +896,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                                 {
                                     text: 'New',
                                     scope: this,
-                                    handler: this.addcontribuciones,
+                                    handler: this.addpayroll,
                                     iconCls: 'save-icon',
                                     disabled: !acceso
                                 },
@@ -904,7 +904,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                                 {
                                     text: "Delete",
                                     scope: this,
-                                    handler: this.deletecontribuciones,
+                                    handler: this.deletepayroll,
                                     iconCls: 'delete-icon',
                                     //disabled: this.app.isAllowedTo('accesosAdministrador', this.id) ? false : true
                                     disabled: false
@@ -1056,14 +1056,14 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             this.storeContribuciones.load({
                 params: {
                     start: 0,
-                    limit: limitecontribuciones,
+                    limit: limitepayroll,
                     // noenviados: Ext.getCmp('checkNoEnviados').getValue()
                 }
             });
         }, 500);
 
     },
-    deletecontribuciones: function () {
+    deletepayroll: function () {
         Ext.Msg.show({
             title: 'Alert',
             msg: 'Are you sure you want to delete?',
@@ -1080,8 +1080,8 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             }
         });
     },
-    addcontribuciones: function () {
-        var contribuciones = new this.storeContribuciones.recordType({
+    addpayroll: function () {
+        var payroll = new this.storeContribuciones.recordType({
             grant_number: null,
             estado: '',
             donor: '',
@@ -1100,7 +1100,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             recepcion_documento: (new Date())
         });
         this.gridContribuciones.stopEditing();
-        this.storeContribuciones.insert(0, contribuciones);
+        this.storeContribuciones.insert(0, payroll);
         this.gridContribuciones.startEditing(0, 0);
 
     },
@@ -1127,7 +1127,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 buttons: Ext.Msg.YESNO,
                 fn: function (btn) {
                     if (btn == 'yes') {
-                        window.location.href = 'modules/desktop/contribuciones/server/descargaContribucionesNuevas.inc.php?unidad=' + Ext.getCmp('tb_seleccionarUnidad').getValue();
+                        window.location.href = 'modules/desktop/payroll/server/descargaContribucionesNuevas.inc.php?unidad=' + Ext.getCmp('tb_seleccionarUnidad').getValue();
                         setTimeout(function () {
                             storeContribuciones.load({params: {noenviados: Ext.getCmp('checkNoEnviados').getValue()}});
                         }, 1000);
@@ -1161,13 +1161,13 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             fn: function (btn) {
 
                 if (btn == 'yes') {
-                    window.location.href = 'modules/desktop/contribuciones/server/descargaContribucionesNuevas.inc.php?reimpresion=true&guia=' + rows[0].get('id');
+                    window.location.href = 'modules/desktop/payroll/server/descargaContribucionesNuevas.inc.php?reimpresion=true&guia=' + rows[0].get('id');
                 }
             }
         });
     },
 
-    grabarcontribuciones: function () {
+    grabarpayroll: function () {
         Ext.Msg.show({
             title: 'Alert',
             msg: 'Save?<br>Continue?',
@@ -1178,12 +1178,12 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 if (btn == 'yes') {
                     var myForm = Ext.getCmp('formContribucionesDetalle').getForm();
                     myForm.submit({
-                        url: 'modules/desktop/contribuciones/server/crudContribuciones.php?operation=updateForm',
+                        url: 'modules/desktop/payroll/server/crudContribuciones.php?operation=updateForm',
                         method: 'POST',
                         waitMsg: 'Saving data',
                         success: function (form, action) {
                             storeContribuciones.load({params: {noenviados: Ext.getCmp('checkNoEnviados').getValue()}});
-                            Ext.getCmp('tb_grabarcontribuciones').setDisabled(true);
+                            Ext.getCmp('tb_grabarpayroll').setDisabled(true);
                         },
                         failure: function (form, action) {
                             if (typeof action.response.responseText !== 'undefined') {
@@ -1245,7 +1245,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             fn: function (btn) {
                 if (btn == 'yes') {
                     valueParams = JSON.stringify(this.formConsultaDocumentos.getForm().getValues());
-                    window.location.href = 'modules/desktop/contribuciones/server/descargaReporte.inc.php?param=' + valueParams;
+                    window.location.href = 'modules/desktop/payroll/server/descargaReporte.inc.php?param=' + valueParams;
                 }
             }
         });

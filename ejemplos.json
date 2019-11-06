@@ -1,10 +1,10 @@
 {
-  "id": "planificacionmicro",
-  "type": "desktop/planificacionmicro",
+  "id": "payroll",
+  "type": "desktop/payroll",
   "about": {
     "author": "",
-    "description": "Planificacionmicro de Planificacionmicro.",
-    "name": "Ventana Planificacionmicro",
+    "description": "Payroll",
+    "name": "Payroll",
     "url": "",
     "version": "1.0"
   },
@@ -12,23 +12,29 @@
     "methods": [
       { "name": "accesosAdministrador", "description": "Full acceso con vista de todos los tramites" },
       { "name": "accesosSecretaria", "description": "Full acceso con vista de tramites pendientes" },
-      { "name": "accesosPlanificacionmicro", "description": "Personal de planificacionmicro" },
-      { "name": "accesosSupervision", "description": "Personal de supervision" }
-
+      { "name": "accesosPayroll", "description": "Personal de payroll" }
     ],
-    "class": "QoDenuncias",
-    "file": "desktop/planificacionmicro/denuncias.php"
+    "class": "QoPayroll",
+    "file": "desktop/payroll/payroll.php"
   },
   "client": {
-    "class": "QoDesk.PlanificacionmicroWindow",
+    "class": "QoDesk.PayrollWindow",
     "css": [
       {
-        "directory": "desktop/planificacionmicro/client/resources/",
+        "directory": "desktop/payroll/client/resources/",
         "files": [ "styles.css" ]
       },
       {
         "directory": "common/libraries/",
         "files": [  "datetime/date-time-ux.css", "Spinner/Spinner.css", "MultiSelect.css"   ]
+      }
+    ,{
+        "directory": "common/libraries/gridfilters/",
+        "files": [  "css/GridFilters.css", "css/RangeMenu.css"    ]
+      },
+      {
+        "directory": "common/libraries/",
+        "files": [ "styles.css" ]
       }
     ],
     "javascript": [
@@ -37,8 +43,8 @@
         "files": [ "AppMsg.js","datetime/date-time-ux.js","CheckColumn.js", "Spinner/SpinnerField.js", "Spinner/Spinner.js","MultiSelect.js"  ]
       },
       {
-        "directory": "desktop/planificacionmicro/client/",
-        "files": [  "moduloPlanificacionmicro-win.js" ]
+        "directory": "desktop/payroll/client/",
+        "files": [  "payroll-win.js" ]
       },
       {
         "directory": "qwiki/admin/client/",
@@ -48,13 +54,17 @@
         "directory": "qwiki/admin/client/lib/",
         "files": [ "ActiveColumn.js", "ColumnNodeUI.js", "Nav.js", "SearchField.js", "TooltipEditor.js" ]
       }
+    ,{
+        "directory": "common/libraries/gridfilters/",
+        "files": [ "menu/RangeMenu.js", "menu/ListMenu.js", "GridFilters.js", "filter/Filter.js", "filter/StringFilter.js", "filter/DateFilter.js", "filter/ListFilter.js", "filter/NumericFilter.js","filter/BooleanFilter.js" ]
+      }
     ],
     "launcher": {
       "config": {
-        "iconCls": "planificacionmicro-icon",
-        "shortcutIconCls": "planificacionmicro-shortcut",
-        "text": "Planificacion",
-        "tooltip": "<b>Planificacion</b>"
+        "iconCls": "payroll-icon",
+        "shortcutIconCls": "payroll-shortcut",
+        "text": "Payroll",
+        "tooltip": "<b>Payroll</b>"
       },
       "paths": {
         "startmenu": "/"
