@@ -4,12 +4,12 @@ var costoMacroSeleccionada = '';
 var costoMicroSeleccionada = '';
 
 QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
-    id: 'moduloForecast',
-    type: 'desktop/moduloForecast',
+    id: 'moduloPlanificacionmicro',
+    type: 'desktop/moduloPlanificacionmicro',
 
     init: function () {
         this.launcher = {
-            text: 'Forecast',
+            text: 'Planificacionmicro',
             iconCls: 'mantenimiento-icon',
             handler: this.createWindow,
             scope: this
