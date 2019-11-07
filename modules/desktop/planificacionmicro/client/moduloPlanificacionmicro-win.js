@@ -304,7 +304,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 }
             }
         });
-        this.storePlanificacionmicro.load();
+        //this.storePlanificacionmicro.load();
 
         //Definición de escritura en campos bdd Planificacionmicro
         var writerListadoPlanificacionmicro = new Ext.data.JsonWriter({
@@ -358,9 +358,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             encode: true,
             writeAllFields: true
         });
-
-
-
 
         //Definición de store para módulo Planificacionmicro
         this.storeDetallePlanificacionmicro = new Ext.data.Store({
@@ -879,45 +876,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
         }
 
-        //inicio combo guia  REAGUIA
-        storeREAGUIA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=guia'
-        });
 
-        //inicio combo tipo de actividad
-        storeACTIVIDAD = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre_actividad'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=tipo_actividad'
-        });
 
-        //inicio combo unidad asignada Inspección
-        storePERDIS = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=personal_distributivo'
-        });
 
-        //inicio combo unidad asignada Inspección
-        storeACTUALIZARFECHA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'fecha_asignacion'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=actualizar_fecha'
-        });
 
-        //inicio combo unidad asignada Inspección
-        storeFUNREA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=personal_distributivo'
-        });
 
         //inicio combo activo
 
@@ -948,214 +910,21 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
         });
 
-        //inicio combo actividad  ACTA
-        storeACTA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=depPlanificacionmicro'
-        });
 
-        //inicio combo ZONA
-        storeZONA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=zonas'
-        });
 
-        var comboZONA = new Ext.form.ComboBox({
-            id: 'comboZONA',
-            store: storeZONA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-        var comboZONA2 = new Ext.form.ComboBox({
-            id: 'comboZONA24',
-            store: storeZONA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            listeners: {
-                select: function (combo, record) {
-                    comboPARROQUIA.enable();			//step 2
-                    comboPARROQUIA.clearValue();		//step 3
-                    storePARROQUIA.load({			//step 4
-                        params: {
-                            id: record.get('id')	//step 5
-                        }
-                    });
-                }
-            }
-        });
-        var comboZONA3 = new Ext.form.ComboBox({
-            id: 'comboZONA3',
-            store: storeZONA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            listeners: {
-                select: function (combo, record) {
-                    comboPARROQUIA2.enable();			//step 2
-                    comboPARROQUIA2.clearValue();		//step 3
-                    storePARROQUIA.load({			//step 4
-                        params: {
-                            id: record.get('id')	//step 5
-                        }
-                    });
-                }
-            }
-        });
 
-        function zonaAdm(id) {
-            var index = storeZONA.find('id', id);
-            if (index > -1) {
-                var record = storeZONA.getAt(index);
-                return record.get('nombre');
-            }
-        }
 
-        //fin combo ZONA
 
-        //inicio combo PARROQUIA
+/*        //inicio combo PARROQUIA
         storePARROQUIA = new Ext.data.JsonStore({
             root: 'data',
             fields: ['id', 'nombre'],
             autoLoad: true,
             url: 'modules/common/combos/combos.php?tipo=parroquias'
-        });
+        });*/
 
-        this.storePARROQUIA = storePARROQUIA;
+        //this.storePARROQUIA = storePARROQUIA;
 
-        var comboPARROQUIA = new Ext.form.ComboBox({
-            id: 'comboPARROQUIA',
-            store: storePARROQUIA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            listeners: {
-                select: function (combo, record) {
-                    comboSECTORES.enable();			//step 2
-                    comboSECTORES.clearValue();		//step 3
-                    storeSECTORES.load({			//step 4
-                        params: {
-                            id: record.get('id')	//step 5
-                        }
-                    });
-                }
-            }
-        });
-
-        var comboPARROQUIA2 = new Ext.form.ComboBox({
-            id: 'comboPARROQUIA2',
-            store: storePARROQUIA,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            listeners: {
-                select: function (combo, record) {
-                    comboSECTORES2.enable();			//step 2
-                    comboSECTORES2.clearValue();		//step 3
-                    storeSECTORES.load({			//step 4
-                        params: {
-                            id: record.get('id')	//step 5
-                        }
-                    });
-                }
-            }
-        });
-
-
-        function parroquiaAdm(id) {
-            var index = storePARROQUIA.findExact('id', id);
-            if (index > -1) {
-                var record = storePARROQUIA.getAt(index);
-                return record.get('nombre');
-            }
-        }
-
-        //fin combo
-
-        //inicio combo SECTORES
-        storeSECTORES = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=sectores'
-        });
-
-        var comboSECTORES = new Ext.form.ComboBox({
-            id: 'comboSECTORES',
-            store: storeSECTORES,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-
-
-        var comboSECTORES2 = new Ext.form.ComboBox({
-            id: 'comboSECTORES2',
-            store: storeSECTORES,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local'
-        });
-
-        function sectoresAdm(id) {
-            var index = storeSECTORES.findExact('id', id);
-            if (index > -1) {
-                var record = storeSECTORES.getAt(index);
-                return record.get('nombre');
-            }
-        }
-
-        //fin combo
-
-        //inicio combo denuncias ordenanza DETIORD
-        storeORD = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=ordenanzas'
-        });
-
-        var comboORD = new Ext.form.ComboBox({
-            id: 'comboORD',
-            store: storeORD,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            //forceSelection: true,
-            //allowBlank: false
-        });
-
-        //inicio combo denuncias ordenanza DETIORD
-        storeINSPORD = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=ordenanzas'
-        });
-
-        var comboINSPORD = new Ext.form.ComboBox({
-            id: 'comboINSPORD',
-            store: storeINSPORD,
-            valueField: 'id',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            //forceSelection: true,
-            //allowBlank: false
-        });
 
         var comboCDT = new Ext.form.ComboBox({
             id: 'comboCDT',
@@ -1195,17 +964,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
 
 
-
-
-
-
-        function listaOrdenanzas(id) {
-            var index = storeORD.find('id', id);
-            if (index > -1) {
-                var record = storeORD.getAt(index);
-                return record.get('nombre');
-            }
-        }
 
 
 
@@ -1264,7 +1022,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //fin  combo denuncias ordenanza
 
         //inicio combo reasignacion  REA
-        storeREA = new Ext.data.JsonStore({
+        /*storeREA = new Ext.data.JsonStore({
             root: 'data',
             fields: ['id', 'nombre', 'orden'],
             autoLoad: true,
@@ -1274,161 +1032,15 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 property: 'orden',
                 direction: 'ASC' // or 'ASC'
             }],
-        });
-
-        //inicio combo instituciones INST
-        storeINST = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=instituciones'
-
-        });
-
-        var comboINST = new Ext.form.ComboBox({
-            id: 'comboINST',
-            store: storeINST,
-            valueField: 'nombre',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            allowBlank: false
-        });
+        });*/
 
 
-        function departamentoReasignacion(id) {
-            var index = storeREA.find('id', id);
-            if (index > -1) {
-                var record = storeREA.getAt(index);
-                return record.get('nombre');
-            } else {
-                return ''
-            }
-
-        }
-
-        storeREA.sort('orden', 'ASC');
-        var comboREA = new Ext.form.ComboBox({
-            id: 'comboREA',
-            store: storeREA,
-            valueField: 'id',
-            displayField: 'nombre',
-            mode: 'local',
-            forceSelection: true,
-            allowBlank: false
-        });
-
-        storeACTIVIDAD.sort('orden', 'ASC');
-        var comboACTIVIDAD = new Ext.form.ComboBox({
-            id: 'comboACTIVIDAD',
-            store: storeACTIVIDAD,
-            valueField: 'id',
-            displayField: 'nombre_actividad',
-            mode: 'local',
-            forceSelection: true,
-            triggerAction: 'all',
-            allowBlank: false
-        });
 
 
-        storePERDIS.sort('orden', 'ASC');
-        var comboINSPECTOR = new Ext.form.ComboBox({
-            id: 'comboINSPECTOR',
-            store: storePERDIS,
-            valueField: 'id',
-            displayField: 'nombre',
-            mode: 'local',
-            forceSelection: true,
-            triggerAction: 'all',
-            allowBlank: false,
-            typeAhead: true,
-            selectOnFocus: true,
-            disabled: false
-        });
-        comboINSPECTOR.on('select', function () {
-            AppMsg.setAlert("Alerta ", 'Funcionario asignado');
-            // this.gridCCFPlanificacionmicro.stopEditing();
-            // this.storeCCFPlanificacionmicro.insert(0, planificacionmicro);
 
-        })
 
-        storeFUNREA.sort('orden', 'ASC');
-        var comboFUNREA = new Ext.form.ComboBox({
-            id: 'comboFUNREA',
-            store: storeFUNREA,
-            valueField: 'id',
-            displayField: 'nombre',
-            //mode: 'local',
-            forceSelection: false,
-            triggerAction: 'all',
-            allowBlank: true
-        });
 
-        function tipoActividad(id) {
-            var index = storeACTIVIDAD.find('id', id);
-            if (index > -1) {
-                var record = storeACTIVIDAD.getAt(index);
-                return record.get('nombre_actividad');
-            }
-        }
 
-        function tipoUnidadesPersonal(id) {
-            var index = storePERDIS.findExact('id', id);
-            if (index > -1) {
-                var record = storePERDIS.getAt(index);
-                return record.get('nombre');
-            }
-        }
-
-        function tipoFuncionarioReasignacion(id) {
-            var index = storeFUNREA.find('id', id);
-            if (index > -1) {
-                var record = storeFUNREA.getAt(index);
-                return record.get('nombre');
-            }
-        }
-
-        storePERDIS.sort('orden', 'ASC');
-        var comboPERDIS = new Ext.form.ComboBox({
-            id: 'comboPERDIS',
-            store: storePERDIS,
-            valueField: 'id',
-            displayField: 'nombre',
-            mode: 'local',
-            forceSelection: true,
-            triggerAction: 'all',
-            allowBlank: false,
-            typeAhead: true,
-            selectOnFocus: true,
-            disabled: false
-        });
-        comboPERDIS.on('select', function () {
-            //AppMsg.setAlert("Alerta ", planificacionmicroSeleccionada);
-            //AppMsg.setAlert("Alerta ", contribucionSeleccionada);
-            //storeACTUALIZARFECHA.load({params: {id_planificacionmicro: planificacionmicroSeleccionada}});
-            //storeACTUALIZARFECHA.load();
-        })
-
-        storePERDIS.sort('orden', 'ASC');
-        var comboINSP = new Ext.form.ComboBox({
-            id: 'comboINSP',
-            store: storePERDIS,
-            valueField: 'id',
-            displayField: 'nombre',
-            mode: 'local',
-            forceSelection: true,
-            triggerAction: 'all',
-            allowBlank: false,
-            typeAhead: true,
-            selectOnFocus: true,
-            disabled: false
-        });
-        comboINSP.on('select', function () {
-            //AppMsg.setAlert("Alerta ", planificacionmicroSeleccionada);
-            //AppMsg.setAlert("Alerta ", contribucionSeleccionada);
-            //storeACTUALIZARFECHA.load({params: {id_planificacionmicro: planificacionmicroSeleccionada}});
-            //storeACTUALIZARFECHA.load();
-        })
 
         var checkHandler = function (item, checked) {
             if (checked) {
@@ -1465,10 +1077,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
 
 
-        this.storeDetallePlanificacionmicro.load();
-        this.storeCostoMacro.load();
-        this.storePlanificacionmicro.load();
-        this.storePlanificacionmicroDetalle.load();
+       // this.storeDetallePlanificacionmicro.load();
+      //  this.storeCostoMacro.load();
+       // this.storePlanificacionmicro.load();
+       // this.storePlanificacionmicroDetalle.load();
         // this.storeListadoPlanificacionmicro.load();
 
 
@@ -2155,11 +1767,12 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             //baseParams: {}
         });
 
-        this.storeModuloPlanificacionmicro.load();
         storeModuloPlanificacionmicro = this.storeModuloPlanificacionmicro;
         storeModuloPlanificacionmicro.baseParams = {
             limit: limiteModuloPlanificacionmicro
         };
+
+       // this.storeModuloPlanificacionmicro.load();
 
         var filters = new Ext.ux.grid.GridFilters({
             // encode and local configuration options defined previously for easier reuse

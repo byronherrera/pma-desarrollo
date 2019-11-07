@@ -24,6 +24,10 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
         var win = desktop.getWindow('grid-win-payroll');
         var urlPayroll = "modules/desktop/payroll/server/";
 
+        var winWidth = desktop.getWinWidth();
+        var winHeight = desktop.getWinHeight();
+
+
         limitePayroll = 100;
 
         var intervalo1 = 30;
@@ -489,7 +493,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 //Inicio formato grid pestaña DetailPayroll
                 this.gridDetailPayroll = new Ext.grid.EditorGridPanel({
                     id: 'gridDetailPayroll',
-                    height: winHeight - 124,
+                    height: winHeight - 120,
                     store: this.storeDetailPayroll,
                     listeners: {
                         beforeedit: function(o) {
@@ -617,10 +621,9 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 //Carga de datos al levantarse la pantalla
 
                 this.storePayroll.load();
-
                 //Inicio formato grid pestaña Payroll
                 this.gridPayroll = new Ext.grid.EditorGridPanel({
-                    height: winHeight - 124,
+                    height: winHeight - 120,
                     store: this.storePayroll,
                     columns: [
                         //Definición de campos bdd Payroll
@@ -1182,8 +1185,6 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
         var win = desktop.getWindow('layout-win');
 
         if (!win) {
-            var winWidth = desktop.getWinWidth();
-            var winHeight = desktop.getWinHeight();
 
 
             this.seleccionDepar = 3;
