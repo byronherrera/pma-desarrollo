@@ -11,7 +11,7 @@ function selectPayroll()
     global $os;
 
     //Se inicializa el parámetro de búsqueda de código trámite
-    $columnaBusqueda = 'id';
+    $columnaBusqueda = 'pma_payroll.id';
     if (isset($_POST['filterText'])) {
         $campo = $_POST['filterText'];
         $campo = str_replace(" ", "%", $campo);
@@ -35,10 +35,10 @@ function selectPayroll()
     else
         $limit = 100;
 
-    $orderby = 'ORDER BY CONVERT( id,UNSIGNED INTEGER) ASC';
+    $orderby = 'ORDER BY CONVERT( pma_payroll.id,UNSIGNED INTEGER) ASC';
     if (isset($_POST['sort'])) {
         if ($_POST['sort'] == 'id') {
-            $orderby = 'ORDER BY CONVERT( id,UNSIGNED INTEGER) ASC';
+            $orderby = 'ORDER BY CONVERT( pma_payroll.id,UNSIGNED INTEGER) ASC';
         } else {
             $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
         }
@@ -46,7 +46,8 @@ function selectPayroll()
 
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_payroll $where $orderby LIMIT $start, $limit";
+    $sql = "SELECT * FROM pma_payroll INNER JOIN pma_payroll_employees ON pma_payroll.id=pma_payroll_employees.id_pma_payroll $where $orderby LIMIT $start, $limit";
+// echo $sql;
     $result = $os->db->conn->query($sql);
 
     $data = array();
@@ -85,7 +86,7 @@ function insertPayroll()
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "INSERT INTO pma_payroll($cadenaCampos) VALUES ($cadenaDatos);";
+    $sql = "INSERT INTO pma_payroll_employees($cadenaCampos) VALUES ($cadenaDatos);";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
@@ -128,13 +129,14 @@ function updatePayroll()
     }
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    $sql = "UPDATE pma_payroll SET  $cadenaDatos  WHERE pma_payroll.id = '$data->id' ";
+    $sql = "UPDATE pma_payroll_employees SET  $cadenaDatos  WHERE pma_payroll_employees.id = '$data->id' ";
+    // echo($sql);
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_payroll actualizado exitosamente" : $sql->errorCode(),
+        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_payroll_employees actualizado exitosamente" : $sql->errorCode(),
         "message" => $message
     ));
 }
@@ -232,7 +234,7 @@ function deletePayroll()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM pma_payroll WHERE id = $id";
+    $sql = "DELETE FROM pma_payroll_employees WHERE id = $id";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
     echo json_encode(array(

@@ -1,3 +1,6 @@
+var hrPositionSelected = '';
+var dataPayroll = '';
+
 QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
     id: 'payroll',
     type: 'desktop/payroll',
@@ -51,6 +54,8 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
         });
 
         var fecha = new Ext.form.DateField({format: 'Y-m-d'});
+
+        var cambioCombo = false;
 
         function formatDate(value) {
             return value ? value.dateFormat('Y-m-d') : '';
@@ -161,6 +166,139 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
 
                 //fin combo Ending_month
 
+                //inicio combo SO
+                storeSO = new Ext.data.JsonStore({
+                    root: 'data',
+                    fields: ['id', 'category_name'],
+                    autoLoad: true,
+                    url: 'modules/common/combos/combos.php?tipo=so'
+                });
+                var comboSO = new Ext.form.ComboBox({
+                    id: 'comboSO',
+                    store: storeSO,
+                    valueField: 'id',
+                    displayField: 'category_name',
+                    triggerAction: 'all',
+                    mode: 'local'
+                });
+
+                function costSO(id) {
+                    var index = storeSO.find('id', id);
+                    if (index > -1) {
+                        var record = storeSO.getAt(index);
+                        return record.get('category_name');
+                    }
+                }
+
+                //fin combo SO
+
+
+                //inicio combo ACTIVITIES
+                storeActivities = new Ext.data.JsonStore({
+                    root: 'data',
+                    fields: ['id', 'subcategory_name'],
+                    autoLoad: true,
+                    url: 'modules/common/combos/combos.php?tipo=activities'
+                });
+                var comboActivities = new Ext.form.ComboBox({
+                    id: 'comboActivities',
+                    store: storeActivities,
+                    valueField: 'id',
+                    displayField: 'subcategory_name',
+                    triggerAction: 'all',
+                    mode: 'local'
+                });
+
+                function costActivities(id) {
+                    //   var index = storeActivities.findExact('id', id);
+                    var index = storeActivities.find('id', id);
+                    if (index > -1) {
+                        var record = storeActivities.getAt(index);
+                        return record.get('subcategory_name');
+                    }
+
+                }
+
+                //fin combo ACTIVITIES
+
+                //inicio combo HRDescription
+                storeHRDescription = new Ext.data.JsonStore({
+                    root: 'data',
+                    fields: ['id', 'hr_position', 'location', 'grade', 'monthly_cost_2018', 'index_no'],
+                    autoLoad: true,
+                    url: 'modules/common/combos/combos.php?tipo=hrDescription'
+                });
+                var comboHRDescription = new Ext.form.ComboBox({
+                    id: 'comboHRDescription',
+                    store: storeHRDescription,
+                    valueField: 'id',
+                    displayField: 'hr_position',
+                    triggerAction: 'all',
+                    mode: 'local',
+                    listeners: {
+                      change: function(combo, value){
+                        cambioCombo = true;
+                        dataPayroll = selectPayroll(value);
+                        filaSeleccionada = Ext.getCmp('gridPayroll').getSelectionModel().getSelections();
+                        //console.log(filaSeleccionada);
+                        //console.log (dataPayroll.data['index_no'])
+                        record =   Ext.getCmp('gridPayroll').store.getAt(filaSeleccionada);
+                        console.log (record)
+                        //record.set("index_no",dataPayroll.data['index_no'])
+                      }
+                    }
+                });
+
+                function costHRDescription(id) {
+                    //   var index = storeHRDescription.findExact('id', id);
+                    var index = storeHRDescription.find('id', id);
+                    if (index > -1) {
+                        var record = storeHRDescription.getAt(index);
+                        hrPositionSelected = id;
+                        return record.get('hr_position');
+                    }
+
+                }
+                function selectPayroll(id) {
+                    //   var index = storeHRDescription.findExact('id', id);
+                    var index = storeHRDescription.find('id', id);
+                    if (index > -1) {
+                        var record = storeHRDescription.getAt(index);
+                        hrPositionSelected = id;
+                        return record;
+                    }
+
+                }
+
+                //fin combo ACTIVITIES
+
+                //inicio combo GRANT NUMBER
+                storeGrantNumber = new Ext.data.JsonStore({
+                    root: 'data',
+                    fields: ['id', 'grant_number'],
+                    autoLoad: true,
+                    url: 'modules/common/combos/combos.php?tipo=grantNumber'
+                });
+                var comboGrantNumber = new Ext.form.ComboBox({
+                    id: 'comboGrantNumber',
+                    store: storeGrantNumber,
+                    valueField: 'id',
+                    displayField: 'grant_number',
+                    triggerAction: 'all',
+                    mode: 'local'
+                });
+
+                function costGrantNumber(id) {
+                    //   var index = storeGrantNumber.findExact('id', id);
+                    var index = storeGrantNumber.find('id', id);
+                    if (index > -1) {
+                        var record = storeGrantNumber.getAt(index);
+                        return record.get('grant_number');
+                    }
+
+                }
+
+                //fin combo GRANT NUMBER
 
                 //inicio combo costCode2
                 storeCostCode2 = new Ext.data.JsonStore({
@@ -433,19 +571,13 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     root: 'data',
                     fields: [
                         {name: 'id', allowBlank: false},
-
-                        // {name: 'id', allowBlank: false},
-                        // {name: 'location', allowBlank: false},
-                        // {name: 'hr_position', allowBlank: false},
-                        // {name: 'grade', allowBlank: true},
-                        // {name: 'index_no', allowBlank: true},
-                        // {name: 'hr_position', allowBlank: true},
                         {name: 'year', allowBlank: false},
+                        {name: 'so', allowBlank: false},
+                        {name: 'activity', allowBlank: false},
+                        {name: 'grant_number', allowBlank: false},
                         {name: 'starting_month', allowBlank: false},
                         {name: 'end_month', allowBlank: false},
-                        //{name: 'number_staff', allowBlank: true},
                         {name: 'monthly_cost_2019', allowBlank: false},
-                        // {name: 'monthly_cost_2018', allowBlank: true},
                         {name: 'expected_cost_2019', allowBlank: true},
                         {name: 'january', allowBlank: true},
                         {name: 'february', allowBlank: true},
@@ -505,37 +637,12 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                         //Definición de campos bdd DetailPayroll
                         new Ext.grid.RowNumberer()
                         , {header: 'ID', dataIndex: 'id', sortable: true, width: 10, hidden: true, editor: textField}
-                        // ,{header: 'ID', dataIndex: 'id', sortable: true, width: 10}
-                        // ,{header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
-                        // ,{header: 'Grade', dataIndex: 'grade', sortable: true, width: 100}
-                        // ,{header: 'Index_no', dataIndex: 'index_no', sortable: true, width: 100}
-
-                        , {header: 'Year', dataIndex: 'year', sortable: true, width: 100, editor: textField}
-                        , {
-                            header: 'Starting month',
-                            dataIndex: 'starting_month',
-                            sortable: true,
-                            width: 100,
-                            editor: comboStarting_month,
-                            renderer: rendererStarting_month
-                        }
-                        , {
-                            header: 'Ending month',
-                            dataIndex: 'end_month',
-                            sortable: true,
-                            width: 100,
-                            editor: comboEnding_month,
-                            renderer: rendererEnding_month
-                        }
-                        // , {header: 'Number staff', dataIndex: 'number_staff', sortable: true, width: 100, editor: textField}
-                        // , {header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
-                        , {
-                            header: 'Monthly cost',
-                            dataIndex: 'monthly_cost_2019',
-                            sortable: true,
-                            width: 100,
-                            editor: textField
-                        }
+                        , {header: 'SO', dataIndex: 'so', sortable: true, width: 80, editor: comboSO, renderer: costSO}
+                        , {header: 'Activity', dataIndex: 'activity', sortable: true, width: 120, editor: comboActivities, renderer: costActivities}
+                        , {header: 'Grant', dataIndex: 'grant_number', sortable: true, width: 150, editor: comboGrantNumber, renderer: costGrantNumber}
+                        , {header: 'Starting month', dataIndex: 'starting_month', sortable: true, width: 140, editor: comboStarting_month, renderer: rendererStarting_month}
+                        , {header: 'Ending month', dataIndex: 'end_month', sortable: true, width: 140, editor: comboEnding_month, renderer: rendererEnding_month}
+                        , {header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
                         , {header: 'Expected cost', dataIndex: 'expected_cost_2019', sortable: true, width: 100}
                         , {header: 'January', dataIndex: 'january', sortable: true, width: 100, editor: textField}
                         , {header: 'February', dataIndex: 'february', sortable: true, width: 100, editor: textField}
@@ -550,12 +657,6 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                         , {header: 'November', dataIndex: 'november', sortable: true, width: 100, editor: textField}
                         , {header: 'December', dataIndex: 'december', sortable: true, width: 100, editor: textField}
                         , {header: 'Total', dataIndex: 'total', sortable: true, width: 100}
-
-                        // , {header: 'Without increase', dataIndex: 'without_increase', sortable: true, width: 100, editor: textField}
-                        // , {header: 'Increase_2', dataIndex: 'increase_2', sortable: true, width: 100, editor: textField}
-                        // , {header: 'Increase_5', dataIndex: 'increase_5', sortable: true, width: 100, editor: textField}
-                        // , {header: 'Program Validation', dataIndex: 'program_validation', sortable: true, width: 100, editor: textField}
-                        // , {header: 'Program Validation', dataIndex: 'id_pma_payroll', hidden: true}
                     ],
                     viewConfig: {forceFit: true},
                     sm: new Ext.grid.RowSelectionModel({
@@ -595,7 +696,9 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     root: 'data',
                     fields: [
                         {name: 'id', allowBlank: false},
+                        {name: 'id_pma_payroll', allowBlank: false},
                         {name: 'location', allowBlank: false},
+                        {name: 'name', allowBlank: false},
                         {name: 'grade', allowBlank: false},
                         {name: 'index_no', allowBlank: false},
                         {name: 'hr_position', allowBlank: false},
@@ -625,21 +728,18 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 this.gridPayroll = new Ext.grid.EditorGridPanel({
                     height: winHeight - 120,
                     store: this.storePayroll,
+                    id:'gridPayroll',
                     columns: [
                         //Definición de campos bdd Payroll
                         new Ext.grid.RowNumberer()
                         , {header: 'ID', dataIndex: 'id', sortable: true, hidden: true, width: 10}
+                        , {header: 'id_pma_payroll', dataIndex: 'id_pma_payroll', sortable: true, hidden: true, width: 10}
                         , {header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
+                        , {header: 'Name', dataIndex: 'name', sortable: true, width: 100, editor: textField}
+                        , {header: 'HR Description', dataIndex: 'hr_position', sortable: true, width: 150, editor: comboHRDescription, renderer: costHRDescription}
                         , {header: 'Grade', dataIndex: 'grade', sortable: true, width: 70, editor: textField}
                         , {header: 'Index-no', dataIndex: 'index_no', sortable: true, width: 60, editor: textField}
-                        , {header: 'HR Description', dataIndex: 'hr_position', sortable: true, width: 150, editor: textField}
-                        , {
-                            header: 'Monthly cost',
-                            dataIndex: 'monthly_cost_2018',
-                            sortable: true,
-                            width: 100,
-                            editor: textField
-                        }
+                        , {header: 'Monthly cost',dataIndex: 'monthly_cost_2018',sortable: true,width: 100,editor: textField}
                     ],
                     viewConfig: {forceFit: false},
                     sm: new Ext.grid.RowSelectionModel({
@@ -650,6 +750,11 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                                 selectedPayroll = rec.id;
                                 storeDetailPayroll.baseParams.id = selectedPayroll;
                                 storeDetailPayroll.load();
+                                if (cambioCombo){
+                                    cambioCombo = false;
+                                    record= this.gridPayroll.store.getAt (row);
+                                    record.set('index_no', '666')
+                                }
                             }
                         }
                     }),
@@ -1599,6 +1704,108 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
         }, 500);
 
     },
+
+    //Funciones
+    //Función para eliminación de registros de Payroll
+    deletePayroll: function () {
+        //Popup de confirmación
+        Ext.Msg.show({
+            title: 'Confirmación',
+            msg: 'Está seguro de querer borrar?',
+            scope: this,
+            buttons: Ext.Msg.YESNO,
+            //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
+            fn: function (btn) {
+                if (btn == 'yes') {
+                    var rows = this.gridPayroll.getSelectionModel().getSelections();
+                    if (rows.length === 0) {
+                        return false;
+                    }
+                    this.storePayroll.remove(rows);
+                }
+            }
+        });
+    },
+
+    //Función para inserción de registros de Payroll
+    addPayroll: function () {
+        var dataPayroll = new this.storePayroll.recordType({
+            id: ' ',
+            id_pma_payroll: hrPositionSelected,
+            location: '',
+            grade: '',
+            index_no: '',
+            hr_position: '',
+            monthly_cost_2018: 0
+        });
+        this.gridPayroll.stopEditing();
+        this.storePayroll.insert(0, dataPayroll);
+        this.gridPayroll.startEditing(0, 0);
+    },
+
+    //Función para actualizar los datos mostrados en pantalla de la pestaña de Payroll
+    requestGridDataPayroll: function () {
+        this.storePayroll.load();
+    },
+
+    //Función para eliminación de registros de DetailPayroll
+    deleteDetailPayroll: function () {
+        //Popup de confirmación
+        Ext.Msg.show({
+            title: 'Confirmación',
+            msg: 'Está seguro de querer borrar?',
+            scope: this,
+            buttons: Ext.Msg.YESNO,
+            //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
+            fn: function (btn) {
+                if (btn == 'yes') {
+                    var rows = this.gridDetailPayroll.getSelectionModel().getSelections();
+                    if (rows.length === 0) {
+                        return false;
+                    }
+                    this.storeDetailPayroll.remove(rows);
+                }
+            }
+        });
+    },
+
+    //Función para inserción de registros de DetailPayroll
+    addDetailPayroll: function () {
+        var dataDetailPayroll = new this.storeDetailPayroll.recordType({
+            id: ' ',
+            starting_month: '',
+            end_month: '',
+            //   number_staff : '',
+            january: 0,
+            february: 0,
+            march: 0,
+            april: 0,
+            may: 0,
+            june: 0,
+            july: 0,
+            august: 0,
+            september: 0,
+            october: 0,
+            november: 0,
+            december: 0,
+            expected_cost_2019: 0,
+            without_increase: '',
+            increase_2: '',
+            increase_5: '',
+            program_validation: '',
+            id_pma_payroll: selectedPayroll,
+            total: 0
+        });
+        this.gridDetailPayroll.stopEditing();
+        this.storeDetailPayroll.insert(0, dataDetailPayroll);
+        this.gridDetailPayroll.startEditing(0, 0);
+    },
+
+    //Función para actualizar los datos mostrados en pantalla de la pestaña de DetailPayroll
+    requestGridDataDetailPayroll: function () {
+        this.storeDetailPayroll.load();
+    },
+
     deletecontribuciones: function () {
         Ext.Msg.show({
             title: 'Alert',

@@ -256,6 +256,38 @@ function comboActivities()
     );
 }
 
+function comboGrantNumber()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT id,grant_number   FROM pma_contribuciones ORDER BY id";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
+function comboHRDescription()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT id,hr_position, location, grade, index_no, monthly_cost_2018 FROM pma_payroll ORDER BY id";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
 
 function comboSecretariaTramites()
 {
@@ -933,6 +965,12 @@ switch ($_GET['tipo']) {
         break;
     case 'activities' :
         comboActivities();
+        break;
+    case 'grantNumber' :
+        comboGrantNumber();
+        break;
+    case 'hrDescription' :
+        comboHRDescription();
         break;
     case 'costcode2' :
         comboCostcode2();
