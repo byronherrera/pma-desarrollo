@@ -1,8 +1,6 @@
 <?php
 require_once '../../../common/Classes/PhpSpreadsheet/autoload.php';
 
-//require __DIR__ . "/PhpSpreadsheet/autoload.php";
-
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 require_once '../../../../server/os.php';
@@ -11,7 +9,6 @@ $os = new os();
 if (!$os->session_exists()) {
     die('No existe sesión!');
 }
-
 
 ///////////////
 ///
@@ -39,52 +36,82 @@ if (isset($_FILES)) {
 
         $spreadsheet = IOFactory::load($inputFileName);
 
-//        $spreadsheet->getSheetByName('BUDGET');
-//        $spreadsheet->setActiveSheetIndexByName('BUDGET');
-//        $spreadsheet->getActiveSheet()
+        $spreadsheet->getSheetByName('BUDGET');
+        $spreadsheet->setActiveSheetIndexByName('BUDGET');
+        $spreadsheet->getActiveSheet();
 
         $sheet = $spreadsheet->getActiveSheet()->getTitle();
         $total = 0;
 
-        $sql = "SELECT tab_wings FROM pma_migrate WHERE active  = 1 GROUP BY tab_wings";
+        // recuperar informacion para migrate contribuciones
+
+        // VACIAR LAS TABLAS TEMPORALES
+
+        $sql = "DELETE FROM pma_migrate_contribuciones`;";
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+        // REINICIAR LA TABLA
+        $sql = "ALTER TABLE `pma_migrate_contribuciones` AUTO_INCREMENT = 1;";
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+
+        // CASO BUDGET
+        $hoja = 'BUDGET';
+        $sql = "SELECT * FROM pma_migrate WHERE active  = 1 AND tab_wings = '$hoja'";
+        // obtengo el listado de las columnas a migrar
         $result = $os->db->conn->query($sql);
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            // se realiza para cada uno de las pestañas del excel
-            $hoja = $row['tab_wings'];
-            $data = $spreadsheet->getSheetByName($hoja)->toArray(null, true, true, true);
+        $columnas = $result->fetchAll(PDO::FETCH_ASSOC);
 
-            // se recupera la columna a cargar de una misma hoja
-            $sql = "SELECT * FROM pma_migrate   WHERE active  = 1 AND tab_wings = '$hoja';";
-            $result = $os->db->conn->query($sql);
-            while ($row = $result->fetch(PDO::FETCH_ASSOC)
-            ) {
-                //recupea la columna
-                $fila = $row['name_wings'];
-                $cabeceras = $data[1];
-                $fila_cabecera = "";
-                if (in_array("$fila", $cabeceras)) {
-                    $fila_cabecera = "Existe Irix";
-                    // verificar si no existe
+        $data = $spreadsheet->getSheetByName($hoja)->toArray(null, true, false, true);
 
-                    // caso existe
+        for ($i = 2; $i <= count($data); $i++) {
+            $cadenaDatos = '';
+            $cadenaCampos = '';
 
-                    // caso no existe
+            foreach ($data[$i] as $clave => $valor) {
+                if ($valor != '') {
+                    foreach ($columnas as &$columna) {
+                        if (in_array($data[1][$clave], $columna)) {
+                            $columnaAsociada = $columna['table'];
+                            break;
+                        }
+                    }
+                    // para el caso de la columna fechas
+                    if ($columnaAsociada == 'document_date') {
+                        $excel_date = $valor; //here is that value 41621 or 41631
+                        $unix_date = ($excel_date - 25569) * 86400;
+                        $excel_date = 25569 + ($unix_date / 86400);
+                        $unix_date = ($excel_date - 25569) * 86400;
+                        $valor = gmdate("Y/m/d", $unix_date);
+                    }
 
-                    // aca realizamos la insercion
+                    $valor = addslashes ($valor);
 
+                    $cadenaCampos = $cadenaCampos . "`" . $columnaAsociada . "`,";
+                    $cadenaDatos = $cadenaDatos . "'" . $valor . "',";
+                }
+            }
+            $cadenaCampos = substr($cadenaCampos, 0, -1);
+            $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-                   }
-            };
+            $sql = "INSERT INTO pma_migrate_contribuciones ($cadenaCampos) values($cadenaDatos);";
 
+            $sql = $os->db->conn->prepare($sql);
+
+            $code = $sql->errorCode();
+            echo $code;
+
+            $sql->execute();
 
         }
-
+        // FIN CASO BUDGET
 
         echo json_encode(array(
                 "total" => $total,
                 "Sheet" => $sheet,
                 "success" => true,
-                "hoja " =>$fila_cabecera )
+                "hoja " => "real")
+        //"hoja " =>$fila_cabecera )
         );
     } else {
         echo json_encode(array(
@@ -93,8 +120,6 @@ if (isset($_FILES)) {
                 "data" => "")
         );
     }
-
-
 }
 
 
