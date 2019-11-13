@@ -55,7 +55,19 @@ if (isset($_FILES)) {
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();
 
-        migrarPestana ('BUDGET', 'pma_migrate_contribuciones');
+        $sql = "DELETE FROM pma_migrate_detail;";
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+        // REINICIAR LA TABLA
+        $sql = "ALTER TABLE `pma_migrate_detail` AUTO_INCREMENT = 1;";
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+
+        //migrarPestana ('BUDGET', 'pma_migrate_contribuciones');
+
+   migrarPestana ('PRECOMITMENT', 'pma_migrate_detail');
+      /*  migrarPestana ('COMIT', 'pma_migrate_detail');
+        migrarPestana ('ACTUALS', 'pma_migrate_detail');*/
 
         echo json_encode(array(
                 "total" => $total,
@@ -112,19 +124,21 @@ function migrarPestana ($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones')
                 $cadenaDatos = $cadenaDatos . "'" . $valor . "',";
                 // en caso de no se budget agregrar el nombre
 
-
             }
         }
+
         $cadenaCampos = $cadenaCampos . "`tipo`,";
         $cadenaDatos = $cadenaDatos . "'$hoja',";
+
         $cadenaCampos = substr($cadenaCampos, 0, -1);
         $cadenaDatos = substr($cadenaDatos, 0, -1);
 
         $sql = "INSERT INTO $tabla ($cadenaCampos) values($cadenaDatos);";
-
+echo $sql;
         $sql = $os->db->conn->prepare($sql);
 
         $code = $sql->errorCode();
+
         echo $code;
 
         $sql->execute();
