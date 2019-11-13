@@ -1610,8 +1610,8 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                 {name: 'hr_position', allowBlank: true},
                 {name: 'number_months', allowBlank: true},
                 {name: 'number_staff', allowBlank: true},
-                {name: 'monthly_cost_2019', allowBlank: true},
-                {name: 'monthly_cost_2018', allowBlank: true},
+                {name: 'monthly_cost', allowBlank: true},
+                {name: 'monthly_cost', allowBlank: true},
                 {name: 'expected_cost_2019', allowBlank: true},
                 {name: 'without_increase', allowBlank: true},
                 {name: 'increase_2', allowBlank: true},
@@ -1661,7 +1661,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     width: 200,
                     editor: textField
                 }
-                , {header: 'Monthly cost 2018', dataIndex: 'monthly_cost_2018', sortable: true, width: 100}
+                , {header: 'Monthly cost 2018', dataIndex: 'monthly_cost', sortable: true, width: 100}
 
 
             ],

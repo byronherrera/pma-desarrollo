@@ -315,8 +315,8 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 {name: 'starting_month', allowBlank: false},
                 {name: 'end_month', allowBlank: false},
                 //{name: 'number_staff', allowBlank: true},
-                {name: 'monthly_cost_2019', allowBlank: false},
-                // {name: 'monthly_cost_2018', allowBlank: true},
+                {name: 'monthly_cost', allowBlank: false},
+                // {name: 'monthly_cost', allowBlank: true},
                 {name: 'expected_cost_2019', allowBlank: true},
                 {name: 'january', allowBlank: true},
                 {name: 'february', allowBlank: true},
@@ -399,10 +399,10 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                     renderer: rendererEnding_month
                 }
                 // , {header: 'Number staff', dataIndex: 'number_staff', sortable: true, width: 100, editor: textField}
-                // , {header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
+                // , {header: 'Monthly cost', dataIndex: 'monthly_cost', sortable: true, width: 100, editor: textField}
                 , {
                     header: 'Monthly cost',
-                    dataIndex: 'monthly_cost_2019',
+                    dataIndex: 'monthly_cost',
                     sortable: true,
                     width: 100,
                     editor: textField
@@ -470,7 +470,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 {name: 'grade', allowBlank: false},
                 {name: 'index_no', allowBlank: false},
                 {name: 'hr_position', allowBlank: false},
-                {name: 'monthly_cost_2018', allowBlank: false}
+                {name: 'monthly_cost', allowBlank: false}
             ]
         });
 
@@ -507,7 +507,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 , {header: 'HR Description', dataIndex: 'hr_position', sortable: true, width: 150, editor: textField}
                 , {
                     header: 'Monthly cost',
-                    dataIndex: 'monthly_cost_2018',
+                    dataIndex: 'monthly_cost',
                     sortable: true,
                     width: 100,
                     editor: textField
@@ -1472,7 +1472,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             grade: '',
             index_no: '',
             hr_position: '',
-            monthly_cost_2018: 0
+            monthly_cost: 0
         });
         this.gridPayroll.stopEditing();
         this.storePayroll.insert(0, dataPayroll);
@@ -1571,7 +1571,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             grade: '',
             index_no: '',
             hr_position: '',
-            monthly_cost_2018: 0
+            monthly_cost: 0
         });
         this.gridGlCodes.stopEditing();
         this.storeGlCodes.insert(0, dataGlCodes);

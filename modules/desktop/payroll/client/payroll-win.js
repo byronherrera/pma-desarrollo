@@ -224,7 +224,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 //inicio combo HRDescription
                 storeHRDescription = new Ext.data.JsonStore({
                     root: 'data',
-                    fields: ['id', 'hr_position', 'location', 'grade', 'monthly_cost_2018', 'index_no'],
+                    fields: ['id', 'hr_position', 'location', 'grade', 'monthly_cost', 'index_no'],
                     autoLoad: true,
                     url: 'modules/common/combos/combos.php?tipo=hrDescription'
                 });
@@ -577,7 +577,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                         {name: 'grant_number', allowBlank: true},
                         {name: 'starting_month', allowBlank: true},
                         {name: 'end_month', allowBlank: true},
-                        {name: 'monthly_cost_2019', allowBlank: true},
+                        {name: 'monthly_cost', allowBlank: true},
                         {name: 'expected_cost_2019', allowBlank: true},
                         {name: 'january', allowBlank: true},
                         {name: 'february', allowBlank: true},
@@ -642,7 +642,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                         , {header: 'Grant', dataIndex: 'grant_number', sortable: true, width: 150, editor: comboGrantNumber, renderer: costGrantNumber}
                         , {header: 'Starting month', dataIndex: 'starting_month', sortable: true, width: 140, editor: comboStarting_month, renderer: rendererStarting_month}
                         , {header: 'Ending month', dataIndex: 'end_month', sortable: true, width: 140, editor: comboEnding_month, renderer: rendererEnding_month}
-                        , {header: 'Monthly cost', dataIndex: 'monthly_cost_2019', sortable: true, width: 100, editor: textField}
+                        , {header: 'Monthly cost', dataIndex: 'monthly_cost', sortable: true, width: 100, editor: textField}
                         , {header: 'Expected cost', dataIndex: 'expected_cost_2019', sortable: true, width: 100}
                         , {header: 'January', dataIndex: 'january', sortable: true, width: 100, editor: textField}
                         , {header: 'February', dataIndex: 'february', sortable: true, width: 100, editor: textField}
@@ -702,7 +702,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                         {name: 'grade', allowBlank: false},
                         {name: 'index_no', allowBlank: false},
                         {name: 'hr_position', allowBlank: false},
-                        {name: 'monthly_cost_2018', allowBlank: false}
+                        {name: 'monthly_cost', allowBlank: false}
                     ]
                 });
 
@@ -739,7 +739,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                         , {header: 'HR Description', dataIndex: 'hr_position', sortable: true, width: 150, editor: comboHRDescription, renderer: costHRDescription}
                         , {header: 'Grade', dataIndex: 'grade', sortable: true, width: 70, editor: textField}
                         , {header: 'Index-no', dataIndex: 'index_no', sortable: true, width: 60, editor: textField}
-                        , {header: 'Monthly cost',dataIndex: 'monthly_cost_2018',sortable: true,width: 100,editor: textField}
+                        , {header: 'Monthly cost',dataIndex: 'monthly_cost',sortable: true,width: 100,editor: textField}
                     ],
                     viewConfig: {forceFit: false},
                     sm: new Ext.grid.RowSelectionModel({
@@ -1684,7 +1684,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             grade: '',
             index_no: '',
             hr_position: '',
-            monthly_cost_2018: 0
+            monthly_cost: 0
         });
         this.gridPayroll.stopEditing();
         this.storePayroll.insert(0, dataPayroll);
