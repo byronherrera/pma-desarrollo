@@ -1564,7 +1564,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
                         storePlanificacionmicroDetalle.load({
                             params: {
-                                costCodeNuevo2: costCodeNuevo2
+                                costCodeNuevo2: costoMicroSeleccionada
                             }
                         });
 
