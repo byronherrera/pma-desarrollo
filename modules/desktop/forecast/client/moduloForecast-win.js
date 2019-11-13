@@ -2673,7 +2673,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
             buttons: Ext.Msg.YESNO,
             fn: function (btn) {
                 if (btn === 'yes') {
-                    window.location.href = 'modules/desktop/forecast/server/generarHojaRuta.php';
+                    window.location.href = 'modules/desktop/forecast/server/gexºnerarHojaRuta.php';
                     /*setTimeout(function () {
                         AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
                         storeModuloForecast.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});

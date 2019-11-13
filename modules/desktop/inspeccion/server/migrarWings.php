@@ -47,7 +47,7 @@ if (isset($_FILES)) {
 
         // VACIAR LAS TABLAS TEMPORALES
 
-        $sql = "DELETE FROM pma_migrate_contribuciones`;";
+        $sql = "DELETE FROM pma_migrate_contribuciones;";
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();
         // REINICIAR LA TABLA
@@ -55,56 +55,7 @@ if (isset($_FILES)) {
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();
 
-        // CASO BUDGET
-        $hoja = 'BUDGET';
-        $sql = "SELECT * FROM pma_migrate WHERE active  = 1 AND tab_wings = '$hoja'";
-        // obtengo el listado de las columnas a migrar
-        $result = $os->db->conn->query($sql);
-        $columnas = $result->fetchAll(PDO::FETCH_ASSOC);
-
-        $data = $spreadsheet->getSheetByName($hoja)->toArray(null, true, false, true);
-
-        for ($i = 2; $i <= count($data); $i++) {
-            $cadenaDatos = '';
-            $cadenaCampos = '';
-
-            foreach ($data[$i] as $clave => $valor) {
-                if ($valor != '') {
-                    foreach ($columnas as &$columna) {
-                        if (in_array($data[1][$clave], $columna)) {
-                            $columnaAsociada = $columna['table'];
-                            break;
-                        }
-                    }
-                    // para el caso de la columna fechas
-                    if ($columnaAsociada == 'document_date') {
-                        $excel_date = $valor; //here is that value 41621 or 41631
-                        $unix_date = ($excel_date - 25569) * 86400;
-                        $excel_date = 25569 + ($unix_date / 86400);
-                        $unix_date = ($excel_date - 25569) * 86400;
-                        $valor = gmdate("Y/m/d", $unix_date);
-                    }
-
-                    $valor = addslashes ($valor);
-
-                    $cadenaCampos = $cadenaCampos . "`" . $columnaAsociada . "`,";
-                    $cadenaDatos = $cadenaDatos . "'" . $valor . "',";
-                }
-            }
-            $cadenaCampos = substr($cadenaCampos, 0, -1);
-            $cadenaDatos = substr($cadenaDatos, 0, -1);
-
-            $sql = "INSERT INTO pma_migrate_contribuciones ($cadenaCampos) values($cadenaDatos);";
-
-            $sql = $os->db->conn->prepare($sql);
-
-            $code = $sql->errorCode();
-            echo $code;
-
-            $sql->execute();
-
-        }
-        // FIN CASO BUDGET
+        migrarPestana ('BUDGET', 'pma_migrate_contribuciones');
 
         echo json_encode(array(
                 "total" => $total,
@@ -122,6 +73,65 @@ if (isset($_FILES)) {
     }
 }
 
+function migrarPestana ($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones') {
+    // CASO BUDGET
+    global $os;
+    global $spreadsheet;
+    $sql = "SELECT * FROM pma_migrate WHERE active  = 1 AND tab_wings = '$hoja'";
+    // obtengo el listado de las columnas a migrar
+    $result = $os->db->conn->query($sql);
+    $columnas = $result->fetchAll(PDO::FETCH_ASSOC);
+
+    $data = $spreadsheet->getSheetByName($hoja)->toArray(null, true, false, true);
+
+    for ($i = 2; $i <= count($data); $i++) {
+        $cadenaDatos = '';
+        $cadenaCampos = '';
+
+        foreach ($data[$i] as $clave => $valor) {
+            if ($valor != '') {
+                // se busca el nombre de la columna
+                foreach ($columnas as &$columna) {
+                    if (in_array($data[1][$clave], $columna)) {
+                        $columnaAsociada = $columna['table'];
+                        break;
+                    }
+                }
+                // para el caso de la columna fechas
+                if ($columnaAsociada == 'document_date') {
+                    $excel_date = $valor; //here is that value 41621 or 41631
+                    $unix_date = ($excel_date - 25569) * 86400;
+                    $excel_date = 25569 + ($unix_date / 86400);
+                    $unix_date = ($excel_date - 25569) * 86400;
+                    $valor = gmdate("Y/m/d", $unix_date);
+                }
+
+                $valor = addslashes ($valor);
+
+                $cadenaCampos = $cadenaCampos . "`" . $columnaAsociada . "`,";
+                $cadenaDatos = $cadenaDatos . "'" . $valor . "',";
+                // en caso de no se budget agregrar el nombre
+
+
+            }
+        }
+        $cadenaCampos = $cadenaCampos . "`tipo`,";
+        $cadenaDatos = $cadenaDatos . "'$hoja',";
+        $cadenaCampos = substr($cadenaCampos, 0, -1);
+        $cadenaDatos = substr($cadenaDatos, 0, -1);
+
+        $sql = "INSERT INTO $tabla ($cadenaCampos) values($cadenaDatos);";
+
+        $sql = $os->db->conn->prepare($sql);
+
+        $code = $sql->errorCode();
+        echo $code;
+
+        $sql->execute();
+
+    }
+    // FIN CASO BUDGET
+}
 
 function insertParticipantes($url, $idOper)
 {
