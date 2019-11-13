@@ -1634,58 +1634,6 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                                 }
                             ]
                         },
-
-                        // , {
-                        //     title: 'Reports',
-                        //     closable: true,
-                        //     layout: 'border',
-                        //     //disabled: this.app.isAllowedTo('accesosSecretaria', this.id) ? false : true,
-                        //     tbar: [
-                        //         {
-                        //             iconCls: 'reload-icon',
-                        //             handler: this.requestGridDataDocumentoReporte,
-                        //             scope: this,
-                        //             text: 'Buscar'
-                        //         },
-                        //         {
-                        //             iconCls: 'reload-icon',
-                        //             handler: this.requestGridDataDocumentoReporteReset,
-                        //             scope: this,
-                        //             text: 'Borrar formulario'
-                        //
-                        //         },
-                        //         {
-                        //             iconCls: 'excel-icon',
-                        //             handler: this.botonExportarDocumentoReporte,
-                        //             scope: this,
-                        //             text: 'Exportar listado',
-                        //             tooltip: 'Se genera archivo Excel con la información solicitada',
-                        //             id: 'tb_repoteContribucionesGuias',
-                        //         }
-                        //     ],
-                        //     items: [
-                        //         {
-                        //             region: 'north',
-                        //             height: 'auto',
-                        //             minSize: 100,
-                        //             maxSize: 150,
-                        //             closable: true,
-                        //             border: false,
-                        //             autoScroll: false,
-                        //             items: this.formConsultaDocumentos
-                        //         },
-                        //         {
-                        //             region: 'center',
-                        //             split: true,
-                        //             autoScroll: true,
-                        //             height: 300,
-                        //             minSize: 100,
-                        //             maxSize: 150,
-                        //             items: this.gridDocumentosReporte
-                        //         }
-                        //     ]
-                        //     //this.gridReportes
-                        // }
                     ]
                 })
             });
@@ -1773,6 +1721,9 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
     addDetailPayroll: function () {
         var dataDetailPayroll = new this.storeDetailPayroll.recordType({
             id: ' ',
+            so: 0,
+            activity: 0,
+            grant_number: 0,
             starting_month: '',
             end_month: '',
             //   number_staff : '',

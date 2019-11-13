@@ -1099,7 +1099,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         this.gridForecastDetalle = new Ext.grid.EditorGridPanel({
             id: 'gridForecastDetalle',
             xtype: "grid",
-            height: 200,
+            height: winHeight - altoHelp - 22 - 300,
             store: this.storeForecastDetalle,
             columns: [
                 new Ext.grid.RowNumberer(),
@@ -1199,9 +1199,9 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         this.gridCostoMacro = new Ext.grid.EditorGridPanel({
             id: 'gridCostoMacro',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight - altoHelp,
+            height: winHeight - altoHelp - 8,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
-            width: winWidth - anchoHelp,
+            width: winWidth - anchoHelp - 295,
             readOnly: false,
             store: this.storeCostoMacro,
             columns: [
@@ -1337,9 +1337,9 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         this.gridDetalleForecast = new Ext.grid.EditorGridPanel({
             id: 'gridDetalleForecast',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight - altoHelp,
+            height: winHeight - altoHelp - 5,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
-            width: winWidth - anchoHelp,
+            width: winWidth - anchoHelp - 295,
             readOnly: false,
             store: this.storeDetalleForecast,
             columns: [
@@ -1429,9 +1429,9 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         this.gridForecast = new Ext.grid.EditorGridPanel({
             id: 'gridForecast',
             xtype: "grid",
-            height: winHeight - altoHelp,
+            height: winHeight - altoHelp - 22,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
-            width: winWidth - anchoHelp,
+            width: winWidth - anchoHelp - 100,
             store: this.storeForecast,
             columns: [
                 new Ext.grid.RowNumberer(),
@@ -1564,7 +1564,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
 
                         storeForecastDetalle.load({
                             params: {
-                                costCodeNuevo2: costCodeNuevo2
+                                costCodeNuevo2: costoMicroSeleccionada
                             }
                         });
 
@@ -1960,7 +1960,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         this.gridModuloForecast = new Ext.grid.EditorGridPanel({
             id: 'gridModuloForecast',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight - altoHelp,
+            height: winHeight - altoHelp - 20,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
             width: winWidth - anchoHelp,
             store: this.storeModuloForecast,
