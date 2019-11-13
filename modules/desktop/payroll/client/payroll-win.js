@@ -570,14 +570,14 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     idProperty: 'id',
                     root: 'data',
                     fields: [
-                        {name: 'id', allowBlank: false},
-                        {name: 'year', allowBlank: false},
-                        {name: 'so', allowBlank: false},
-                        {name: 'activity', allowBlank: false},
-                        {name: 'grant_number', allowBlank: false},
-                        {name: 'starting_month', allowBlank: false},
-                        {name: 'end_month', allowBlank: false},
-                        {name: 'monthly_cost_2019', allowBlank: false},
+                        {name: 'id', allowBlank: true},
+                        {name: 'year', allowBlank: true},
+                        {name: 'so', allowBlank: true},
+                        {name: 'activity', allowBlank: true},
+                        {name: 'grant_number', allowBlank: true},
+                        {name: 'starting_month', allowBlank: true},
+                        {name: 'end_month', allowBlank: true},
+                        {name: 'monthly_cost_2019', allowBlank: true},
                         {name: 'expected_cost_2019', allowBlank: true},
                         {name: 'january', allowBlank: true},
                         {name: 'february', allowBlank: true},
@@ -636,7 +636,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     columns: [
                         //Definición de campos bdd DetailPayroll
                         new Ext.grid.RowNumberer()
-                        , {header: 'ID', dataIndex: 'id', sortable: true, width: 10, hidden: true, editor: textField}
+                        , {header: 'ID', dataIndex: 'id', sortable: true, width: 10, hidden: true}
                         , {header: 'SO', dataIndex: 'so', sortable: true, width: 80, editor: comboSO, renderer: costSO}
                         , {header: 'Activity', dataIndex: 'activity', sortable: true, width: 120, editor: comboActivities, renderer: costActivities}
                         , {header: 'Grant', dataIndex: 'grant_number', sortable: true, width: 150, editor: comboGrantNumber, renderer: costGrantNumber}
