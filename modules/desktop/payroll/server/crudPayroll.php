@@ -128,14 +128,14 @@ function actualizaDataHR($data)
     $result = $os->db->conn->query($sql);
 
     $row = $result->fetch(PDO::FETCH_ASSOC);
-``
+
     // se compara con los campos
 
-    if ($row['hr_position'] != $data->hr_position)  {
+  /*  if ($row['hr_position'] != $data->hr_position)  {
         return true;
     } else {
         return false;
-    }
+    }*/
 };
 
 function updatePayroll()
