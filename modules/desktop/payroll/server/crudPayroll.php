@@ -100,6 +100,43 @@ function insertPayroll()
     ));
 }
 
+//funcion verifica si el campo HRPosition se va a actualizar con los datos nuevos
+function verificaCambioHRPOSITION($data)
+{
+    global $os;
+    $id = $data->id;
+    // recupero id original,
+    $sql = "SELECT hr_position  FROM  pma_payroll_employees WHERE id = '$id';";
+    $result = $os->db->conn->query($sql);
+
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    // se compara con los campos
+    if ($row['hr_position'] != $data->hr_position)  {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function actualizaDataHR($data)
+{
+    global $os;
+    
+    $sql = "SELECT hr_position  FROM  pma_payroll_employees WHERE id = '$id';";
+    $result = $os->db->conn->query($sql);
+
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    // se compara con los campos
+
+    if ($row['hr_position'] != $data->hr_position)  {
+        return true;
+    } else {
+        return false;
+    }
+};
+
 
 function updatePayroll()
 {
@@ -114,12 +151,12 @@ function updatePayroll()
             $data->despacho_secretaria = 'true';
     }
 
+
     $message = '';
-    if (isset($data->id_tipo_documento)) {
-        if ($data->id_tipo_documento == '1')
-            if (validarCedulaCorreo($data->id)) {
-                $message = 'Ingresar número de cédula y correo electrónico';
-            }
+    if (isset($data->hr_position)) {
+        if (verificaCambioHRPOSITION($data)) {
+            $data = actualizaDataHR($data);
+        }
     }
 
     // genero el listado de valores a insertar
@@ -137,7 +174,8 @@ function updatePayroll()
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_payroll_employees actualizado exitosamente" : $sql->errorCode(),
-        "message" => $message
+        "message" => $message,
+        "data" => $data
     ));
 }
 
