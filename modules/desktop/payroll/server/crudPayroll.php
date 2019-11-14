@@ -122,12 +122,13 @@ function verificaCambioHRPOSITION($data)
 function actualizaDataHR($data)
 {
     global $os;
-    
+    $id = $data->id;
+
     $sql = "SELECT hr_position  FROM  pma_payroll_employees WHERE id = '$id';";
     $result = $os->db->conn->query($sql);
 
     $row = $result->fetch(PDO::FETCH_ASSOC);
-
+``
     // se compara con los campos
 
     if ($row['hr_position'] != $data->hr_position)  {
