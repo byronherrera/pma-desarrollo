@@ -138,6 +138,7 @@ function actualizaDataHR($data)
 };
 
 
+
 function updatePayroll()
 {
     global $os;
