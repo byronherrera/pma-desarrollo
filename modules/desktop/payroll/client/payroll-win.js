@@ -1494,6 +1494,97 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     id: 'panelPrincipal',
                     items: [
                       //Pestaña Payroll
+                      {
+                          autoScroll: true,
+                          title: 'Planification',
+                          closable: true,
+                          layout: 'fit',
+                          height: winHeight - 65
+                          //Llamado a función que arma la tabla de datos
+                          , items: [
+                              {
+                                  layout: 'border',
+                                  // height: winHeight,
+                                  items: [{
+                                      region: 'west',
+                                      id: 'west-panel',
+                                      title: 'Payroll List',
+                                      split: true,
+                                      width: winWidth * 0.3 - 100,
+                                      // minSize: 175,
+                                      // maxSize: 400,
+                                      // collapsible: true,
+                                      // layoutConfig: {
+                                      //     animate: true
+                                      // },
+                                      items: [{
+                                          tbar: [
+                                              //Definición de botón nuevo
+                                              {
+                                                  text: 'New',
+                                                  scope: this,
+                                                  handler: this.addPayroll,
+                                                  iconCls: 'save-icon'
+                                              },
+                                              '-',
+                                              //Definición de botón eliminar
+                                              {
+                                                  text: "Delete",
+                                                  scope: this,
+                                                  handler: this.deletePayroll,
+                                                  iconCls: 'delete-icon'
+                                              },
+                                              '-',
+                                              //Definición de botón regargar datos
+                                              {
+                                                  iconCls: 'reload-icon',
+                                                  handler: this.requestGridDataPayroll,
+                                                  scope: this,
+                                                  text: 'Reload data'
+                                              }
+                                          ],
+                                          //Llamado a función que arma la tabla de datos
+                                          items: this.gridPayroll
+                                      }]
+                                  }, {
+                                      title: 'Payroll Detail',
+                                      region: 'center',
+                                      items: [
+                                          {
+                                              tbar: [
+                                                  //Definición de botón nuevo
+                                                  {
+                                                      text: 'New',
+                                                      scope: this,
+                                                      handler: this.addDetailPayroll,
+                                                      iconCls: 'save-icon'
+                                                  },
+                                                  '-',
+                                                  //Definición de botón eliminar
+                                                  {
+                                                      text: "Delete",
+                                                      scope: this,
+                                                      handler: this.deleteDetailPayroll,
+                                                      iconCls: 'delete-icon'
+                                                  },
+                                                  '-',
+                                                  //Definición de botón regargar datos
+                                                  {
+                                                      iconCls: 'reload-icon',
+                                                      handler: this.requestGridDataDetailPayroll,
+                                                      scope: this,
+                                                      text: 'Reload data'
+                                                  }
+                                              ],
+                                              //Llamado a función que arma la tabla de datos
+                                              items: this.gridDetailPayroll
+                                          }]
+
+
+                                  }]
+                              }
+                          ]
+                        },
                         {
                             autoScroll: true,
                             title: 'Payroll costs',
@@ -1542,97 +1633,6 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                                 // })
                             ],
                             items: this.formContribucionesDetalle
-                        },
-                        {
-                            autoScroll: true,
-                            title: 'Planification',
-                            closable: true,
-                            layout: 'fit',
-                            height: winHeight - 65
-                            //Llamado a función que arma la tabla de datos
-                            , items: [
-                                {
-                                    layout: 'border',
-                                    // height: winHeight,
-                                    items: [{
-                                        region: 'west',
-                                        id: 'west-panel',
-                                        title: 'Payroll List',
-                                        split: true,
-                                        width: winWidth * 0.3 - 100,
-                                        // minSize: 175,
-                                        // maxSize: 400,
-                                        // collapsible: true,
-                                        // layoutConfig: {
-                                        //     animate: true
-                                        // },
-                                        items: [{
-                                            tbar: [
-                                                //Definición de botón nuevo
-                                                {
-                                                    text: 'New',
-                                                    scope: this,
-                                                    handler: this.addPayroll,
-                                                    iconCls: 'save-icon'
-                                                },
-                                                '-',
-                                                //Definición de botón eliminar
-                                                {
-                                                    text: "Delete",
-                                                    scope: this,
-                                                    handler: this.deletePayroll,
-                                                    iconCls: 'delete-icon'
-                                                },
-                                                '-',
-                                                //Definición de botón regargar datos
-                                                {
-                                                    iconCls: 'reload-icon',
-                                                    handler: this.requestGridDataPayroll,
-                                                    scope: this,
-                                                    text: 'Reload data'
-                                                }
-                                            ],
-                                            //Llamado a función que arma la tabla de datos
-                                            items: this.gridPayroll
-                                        }]
-                                    }, {
-                                        title: 'Payroll Detail',
-                                        region: 'center',
-                                        items: [
-                                            {
-                                                tbar: [
-                                                    //Definición de botón nuevo
-                                                    {
-                                                        text: 'New',
-                                                        scope: this,
-                                                        handler: this.addDetailPayroll,
-                                                        iconCls: 'save-icon'
-                                                    },
-                                                    '-',
-                                                    //Definición de botón eliminar
-                                                    {
-                                                        text: "Delete",
-                                                        scope: this,
-                                                        handler: this.deleteDetailPayroll,
-                                                        iconCls: 'delete-icon'
-                                                    },
-                                                    '-',
-                                                    //Definición de botón regargar datos
-                                                    {
-                                                        iconCls: 'reload-icon',
-                                                        handler: this.requestGridDataDetailPayroll,
-                                                        scope: this,
-                                                        text: 'Reload data'
-                                                    }
-                                                ],
-                                                //Llamado a función que arma la tabla de datos
-                                                items: this.gridDetailPayroll
-                                            }]
-
-
-                                    }]
-                                }
-                            ]
                         },
                     ]
                 })
