@@ -223,7 +223,6 @@ function calcularActivitiesTotal($id)
 {
     // aca el calculo
     global $os;
-
     $sql = "SELECT SUM(total_adjusted) as total , 
             (select id_pma_contribuciones_detalle from pma_contribuciones_detalle WHERE id = $id) as id_pma_contribuciones_detalle
             FROM pma_costos_macro where id_pma_costos_macro = $id ";
@@ -233,11 +232,7 @@ function calcularActivitiesTotal($id)
         if (!is_null($row ['total'])){
             $id_pma_contribuciones_detalle = $row ['id_pma_contribuciones_detalle'];
             $total = $row ['total'];
-        } else {
-            $id_pma_contribuciones_detalle = 0;
-            $total = 0;
         }
-
     }
 
     $sql = "UPDATE pma_contribuciones_detalle SET total = $total  WHERE pma_contribuciones_detalle.id = '$id' ";

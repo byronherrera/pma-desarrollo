@@ -208,10 +208,10 @@ function validarCedulaCorreo($id)
 function selectDetalleInspecciones()
 {
     global $os;
-    $id = (int)$_POST ['costCodeNuevo2'];
+    $id = (int)$_POST ['id'];
     if ($id != 0) {
         $os->db->conn->query("SET NAMES 'utf8'");
-        $sql = "SELECT * FROM pma_costos_micro_detalle WHERE pma_costos_micro_detalle.id_pma_costos_micro = $id";
+        $sql = "SELECT * FROM pma_costos_micro_detalle WHERE pma_costos_micro_detalle.id_pma_costos_macro = $id";
         $result = $os->db->conn->query($sql);
         $data = array();
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {

@@ -63,11 +63,12 @@ if (isset($_FILES)) {
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();
 
+        // todo descomentar esta
         //migrarPestana ('BUDGET', 'pma_migrate_contribuciones');
 
-   migrarPestana ('PRECOMITMENT', 'pma_migrate_detail');
-      /*  migrarPestana ('COMIT', 'pma_migrate_detail');
-        migrarPestana ('ACTUALS', 'pma_migrate_detail');*/
+        migrarPestana('PRECOMITMENT', 'pma_migrate_detail');
+        /*  migrarPestana ('COMIT', 'pma_migrate_detail');
+          migrarPestana ('ACTUALS', 'pma_migrate_detail');*/
 
         echo json_encode(array(
                 "total" => $total,
@@ -85,7 +86,8 @@ if (isset($_FILES)) {
     }
 }
 
-function migrarPestana ($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones') {
+function migrarPestana($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones')
+{
     // CASO BUDGET
     global $os;
     global $spreadsheet;
@@ -101,6 +103,7 @@ function migrarPestana ($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones')
         $cadenaCampos = '';
 
         foreach ($data[$i] as $clave => $valor) {
+
             if ($valor != '') {
                 // se busca el nombre de la columna
                 foreach ($columnas as &$columna) {
@@ -109,6 +112,7 @@ function migrarPestana ($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones')
                         break;
                     }
                 }
+                echo $columnaAsociada . "-";
                 // para el caso de la columna fechas
                 if ($columnaAsociada == 'document_date') {
                     $excel_date = $valor; //here is that value 41621 or 41631
@@ -118,7 +122,7 @@ function migrarPestana ($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones')
                     $valor = gmdate("Y/m/d", $unix_date);
                 }
 
-                $valor = addslashes ($valor);
+                $valor = addslashes($valor);
 
                 $cadenaCampos = $cadenaCampos . "`" . $columnaAsociada . "`,";
                 $cadenaDatos = $cadenaDatos . "'" . $valor . "',";
@@ -134,7 +138,7 @@ function migrarPestana ($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones')
         $cadenaDatos = substr($cadenaDatos, 0, -1);
 
         $sql = "INSERT INTO $tabla ($cadenaCampos) values($cadenaDatos);";
-echo $sql;
+        echo $sql;
         $sql = $os->db->conn->prepare($sql);
 
         $code = $sql->errorCode();
@@ -146,36 +150,4 @@ echo $sql;
     }
     // FIN CASO BUDGET
 }
-
-function insertParticipantes($url, $idOper)
-{
-    global $os;
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT COUNT(*) total FROM amc_operativos_imagenes   WHERE url =  '$url';";
-    $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    $id = 0;
-    if ($row['total'] == 0) {
-
-        $vowels = array("[", "]");
-        $url = str_replace($vowels, "", $url);
-
-        $sql = "INSERT INTO amc_operativos_imagenes (id_operativo, url) VALUES ('$idOper', '$url');";
-        $sql = $os->db->conn->prepare($sql);
-        $sql->execute();
-        $id = $os->db->conn->lastInsertId();
-    }
-
-    // genero el nuevo codigo de proceso
-    echo json_encode(array(
-        "success" => true,
-        "msg" => $sql->errorCode() == 0 ? "insertado exitosamente" : $sql->errorCode(),
-        "file" => $_FILES['photo-path']['name'],
-        "data" => $id,
-        "message" => "error"
-    ));
-}
-
-
-
 
