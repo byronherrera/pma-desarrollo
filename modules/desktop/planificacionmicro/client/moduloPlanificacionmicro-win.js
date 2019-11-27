@@ -1100,7 +1100,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         this.gridPlanificacionmicroDetalle = new Ext.grid.EditorGridPanel({
             id: 'gridPlanificacionmicroDetalle',
             xtype: "grid",
-            height: winHeight - altoHelp - 22 - 300,
+            height: 200,
             store: this.storePlanificacionmicroDetalle,
             columns: [
                 new Ext.grid.RowNumberer(),
@@ -1200,9 +1200,9 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         this.gridCostoMacro = new Ext.grid.EditorGridPanel({
             id: 'gridCostoMacro',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight - altoHelp - 8,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
-            width: winWidth - anchoHelp - 295,
+            width: winWidth - anchoHelp,
             readOnly: false,
             store: this.storeCostoMacro,
             columns: [
@@ -1338,9 +1338,9 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         this.gridDetallePlanificacionmicro = new Ext.grid.EditorGridPanel({
             id: 'gridDetallePlanificacionmicro',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight - altoHelp - 5,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
-            width: winWidth - anchoHelp - 295,
+            width: winWidth - anchoHelp,
             readOnly: false,
             store: this.storeDetallePlanificacionmicro,
             columns: [
@@ -1430,9 +1430,9 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         this.gridPlanificacionmicro = new Ext.grid.EditorGridPanel({
             id: 'gridPlanificacionmicro',
             xtype: "grid",
-            height: winHeight - altoHelp - 22,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
-            width: winWidth - anchoHelp - 100,
+            width: winWidth - anchoHelp,
             store: this.storePlanificacionmicro,
             columns: [
                 new Ext.grid.RowNumberer(),
@@ -1961,7 +1961,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         this.gridModuloPlanificacionmicro = new Ext.grid.EditorGridPanel({
             id: 'gridModuloPlanificacionmicro',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight - altoHelp - 20,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
             width: winWidth - anchoHelp,
             store: this.storeModuloPlanificacionmicro,

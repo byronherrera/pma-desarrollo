@@ -209,7 +209,7 @@ function validarCedulaCorreo($id)
 function selectDetalleInspecciones()
 {
     global $os;
-    $id = (int)$_POST ['costCodeNuevo2'];
+    $id = (int)$_POST ['id'];
     if ($id != 0) {
         $os->db->conn->query("SET NAMES 'utf8'");
         $sql = "SELECT * FROM pma_costos_micro_detalle WHERE pma_costos_micro_detalle.id_pma_costos_micro = $id AND is_forecast=1";

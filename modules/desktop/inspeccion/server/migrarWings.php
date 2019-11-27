@@ -63,54 +63,101 @@ if (isset($_FILES)) {
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();
 
-        //migrarPestana ('BUDGET', 'pma_migrate_contribuciones');
+        // preparar archivo
 
-   migrarPestana ('PRECOMITMENT', 'pma_migrate_detail');
-      /*  migrarPestana ('COMIT', 'pma_migrate_detail');
-        migrarPestana ('ACTUALS', 'pma_migrate_detail');*/
+        $error = false;
+        $mensajeError = '';
+        if (prepararArchivoTitulos('BUDGET')) {
+            migrarPestana('BUDGET', 'pma_migrate_contribuciones');
+        } else {
+            $error = true;
+            $mensajeError = $mensajeError ."Error pestania BUDGET";
+        }
 
+        if (prepararArchivoTitulos('PRECOMITMENT'))
+            migrarPestana('PRECOMITMENT', 'pma_migrate_detail');
+        else{
+            $error = true;
+            $mensajeError = $mensajeError . "Error pestania PRECOMITMENT, ";
+        }
+
+        if (prepararArchivoTitulos('COMIT'))
+            migrarPestana('COMIT', 'pma_migrate_detail');
+        else
+        {
+            $error = true;
+            $mensajeError = $mensajeError . "Error pestania COMIT, ";
+        }
+
+        if (prepararArchivoTitulos('ACTUALS')){
+            migrarPestana('ACTUALS', 'pma_migrate_detail');
+        }
+        else
+        {
+            $error = true;
+            $mensajeError = $mensajeError ."Error pestania ACTUALS, ";
+        }
+
+
+    } else {
+        {
+            $error = true;
+            $mensajeError = "Error Archivo";
+        }
+    }
+
+    // imprimimos los resultados
+    if (!$error) {
         echo json_encode(array(
                 "total" => $total,
                 "Sheet" => $sheet,
                 "success" => true,
                 "hoja " => "real")
-        //"hoja " =>$fila_cabecera )
         );
+
     } else {
         echo json_encode(array(
                 "total" => 0,
+                "mensage" => $mensajeError,
                 "success" => false,
                 "data" => "")
         );
     }
+
 }
 
-function migrarPestana ($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones') {
+function migrarPestana($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones')
+{
     // CASO BUDGET
     global $os;
     global $spreadsheet;
     $sql = "SELECT * FROM pma_migrate WHERE active  = 1 AND tab_wings = '$hoja'";
     // obtengo el listado de las columnas a migrar
     $result = $os->db->conn->query($sql);
+    // $colunas almacena estructura de datos con la descripcion de las columnas a usarse
     $columnas = $result->fetchAll(PDO::FETCH_ASSOC);
 
     $data = $spreadsheet->getSheetByName($hoja)->toArray(null, true, false, true);
 
-    for ($i = 2; $i <= count($data); $i++) {
+    for ($i = 2; $i <= (count($data) - 1); $i++) {
         $cadenaDatos = '';
         $cadenaCampos = '';
 
         foreach ($data[$i] as $clave => $valor) {
+
             if ($valor != '') {
                 // se busca el nombre de la columna
                 foreach ($columnas as &$columna) {
                     if (in_array($data[1][$clave], $columna)) {
                         $columnaAsociada = $columna['table'];
+                        $columType = $columna['type'];
                         break;
                     }
                 }
+//                echo "( $columnaAsociada  - $columType ) ";
+
                 // para el caso de la columna fechas
-                if ($columnaAsociada == 'document_date') {
+                if ($columType == 'date') {
                     $excel_date = $valor; //here is that value 41621 or 41631
                     $unix_date = ($excel_date - 25569) * 86400;
                     $excel_date = 25569 + ($unix_date / 86400);
@@ -118,7 +165,7 @@ function migrarPestana ($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones')
                     $valor = gmdate("Y/m/d", $unix_date);
                 }
 
-                $valor = addslashes ($valor);
+                $valor = addslashes($valor);
 
                 $cadenaCampos = $cadenaCampos . "`" . $columnaAsociada . "`,";
                 $cadenaDatos = $cadenaDatos . "'" . $valor . "',";
@@ -134,7 +181,7 @@ function migrarPestana ($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones')
         $cadenaDatos = substr($cadenaDatos, 0, -1);
 
         $sql = "INSERT INTO $tabla ($cadenaCampos) values($cadenaDatos);";
-echo $sql;
+//        echo $sql;
         $sql = $os->db->conn->prepare($sql);
 
         $code = $sql->errorCode();
@@ -147,35 +194,34 @@ echo $sql;
     // FIN CASO BUDGET
 }
 
-function insertParticipantes($url, $idOper)
+
+function prepararArchivoTitulos($hoja = 'PRECOMITMENT')
 {
+    // CASO BUDGET
     global $os;
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT COUNT(*) total FROM amc_operativos_imagenes   WHERE url =  '$url';";
+    global $spreadsheet;
+
+    $sql = "SELECT * FROM pma_migrate WHERE active  = 1 AND tab_wings = '$hoja'";
+    // obtengo el listado de las columnas a migrar
     $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    $id = 0;
-    if ($row['total'] == 0) {
+    // $colunas almacena estructura de datos con la descripcion de las columnas a usarse
 
-        $vowels = array("[", "]");
-        $url = str_replace($vowels, "", $url);
+    //validamos que exista la pestana
 
-        $sql = "INSERT INTO amc_operativos_imagenes (id_operativo, url) VALUES ('$idOper', '$url');";
-        $sql = $os->db->conn->prepare($sql);
-        $sql->execute();
-        $id = $os->db->conn->lastInsertId();
-    }
+    if ($spreadsheet->getSheetByName($hoja)) {
+        while ($columna = $result->fetch(PDO::FETCH_ASSOC)) {
+            $nombreOrden = $columna['orden'];
+            $nameWings = $columna['name_wings'];
 
-    // genero el nuevo codigo de proceso
-    echo json_encode(array(
-        "success" => true,
-        "msg" => $sql->errorCode() == 0 ? "insertado exitosamente" : $sql->errorCode(),
-        "file" => $_FILES['photo-path']['name'],
-        "data" => $id,
-        "message" => "error"
-    ));
+            $datoRecueprado = $spreadsheet->getSheetByName($hoja)->getCell($nombreOrden . '1')->getValue();;
+
+            // en caso que no concuerde la fila se le cambia de nombre
+            if ($datoRecueprado != $nameWings) {
+                $spreadsheet->getSheetByName($hoja)->setCellValue($nombreOrden . '1', $nameWings);
+            }
+
+        }
+        return true;
+    } else
+        return false;
 }
-
-
-
-

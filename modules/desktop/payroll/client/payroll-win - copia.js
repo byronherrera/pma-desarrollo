@@ -786,147 +786,21 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                         gridPayrollSelect = rec;
 
                     },
-                    columns: [
-                        //Definición de campos bdd DetailPayroll
-                        new Ext.grid.RowNumberer()
-                        , {header: 'ID', dataIndex: 'id', sortable: true, width: 10, hidden: true}
-                        , {header: 'SO', dataIndex: 'so', sortable: true, width: 80, editor: comboSO, renderer: costSO}
-                        , {header: 'Activity', dataIndex: 'activity', sortable: true, width: 120, editor: comboActivities, renderer: costActivities}
-                        , {header: 'Grant', dataIndex: 'grant_number', sortable: true, width: 150, editor: comboGrantNumber, renderer: costGrantNumber}
-                        , {header: 'Starting month', dataIndex: 'starting_month', sortable: true, width: 140, editor: comboStarting_month, renderer: rendererStarting_month}
-                        , {header: 'Ending month', dataIndex: 'end_month', sortable: true, width: 140, editor: comboEnding_month, renderer: rendererEnding_month}
-                        , {header: 'Monthly cost', dataIndex: 'monthly_cost', sortable: true, width: 100, editor: textField}
-                        , {header: 'Expected cost', dataIndex: 'expected_cost_2019', sortable: true, width: 100}
-                        , {header: 'January', dataIndex: 'january', sortable: true, width: 100, editor: textField}
-                        , {header: 'February', dataIndex: 'february', sortable: true, width: 100, editor: textField}
-                        , {header: 'March', dataIndex: 'march', sortable: true, width: 100, editor: textField}
-                        , {header: 'April', dataIndex: 'april', sortable: true, width: 100, editor: textField}
-                        , {header: 'May', dataIndex: 'may', sortable: true, width: 100, editor: textField}
-                        , {header: 'June', dataIndex: 'june', sortable: true, width: 100, editor: textField}
-                        , {header: 'July', dataIndex: 'july', sortable: true, width: 100, editor: textField}
-                        , {header: 'August', dataIndex: 'august', sortable: true, width: 100, editor: textField}
-                        , {header: 'September', dataIndex: 'september', sortable: true, width: 100, editor: textField}
-                        , {header: 'October', dataIndex: 'october', sortable: true, width: 100, editor: textField}
-                        , {header: 'November', dataIndex: 'november', sortable: true, width: 100, editor: textField}
-                        , {header: 'December', dataIndex: 'december', sortable: true, width: 100, editor: textField}
-                        , {header: 'Total', dataIndex: 'total', sortable: true, width: 100}
-                    ],
-                    viewConfig: {forceFit: true},
-                    sm: new Ext.grid.RowSelectionModel({
-                        singleSelect: true
-                    }),
-                    border: false,
-                    stripeRows: true,
-                    //Definición de barra de paginado
-                    bbar: new Ext.PagingToolbar({
-                        pageSize: limitePayroll,
-                        store: this.storeDetailPayroll,
-                        displayInfo: true,
-                        displayMsg: 'Showing: {0} - {1} of {2} - PMA',
-                        emptyMsg: "No data to be shown"
-                    })
-                });
-                //Fin formato grid pestaña DetailPayroll
-                //Fin ventana mantenimiento DetailPayroll
-
-
-                //Inicio mantenimiento Payroll
-                //Definición de url CRUD
-                var proxyPayroll = new Ext.data.HttpProxy({
-                    api: {
-                        create: urlPayroll + "crudPayroll.php?operation=insert",
-                        read: urlPayroll + "crudPayroll.php?operation=select",
-                        update: urlPayroll + "crudPayroll.php?operation=update",
-                        destroy: urlPayroll + "crudPayroll.php?operation=delete"
-                    }
-                });
-
-                //Definición de lectura de campos bdd Payroll
-                var readerPayroll = new Ext.data.JsonReader({
-                    successProperty: 'success',
-                    messageProperty: 'message',
-                    idProperty: 'id',
-                    root: 'data',
-                    fields: [
-                        {name: 'id', allowBlank: false},
-                        {name: 'id_pma_payroll', allowBlank: false},
-                        {name: 'location', allowBlank: false},
-                        {name: 'name', allowBlank: false},
-                        {name: 'grade', allowBlank: false},
-                        {name: 'index_no', allowBlank: false},
-                        {name: 'hr_position', allowBlank: false},
-                        {name: 'monthly_cost', allowBlank: false}
-                    ]
-                });
-
-                //Definición de escritura en campos bdd Payroll
-                var writerPayroll = new Ext.data.JsonWriter({
-                    encode: true,
-                    writeAllFields: true
-                });
-
-                //Definición de store para pestaña Payroll
-                this.storePayroll = new Ext.data.Store({
-                    id: 'storePayroll',
-                    proxy: proxyPayroll,
-                    reader: readerPayroll,
-                    writer: writerPayroll,
-                    autoSave: true
-                    //, baseParams: {limit: limitePayroll}
-                });
-                //Carga de datos al levantarse la pantalla
-
-
-                //Inicio formato grid pestaña Payroll
-                this.gridPayroll = new Ext.grid.EditorGridPanel({
-                    height: winHeight - 120,
-                    store: this.storePayroll,
-                    id:'gridPayroll',
-                    columns: [
-                        //Definición de campos bdd Payroll
-                        new Ext.grid.RowNumberer()
-                        , {header: 'ID', dataIndex: 'id', sortable: true, hidden: true, width: 10}
-                        , {header: 'id_pma_payroll', dataIndex: 'id_pma_payroll', sortable: true, hidden: true, width: 10}
-                        , {header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
-                        , {header: 'Name', dataIndex: 'name', sortable: true, width: 100, editor: textField}
-                        , {header: 'HR Description', dataIndex: 'hr_position', sortable: true, width: 150, editor: comboHRDescription, renderer: costHRDescription}
-                        , {header: 'Grade', dataIndex: 'grade', sortable: true, width: 70, editor: textField}
-                        , {header: 'Index-no', dataIndex: 'index_no', sortable: true, width: 60, editor: textField}
-                        , {header: 'Monthly cost',dataIndex: 'monthly_cost',sortable: true,width: 100,editor: textField}
-                    ],
-                    viewConfig: {forceFit: false},
-                    sm: new Ext.grid.RowSelectionModel({
-                        singleSelect: true,
-                        listeners: {
-                            rowselect: function (sm, row, rec) {
-                                // recuperamos la informacion de ese payroll
-                                selectedPayroll = rec.id;
-                                storeDetailPayroll.baseParams.id = selectedPayroll;
-                                storeDetailPayroll.load();
-                                if (cambioCombo){
-                                    cambioCombo = false;
-                                    record= this.gridPayroll.store.getAt (row);
-                                    record.set('index_no', '666')
-                                }
-                            }
-                        }
-                    }),
-                    border: false,
-                    stripeRows: true,
-                    //Definición de barra de paginado
-                    bbar: new Ext.PagingToolbar({
-                        pageSize: limitePayroll,
-                        store: this.storePayroll,
-                        displayInfo: true,
-                        displayMsg: 'Showing: {0} - {1} of {2} - PMA',
-                        emptyMsg: "No data to be shown"
-                    })
-                });
-
-                // loadPayrollGrid();
-                this.storePayroll.load();
-                //Fin formato grid pestaña Payroll
-                //Fin ventana mantenimiento Payroll
+                }
+            }),
+            border: false,
+            stripeRows: true,
+            //Definición de barra de paginado
+            bbar: new Ext.PagingToolbar({
+                pageSize: limitePayroll,
+                store: this.storePayroll,
+                displayInfo: true,
+                displayMsg: 'Showing: {0} - {1} of {2} - PMA',
+                emptyMsg: "No data to be shown"
+            })
+        });
+        //Fin formato grid pestaña Payroll
+        //Fin ventana mantenimiento Payroll
 
 
         var proxyContribuciones = new Ext.data.HttpProxy({
@@ -1440,7 +1314,8 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 emptyMsg: "No contributions to be shown"
             }),
         });
-        // fin datastore and datagrid in GuiaZFV
+        // fin datastore and datagrid in Guia
+
 
         var win = desktop.getWindow('layout-win');
 
@@ -1850,16 +1725,6 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
 
         setTimeout(function () {
             this.storeContribuciones.load({
-                params: {
-                    start: 0,
-                    limit: limitePayroll,
-                    // noenviados: Ext.getCmp('checkNoEnviados').getValue()
-                }
-            });
-        }, 500);
-
-        setTimeout(function () {
-            this.storePayroll.load({
                 params: {
                     start: 0,
                     limit: limitePayroll,

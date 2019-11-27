@@ -13,10 +13,10 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
 
     createWindow: function () {
         var accesosAdministrador = this.app.isAllowedTo('accesosAdministrador', this.id);
-        var accesosMacro= this.app.isAllowedTo('accesosMacro', this.id);
-        var accesosMicro = this.app.isAllowedTo('accesosMicro', this.id);
+        var accesosSecretaria = this.app.isAllowedTo('accesosSecretaria', this.id);
+        var accesosZonales = this.app.isAllowedTo('accesosZonales', this.id);
 
-        var acceso = (accesosAdministrador || accesosMacro) ? true : false
+        var acceso = (accesosAdministrador || accesosSecretaria || accesosZonales) ? true : false
 
         var desktop = this.app.getDesktop();
         var AppMsg = new Ext.AppMsg({});
@@ -584,22 +584,19 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     header: 'Grant Number CSP',
                     dataIndex: 'grant_number',
                     sortable: true,
-                    width: 38,
-                    editor: textField
+                    width: 38
                 },
                 {
                     header: 'Estado',
                     dataIndex: 'estado',
                     sortable: true,
-                    width: 28,
-                    editor: textField
+                    width: 28
                 },
                 {
                     header: 'CRN',
                     dataIndex: 'crn',
                     sortable: true,
-                    width: 28,
-                    editor: textField
+                    width: 28
                 },
                 {
                     header: 'Donor',
@@ -914,7 +911,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                     scope: this,
                                     handler: this.addcontribuciones,
                                     iconCls: 'save-icon',
-                                    disabled: !acceso,
+                                    disabled: !acceso
                                 },
                                 '-',
                                 {
@@ -923,7 +920,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                     handler: this.deletecontribuciones,
                                     iconCls: 'delete-icon',
                                     //disabled: this.app.isAllowedTo('accesosAdministrador', this.id) ? false : true
-                                    disabled: !acceso,
+                                    disabled: false
                                 },
                                 '-',
                                 {
@@ -1014,7 +1011,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                             title: 'Reports',
                             closable: true,
                             layout: 'border',
-                            //disabled: this.app.isAllowedTo('accesosMacro', this.id) ? false : true,
+                            //disabled: this.app.isAllowedTo('accesosSecretaria', this.id) ? false : true,
                             tbar: [
                                 {
                                     iconCls: 'reload-icon',

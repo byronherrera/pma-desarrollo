@@ -276,7 +276,7 @@ function comboHRDescription()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id,hr_position, location, grade, index_no, monthly_cost FROM pma_payroll ORDER BY id";
+    $sql = "SELECT id,hr_position, location, grade, index_no, monthly_cost_2018 FROM pma_payroll ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {

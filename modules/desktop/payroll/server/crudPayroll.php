@@ -112,7 +112,7 @@ function verificaCambioHRPOSITION($data)
     $row = $result->fetch(PDO::FETCH_ASSOC);
 
     // se compara con los campos
-    if ($row['hr_position'] != $data->hr_position) {
+    if ($row['hr_position'] != $data->hr_position)  {
         return true;
     } else {
         return false;
@@ -122,24 +122,21 @@ function verificaCambioHRPOSITION($data)
 function actualizaDataHR($data)
 {
     global $os;
-    $id = $data->id;
-    $id_hr_position = $data->hr_position;
-
-    $sql = "SELECT *  FROM  pma_payroll WHERE id = '$id_hr_position';";
-    //echo $sql;
-
+    
+    $sql = "SELECT hr_position  FROM  pma_payroll_employees WHERE id = '$id';";
     $result = $os->db->conn->query($sql);
+
     $row = $result->fetch(PDO::FETCH_ASSOC);
 
-    $data->location = $row ['location'];
-    $data->grade = $row ['grade'];
-    $data->index_no = $row ['index_no'];
-    $data->monthly_cost = $row ['monthly_cost'];
+    // se compara con los campos
 
-    return $data;
-}
+    if ($row['hr_position'] != $data->hr_position)  {
+        return true;
+    } else {
+        return false;
+    }
+};
 
-;
 
 function updatePayroll()
 {

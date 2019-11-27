@@ -6,43 +6,35 @@
  *
  * http://www.qwikioffice.com/license
  */
-
 class config {
-
    /**
     * Begin editable code.
     * Update the following with your information.
     */
-
    /**
     * Domain url
     */
    public $DOMAIN = 'www.qwikioffice.com';
-
    /**
     * Email address
     */
    public $EMAIL = 'byronherrera@hotmail.com';
-
    /**
     * Database connection
     * Using PHP Data Objects (PDO)
     */
- 
-   public $DB_CONN_STRING = 'mysql:dbname=procesos-amc;host=localhost';
+  
   // public $DB_CONN_STRING = 'mysql:dbname=amc-seguimiento;host=localhost';
+   public $DB_CONN_STRING = 'mysql:dbname=pma_desarrollo;host=localhost';
    public $DB_USERNAME = 'root';
    public $DB_PASSWORD = '111111';
 
-
    public $URLBASE = 'http://172.20.136.71:8080/amc-procesos/';
- 
-
    
    /**
     * Login url
     */
-   public $LOGIN_URL = 'login.php';
+    public $LOGIN_URL = 'login.php';
 
    /**
     * PDO error mode
@@ -79,6 +71,7 @@ class config {
     *
     * @access public
     */
+ 
    public function __construct(){
       // set error reporting
       switch($this->error_reporting){

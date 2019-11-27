@@ -1100,7 +1100,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         this.gridForecastDetalle = new Ext.grid.EditorGridPanel({
             id: 'gridForecastDetalle',
             xtype: "grid",
-            height: winHeight - altoHelp - 22 - 300,
+            height: 200,
             store: this.storeForecastDetalle,
             columns: [
                 new Ext.grid.RowNumberer(),
@@ -1200,9 +1200,9 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         this.gridCostoMacro = new Ext.grid.EditorGridPanel({
             id: 'gridCostoMacro',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight - altoHelp - 8,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
-            width: winWidth - anchoHelp - 295,
+            width: winWidth - anchoHelp,
             readOnly: false,
             store: this.storeCostoMacro,
             columns: [
@@ -1338,9 +1338,9 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         this.gridDetalleForecast = new Ext.grid.EditorGridPanel({
             id: 'gridDetalleForecast',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight - altoHelp - 5,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
-            width: winWidth - anchoHelp - 295,
+            width: winWidth - anchoHelp,
             readOnly: false,
             store: this.storeDetalleForecast,
             columns: [
@@ -1431,9 +1431,9 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         this.gridForecast = new Ext.grid.EditorGridPanel({
             id: 'gridForecast',
             xtype: "grid",
-            height: winHeight - altoHelp - 22,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
-            width: winWidth - anchoHelp - 100,
+            width: winWidth - anchoHelp,
             store: this.storeForecast,
             columns: [
                 new Ext.grid.RowNumberer(),
@@ -1566,7 +1566,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
 
                         storeForecastDetalle.load({
                             params: {
-                                costCodeNuevo2: costoMicroSeleccionada
+                                costCodeNuevo2: costCodeNuevo2
                             }
                         });
 
@@ -1612,8 +1612,8 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                 {name: 'hr_position', allowBlank: true},
                 {name: 'number_months', allowBlank: true},
                 {name: 'number_staff', allowBlank: true},
-                {name: 'monthly_cost', allowBlank: true},
-                {name: 'monthly_cost', allowBlank: true},
+                {name: 'monthly_cost_2019', allowBlank: true},
+                {name: 'monthly_cost_2018', allowBlank: true},
                 {name: 'expected_cost_2019', allowBlank: true},
                 {name: 'without_increase', allowBlank: true},
                 {name: 'increase_2', allowBlank: true},
@@ -1663,7 +1663,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     width: 200,
                     editor: textField
                 }
-                , {header: 'Monthly cost 2018', dataIndex: 'monthly_cost', sortable: true, width: 100}
+                , {header: 'Monthly cost 2018', dataIndex: 'monthly_cost_2018', sortable: true, width: 100}
 
 
             ],
@@ -1962,7 +1962,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         this.gridModuloForecast = new Ext.grid.EditorGridPanel({
             id: 'gridModuloForecast',
             //Calculo de tamaño vertical frame superior de pestaña Trámites pendientes
-            height: winHeight - altoHelp - 20,
+            height: winHeight - altoHelp,
             //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
             width: winWidth - anchoHelp,
             store: this.storeModuloForecast,
