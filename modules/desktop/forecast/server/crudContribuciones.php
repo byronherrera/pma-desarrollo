@@ -99,7 +99,7 @@ function selectContribuciones()
     // }
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
+    $sql = "SELECT * FROM pma_contribuciones WHERE is_forecast=1 $where $orderby LIMIT $start, $limit";
 //    $sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
 
     $result = $os->db->conn->query($sql);
@@ -108,7 +108,7 @@ function selectContribuciones()
         $data[] = $row;
     };
 
-    $sql = "SELECT count(*) AS total FROM pma_contribuciones $where";
+    $sql = "SELECT count(*) AS total FROM pma_contribuciones WHERE is_forecast=1 $where";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     $total = $row['total'];
@@ -127,7 +127,7 @@ function insertDenuncias()
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
-    // $data->despacho_secretaria = 'false';
+    $data->is_forecast=1;
     // $data->codigo_tramite = generaCodigoProcesoDenuncia();
     // $data->id_persona = $os->get_member_id();
     // $data->id_zonal_origen = $os->get_zonal_id();

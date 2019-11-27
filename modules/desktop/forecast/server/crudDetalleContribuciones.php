@@ -27,7 +27,8 @@ function selectDetalleInspecciones()
     $orderby = 'ORDER BY id DESC';
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_contribuciones_detalle WHERE $where  $orderby ";
+    $sql = "SELECT * FROM pma_contribuciones_detalle WHERE is_forecast=1 AND $where  ";
+    // echo $sql;
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -46,7 +47,7 @@ function calcularTotal($id)
     // aca el calculo
     global $os;
 
-    $sql = "SELECT SUM(total_adjusted) as total  FROM pma_costos_macro where id_pma_costos_macro = $id ";
+    $sql = "SELECT SUM(total_adjusted) as total  FROM pma_costos_macro where id_pma_costos_macro = $id AND is_forecast=1";
     $result = $os->db->conn->query($sql);
     $total = 0;
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -113,6 +114,7 @@ function insertDetalleInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
     $data->id = generaCodigoProcesoOrdenanza();
+    $data->is_forecast=1;
     // $data->id_inspeccion = generaNuevoCodigoInspeccion();
     //$data->fecha_recepcion_documento = date('Y-m-d H:i:s');
     //genero el listado de nombre de campos
@@ -191,7 +193,6 @@ function updateDetalleInspecciones()
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
-
     // if (isset($data->despacho_secretaria)) {
     //     if (!$data->despacho_secretaria)
     //         $data->despacho_secretaria = 'false';
@@ -228,7 +229,7 @@ function updateDetalleInspecciones()
     // cambioEstadoAsignacion ($data->funcionario_entrega, $data->id);
     // cambioEstadoReasignacion ($data->funcionario_reasignacion, $data->id);
 
-    $sql = "UPDATE pma_contribuciones_detalle SET  $cadenaDatos  WHERE pma_contribuciones_detalle.id = '$data->id' ";
+    $sql = "UPDATE pma_contribuciones_detalle SET  $cadenaDatos  WHERE pma_contribuciones_detalle.id = '$data->id' AND pma_contribuciones_detalle.is_forecast=1";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 

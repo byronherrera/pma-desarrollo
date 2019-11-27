@@ -12,7 +12,7 @@ function calcularTotal($id)
     // aca el calculo
     global $os;
 
-    $sql = "SELECT SUM(total_after_adjust) as total  FROM pma_costos_micro where id = $id ";
+    $sql = "SELECT SUM(total_after_adjust) as total  FROM pma_costos_micro where is_forecast=1 AND id = $id ";
     $result = $os->db->conn->query($sql);
     $total = 0;
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -45,7 +45,7 @@ function selectDetalleInspecciones()
     $orderby = 'ORDER BY id DESC';
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_costos_micro WHERE $where  $orderby ";
+    $sql = "SELECT * FROM pma_costos_micro WHERE is_forecast=1 AND $where  $orderby ";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -113,6 +113,7 @@ function insertDetalleInspecciones()
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
+    $data->is_forecast=1;
     $data->id = generaCodigoProcesoOrdenanza();
     // $data->id_inspeccion = generaNuevoCodigoInspeccion();
     //$data->fecha_recepcion_documento = date('Y-m-d H:i:s');

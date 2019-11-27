@@ -76,6 +76,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //incio variables visualizacion
         var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
         var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 10});
+        var textField20 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 20});
 
         var anio = new Ext.ux.form.SpinnerField({
             fieldLabel: 'Year',
@@ -1134,7 +1135,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     renderer: 'usMoney',
                     editor: textField
                 },
-                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 200, editor: textField},
+                {header: 'Description', dataIndex: 'comment', hidden: false, width: 200, editor: textField},
                 {
                     header: 'Total adjusted',
                     dataIndex: 'total_adjusted',
@@ -1506,15 +1507,15 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'description_micro',
                     sortable: true,
                     width: 200,
-                    editor: textField
+                    editor: textField20
                 },
                 {
-                    header: 'Total micro',
+                    header: 'Total Planned',
                     dataIndex: 'total_micro',
                     sortable: true,
                     width: 100,
                     renderer: 'usMoney',
-                    editor: textField
+                    editor: textField20
                 },
                 {
                     header: 'Adjust',
@@ -1522,7 +1523,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 100,
                     renderer: 'usMoney',
-                    editor: textField
+                    editor: textField20
                 },
                 {
                     header: 'Total after adjustment',
@@ -1558,7 +1559,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                             }
                         });
                         // aca se carga el micro cost detail step 5
-                        costoMicroSeleccionada = rec.data['id'];
+                        // costoMicroSeleccionada = rec.data['id'];
                         console.log (costoMicroSeleccionada);
 
 
@@ -2078,12 +2079,14 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     },
                                     layout: 'column',
                                     autoScroll: true,
-                                    items: [{
-                                        columnWidth: 1,
-                                        baseCls: 'x-plain',
-                                        bodyStyle: 'padding:0 0 0 0',
-                                        items: this.gridPayroll
-                                    }]
+                                    items: [
+                                    //   {
+                                    //     columnWidth: 1,
+                                    //     baseCls: 'x-plain',
+                                    //     bodyStyle: 'padding:0 0 0 0',
+                                    //     items: this.gridPayroll
+                                    // }
+                                  ]
                                 },
                                 {
                                     region: 'center',
@@ -2603,7 +2606,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addMicroDetalle: function () {
         var inspeccion = new this.storePlanificacionmicroDetalle.recordType({
-            id_pma_costos_micro: costoMacroSeleccionada,
+            id_pma_costos_micro: costoMicroSeleccionada,
             total: 0,
             adjust: 0,
             comment: '',

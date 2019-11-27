@@ -76,6 +76,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         //incio variables visualizacion
         var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
         var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 10});
+        var textField20 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 20});
 
         var anio = new Ext.ux.form.SpinnerField({
             fieldLabel: 'Year',
@@ -1134,7 +1135,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     renderer: 'usMoney',
                     editor: textField
                 },
-                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 200, editor: textField},
+                {header: 'Description', dataIndex: 'comment', hidden: false, width: 200, editor: textField},
                 {
                     header: 'Total adjusted',
                     dataIndex: 'total_adjusted',
@@ -1218,7 +1219,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'cost_code',
                     sortable: true,
                     width: 250,
-                    // editor: comboCOSTPARENTDET,
+                    editor: comboCOSTPARENTDET,
                     renderer: costparentAdmDet
                 },
                 // {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
@@ -1228,7 +1229,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     hidden: false,
                     width: 150,
                     renderer: 'usMoney',
-                    // editor: textField
+                    editor: textField
                 },
 
                 {
@@ -1237,9 +1238,9 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     hidden: false,
                     width: 150,
                     renderer: 'usMoney',
-                    // editor: textField
+                    editor: textField
                 },
-                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 200},
+                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 200, editor: textField},
                 {
                     header: 'Total adjusted',
                     dataIndex: 'total_adjusted',
@@ -1283,7 +1284,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                         costoMacroSeleccionada = rec.id;
 
                         // fin actualizar combo
-                        Ext.getCmp('paso4').expand();
+                        // Ext.getCmp('paso4').expand();
                         Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs - " + costparentAdmDet(rec.data['cost_code']) + " - Total: " + rec.data['total_adjusted']);
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
 
@@ -1344,7 +1345,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
             store: this.storeDetalleForecast,
             columns: [
                 new Ext.grid.RowNumberer(),
-                {header: 'Year', dataIndex: 'year', hidden: false, width: 100},
+                {header: 'Year', dataIndex: 'year', hidden: false, width: 100, editor: textField},
                 {
                     header: 'id_pma_contribuciones_detalle',
                     dataIndex: 'id_pma_contribuciones_detalle',
@@ -1356,7 +1357,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'so',
                     sortable: true,
                     width: 125,
-                    // editor: comboSO,
+                    editor: comboSO,
                     renderer: costSO
                 },
                 {
@@ -1364,7 +1365,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'activity',
                     sortable: true,
                     width: 129,
-                    // editor: comboActivities,
+                    editor: comboActivities,
                     renderer: costActivities
                 },
                 {header: 'Total Planned', dataIndex: 'total_planned', renderer: 'usMoney', width: 100, align: 'right', editor: textField},
@@ -1381,8 +1382,9 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     rowselect: function (sm, row, rec) {
                         // recuperamos la informacion de personal asignado a ese operativo
                         select_SO = rec.id;
+                        // alert(rec.id);
                         storeCostoMacro.load({params: {id: rec.id}});
-                        Ext.getCmp('paso3').expand();
+                        // Ext.getCmp('paso3').expand();
                         Ext.getCmp('paso2').setTitle("Step 2 - Activities - " + costSO(rec.data['so']) + " - " + costActivities(rec.data['activity']) + " - Total: " + rec.data['total']);
                         Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
@@ -1506,10 +1508,10 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'description_micro',
                     sortable: true,
                     width: 200,
-                    editor: textField
+                    editor: textField20
                 },
                 {
-                    header: 'Total micro',
+                    header: 'Total Planned',
                     dataIndex: 'total_micro',
                     sortable: true,
                     width: 100,
@@ -1522,7 +1524,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 100,
                     renderer: 'usMoney',
-                    editor: textField
+                    editor: textField20
                 },
                 {
                     header: 'Total after adjustment',
@@ -1558,7 +1560,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                             }
                         });
                         // aca se carga el micro cost detail step 5
-                        costoMicroSeleccionada = rec.data['id'];
+                        // costoMicroSeleccionada = rec.data['id'];
                         console.log (costoMicroSeleccionada);
 
 
@@ -2037,11 +2039,11 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
             win = desktop.createWindow({
                 id: 'grid-win-moduloForecast',
                 //Definición del título de la ventana
-                title: 'MICRO PLANIFICATION',
+                title: 'FORECAST',
                 //Definición de tamaños de la ventana
                 width: winWidth,
                 height: winHeight,
-                iconCls: 'mantenimiento-icon',
+                iconCls: 'forecast-icon',
                 shim: false,
                 animCollapse: false,
                 constrainHeader: true,
@@ -2078,12 +2080,14 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                                     },
                                     layout: 'column',
                                     autoScroll: true,
-                                    items: [{
-                                        columnWidth: 1,
-                                        baseCls: 'x-plain',
-                                        bodyStyle: 'padding:0 0 0 0',
-                                        items: this.gridPayroll
-                                    }]
+                                    items: [
+                                    //   {
+                                    //     columnWidth: 1,
+                                    //     baseCls: 'x-plain',
+                                    //     bodyStyle: 'padding:0 0 0 0',
+                                    //     items: this.gridPayroll
+                                    // }
+                                  ]
                                 },
                                 {
                                     region: 'center',
@@ -2101,7 +2105,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                                                 text: 'New',
                                                 scope: this,
                                                 handler: this.addModuloForecast,
-                                                disabled: true,
+                                                disabled: false,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
@@ -2110,7 +2114,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                                                 text: "Delete",
                                                 scope: this,
                                                 handler: this.deleteModuloForecast,
-                                                disabled: true,
+                                                disabled: false,
                                                 //disabled: !creacionTramites,
                                                 iconCls: 'delete-icon'
                                             },
@@ -2124,26 +2128,36 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                                             },
                                             '-',
                                             {
-                                                xtype: 'checkbox',
-                                                boxLabel: 'Filter',
-                                                id: 'checkPendientesAprobar',
-                                                name: 'pendientesAprobar',
-                                                checked: accesosSecretaria,
-                                                inputValue: '1',
-                                                tooltip: 'Reload data',
-                                                //disabled: !acceso,
-                                                cls: 'barramenu',
-                                                handler: function (checkbox, isChecked) {
-                                                    //Ext.getCmp('tb_repoteDenuncias').setDisabled(!this.checked);
-                                                    //Ext.getCmp('tb_seleccionarUnidad').setDisabled(!this.checked);
-                                                    //Ext.getCmp('tb_seleccionarUnidad').getValue();
-                                                    //storeDenuncias.load({params: {noenviados: isChecked}});
-                                                    storeModuloForecast.baseParams = {
-                                                        pendientesAprobar: isChecked
-                                                    };
-                                                    storeModuloForecast.load();
-                                                }
+                                                text: "Move Data",
+                                                scope: this,
+                                                handler: this.botonTransferirDatos,
+                                                id: 'movedata',
+                                                iconCls: 'subir-icon',
+                                                //disabled: this.app.isAllowedTo('accesosAdministradorOpe', this.id) ? false : true
+                                                disabled: false
                                             },
+                                            // '-',
+                                            // {
+                                            //     xtype: 'checkbox',
+                                            //     boxLabel: 'Filter',
+                                            //     id: 'checkPendientesAprobar',
+                                            //     name: 'pendientesAprobar',
+                                            //     checked: accesosSecretaria,
+                                            //     inputValue: '1',
+                                            //     tooltip: 'Reload data',
+                                            //     //disabled: !acceso,
+                                            //     cls: 'barramenu',
+                                            //     handler: function (checkbox, isChecked) {
+                                            //         //Ext.getCmp('tb_repoteDenuncias').setDisabled(!this.checked);
+                                            //         //Ext.getCmp('tb_seleccionarUnidad').setDisabled(!this.checked);
+                                            //         //Ext.getCmp('tb_seleccionarUnidad').getValue();
+                                            //         //storeDenuncias.load({params: {noenviados: isChecked}});
+                                            //         storeModuloForecast.baseParams = {
+                                            //             pendientesAprobar: isChecked
+                                            //         };
+                                            //         storeModuloForecast.load();
+                                            //     }
+                                            // },
                                             '-',
                                             '->'
                                             , {
@@ -2171,7 +2185,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                                                 text: 'New',
                                                 scope: this,
                                                 handler: this.addDetalleForecast,
-                                                disabled: true,
+                                                disabled: false,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
@@ -2181,7 +2195,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                                                 text: "Delete",
                                                 scope: this,
                                                 handler: this.deleteDetalleForecast,
-                                                disabled: true,
+                                                disabled: false,
                                                 iconCls: 'delete-icon'
                                             },
                                             '-',
@@ -2211,7 +2225,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                                                 text: 'New',
                                                 scope: this,
                                                 handler: this.addCostoMacro,
-                                                disabled: true,
+                                                disabled: false,
                                                 iconCls: 'save-icon'
                                             },
                                             '-',
@@ -2221,7 +2235,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                                                 text: "Delete",
                                                 scope: this,
                                                 handler: this.deleteCostoMacro,
-                                                disabled: true,
+                                                disabled: false,
                                                 iconCls: 'delete-icon'
                                             },
                                             '-',
@@ -2603,7 +2617,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addMicroDetalle: function () {
         var inspeccion = new this.storeForecastDetalle.recordType({
-            id_pma_costos_micro: costoMacroSeleccionada,
+            id_pma_costos_micro: costoMicroSeleccionada,
             total: 0,
             adjust: 0,
             comment: '',
@@ -2682,6 +2696,50 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                 }
             }
         });
-    }
+    },
+
+    // cc boton transferir datos
+    botonTransferirDatos: function () {
+        Ext.Msg.show({
+            title: 'Warning',
+            msg: 'The migration will overwrite the previous information<br><br>Do you wish to continue?',
+            scope: this,
+            icon: Ext.Msg.WARNING,
+            buttons: Ext.Msg.YESNO,
+            fn: function (btn) {
+                if (btn == 'yes') {
+                    //                window.location.href = 'modules/desktop/inspeccion/server/migrarWings.php';
+                    //                setTimeout(function () {
+                    //                    AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
+                    //                    storeModuloContribution.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
+                    //                }, 1500);
+                    if (Ext.getCmp('movedata').getForm().isValid()) {
+                        Ext.getCmp('movedata').getForm().submit({
+                            url: 'modules/desktop/forecast/server/migrarDatosForecast.php',
+                            waitMsg: 'Moving data ...',
+                            //params: {data: selectOperativos},
+                            success: function (movedata, o) {
+
+
+                                Ext.getCmp('movedata').getForm().reset();
+                            },
+                            failure: function (form, action) {
+                                //var errorJson = JSON.parse(action.response.responseText);
+                                /*Ext.Msg.show({
+                                    title: 'Error '
+                                    , msg: errorJson.msg
+                                    , modal: true
+                                    , icon: Ext.Msg.ERROR
+                                    , buttons: Ext.Msg.OK
+                                });*/
+                            }
+
+                        });
+                    }
+
+                }
+            }
+        });
+    },
 
 });

@@ -638,6 +638,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 singleSelect: true,
                 listeners: {
                     rowselect: function (sm, row, rec) {
+
                         // recuperamos la informacion de personal asignado a ese operativo
                         selectContribuciones = rec.id;
 
@@ -654,7 +655,10 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                             Ext.getCmp('gridDetalleInspeccion').setVisible(true);
                         }
                         //
+                     
                         storeCostoMacro.load({params: {id: 0}});
+                        // storeCostoMacro.load({params: {id: -133}});
+
                     }
                 }
             }),

@@ -723,7 +723,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 });
                 //Carga de datos al levantarse la pantalla
 
-                this.storePayroll.load();
+
                 //Inicio formato grid pestaña Payroll
                 this.gridPayroll = new Ext.grid.EditorGridPanel({
                     height: winHeight - 120,
@@ -769,6 +769,9 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                         emptyMsg: "No data to be shown"
                     })
                 });
+
+                // loadPayrollGrid();
+                this.storePayroll.load();
                 //Fin formato grid pestaña Payroll
                 //Fin ventana mantenimiento Payroll
 
@@ -1284,8 +1287,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 emptyMsg: "No contributions to be shown"
             }),
         });
-        // fin datastore and datagrid in Guia
-
+        // fin datastore and datagrid in GuiaZFV
 
         var win = desktop.getWindow('layout-win');
 
@@ -1643,6 +1645,16 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
 
         setTimeout(function () {
             this.storeContribuciones.load({
+                params: {
+                    start: 0,
+                    limit: limitePayroll,
+                    // noenviados: Ext.getCmp('checkNoEnviados').getValue()
+                }
+            });
+        }, 500);
+
+        setTimeout(function () {
+            this.storePayroll.load({
                 params: {
                     start: 0,
                     limit: limitePayroll,

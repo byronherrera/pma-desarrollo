@@ -27,7 +27,8 @@ function selectDetalleInspecciones()
     $orderby = 'ORDER BY id DESC';
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_costos_macro WHERE $where  $orderby ";
+    $sql = "SELECT * FROM pma_costos_macro WHERE is_forecast=1 AND $where  $orderby ";
+    // echo $sql;
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -92,6 +93,7 @@ function insertDetalleInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
     $data->fecha_registro = date('Y-m-d H:i:s');
+    $data->is_forecast=1;
     //genero el listado de nombre de campos
 
     $cadenaDatos = '';

@@ -33,8 +33,13 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         }else{
           var textField = new Ext.form.TextField({allowBlank: false, readOnly: true});
         }
-        alert(textField);
-        var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 10});
+        // alert(acceso);
+
+        if(acceso){
+          var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 10});
+        }else{
+          var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: true, maxLength: 10});
+        }
 
         var anio = new Ext.ux.form.SpinnerField({
             fieldLabel: 'Year',
@@ -320,7 +325,10 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     header: 'CRN',
                     dataIndex: 'crn',
                     width: 28,
-                    editor: textField
+                    editor: function(){
+                      if(!acceso)
+                        return textField
+                    }
                 },
                 {
                     header: 'Fund',

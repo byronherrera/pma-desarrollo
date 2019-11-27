@@ -14,6 +14,7 @@ function insertDetalleInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
     $data->fecha_registro = date('Y-m-d H:i:s');
+    $data->is_forecast=1;
     //genero el listado de nombre de campos
 
     $cadenaDatos = '';
@@ -211,7 +212,8 @@ function selectDetalleInspecciones()
     $id = (int)$_POST ['costCodeNuevo2'];
     if ($id != 0) {
         $os->db->conn->query("SET NAMES 'utf8'");
-        $sql = "SELECT * FROM pma_costos_micro_detalle WHERE pma_costos_micro_detalle.id_pma_costos_micro = $id";
+        $sql = "SELECT * FROM pma_costos_micro_detalle WHERE pma_costos_micro_detalle.id_pma_costos_micro = $id AND is_forecast=1";
+        // echo $sql;
         $result = $os->db->conn->query($sql);
         $data = array();
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -230,6 +232,9 @@ function updateDetalleInspeccionesForm()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
+
+    $data = json_decode($_POST["data"]);
+    $data->total_adjusted = $data->total + $data->adjust;
 
     $id = $_POST["id"];
     $nombre = $_POST["nombre"];
