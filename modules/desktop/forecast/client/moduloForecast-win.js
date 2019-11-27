@@ -105,6 +105,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
             }
             return val;
         }
+
         //fin variables visualizacion
 
         //Inicio Combos
@@ -133,6 +134,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         function costStatus(id) {
             return id;
         }
+
         //fin combo Status
 
         //inicio combo grant
@@ -160,6 +162,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         function costGrant(id) {
             return id
         }
+
         //fin combo GRANT
         //fin combos
 
@@ -736,13 +739,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         //fin combo tipo documento  TID
 
 
-
-
-
-
         //fin combo Razon Devolucion
-
-
 
 
         //inicio combo caracter del tramite CDT
@@ -799,8 +796,6 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                 ]
             }
         });
-
-
 
 
         //inicio combo aprobación secretaría inspección
@@ -878,10 +873,6 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         }
 
 
-
-
-
-
         //inicio combo activo
 
         storeOFAC = new Ext.data.JsonStore({
@@ -910,10 +901,6 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                 ]
             }
         });
-
-
-
-
 
 
         /*        //inicio combo PARROQUIA
@@ -962,13 +949,6 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
             triggerAction: 'all',
             mode: 'local'
         });
-
-
-
-
-
-
-
 
 
         function caracterTramite(id) {
@@ -1036,13 +1016,6 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         });*/
 
 
-
-
-
-
-
-
-
         var checkHandler = function (item, checked) {
             if (checked) {
                 var store = this.storeContribuciones;
@@ -1077,7 +1050,6 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         });
 
 
-
         // this.storeDetalleForecast.load();
         //  this.storeCostoMacro.load();
         // this.storeForecast.load();
@@ -1093,8 +1065,6 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         limiteModuloForecast = 100;
         var anchoHelp = 43;
         var altoHelp = 210;
-
-
 
 
         this.gridForecastDetalle = new Ext.grid.EditorGridPanel({
@@ -1368,8 +1338,23 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     editor: comboActivities,
                     renderer: costActivities
                 },
-                {header: 'Total Planned', dataIndex: 'total_planned', renderer: 'usMoney', width: 100, align: 'right', editor: textField},
-                {header: 'Total macro', dataIndex: 'total', hidden: false, renderer: valueColor, renderer: 'usMoney', align: 'right', width: 150},
+                {
+                    header: 'Total Planned',
+                    dataIndex: 'total_planned',
+                    renderer: 'usMoney',
+                    width: 100,
+                    align: 'right',
+                    editor: textField
+                },
+                {
+                    header: 'Total macro',
+                    dataIndex: 'total',
+                    hidden: false,
+                    renderer: valueColor,
+                    renderer: 'usMoney',
+                    align: 'right',
+                    width: 150
+                },
 
             ],
             viewConfig: {
@@ -1561,7 +1546,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                         });
                         // aca se carga el micro cost detail step 5
                         // costoMicroSeleccionada = rec.data['id'];
-                        console.log (costoMicroSeleccionada);
+                        console.log(costoMicroSeleccionada);
 
 
                         storeForecastDetalle.load({
@@ -2026,7 +2011,6 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
         //Fin ventana forecast
 
 
-
         //Creación variable ventana
         var win = desktop.getWindow('layout-win');
 
@@ -2081,13 +2065,13 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                                     layout: 'column',
                                     autoScroll: true,
                                     items: [
-                                    //   {
-                                    //     columnWidth: 1,
-                                    //     baseCls: 'x-plain',
-                                    //     bodyStyle: 'padding:0 0 0 0',
-                                    //     items: this.gridPayroll
-                                    // }
-                                  ]
+                                        //   {
+                                        //     columnWidth: 1,
+                                        //     baseCls: 'x-plain',
+                                        //     bodyStyle: 'padding:0 0 0 0',
+                                        //     items: this.gridPayroll
+                                        // }
+                                    ]
                                 },
                                 {
                                     region: 'center',
@@ -2713,29 +2697,22 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     //                    AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
                     //                    storeModuloContribution.load({params: {noenviados: Ext.getCmp('checkPendientesAprobar').getValue()}});
                     //                }, 1500);
-                    if (Ext.getCmp('movedata').getForm().isValid()) {
-                        Ext.getCmp('movedata').getForm().submit({
-                            url: 'modules/desktop/forecast/server/migrarDatosForecast.php',
-                            waitMsg: 'Moving data ...',
-                            //params: {data: selectOperativos},
-                            success: function (movedata, o) {
+
+                    Ext.Ajax.request({
+                        url: 'modules/desktop/forecast/server/migrarDatosForecast.php',
+                        waitMsg: 'Moving data ...',
+                        success: function(response, opts) {
+                           // var obj = Ext.decode(response.responseText);
+                           // console.dir(obj);
+                        },
+                        failure: function(response, opts) {
+                            console.log('server-side failure with status code ');
+                            alert ("errir")
+                        }
+                    });
 
 
-                                Ext.getCmp('movedata').getForm().reset();
-                            },
-                            failure: function (form, action) {
-                                //var errorJson = JSON.parse(action.response.responseText);
-                                /*Ext.Msg.show({
-                                    title: 'Error '
-                                    , msg: errorJson.msg
-                                    , modal: true
-                                    , icon: Ext.Msg.ERROR
-                                    , buttons: Ext.Msg.OK
-                                });*/
-                            }
 
-                        });
-                    }
 
                 }
             }

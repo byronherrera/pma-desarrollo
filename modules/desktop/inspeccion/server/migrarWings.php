@@ -36,8 +36,8 @@ if (isset($_FILES)) {
 
         $spreadsheet = IOFactory::load($inputFileName);
 
-        $spreadsheet->getSheetByName('BUDGET');
-        $spreadsheet->setActiveSheetIndexByName('BUDGET');
+        $spreadsheet->getSheetByName('Hoja1');
+        $spreadsheet->setActiveSheetIndexByName('Hoja1');
         $spreadsheet->getActiveSheet();
 
         $sheet = $spreadsheet->getActiveSheet()->getTitle();
@@ -67,13 +67,13 @@ if (isset($_FILES)) {
 
         $error = false;
         $mensajeError = '';
-        if (prepararArchivoTitulos('BUDGET')) {
-            migrarPestana('BUDGET', 'pma_migrate_contribuciones');
+        if (prepararArchivoTitulos('Hoja1')) {
+            migrarPestana('Hoja1', 'pma_migrate_contribuciones');
         } else {
             $error = true;
             $mensajeError = $mensajeError ."Error pestania BUDGET";
         }
-
+/*
         if (prepararArchivoTitulos('PRECOMITMENT'))
             migrarPestana('PRECOMITMENT', 'pma_migrate_detail');
         else{
@@ -97,7 +97,7 @@ if (isset($_FILES)) {
             $error = true;
             $mensajeError = $mensajeError ."Error pestania ACTUALS, ";
         }
-
+*/
 
     } else {
         {
@@ -126,7 +126,7 @@ if (isset($_FILES)) {
 
 }
 
-function migrarPestana($hoja = 'BUDGET', $tabla = 'pma_migrate_contribuciones')
+function migrarPestana($hoja = 'Hoja1', $tabla = 'pma_migrate_contribuciones')
 {
     // CASO BUDGET
     global $os;
