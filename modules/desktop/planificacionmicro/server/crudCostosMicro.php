@@ -18,12 +18,14 @@ function calcularTotal($id)
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
 
         if (!is_null($row ['total']))
-        $total = $row ['total'];
+            $total = $row ['total'];
 
     }
 
     return $total;
-};
+}
+
+;
 
 function selectDetalleInspecciones()
 {
@@ -53,10 +55,10 @@ function selectDetalleInspecciones()
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-      $total = calcularTotal($row['id']);
+        $total = calcularTotal($row['id']);
 
-      // echo $row['id'];
-      $row['total_micro'] = $total;
+        // echo $row['id'];
+        $row['total_micro'] = $total;
         $data[] = $row;
     }
     echo json_encode(array(
@@ -65,7 +67,7 @@ function selectDetalleInspecciones()
     );
 }
 
-function    selectDetalleTodasInspecciones()
+function selectDetalleTodasInspecciones()
 {
     global $os;
     //Se inicializa el parámetro de búsqueda de código trámite
@@ -197,8 +199,8 @@ function updateDetalleInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
     // calculo el valor de total en base de amount - adjust
-     $data->total_after_adjust = $data->total_micro + $data->adjust;
-     // if (isset($data->despacho_secretaria)) {
+    $data->total_after_adjust = $data->total_micro + $data->adjust;
+    // if (isset($data->despacho_secretaria)) {
     //     if (!$data->despacho_secretaria)
     //         $data->despacho_secretaria = 'false';
     //     else
@@ -239,20 +241,20 @@ function updateDetalleInspecciones()
     $sql->execute();
 
 
-
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_micro actualizado exitosamente" : $sql->errorCode(),
         "message" => $message,
         "data" => $data,
-        "total" => totalCostosMicro ($data->id_pma_costos_micro)
+        "total" => totalCostosMicro($data->id_pma_costos_micro)
     ));
 
 
 }
 
 
-function totalCostosMicro ($id) {
+function totalCostosMicro($id)
+{
     // aca el calculo
     global $os;
 
@@ -268,14 +270,16 @@ function totalCostosMicro ($id) {
 
     return $total;
 }
-function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
+
+function cambioEstadoAsignacion($id_asignacion, $idInspeccion)
+{
     global $os;
     // en caso de que sea una reasignacion entonces se cambia de estado
-    if (!is_null($id_asignacion) AND $id_asignacion != ''){
+    if (!is_null($id_asignacion) AND $id_asignacion != '') {
 
         // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
 
-        if ( verificaAnteriorReasignacion ($id_asignacion, $idInspeccion)) {
+        if (verificaAnteriorReasignacion($id_asignacion, $idInspeccion)) {
             $sql = "UPDATE `pma_costos_micro` SET `estado_asignacion` = 1 WHERE `id` = $idInspeccion";
             $sql = $os->db->conn->prepare($sql);
             $sql->execute();
@@ -283,26 +287,28 @@ function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
     }
 }
 
-function verificaAnteriorAsignacion ($id_reasignacion, $idInspeccion) {
+function verificaAnteriorAsignacion($id_reasignacion, $idInspeccion)
+{
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT funcionario_entrega FROM  `pma_costos_micro` WHERE  id = $idInspeccion";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
-    if ($row['funcionario_entrega'] === $id_reasignacion )
+    if ($row['funcionario_entrega'] === $id_reasignacion)
         return false;
     else
         return true;
 }
 
-function cambioEstadoReasignacion ($id_reasignacion, $idInspeccion ) {
+function cambioEstadoReasignacion($id_reasignacion, $idInspeccion)
+{
     global $os;
     // en caso de que sea una reasignacion entonces se cambia de estado
-    if (!is_null($id_reasignacion) AND $id_reasignacion != ''){
+    if (!is_null($id_reasignacion) AND $id_reasignacion != '') {
 
         // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
 
-        if ( verificaAnteriorReasignacion ($id_reasignacion, $idInspeccion)) {
+        if (verificaAnteriorReasignacion($id_reasignacion, $idInspeccion)) {
             $sql = "UPDATE `pma_costos_micro` SET `estado_asignacion` = 3 WHERE `id` = $idInspeccion";
             $sql = $os->db->conn->prepare($sql);
             $sql->execute();
@@ -311,13 +317,14 @@ function cambioEstadoReasignacion ($id_reasignacion, $idInspeccion ) {
     }
 }
 
-function verificaAnteriorReasignacion ($id_reasignacion, $idInspeccion) {
+function verificaAnteriorReasignacion($id_reasignacion, $idInspeccion)
+{
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT funcionario_reasignacion FROM  `pma_costos_micro` WHERE  id = $idInspeccion";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
-    if ($row['funcionario_reasignacion'] === $id_reasignacion )
+    if ($row['funcionario_reasignacion'] === $id_reasignacion)
         return false;
     else
         return true;
@@ -383,13 +390,12 @@ function updateDetalleInspeccionesForm()
     $orden = $_POST["orden"];
 
     /*codigo_tramite='$codigo_tramite',*/
-    $sql = "UPDATE pma_costos_micro SET
+    $sql = "UPDATE pma_costos_micro SET 
             id = '$id',
             nombre = $nombre,
             nombre_completo = $nombre_completo,
             activo = $activo,
             orden = $orden
-
 
           WHERE id = '$id' ";
     $sql = $os->db->conn->prepare($sql);
@@ -406,7 +412,7 @@ function deleteDetalleInspecciones()
     $id = json_decode(stripslashes($_POST["data"]));
 
     // se valida que no existan registros en la tabla hija
-    if (validaRelacion ($id, 'pma_costos_micro', 'id_pma_costos_micro', 'pma_costos_micro_detalle')){
+    if (validaRelacion($id,  'id_pma_costos_micro', 'pma_costos_micro_detalle')) {
         $sql = "DELETE FROM pma_costos_micro WHERE id = $id";
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();
@@ -417,18 +423,14 @@ function deleteDetalleInspecciones()
 
     } else {
         echo json_encode(array(
-            "success" => $sql->errorCode() == 0,
-            "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_micro, eliminado exitosamente" : $sql->errorCode()
+            "success" => false,
+            "msg" => "Error tiene detalle"
         ));
 
     }
 }
 
 
-function validaRelacion ($id, $tablaPadre = 'pma_costos_micro', $idTablaHija = 'id_pma_costos_micro', $tablaHija ='pma_costos_micro_detalle')
-{
-return true;
-}
 
 switch ($_GET['operation']) {
     case 'select' :
