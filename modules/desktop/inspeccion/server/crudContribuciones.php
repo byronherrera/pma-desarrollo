@@ -106,6 +106,7 @@ function selectContribuciones()
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $row;
+        // $data->total_contribution = $data->isc + $data->total_grant;
     };
 
     $sql = "SELECT count(*) AS total FROM pma_contribuciones $where";
@@ -143,6 +144,9 @@ function insertDenuncias()
     }
     $cadenaCampos = substr($cadenaCampos, 0, -1);
     $cadenaDatos = substr($cadenaDatos, 0, -1);
+    //Calculo automáticamente el total de la contribución que es la suma entre isc y total grant
+    $data->total_contribution = $data->total_grant + $data->isc;
+    $data->total_unprogrammed = $data->total_contribution - $data->total_programmed;
 
     $sql = "INSERT INTO pma_contribuciones($cadenaCampos)
 	values($cadenaDatos);";
@@ -231,13 +235,21 @@ function updateDenuncias()
     // }
 
     // if ($grabar) {
+    // echo ($data->id);
+    //Calculo automáticamente el total de la contribución que es la suma entre isc y total grant
+    $data->total_contribution = $data->total_grant + $data->isc;
+    $data->total_unprogrammed = $data->total_contribution - $data->total_programmed;
         $sql = "UPDATE pma_contribuciones SET  $cadenaDatos  WHERE pma_contribuciones.id = '$data->id' ";
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();
+// calcularTotalGrantPlusISC ($data->id);
+
+
         echo json_encode(array(
             "success" => $sql->errorCode() == 0,
             "msg" => $sql->errorCode() == 0 ? $message : $sql->errorCode(),
-            "message" => $message
+            "message" => $message,
+            "data" => array($data)
         ));
     // } else {
     //     echo json_encode(array(

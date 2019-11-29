@@ -22,7 +22,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var accesosSupervision = this.app.isAllowedTo('accesosSupervision', this.id); //Solo modo lectura
 
         this.selectContribuciones = 0;
-        this.select_SO = 0;
+        // this.select_SO = 0;
 
         //Control en caso de tener asignado el perfil de administrador
         if (accesosCoordinadorInspeccion && accesosSecretaria && accesosInspectores && accesosSupervision == true) {
@@ -255,7 +255,15 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             autoSave: true, // dependiendo de si se tiene acceso para grabar
             //remoteSort: true,
             //baseParams: {}
-            baseParams: {id: contribucionSeleccionada}
+            baseParams: {id: contribucionSeleccionada},
+            listeners: {
+                write: function (proxy, action, result, res, rs) {
+                  // console.log("result",result);
+                  // console.log("res",res);
+                  console.log("rs",rs.data['id']);
+                    select_SO = rs.data['id'];
+                }
+            }
         });
 
         this.storeCostoMacro = new Ext.data.Store({
@@ -481,30 +489,47 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             var columns = [
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'Grant Numbersss',
+                    header: 'Alert',
+                    dataIndex: 'id_contribucion',
+                    // id: 'id_contribucion',
+                    width: 12,
+                    // editor: textField10,
+                    renderer: function (value, metaData, record, row, col, store, gridView) {
+                        // si estado es cerrado retorna amarillo
+                        recuperaEstado = record.get('estado');
+                        // grant_number = record.get('grant_number');
+                        // alert('ps',this);
+                        // if (grant_number.length > 10) {
+                        //     alert('ps',grant_number.length);
+                        // }
+                        // si la fecha esta proxima a su vencimiento 30 dias
+                        fecha_actual = new Date();
+                        var diff = Math.abs(record.get('grant_tdd') - fecha_actual) / 3600000 / 24;
+
+                        if (recuperaEstado === 'Closed') {
+                            return '<span class="circleBase goldstate"></span>';
+                        }
+
+                        // regresa diff en dias
+                        else if (diff < intervalo1) {
+                            return '<span class="circleBase redstate"></span>';
+                        }
+                        // si la fecha esta proxima a su vencimiento 60 dias
+                        else if (diff < intervalo2) {
+                            return '<span class="circleBase bluestate"></span>';
+                        }
+                        else{
+                            return '<span class="circleBase whitestate"></span>';
+                        }
+                        return value
+                    }
+                },
+                {
+                    header: 'Grant Number',
                     dataIndex: 'grant_number',
                     id: 'grant_number',
                     width: 38,
                     editor: textField10,
-                    renderer: function (value, metaData, record, row, col, store, gridView) {
-                        // si estado es cerrado retorna amarillo
-                        recuperaEstado = record.get('estado');
-                        if (recuperaEstado === 'Closed') {
-                            return '<span class="circleBase goldstate"></span>' + value;
-                        }
-                        // si la fecha esta proxima a su vencimiento 30 dias
-                        fecha_actual = new Date();
-                        var diff = Math.abs(record.get('grant_tdd') - fecha_actual) / 3600000 / 24;
-                        // regresa diff en dias
-                        if (diff < intervalo1) {
-                            return '<span class="circleBase redstate"></span>' + value;
-                        }
-                        // si la fecha esta proxima a su vencimiento 60 dias
-                        if (diff < intervalo2) {
-                            return '<span class="circleBase bluestate"></span>' + value;
-                        }
-                        return value
-                    }
                 },
                 {
                     header: 'CRN',

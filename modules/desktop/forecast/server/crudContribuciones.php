@@ -101,7 +101,7 @@ function selectContribuciones()
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT * FROM pma_contribuciones WHERE is_forecast=1 $where $orderby LIMIT $start, $limit";
 //    $sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
-
+    // echo $sql;
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {

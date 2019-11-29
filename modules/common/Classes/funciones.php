@@ -199,20 +199,35 @@ function generaCodigoProcesoDenuncia()
 }
 
 
-function calcularContribucionesTotal ($id)
+function calcularContribucionesTotal ($id=0)
 {
     // aca el calculo
     global $os;
-    $sql = "SELECT SUM(total) as total  
+    $sql = "SELECT SUM(total) as total
                 FROM pma_contribuciones_detalle where id_pma_contribuciones_detalle = $id ";
     $result = $os->db->conn->query($sql);
     $total = 0;
+    // echo ($sql);
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         if (!is_null($row ['total']))
             $total = $row ['total'];
     }
 
+    $sql = "UPDATE pma_contribuciones SET total_contribution = total_grant + isc  WHERE `id` = $id";
+    $sql = $os->db->conn->prepare($sql);
+    $sql->execute();
+
     $sql = "UPDATE pma_contribuciones SET total_programmed = $total, total_unprogrammed = total_grant - $total WHERE `id` = $id";
+    $sql = $os->db->conn->prepare($sql);
+    $sql->execute();
+    return 1;
+}
+
+function calcularTotalGrantPlusISC ($id)
+{
+    // aca el calculo
+    global $os;
+    $sql = "UPDATE pma_contribuciones SET total_contribution = total_grant + isc  WHERE `id` = $id";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
@@ -223,11 +238,12 @@ function calcularActivitiesTotal($id)
 {
     // aca el calculo
     global $os;
-    $sql = "SELECT SUM(total_adjusted) as total , 
+    $sql = "SELECT SUM(total_adjusted) as total ,
             (select id_pma_contribuciones_detalle from pma_contribuciones_detalle WHERE id = $id) as id_pma_contribuciones_detalle
             FROM pma_costos_macro where id_pma_costos_macro = $id ";
     $result = $os->db->conn->query($sql);
     $total = 0;
+    $id_pma_contribuciones_detalle = 0;
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         if (!is_null($row ['total'])){
             $id_pma_contribuciones_detalle = $row ['id_pma_contribuciones_detalle'];

@@ -47,8 +47,9 @@ if (!$os->session_exists()) {
     //
     //     // VACIAR LAS TABLAS TEMPORALES
 
-        $sql = "SELECT * FROM pma_contribuciones;";
-        echo $sql;
+        $sql = "INSERT INTO pma_contribuciones (id_contribucion,	grant_number,	estado,	crn,	donor,	fund,	comments,	year_contribution,	isc,	total_grant,	total_contribution,	total_programmed,	total_unprogrammed,	grant_tod,	grant_tdd,	grant_specific,	activity,	recepcion_documento, is_forecast)
+SELECT id_contribucion,	grant_number,	estado,	crn,	donor,	fund,	comments,	year_contribution,	isc,	total_grant,	total_contribution,	total_programmed,	total_unprogrammed,	grant_tod,	grant_tdd,	grant_specific,	activity,	recepcion_documento, 0 FROM pma_contribuciones WHERE is_forecast=1;";
+        // echo $sql;
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();
    //      // REINICIAR LA TABLA
