@@ -415,6 +415,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {name: 'adjust', allowBlank: false},
                 {name: 'comment', allowBlank: false},
                 {name: 'total_adjusted', allowBlank: false},
+                {name: 'pr_microcosts', allowBlank: false},
+                {name: 'sub_pr_microcosts', allowBlank: false},
+                {name: 'po_microcosts', allowBlank: false},
+                {name: 'sub_po_microcosts', allowBlank: false},
                 {name: 'fecha_registro', type: 'date', dateFormat: 'c', allowBlank: true}
 
             ]
@@ -1129,6 +1133,38 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     width: 150,
                     renderer: 'usMoney',
                     // editor: textField
+                },
+                {
+                    header: 'PR',
+                    dataIndex: 'pr_microcosts',
+                    hidden: false,
+                    width: 150,
+                    // renderer: 'usMoney',
+                    editor: textField
+                },
+                {
+                    header: 'SUB PR',
+                    dataIndex: 'sub_pr_microcosts',
+                    hidden: false,
+                    width: 150,
+                    // renderer: 'usMoney',
+                    editor: textField
+                },
+                {
+                    header: 'PO',
+                    dataIndex: 'po_microcosts',
+                    hidden: false,
+                    width: 150,
+                    // renderer: 'usMoney',
+                    editor: textField
+                },
+                {
+                    header: 'SUB PO',
+                    dataIndex: 'sub_po_microcosts',
+                    hidden: false,
+                    width: 150,
+                    // renderer: 'usMoney',
+                    editor: textField
                 },
 
                 {
@@ -2602,6 +2638,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             adjust: 0,
             comment: '',
             total_adjusted: 0,
+            pr_microcosts: '',
+            sub_pr_microcosts: '',
+            po_microcosts: '',
+            sub_po_microcosts: '',
             fecha_registro: (new Date()),
         });
         this.gridPlanificacionmicroDetalle.stopEditing();
