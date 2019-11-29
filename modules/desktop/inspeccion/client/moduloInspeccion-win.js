@@ -834,7 +834,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     editor: comboActivities,
                     renderer: costActivities
                 },
-                {header: 'Total Planned', dataIndex: 'total_planned', renderer: 'usMoney', width: 100, align: 'right', editor: textField},
+                {
+                    header: 'Total Planned',
+                    dataIndex: 'total_planned',
+                    renderer: 'usMoney',
+                    width: 100,
+                    align: 'right',
+                    editor: textField
+                },
                 {header: 'Total macro', dataIndex: 'total', renderer: 'usMoney', width: 90, align: 'right'}
             ],
             viewConfig: {
@@ -1026,7 +1033,17 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                     text: "Upload Excel File",
                                     scope: this,
                                     handler: this.botonImportarWings,
-                                    id: 'subirimagen',
+                                    id: 'uploadFiles',
+                                    iconCls: 'subir-icon',
+                                    //disabled: this.app.isAllowedTo('accesosAdministradorOpe', this.id) ? false : true
+                                    disabled: false
+                                },
+                                '-',
+                                {
+                                    text: "Migrate Data",
+                                    scope: this,
+                                    handler: this.botonMigrateData,
+                                    id: 'porcesarArchivos',
                                     iconCls: 'subir-icon',
                                     //disabled: this.app.isAllowedTo('accesosAdministradorOpe', this.id) ? false : true
                                     disabled: false
@@ -1444,6 +1461,35 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
                         });
                     }
+
+                }
+            }
+        });
+    },
+    // bh boton migrar informacion wings
+    botonMigrateData: function () {
+        Ext.Msg.show({
+            title: 'Warning',
+            msg: 'The migration will overwrite the previous information<br><br>Do you wish to continue?',
+            scope: this,
+            icon: Ext.Msg.WARNING,
+            buttons: Ext.Msg.YESNO,
+            fn: function (btn) {
+                if (btn == 'yes') {
+
+                    Ext.Ajax.request({
+                        url: 'modules/desktop/inspeccion/server/migrarData.php',
+                        waitMsg: 'Moving data ...',
+                        success: function(response, opts) {
+                            // var obj = Ext.decode(response.responseText);
+                            // console.dir(obj);
+                        },
+                        failure: function(response, opts) {
+                            console.log('server-side failure with status code ');
+                            alert ("errir")
+                        }
+                    });
+
 
                 }
             }
