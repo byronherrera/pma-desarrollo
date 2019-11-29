@@ -122,8 +122,8 @@ function verificaCambioHRPOSITION($data)
 function actualizaDataHR($data)
 {
     global $os;
-    
-    $sql = "SELECT hr_position  FROM  pma_payroll_employees WHERE id = '$id';";
+
+    $sql = "SELECT hr_position  FROM  pma_payroll_employees WHERE id = $data->id;";
     $result = $os->db->conn->query($sql);
 
     $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -144,20 +144,21 @@ function updatePayroll()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
 
-    if (isset($data->despacho_secretaria)) {
-        if (!$data->despacho_secretaria)
-            $data->despacho_secretaria = 'false';
-        else
-            $data->despacho_secretaria = 'true';
-    }
+    // if (isset($data->despacho_secretaria)) {
+    //     if (!$data->despacho_secretaria)
+    //         $data->despacho_secretaria = 'false';
+    //     else
+    //         $data->despacho_secretaria = 'true';
+    // }
 
 
     $message = '';
-    if (isset($data->hr_position)) {
-        if (verificaCambioHRPOSITION($data)) {
-            $data = actualizaDataHR($data);
-        }
-    }
+    // if (isset($data->hr_position)) {
+    //     if (verificaCambioHRPOSITION($data)) {
+    //         print_r($data);
+    //         $data = actualizaDataHR($data);
+    //     }
+    // }
 
     // genero el listado de valores a insertar
     $cadenaDatos = '';

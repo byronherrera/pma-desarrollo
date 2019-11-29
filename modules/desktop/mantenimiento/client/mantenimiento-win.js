@@ -364,7 +364,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
         //Inicio formato grid pestaña DetailPayroll
         this.gridDetailPayroll = new Ext.grid.EditorGridPanel({
             id: 'gridDetailPayroll',
-            height: winHeight - 124,
+            height: winHeight,
             store: this.storeDetailPayroll,
             listeners: {
                 beforeedit: function(o) {
@@ -470,7 +470,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 {name: 'grade', allowBlank: false},
                 {name: 'index_no', allowBlank: false},
                 {name: 'hr_position', allowBlank: false},
-                {name: 'monthly_cost_2018', allowBlank: false}
+                {name: 'monthly_cost', allowBlank: false}
             ]
         });
 
@@ -501,15 +501,15 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                 //Definición de campos bdd Payroll
                 new Ext.grid.RowNumberer()
                 , {header: 'ID', dataIndex: 'id', sortable: true, hidden: true, width: 10}
-                , {header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
-                , {header: 'Grade', dataIndex: 'grade', sortable: true, width: 70, editor: textField}
-                , {header: 'Index-no', dataIndex: 'index_no', sortable: true, width: 60, editor: textField}
-                , {header: 'HR Description', dataIndex: 'hr_position', sortable: true, width: 150, editor: textField}
+                // , {header: 'Location', dataIndex: 'location', sortable: true, width: 40, editor: textField}
+                , {header: 'Grade', dataIndex: 'grade', sortable: true, width: 170, editor: textField}
+                // , {header: 'Index-no', dataIndex: 'index_no', sortable: true, width: 60, editor: textField}
+                , {header: 'HR Description', dataIndex: 'hr_position', sortable: true, width: 250, editor: textField}
                 , {
                     header: 'Monthly cost',
-                    dataIndex: 'monthly_cost_2018',
+                    dataIndex: 'monthly_cost',
                     sortable: true,
-                    width: 100,
+                    width: 200,
                     editor: textField
                 }
             ],
@@ -1105,25 +1105,108 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                             title: 'Payroll',
                             closable: true,
                             layout: 'fit',
-                            height: winHeight - 65
+                            height: winHeight - 65,
                             //Llamado a función que arma la tabla de datos
-                            , items: [
-                                {
-                                    layout: 'border',
-                                    // height: winHeight,
-                                    items: [{
-                                        region: 'west',
-                                        id: 'west-panel',
-                                        title: 'Payroll List',
-                                        split: true,
-                                        width: winWidth * 0.3 - 100,
-                                        // minSize: 175,
-                                        // maxSize: 400,
-                                        // collapsible: true,
-                                        // layoutConfig: {
-                                        //     animate: true
-                                        // },
-                                        items: [{
+                            // , items: [
+                                // {
+                                //     layout: 'border',
+                                //     // height: winHeight,
+                                //     items: [{
+                                //         // region: 'west',
+                                //         id: 'west-panel',
+                                //         title: 'Payroll List',
+                                //         split: true,
+                                //         width: winWidth - 65,
+                                //         // height: winHeight - 100,
+                                //         minSize: 175,
+                                //         maxSize: 400,
+                                //         // collapsible: true,
+                                //         // layoutConfig: {
+                                //         //     animate: true
+                                //         // },
+                                //         items: [{
+                                //             tbar: [
+                                //                 //Definición de botón nuevo
+                                //                 {
+                                //                     text: 'New',
+                                //                     scope: this,
+                                //                     handler: this.addPayroll,
+                                //                     iconCls: 'save-icon'
+                                //                 },
+                                //                 '-',
+                                //                 //Definición de botón eliminar
+                                //                 {
+                                //                     text: "Delete",
+                                //                     scope: this,
+                                //                     handler: this.deletePayroll,
+                                //                     iconCls: 'delete-icon'
+                                //                 },
+                                //                 '-',
+                                //                 //Definición de botón regargar datos
+                                //                 {
+                                //                     iconCls: 'reload-icon',
+                                //                     handler: this.requestGridDataPayroll,
+                                //                     scope: this,
+                                //                     text: 'Reload data'
+                                //                 }
+                                //             ],
+                                //             //Llamado a función que arma la tabla de datos
+                                //             items: this.gridPayroll
+                                //         }]
+                                //     },
+                                //     // {
+                                //     //     title: 'Payroll detail',
+                                //     //     region: 'center',
+                                //     //     items: [
+                                //     //         {
+                                //     //             tbar: [
+                                //     //                 //Definición de botón nuevo
+                                //     //                 {
+                                //     //                     text: 'New',
+                                //     //                     scope: this,
+                                //     //                     handler: this.addDetailPayroll,
+                                //     //                     iconCls: 'save-icon'
+                                //     //                 },
+                                //     //                 '-',
+                                //     //                 //Definición de botón eliminar
+                                //     //                 {
+                                //     //                     text: "Delete",
+                                //     //                     scope: this,
+                                //     //                     handler: this.deleteDetailPayroll,
+                                //     //                     iconCls: 'delete-icon'
+                                //     //                 },
+                                //     //                 '-',
+                                //     //                 //Definición de botón regargar datos
+                                //     //                 {
+                                //     //                     iconCls: 'reload-icon',
+                                //     //                     handler: this.requestGridDataDetailPayroll,
+                                //     //                     scope: this,
+                                //     //                     text: 'Reload data'
+                                //     //                 }
+                                //     //             ],
+                                //     //             //Llamado a función que arma la tabla de datos
+                                //     //             items: this.gridDetailPayroll
+                                //     //         }]
+                                //     // }
+                                //   ]
+                                // }
+                                // {
+                                //     layout: 'border',
+                                //     // height: winHeight,
+                                //     items: [{
+                                //         // region: 'west',
+                                //         id: 'west-panel',
+                                //         title: 'Payroll List',
+                                //         split: true,
+                                //         width: winWidth - 65,
+                                //         // height: winHeight - 100,
+                                //         minSize: 175,
+                                //         maxSize: 400,
+                                //         // collapsible: true,
+                                //         // layoutConfig: {
+                                //         //     animate: true
+                                //         // },
+                                //         items: [{
                                             tbar: [
                                                 //Definición de botón nuevo
                                                 {
@@ -1151,46 +1234,46 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
                                             ],
                                             //Llamado a función que arma la tabla de datos
                                             items: this.gridPayroll
-                                        }]
-                                    }, {
-                                        title: 'Payroll detail',
-                                        region: 'center',
-                                        items: [
-                                            {
-                                                tbar: [
-                                                    //Definición de botón nuevo
-                                                    {
-                                                        text: 'New',
-                                                        scope: this,
-                                                        handler: this.addDetailPayroll,
-                                                        iconCls: 'save-icon'
-                                                    },
-                                                    '-',
-                                                    //Definición de botón eliminar
-                                                    {
-                                                        text: "Delete",
-                                                        scope: this,
-                                                        handler: this.deleteDetailPayroll,
-                                                        iconCls: 'delete-icon'
-                                                    },
-                                                    '-',
-                                                    //Definición de botón regargar datos
-                                                    {
-                                                        iconCls: 'reload-icon',
-                                                        handler: this.requestGridDataDetailPayroll,
-                                                        scope: this,
-                                                        text: 'Reload data'
-                                                    }
-                                                ],
-                                                //Llamado a función que arma la tabla de datos
-                                                items: this.gridDetailPayroll
-                                            }]
-
-
-                                    }]
-                                }
-                            ]
-                        },
+                                        // }]
+                                    },
+                                    // {
+                                    //     title: 'Payroll detail',
+                                    //     region: 'center',
+                                    //     items: [
+                                    //         {
+                                    //             tbar: [
+                                    //                 //Definición de botón nuevo
+                                    //                 {
+                                    //                     text: 'New',
+                                    //                     scope: this,
+                                    //                     handler: this.addDetailPayroll,
+                                    //                     iconCls: 'save-icon'
+                                    //                 },
+                                    //                 '-',
+                                    //                 //Definición de botón eliminar
+                                    //                 {
+                                    //                     text: "Delete",
+                                    //                     scope: this,
+                                    //                     handler: this.deleteDetailPayroll,
+                                    //                     iconCls: 'delete-icon'
+                                    //                 },
+                                    //                 '-',
+                                    //                 //Definición de botón regargar datos
+                                    //                 {
+                                    //                     iconCls: 'reload-icon',
+                                    //                     handler: this.requestGridDataDetailPayroll,
+                                    //                     scope: this,
+                                    //                     text: 'Reload data'
+                                    //                 }
+                                    //             ],
+                                    //             //Llamado a función que arma la tabla de datos
+                                    //             items: this.gridDetailPayroll
+                                    //         }]
+                                    // }
+                                //   ]
+                                // }
+                        //     ]
+                        // },
                         //Pestaña GlCodes
                         {
                             autoScroll: true,
@@ -1472,7 +1555,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             grade: '',
             index_no: '',
             hr_position: '',
-            monthly_cost_2018: 0
+            monthly_cost: 0
         });
         this.gridPayroll.stopEditing();
         this.storePayroll.insert(0, dataPayroll);
@@ -1571,7 +1654,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
             grade: '',
             index_no: '',
             hr_position: '',
-            monthly_cost_2018: 0
+            monthly_cost: 0
         });
         this.gridGlCodes.stopEditing();
         this.storeGlCodes.insert(0, dataGlCodes);

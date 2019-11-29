@@ -1398,7 +1398,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     addCostoMacro: function () {
         var inspeccion = new this.storeCostoMacro.recordType({
             id_pma_costos_macro: select_SO,
-            cost_code: 1,
+            cost_code: '',
             total: 0,
             doc: 0,
             dsc: 0,
