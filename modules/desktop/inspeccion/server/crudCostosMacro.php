@@ -28,8 +28,11 @@ function selectDetalleInspecciones()
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT * FROM pma_costos_macro WHERE $where  $orderby ";
+
+    echo $sql;
     $result = $os->db->conn->query($sql);
     $data = array();
+
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $row;
     }

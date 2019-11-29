@@ -91,6 +91,7 @@ function updateDetalleInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
 
+    // calcual autamaticamente el calculo de total adjusted en base a los otros registros
     $data->total_adjusted = $data->total + $data->adjust;
 
     $message = '';
@@ -112,10 +113,13 @@ function updateDetalleInspecciones()
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
     $sql = "UPDATE pma_costos_micro_detalle SET  $cadenaDatos  WHERE pma_costos_micro_detalle.id = '$data->id' ";
+
+
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
     // actualizar el total en el padre
+    $idMicro = calcularMicroDetailTotal ($data->id_pma_costos_micro);
 //    $idMicro = calcularMicroTotal ($data->id_pma_costos_micro);
 
 //    $idActivities = calcularActivitiesTotal ($data->id_pma_costos_micro_detalle);

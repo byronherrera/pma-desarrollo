@@ -199,7 +199,7 @@ function generaCodigoProcesoDenuncia()
 }
 
 
-function calcularContribucionesTotal ($id=0)
+function calcularContribucionesTotal($id = 0)
 {
     // aca el calculo
     global $os;
@@ -207,7 +207,6 @@ function calcularContribucionesTotal ($id=0)
                 FROM pma_contribuciones_detalle where id_pma_contribuciones_detalle = $id ";
     $result = $os->db->conn->query($sql);
     $total = 0;
-    // echo ($sql);
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         if (!is_null($row ['total']))
             $total = $row ['total'];
@@ -223,7 +222,7 @@ function calcularContribucionesTotal ($id=0)
     return 1;
 }
 
-function calcularTotalGrantPlusISC ($id)
+function calcularTotalGrantPlusISC($id)
 {
     // aca el calculo
     global $os;
@@ -233,6 +232,33 @@ function calcularTotalGrantPlusISC ($id)
 
     return 1;
 }
+
+function calcularMicroDetailTotal($id)
+{
+    // aca el calculo
+    global $os;
+    $sql = "SELECT SUM(total_adjusted) as total
+             FROM pma_costos_micro_detalle where id_pma_costos_micro = $id";
+    $result = $os->db->conn->query($sql);
+
+    $total = 0;
+    $id_pma_contribuciones_detalle = 0;
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+    if (!is_null($row ['total'])) {
+        $total = $row ['total'];
+    }
+
+    //(select id_pma_contribuciones_detalle from pma_costos_micro_detalle  WHERE id = $id) as id_pma_contribuciones_detalle
+
+    $sql = "UPDATE pma_costos_micro SET total_cost_detail = $total  WHERE id = '$id' ";
+    $sql = $os->db->conn->prepare($sql);
+    $sql->execute();
+
+    return $id_pma_contribuciones_detalle;
+}
+
+;
+
 
 function calcularActivitiesTotal($id)
 {
@@ -245,7 +271,7 @@ function calcularActivitiesTotal($id)
     $total = 0;
     $id_pma_contribuciones_detalle = 0;
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        if (!is_null($row ['total'])){
+        if (!is_null($row ['total'])) {
             $id_pma_contribuciones_detalle = $row ['id_pma_contribuciones_detalle'];
             $total = $row ['total'];
         }
@@ -256,10 +282,13 @@ function calcularActivitiesTotal($id)
     $sql->execute();
 
     return $id_pma_contribuciones_detalle;
-};
+}
+
+;
 
 // funcion usada para generar la busqueda
-function retornaWhereBusqueda($campo, $columnaBusqueda){
+function retornaWhereBusqueda($campo, $columnaBusqueda)
+{
     $campo = str_replace(" ", "%", $campo);
     $where = " WHERE $columnaBusqueda LIKE '%$campo%' OR
                                     estado LIKE '%$campo%' OR
@@ -274,4 +303,6 @@ function retornaWhereBusqueda($campo, $columnaBusqueda){
                                     grant_specific LIKE '%$campo%' OR
                                     activity LIKE '%$campo%' ";
     return $where;
-};
+}
+
+;

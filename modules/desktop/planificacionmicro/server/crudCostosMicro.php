@@ -28,6 +28,9 @@ function calcularTotal($id)
 function selectDetalleInspecciones()
 {
     global $os;
+
+    $where = "";
+
     if (isset($_POST['id'])) {
         $id = (int)$_POST ['id'];
         $where = " id_pma_costos_micro  = '$id'";
@@ -43,9 +46,10 @@ function selectDetalleInspecciones()
 
     // cambio BH
     $orderby = 'ORDER BY id DESC';
-
+    echo "xx";
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT * FROM pma_costos_micro WHERE $where  $orderby ";
+    echo $sql;
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
