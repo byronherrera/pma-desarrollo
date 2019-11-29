@@ -18,6 +18,10 @@ function insertDetalleInspecciones()
 
     $cadenaDatos = '';
     $cadenaCampos = '';
+
+    // calcual autamaticamente el calculo de total adjusted en base a los otros registros
+    $data->total_adjusted = $data->total + $data->adjust;
+
     foreach ($data as $clave => $valor) {
 
         if (($clave == 'funcionario_reasignacion') OR ($clave == 'guia') OR ($clave == 'acta_verificacion') OR ($clave == 'id_zona') OR ($clave == 'id_actividad')) {
@@ -47,6 +51,14 @@ function insertDetalleInspecciones()
 
     $data->id = $os->db->conn->lastInsertId();
     // genero el nuevo codigo de proceso
+
+    // actualizar el total en el padre
+    $idMicro = calcularMicroDetailTotal ($data->id_pma_costos_micro);
+//    $idMicro = calcularMicroTotal ($data->id_pma_costos_micro);
+
+//    $idActivities = calcularActivitiesTotal ($data->id_pma_costos_micro_detalle);
+//    calcularContribucionesTotal ($idActivities);
+
 
     if ($verificaInsert) {
         echo json_encode(array(

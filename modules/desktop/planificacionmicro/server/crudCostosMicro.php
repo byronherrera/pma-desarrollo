@@ -46,10 +46,10 @@ function selectDetalleInspecciones()
 
     // cambio BH
     $orderby = 'ORDER BY id DESC';
-    echo "xx";
+
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT * FROM pma_costos_micro WHERE $where  $orderby ";
-    echo $sql;
+
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -404,15 +404,31 @@ function deleteDetalleInspecciones()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM pma_costos_micro WHERE id = $id";
-    $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
-    echo json_encode(array(
-        "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_micro, eliminado exitosamente" : $sql->errorCode()
-    ));
+
+    // se valida que no existan registros en la tabla hija
+    if (validaRelacion ($id, 'pma_costos_micro', 'id_pma_costos_micro', 'pma_costos_micro_detalle')){
+        $sql = "DELETE FROM pma_costos_micro WHERE id = $id";
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+        echo json_encode(array(
+            "success" => $sql->errorCode() == 0,
+            "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_micro, eliminado exitosamente" : $sql->errorCode()
+        ));
+
+    } else {
+        echo json_encode(array(
+            "success" => $sql->errorCode() == 0,
+            "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_micro, eliminado exitosamente" : $sql->errorCode()
+        ));
+
+    }
 }
 
+
+function validaRelacion ($id, $tablaPadre = 'pma_costos_micro', $idTablaHija = 'id_pma_costos_micro', $tablaHija ='pma_costos_micro_detalle')
+{
+return true;
+}
 
 switch ($_GET['operation']) {
     case 'select' :
