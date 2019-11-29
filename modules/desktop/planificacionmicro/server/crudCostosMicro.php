@@ -425,6 +425,11 @@ function deleteDetalleInspecciones()
 }
 
 
+function validaRelacion ($id, $tablaPadre = 'pma_costos_micro', $idTablaHija = 'id_pma_costos_micro', $tablaHija ='pma_costos_micro_detalle')
+{
+return true;
+}
+
 switch ($_GET['operation']) {
     case 'select' :
         selectDetalleInspecciones();
