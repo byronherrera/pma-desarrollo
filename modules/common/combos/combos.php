@@ -106,6 +106,49 @@ function comboCost()
     );
 }
 
+function comboSO()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    if (isset($_POST['datoSO']))
+        $where = " AND parent = " . $_POST['costCodeNuevo2'];
+    else
+        $where = '';
+
+    $sql = "SELECT id,category_name FROM pma_so_categories ORDER BY id";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
+
+function comboActivities()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    if (isset($_POST['datoActivities']))
+        $where = " AND parent = " . $_POST['costCodeNuevo2'];
+    else
+        $where = '';
+
+    $sql = "SELECT id,subcategory_name   FROM pma_activities ORDER BY id";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
 function comboCostcode2()
 {
     global $os;
@@ -222,39 +265,6 @@ function comboCostcode5()
     );
 }
 
-
-function comboSO()
-{
-    global $os;
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id,category_name FROM pma_so_categories ORDER BY id";
-    $result = $os->db->conn->query($sql);
-    $data = array();
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $row;
-    }
-    echo json_encode(array(
-            "success" => true,
-            "data" => $data)
-    );
-}
-
-
-function comboActivities()
-{
-    global $os;
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id,subcategory_name   FROM pma_activities ORDER BY id";
-    $result = $os->db->conn->query($sql);
-    $data = array();
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $data[] = $row;
-    }
-    echo json_encode(array(
-            "success" => true,
-            "data" => $data)
-    );
-}
 
 function comboGrantNumber()
 {
