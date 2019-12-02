@@ -111,7 +111,7 @@ function comboSO()
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     if (isset($_POST['datoSO']))
-        $where = " AND parent = " . $_POST['costCodeNuevo2'];
+        $where = " AND parent = " . $_POST['datoSO'];
     else
         $where = '';
 
@@ -133,7 +133,7 @@ function comboActivities()
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     if (isset($_POST['datoActivities']))
-        $where = " AND parent = " . $_POST['costCodeNuevo2'];
+        $where = " AND parent = " . $_POST['datoActivities'];
     else
         $where = '';
 
