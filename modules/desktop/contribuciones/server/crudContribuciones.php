@@ -156,6 +156,7 @@ function insertDenuncias()
     // $data->id_zonal_origen = $os->get_zonal_id();
     //genero el listado de nombre de campos
 
+
     $cadenaDatos = '';
     $cadenaCampos = '';
     foreach ($data as $clave => $valor) {

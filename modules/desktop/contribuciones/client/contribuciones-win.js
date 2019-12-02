@@ -1075,6 +1075,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             });
         }, 500);
 
+
     },
     deletecontribuciones: function () {
         Ext.Msg.show({
