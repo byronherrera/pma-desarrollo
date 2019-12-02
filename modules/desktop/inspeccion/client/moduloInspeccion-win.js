@@ -570,7 +570,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     width: 28,
                     align: 'right',
                     renderer: 'usMoney',
-                    editor: numero,
+                   // editor: numero,
                 },
                 {
                     header: 'Total contribution',
@@ -582,7 +582,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     align: 'right'
                 },
                 {
-                    header: 'Total Programmed',
+                    header: 'Programmed',
                     dataIndex: 'total_programmed',
                     width: 28,
                     renderer: 'usMoney',

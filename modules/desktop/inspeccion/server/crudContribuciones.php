@@ -199,8 +199,6 @@ function insertDenuncias()
         "data" => array($data),
         "message" => $message
     ));
-
-
 }
 
 

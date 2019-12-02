@@ -202,6 +202,8 @@ function updateDenuncias()
     // }
 
 
+    $data->total_contribution = $data->total_grant + $data->isc;
+    $data->total_unprogrammed =  $data->total_grant;
 
 
     // genero el listado de valores a insertar
@@ -237,7 +239,8 @@ function updateDenuncias()
         echo json_encode(array(
             "success" => $sql->errorCode() == 0,
             "msg" => $sql->errorCode() == 0 ? $message : $sql->errorCode(),
-            "message" => $message
+            "message" => $message,
+            "data" => array($data)
         ));
     // } else {
     //     echo json_encode(array(

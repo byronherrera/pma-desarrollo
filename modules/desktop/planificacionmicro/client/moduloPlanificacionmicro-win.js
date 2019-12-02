@@ -1856,7 +1856,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Grant Number',
                     dataIndex: 'grant_number',
                     id: 'grant_number',
-                    width: 38,
+                    width: 44,
                     editor: textField10,
                     renderer: function (value, metaData, record, row, col, store, gridView) {
                         // si estado es cerrado retorna amarillo
@@ -1882,13 +1882,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {
                     header: 'CRN',
                     dataIndex: 'crn',
-                    width: 28,
+                    width: 40,
                     editor: textField
                 },
                 {
                     header: 'Fund',
                     dataIndex: 'fund',
-                    width: 28,
+                    width: 14,
                     editor: textField
                 },
                 {
@@ -1900,7 +1900,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {
                     header: 'Year',
                     dataIndex: 'year_contribution',
-                    width: 20,
+                    width: 10,
                     editor: anio,
                     align: 'right'
                 },
@@ -1926,7 +1926,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 28,
                     renderer: 'usMoney',
-                    editor: numero,
+                    //editor: numero,
                     align: 'right'
                 },
                 {
@@ -1969,15 +1969,23 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {
                     header: 'Status',
                     dataIndex: 'estado',
-                    width: 28,
+                    width: 20,
                     editor: comboStatus,
                     renderer: costStatus
                 },
                 {
                     header: 'Comments',
                     dataIndex: 'comments',
-                    width: 28,
+                    width: 55,
                     editor: textField
+                },
+                {
+                    // COLUMNA EN BLANCO
+                    header: '',
+                    width: 15,
+                    renderer: function () {
+                        return ' ';
+                    }
                 }
             ];
 
@@ -1986,6 +1994,10 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 defaults: {
                     sortable: true,
                     filter: {type: 'string'}
+                },
+                viewConfig: {
+                    //forceFit: winWidth > 1024 ? true : false,
+                    forceFit: false
                 }
             });
         };
@@ -2005,7 +2017,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             autoExpandColumn: 'grant_number',
 
             viewConfig: {
-                // forceFit: winWidth > 1024 ? true : false
+                //forceFit: winWidth > 1024 ? true : false,
                 forceFit: true,
                 getRowClass: function (record, index) {
                 }
