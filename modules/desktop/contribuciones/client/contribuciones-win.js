@@ -178,12 +178,12 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             listeners: {
                 write: function (proxy, action, result, res, rs) {
                   // storeContribucionesr.load();
-                  if (action = 'update') {
+                 /* if (action = 'update') {
                       storeContribuciones.load();
                     }
                   if (action = 'insert') {
                       storeContribuciones.load();
-                    }
+                    }*/
                     if (typeof res.message !== 'undefined') {
                         /*if (res.message != '') {
                             AppMsg.setAlert(AppMsg.STATUS_NOTICE, res.message);
@@ -371,11 +371,11 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 28,
                     renderer: 'usMoney',
-                    editor: numero,
+                    //editor: numero,
                     align: 'right'
                 },
                 {
-                    header: 'Total Programmed',
+                    header: 'Programmed',
                     dataIndex: 'total_programmed',
                     width: 28,
                     renderer: 'usMoney',
@@ -1075,6 +1075,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             });
         }, 500);
 
+
     },
     deletecontribuciones: function () {
         Ext.Msg.show({
@@ -1095,7 +1096,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
     },
     addcontribuciones: function () {
         var contribuciones = new this.storeContribuciones.recordType({
-            grant_number: null,
+            grant_number: '',
             estado: '',
             donor: '',
             fund: '',
@@ -1104,10 +1105,11 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             total_grant: 0,
             total_programmed: 0,
             total_unprogrammed: 0,
+            total_contribution: 0,
             activity: '',
             grant_tod: (new Date()),
             grant_tdd: (new Date()),
-            grant_specific: ' ',
+            grant_specific: '',
             year_contribution: (new Date().getFullYear()),
             crn: '',
             recepcion_documento: (new Date())

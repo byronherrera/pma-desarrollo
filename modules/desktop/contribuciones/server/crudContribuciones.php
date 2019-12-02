@@ -146,12 +146,16 @@ function insertDenuncias()
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
-    $data->total_contribution = $data->isc + $data->total_grant;
+
+    $data->total_contribution = $data->total_grant + $data->isc;
+    $data->total_unprogrammed =  $data->total_grant;
+
     // $data->despacho_secretaria = 'false';
     $data->id = generaCodigoProcesoContribuciones();
     // $data->id_persona = $os->get_member_id();
     // $data->id_zonal_origen = $os->get_zonal_id();
     //genero el listado de nombre de campos
+
 
     $cadenaDatos = '';
     $cadenaCampos = '';
@@ -228,6 +232,9 @@ function updateDenuncias()
 
 
     // genero el listado de valores a insertar
+    $data->total_contribution = $data->total_grant + $data->isc;
+    $data->total_unprogrammed =  $data->total_grant;
+
     $cadenaDatos = '';
     foreach ($data as $clave => $valor) {
         if ($valor != '')
@@ -260,7 +267,8 @@ function updateDenuncias()
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
         "msg" => $sql->errorCode() == 0 ? $message : $sql->errorCode(),
-        "message" => $message
+        "message" => $message,
+        "data" => array($data)
     ));
     // } else {
     //     echo json_encode(array(
