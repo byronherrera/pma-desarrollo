@@ -571,7 +571,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     width: 35,
                     align: 'right',
                     renderer: 'usMoney',
-                   // editor: numero,
+                    editor: numero,
                 },
                 {
                     header: 'Total contribution',
@@ -579,7 +579,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 35,
                     renderer: 'usMoney',
-                    editor: numero,
+                    // editor: numero,
                     align: 'right'
                 },
                 {
@@ -1316,7 +1316,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             fund: '',
             donor: '',
             year_contribution: (new Date().getFullYear()),
-            isc: '',
+            total_unprogrammed: 0,
+            isc: 0,
             total_grant: 0, total_contribution: 0,
             total_programmed: 0
         });

@@ -1861,19 +1861,22 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     renderer: function (value, metaData, record, row, col, store, gridView) {
                         // si estado es cerrado retorna amarillo
                         recuperaEstado = record.get('estado');
+                        fecha_actual = new Date();
+                        var diff = Math.abs(record.get('grant_tdd') - fecha_actual) / 3600000 / 24;
                         if (recuperaEstado === 'Closed') {
                             return '<span class="circleBase goldstate"></span>' + value;
                         }
-                        // si la fecha esta proxima a su vencimiento 30 dias
-                        fecha_actual = new Date();
-                        var diff = Math.abs(record.get('grant_tdd') - fecha_actual) / 3600000 / 24;
+
                         // regresa diff en dias
-                        if (diff < intervalo1) {
+                        else if (diff < intervalo1) {
                             return '<span class="circleBase redstate"></span>' + value;
                         }
                         // si la fecha esta proxima a su vencimiento 60 dias
-                        if (diff < intervalo2) {
+                        else if (diff < intervalo2) {
                             return '<span class="circleBase bluestate"></span>' + value;
+                        }
+                        else{
+                            return '<span class="circleBase whitestate"></span>' + value;
                         }
                         return value
                     }
@@ -2123,6 +2126,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     margins: '0 0 0 0',
                                     cmargins: '0 0 0 0',
                                     collapsible: true,
+                                    collapsed: false,
                                     split: true,
                                     layoutConfig: {
                                         animate: true
