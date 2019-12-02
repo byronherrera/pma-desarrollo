@@ -75,6 +75,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         //incio variables visualizacion
         var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
         var textField2 = new Ext.form.TextField({allowBlank: false, readOnly: false});
+        var textField3 = new Ext.form.TextField({allowBlank: false, readOnly: false});
         var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 10});
 
         var anio = new Ext.ux.form.SpinnerField({
@@ -567,38 +568,38 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {
                     header: 'Total Direct Cost',
                     dataIndex: 'total_grant',
-                    width: 28,
+                    width: 35,
                     align: 'right',
                     renderer: 'usMoney',
-                    editor: numero,
+                   // editor: numero,
                 },
                 {
                     header: 'Total contribution',
                     dataIndex: 'total_contribution',
                     sortable: true,
-                    width: 28,
+                    width: 35,
                     renderer: 'usMoney',
                     editor: numero,
                     align: 'right'
                 },
                 {
-                    header: 'Total Programmed',
+                    header: 'Programmed',
                     dataIndex: 'total_programmed',
-                    width: 28,
+                    width: 35,
                     renderer: 'usMoney',
                     align: 'right'
                 },
                 {
                     header: 'Unprogrammed',
                     dataIndex: 'total_unprogrammed',
-                    width: 28,
+                    width: 35,
                     renderer: 'usMoney',
                     align: 'right'
                 },
                 {
                     header: 'Grant TOD',
                     dataIndex: 'grant_tod',
-                    width: 40,
+                    width: 28,
                     renderer: Ext.util.Format.dateRenderer('Y-m-d'),
                     editor: fecha,
                     align: 'right'
@@ -606,7 +607,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 {
                     header: 'Grant TDD',
                     dataIndex: 'grant_tdd',
-                    width: 40,
+                    width: 28,
                     renderer: Ext.util.Format.dateRenderer('Y-m-d'),
                     editor: fecha,
                     align: 'right'
@@ -817,7 +818,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     hidden: true,
                     width: 50
                 },
-                {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textField},
+                {header: 'Year', dataIndex: 'year', hidden: false, width: 50, editor: textField3},
                 {
                     header: 'Strategic Objectives',
                     dataIndex: 'so',
@@ -840,7 +841,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     renderer: 'usMoney',
                     width: 100,
                     align: 'right',
-                    editor: textField
+                    editor: textField3
                 },
                 {header: 'Total macro', dataIndex: 'total', renderer: 'usMoney', width: 90, align: 'right'}
             ],
@@ -1312,12 +1313,11 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         var inspeccion = new this.storeModuloContribution.recordType({
             grant_number: '',
             crn: '',
-            fund: 0,
+            fund: '',
             donor: '',
             year_contribution: (new Date().getFullYear()),
             isc: '',
-            total_grant: 0,
-            total_contribution: 0,
+            total_grant: 0, total_contribution: 0,
             total_programmed: 0
         });
         this.gridModuloContribution.stopEditing();
