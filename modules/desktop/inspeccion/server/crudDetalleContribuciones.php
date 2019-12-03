@@ -360,13 +360,23 @@ function deleteDetalleInspecciones()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM pma_contribuciones_detalle WHERE id = $id";
-    $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
-    echo json_encode(array(
-        "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en amc_denuncias, eliminado exitosamente" : $sql->errorCode()
-    ));
+    if (validaRelacion($id, 'id_pma_costos_macro', 'pma_costos_macro')) {
+        $sql = "DELETE FROM pma_contribuciones_detalle WHERE id = $id";
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+        echo json_encode(array(
+            "success" => $sql->errorCode() == 0,
+            "msg" => $sql->errorCode() == 0 ? "Ubicación en amc_denuncias, eliminado exitosamente" : $sql->errorCode()
+        ));
+
+    } else {
+        echo json_encode(array(
+            "success" => false,
+            "msg" => "Error tiene detalle",
+            "message" => "Error tiene detalle"
+        ));
+    }
+
 }
 
 

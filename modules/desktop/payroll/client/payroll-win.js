@@ -1907,7 +1907,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
     deletePayroll: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
+            title: 'Confirmation',
             msg: 'Está seguro de querer borrar?',
             scope: this,
             buttons: Ext.Msg.YESNO,
@@ -1949,7 +1949,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
     deleteDetailPayroll: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
+            title: 'Confirmation',
             msg: 'Está seguro de querer borrar?',
             scope: this,
             buttons: Ext.Msg.YESNO,

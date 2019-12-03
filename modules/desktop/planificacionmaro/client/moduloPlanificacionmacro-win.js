@@ -1253,8 +1253,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     deleteModuloContribution: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -1296,8 +1296,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     deleteDetalleInspeccion: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -1340,8 +1340,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     deleteCostoMacro: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado

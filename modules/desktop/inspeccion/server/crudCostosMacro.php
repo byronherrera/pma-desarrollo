@@ -42,7 +42,7 @@ function selectDetalleInspecciones()
     );
 }
 
-function    selectDetalleTodasInspecciones()
+function selectDetalleTodasInspecciones()
 {
     global $os;
     //Se inicializa el parámetro de búsqueda de código trámite
@@ -199,8 +199,8 @@ function updateDetalleInspecciones()
     // actualizar el total en el padre
 //    $idMicro = calcularMicroTotal ($data->id_pma_costos_micro);
 
-    $idActivities = calcularActivitiesTotal ($data->id_pma_costos_macro);
-    calcularContribucionesTotal ($idActivities);
+    $idActivities = calcularActivitiesTotal($data->id_pma_costos_macro);
+    calcularContribucionesTotal($idActivities);
 
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
@@ -212,15 +212,15 @@ function updateDetalleInspecciones()
 }
 
 
-
-function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
+function cambioEstadoAsignacion($id_asignacion, $idInspeccion)
+{
     global $os;
     // en caso de que sea una reasignacion entonces se cambia de estado
-    if (!is_null($id_asignacion) AND $id_asignacion != ''){
+    if (!is_null($id_asignacion) AND $id_asignacion != '') {
 
         // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
 
-        if ( verificaAnteriorReasignacion ($id_asignacion, $idInspeccion)) {
+        if (verificaAnteriorReasignacion($id_asignacion, $idInspeccion)) {
             $sql = "UPDATE `pma_costos_macro` SET `estado_asignacion` = 1 WHERE `id` = $idInspeccion";
             $sql = $os->db->conn->prepare($sql);
             $sql->execute();
@@ -228,26 +228,28 @@ function cambioEstadoAsignacion ($id_asignacion, $idInspeccion ) {
     }
 }
 
-function verificaAnteriorAsignacion ($id_reasignacion, $idInspeccion) {
+function verificaAnteriorAsignacion($id_reasignacion, $idInspeccion)
+{
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT funcionario_entrega FROM  `pma_costos_macro` WHERE  id = $idInspeccion";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
-    if ($row['funcionario_entrega'] === $id_reasignacion )
+    if ($row['funcionario_entrega'] === $id_reasignacion)
         return false;
     else
         return true;
 }
 
-function cambioEstadoReasignacion ($id_reasignacion, $idInspeccion ) {
+function cambioEstadoReasignacion($id_reasignacion, $idInspeccion)
+{
     global $os;
     // en caso de que sea una reasignacion entonces se cambia de estado
-    if (!is_null($id_reasignacion) AND $id_reasignacion != ''){
+    if (!is_null($id_reasignacion) AND $id_reasignacion != '') {
 
         // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
 
-        if ( verificaAnteriorReasignacion ($id_reasignacion, $idInspeccion)) {
+        if (verificaAnteriorReasignacion($id_reasignacion, $idInspeccion)) {
             $sql = "UPDATE `amc_inspeccion` SET `estado_asignacion` = 3 WHERE `id` = $idInspeccion";
             $sql = $os->db->conn->prepare($sql);
             $sql->execute();
@@ -256,13 +258,14 @@ function cambioEstadoReasignacion ($id_reasignacion, $idInspeccion ) {
     }
 }
 
-function verificaAnteriorReasignacion ($id_reasignacion, $idInspeccion) {
+function verificaAnteriorReasignacion($id_reasignacion, $idInspeccion)
+{
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT funcionario_reasignacion FROM  `amc_inspeccion` WHERE  id = $idInspeccion";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
-    if ($row['funcionario_reasignacion'] === $id_reasignacion )
+    if ($row['funcionario_reasignacion'] === $id_reasignacion)
         return false;
     else
         return true;
@@ -348,13 +351,23 @@ function deleteDetalleInspecciones()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM pma_costos_macro WHERE id = $id";
-    $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
-    echo json_encode(array(
-        "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_macro, eliminado exitosamente" : $sql->errorCode()
-    ));
+
+    if (validaRelacion($id, 'id_pma_costos_micro', 'pma_costos_micro')) {
+
+        $sql = "DELETE FROM pma_costos_macro WHERE id = $id";
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+        echo json_encode(array(
+            "success" => $sql->errorCode() == 0,
+            "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_macro, eliminado exitosamente" : $sql->errorCode()
+        ));
+    } else {
+        echo json_encode(array(
+            "success" => false,
+            "msg" => "Error tiene detalle",
+            "message" => "Error tiene detalle"
+        ));
+    }
 }
 
 switch ($_GET['operation']) {

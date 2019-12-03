@@ -170,17 +170,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 read: urlInspeccion + "crudDetalleContribuciones.php?operation=select",
                 update: urlInspeccion + "crudDetalleContribuciones.php?operation=update",
                 destroy: urlInspeccion + "crudDetalleContribuciones.php?operation=delete"
-            },
-            listeners: {
-                write: function (proxy, action, result, res, rs) {
-                    datoSO = rs.data['so'];
-                    comboActivities.clearValue();
-                    storeActivities.load({
-                        params: {
-                            datoSO: datoSO
-                        }
-                    });
-                }
             }
         });
         //Definición de lectura de campos bdd Inspeccion
@@ -256,6 +245,20 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             //             //remoteSort: true,
             //             //autoSave: true
             //baseParams: {}
+            listeners: {
+                exception: function (proxy, response, operation) {
+                    if (operation == 'destroy') {
+                        Ext.Msg.show({
+                            title: 'Error'
+//                            , msg: errorJson.msg
+                            , msg: 'To delete the record, the dependent records must be deleted'
+                            , modal: true
+                            , icon: Ext.Msg.ERROR
+                            , buttons: Ext.Msg.OK
+                        });
+                    }
+                }
+            }
         });
 
         //Definición de store para módulo detalle Inspeccion
@@ -270,9 +273,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             baseParams: {id: contribucionSeleccionada},
             listeners: {
                 write: function (proxy, action, result, res, rs) {
-                  // console.log("result",result);
-                  // console.log("res",res);
-                  // console.log("rss",rs);
+                    // console.log("result",result);
+                    // console.log("res",res);
+                    console.log("rs", rs.data['id']);
                     select_SO = rs.data['id'];
 
                     datoSO = rs.data['so'];
@@ -283,8 +286,18 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         }
                     });
 
+                },
+                exception: function (proxy, response, operation) {
+                    if (operation == 'destroy') {
+                        Ext.Msg.show({
+                            title: 'Error'
+                            , msg: 'To delete the record, the dependent records must be deleted'
+                            , modal: true
+                            , icon: Ext.Msg.ERROR
+                            , buttons: Ext.Msg.OK
+                        });
+                    }
                 }
-
             }
         });
 
@@ -296,6 +309,19 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             autoSave: true, // dependiendo de si se tiene acceso para grabar
             //remoteSort: true,
             //baseParams: {}
+            listeners: {
+                exception: function (proxy, response, operation) {
+                    if (operation == 'destroy') {
+                        Ext.Msg.show({
+                            title: 'Error'
+                            , msg: 'To delete the record, the dependent records must be deleted'
+                            , modal: true
+                            , icon: Ext.Msg.ERROR
+                            , buttons: Ext.Msg.OK
+                        });
+                    }
+                }
+            }
         });
 
 
@@ -702,14 +728,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         }
                         //
                         storeCostoMacro.load({params: {id: 0}});
-
-                        datoSO = rs.data['so'];
-                        comboActivities.clearValue();
-                        storeActivities.load({
-                            params: {
-                                datoSO: datoSO
-                            }
-                        });
                     }
                 }
             }),
@@ -884,7 +902,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         // recuperamos la informacion de personal asignado a ese operativo
                         select_SO = rec.id;
                         storeCostoMacro.load({params: {id: rec.id}});
-                        console.log("rec",rec);
                         if (creacionDatosInspeccion) {
                             Ext.getCmp('btnNuevoDetalleInspeccion').setDisabled(false);
                             Ext.getCmp('btnEliminarDetalleInspeccion').setDisabled(false);
@@ -1322,8 +1339,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     deleteModuloContribution: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -1365,8 +1382,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     deleteDetalleInspeccion: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -1409,8 +1426,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     deleteCostoMacro: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado

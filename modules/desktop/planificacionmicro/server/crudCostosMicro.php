@@ -424,7 +424,8 @@ function deleteDetalleInspecciones()
     } else {
         echo json_encode(array(
             "success" => false,
-            "msg" => "Error tiene detalle"
+            "msg" => "Error tiene detalle",
+            "message" => "Error tiene detalle"
         ));
 
     }

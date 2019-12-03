@@ -2,6 +2,8 @@ var contribucionSeleccionada = '';
 var costoMacroSeleccionada = '';
 var costoMicroSeleccionada = '';
 
+var maxTotalCostDetail = 0;
+
 QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     id: 'moduloPlanificacionmicro',
     type: 'desktop/moduloPlanificacionmicro',
@@ -298,7 +300,17 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             writer: writerPlanificacionmicro,
             autoSave: true,
             listeners: {
-                load: function () {
+                exception : function(proxy, response, operation) {
+                    if (operation == 'destroy') {
+                        Ext.Msg.show({
+                            title: 'Error'
+//                            , msg: errorJson.msg
+                            , msg: 'To delete the record, the dependent records must be deleted'
+                            , modal: true
+                            , icon: Ext.Msg.ERROR
+                            , buttons: Ext.Msg.OK
+                        });
+                    }
                 }
             }
         });
@@ -2394,8 +2406,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     deleteModuloPlanificacionmicro: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -2461,8 +2473,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     deleteDetallePlanificacionmicro: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -2521,8 +2533,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     deletePlanificacionmicro: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -2569,8 +2581,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     deleteCostoMacro: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -2629,8 +2641,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     deleteMicroDetalle: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado

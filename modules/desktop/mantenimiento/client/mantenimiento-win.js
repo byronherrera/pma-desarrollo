@@ -1479,8 +1479,8 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
     deleteCostcategory: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -1530,7 +1530,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
     deletePayroll: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
+            title: 'Confirmation',
             msg: 'Está seguro de querer borrar?',
             scope: this,
             buttons: Ext.Msg.YESNO,
@@ -1571,7 +1571,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
     deleteDetailPayroll: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
+            title: 'Confirmation',
             msg: 'Está seguro de querer borrar?',
             scope: this,
             buttons: Ext.Msg.YESNO,
@@ -1629,7 +1629,7 @@ QoDesk.MantenimientoWindow = Ext.extend(Ext.app.Module, {
     deleteGlCodes: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
+            title: 'Confirmation',
             msg: 'Está seguro de querer borrar?',
             scope: this,
             buttons: Ext.Msg.YESNO,

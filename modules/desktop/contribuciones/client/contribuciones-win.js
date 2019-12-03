@@ -243,7 +243,20 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             autoSave: true, // dependiendo de si se tiene acceso para grabar
             //autoSave: acceso, // dependiendo de si se tiene acceso para grabar
             remoteSort: true,
-            baseParams: {}
+            baseParams: {},
+            listeners: {
+            exception : function(proxy, response, operation) {
+                if (operation == 'destroy') {
+                    Ext.Msg.show({
+                        title: 'Error'
+                        , msg: 'To delete the record, the dependent records must be deleted'
+                        , modal: true
+                        , icon: Ext.Msg.ERROR
+                        , buttons: Ext.Msg.OK
+                    });
+                }
+            }
+        }
         });
         storeContribuciones = this.storeContribuciones;
         limitecontribuciones = 100;

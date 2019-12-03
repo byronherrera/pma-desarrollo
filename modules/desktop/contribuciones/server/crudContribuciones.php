@@ -148,7 +148,7 @@ function insertDenuncias()
     $data = json_decode(stripslashes($_POST["data"]));
 
     $data->total_contribution = $data->total_grant + $data->isc;
-    $data->total_unprogrammed =  $data->total_grant;
+    $data->total_unprogrammed = $data->total_grant;
 
     // $data->despacho_secretaria = 'false';
     $data->id = generaCodigoProcesoContribuciones();
@@ -233,7 +233,7 @@ function updateDenuncias()
 
     // genero el listado de valores a insertar
     $data->total_contribution = $data->total_grant + $data->isc;
-    $data->total_unprogrammed =  $data->total_grant;
+    $data->total_unprogrammed = $data->total_grant;
 
     $cadenaDatos = '';
     foreach ($data as $clave => $valor) {
@@ -424,13 +424,24 @@ function deleteDenuncias()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM pma_contribuciones WHERE id = $id";
-    $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
-    echo json_encode(array(
-        "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_contribuciones, eliminado exitosamente" : $sql->errorCode()
-    ));
+
+    // se valida que no existan registros en la tabla hija
+    if (validaRelacion($id, 'id_pma_contribuciones_detalle', 'pma_contribuciones_detalle')) {
+        $sql = "DELETE FROM pma_contribuciones WHERE id = $id";
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+        echo json_encode(array(
+            "success" => $sql->errorCode() == 0,
+            "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_contribuciones, eliminado exitosamente" : $sql->errorCode()
+        ));
+
+    } else {
+        echo json_encode(array(
+            "success" => false,
+            "msg" => "Error tiene detalle",
+            "message" => "Error tiene detalle"
+        ));
+    }
 }
 
 switch ($_GET['operation']) {

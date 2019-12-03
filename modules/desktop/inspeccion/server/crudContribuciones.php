@@ -421,13 +421,24 @@ function deleteDenuncias()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM pma_contribuciones WHERE id = $id";
-    $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
-    echo json_encode(array(
-        "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_contribuciones, eliminado exitosamente" : $sql->errorCode()
-    ));
+
+    // se valida que no existan registros en la tabla hija
+    if (validaRelacion($id, 'id_pma_contribuciones_detalle', 'pma_contribuciones_detalle')) {
+        $sql = "DELETE FROM pma_contribuciones WHERE id = $id";
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+        echo json_encode(array(
+            "success" => $sql->errorCode() == 0,
+            "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_contribuciones, eliminado exitosamente" : $sql->errorCode()
+        ));
+
+    } else {
+        echo json_encode(array(
+            "success" => false,
+            "msg" => "Error tiene detalle",
+            "message" => "Error tiene detalle"
+        ));
+    }
 }
 
 switch ($_GET['operation']) {

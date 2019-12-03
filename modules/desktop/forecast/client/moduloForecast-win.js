@@ -2335,8 +2335,8 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
     deleteModuloForecast: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -2402,8 +2402,8 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
     deleteDetalleForecast: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -2466,8 +2466,8 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
     deleteForecast: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -2517,8 +2517,8 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
     deleteCostoMacro: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
@@ -2581,8 +2581,8 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
     deleteMicroDetalle: function () {
         //Popup de confirmación
         Ext.Msg.show({
-            title: 'Confirmación',
-            msg: 'Está seguro de borrar el registro seleccionado?',
+            title: 'Confirmation',
+            msg: 'Are you sure to delete the selected record?',
             scope: this,
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
