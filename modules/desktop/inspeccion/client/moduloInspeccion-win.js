@@ -170,6 +170,17 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 read: urlInspeccion + "crudDetalleContribuciones.php?operation=select",
                 update: urlInspeccion + "crudDetalleContribuciones.php?operation=update",
                 destroy: urlInspeccion + "crudDetalleContribuciones.php?operation=delete"
+            },
+            listeners: {
+                write: function (proxy, action, result, res, rs) {
+                    datoSO = rs.data['so'];
+                    comboActivities.clearValue();
+                    storeActivities.load({
+                        params: {
+                            datoSO: datoSO
+                        }
+                    });
+                }
             }
         });
         //Definición de lectura de campos bdd Inspeccion
@@ -261,9 +272,19 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 write: function (proxy, action, result, res, rs) {
                   // console.log("result",result);
                   // console.log("res",res);
-                  console.log("rs",rs.data['id']);
+                  // console.log("rss",rs);
                     select_SO = rs.data['id'];
+
+                    datoSO = rs.data['so'];
+                    comboActivities.clearValue();
+                    storeActivities.load({
+                        params: {
+                            datoSO: datoSO
+                        }
+                    });
+
                 }
+
             }
         });
 
@@ -681,6 +702,14 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         }
                         //
                         storeCostoMacro.load({params: {id: 0}});
+
+                        datoSO = rs.data['so'];
+                        comboActivities.clearValue();
+                        storeActivities.load({
+                            params: {
+                                datoSO: datoSO
+                            }
+                        });
                     }
                 }
             }),
@@ -855,6 +884,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         // recuperamos la informacion de personal asignado a ese operativo
                         select_SO = rec.id;
                         storeCostoMacro.load({params: {id: rec.id}});
+                        console.log("rec",rec);
                         if (creacionDatosInspeccion) {
                             Ext.getCmp('btnNuevoDetalleInspeccion').setDisabled(false);
                             Ext.getCmp('btnEliminarDetalleInspeccion').setDisabled(false);

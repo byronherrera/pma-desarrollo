@@ -110,11 +110,6 @@ function comboSO()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    if (isset($_POST['datoSO']))
-        $where = " AND parent = " . $_POST['datoSO'];
-    else
-        $where = '';
-
     $sql = "SELECT id,category_name FROM pma_so_categories ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
@@ -132,12 +127,13 @@ function comboActivities()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    if (isset($_POST['datoActivities']))
-        $where = " AND parent = " . $_POST['datoActivities'];
+    if (isset($_POST['datoSO']))
+        $where = " WHERE id_cost_category = " . $_POST['datoSO'];
     else
         $where = '';
 
-    $sql = "SELECT id,subcategory_name   FROM pma_activities ORDER BY id";
+    $sql = "SELECT id,subcategory_name FROM pma_activities $where ORDER BY id";
+    // echo ($sql);
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
