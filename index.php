@@ -58,8 +58,7 @@ if (!class_exists('os')) {
             <script type="text/javascript" src="modules/common/libraries/buttoncolumn/ButtonColumn.js"></script>
             <link rel="stylesheet" type="text/css" href="modules/common/libraries/buttoncolumn/ButtonColumn.css"/>
 
-            <script src="https://maps.google.com/maps/api/js?key=AIzaSyCMRqBCH27guelvMimjC_X104PShRSojR8" type="text/javascript"></script>
-            <!-- QoDesk -->
+             <!-- QoDesk -->
             <!-- This dynamic file will load all the modules the member has access to and setup the desktop -->
             <script src="QoDesk.php"></script>
         </head>

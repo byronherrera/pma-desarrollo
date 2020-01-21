@@ -180,7 +180,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'id_pma_contribuciones_detalle', allowBlank: true},
+                {name: 'id_pma_contribuciones', allowBlank: true},
                 {name: 'year', allowBlank: false},
                 //{name: 'id_cost', allowBlank: true},
                 {name: 'so', allowBlank: true},
@@ -270,7 +270,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             root: 'data',
             fields: [
                 {name: 'id', allowBlank: true},
-                {name: 'id_pma_costos_micro', allowBlank: true},
+                {name: 'id_pma_costos_macro', allowBlank: true},
                 {name: 'cost_code2', allowBlank: true},
                 {name: 'cost_code3', allowBlank: true},
                 {name: 'glcode', allowBlank: true},
@@ -351,7 +351,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'id_pma_costos_macro', allowBlank: true},
+                {name: 'id_pma_contribuciones_detalle', allowBlank: true},
                 {name: 'cost_code', allowBlank: true},
                 {name: 'total', allowBlank: true},
                 {name: 'doc', allowBlank: true},
@@ -359,6 +359,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {name: 'adjust', allowBlank: true},
                 {name: 'comment', allowBlank: true},
                 {name: 'total_adjusted', allowBlank: true},
+                {name: 'total_cost_detail', allowBlank: true},
                 {name: 'fecha_registro', type: 'date', dateFormat: 'c', allowBlank: true},
             ]
         });
@@ -412,6 +413,27 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 read: urlPlanificacionmicro + "crudCostosMicroDetalle.php?operation=select",
                 update: urlPlanificacionmicro + "crudCostosMicroDetalle.php?operation=update",
                 destroy: urlPlanificacionmicro + "crudCostosMicroDetalle.php?operation=delete"
+            },
+            listeners: {
+                write: function (proxy, action, result, res, rs) {
+                    if (typeof res.message !== 'undefined') {
+                        if (res.message != '') {
+                            AppMsg.setAlert(AppMsg.STATUS_NOTICE, res.message);
+                        }
+                        else {
+                            AppMsg.setAlert(AppMsg.STATUS_NOTICE, res.message);
+                        }
+                    }
+                },
+                exception: function (proxy, type, operation, options, response, arg) {
+                    if (operation == 'update') {
+                        AppMsg.setAlert("Requisito obligatorio",response.message);
+                    }
+
+                    if (operation == 'create') {
+                        AppMsg.setAlert("Requisito obligatorio", response.message);
+                    }
+                },
             }
         });
 
@@ -425,14 +447,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 {name: 'id_pma_costos_micro', allowBlank: false},
                 {name: 'total', allowBlank: false},
                 {name: 'adjust', allowBlank: false},
-                {name: 'comment', allowBlank: false},
                 {name: 'total_adjusted', allowBlank: false},
-                {name: 'pr_microcosts', allowBlank: false},
-                {name: 'sub_pr_microcosts', allowBlank: false},
-                {name: 'po_microcosts', allowBlank: false},
-                {name: 'sub_po_microcosts', allowBlank: false},
+                {name: 'comment', allowBlank: true},
+                {name: 'pr_microcosts', allowBlank: true},
+                {name: 'sub_pr_microcosts', allowBlank: true},
+                {name: 'po_microcosts', allowBlank: true},
+                {name: 'sub_po_microcosts', allowBlank: true},
                 {name: 'fecha_registro', type: 'date', dateFormat: 'c', allowBlank: true}
-
             ]
         });
 
@@ -1137,7 +1158,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     renderer: 'usMoney',
                     editor: textField
                 },
-                {header: 'Description', dataIndex: 'comment', hidden: false, width: 200, editor: textField},
                 {
                     header: 'Total adjusted',
                     dataIndex: 'total_adjusted',
@@ -1146,6 +1166,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     renderer: 'usMoney',
                     // editor: textField
                 },
+                {header: 'Description', dataIndex: 'comment', hidden: false, width: 200, editor: textField},
                 {
                     header: 'PR',
                     dataIndex: 'pr_microcosts',
@@ -1190,15 +1211,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     //     timeFormat: 'H:i:s'
                     // })
                 }
-                //TODO esto no existe en la tabla
-                /*,
-                {
-                    header: 'Total Micro',
-                    dataIndex: 'total_detalle_micro',
-                    hidden: false,
-                    width: 100,
-                    renderer: formatDate,
-                },*/
             ],
             viewConfig: {forceFit: true},
             sm: new Ext.grid.RowSelectionModel({
@@ -1243,7 +1255,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 new Ext.grid.RowNumberer(),
                 {
                     header: 'id_macro',
-                    dataIndex: 'id_pma_costos_macro',
+                    dataIndex: 'id_pma_contribuciones_detalle',
                     hidden: true,
                     width: 80,
                     // editor: textField
@@ -1256,7 +1268,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     // editor: comboCOSTPARENTDET,
                     renderer: costparentAdmDet
                 },
-                // {header: 'Cost Detail', dataIndex: 'id_cost_detail', sortable: true, width: 100, editor: comboCOSTPARENTDET, renderer: costparentAdmDet },
                 {
                     header: 'Amount Programmed',
                     dataIndex: 'total',
@@ -1265,7 +1276,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     renderer: 'usMoney',
                     // editor: textField
                 },
-
                 {
                     header: 'Adjust',
                     dataIndex: 'adjust',
@@ -1274,7 +1284,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     renderer: 'usMoney',
                     // editor: textField
                 },
-                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 200},
                 {
                     header: 'Total adjusted',
                     dataIndex: 'total_adjusted',
@@ -1283,25 +1292,21 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     renderer: 'usMoney',
                     // editor: textField
                 },
-
+                {
+                    header: 'Total Micro',
+                    dataIndex: 'total_cost_detail',
+                    hidden: false,
+                    width: 100,
+                    renderer: 'usMoney'
+                },
                 {
                     header: 'Register date',
                     dataIndex: 'fecha_registro',
                     hidden: false,
                     width: 100,
                     renderer: formatDate,
-                    // editor: new Ext.ux.form.DateTimeField({
-                    //     dateFormat: 'Y-m-d',
-                    //     timeFormat: 'H:i:s'
-                    // })
                 },
-                {
-                    header: 'Total Micro',
-                    dataIndex: 'total_micro',
-                    hidden: false,
-                    width: 100,
-                    renderer: formatDate,
-                },
+                {header: 'Comment', dataIndex: 'comment', hidden: false, width: 200}
             ],
             viewConfig: {
                 forceFit: false
@@ -1381,8 +1386,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 new Ext.grid.RowNumberer(),
                 {header: 'Year', dataIndex: 'year', hidden: false, width: 100},
                 {
-                    header: 'id_pma_contribuciones_detalle',
-                    dataIndex: 'id_pma_contribuciones_detalle',
+                    header: 'id_pma_contribuciones',
+                    dataIndex: 'id_pma_contribuciones',
                     hidden: true,
                     width: 100
                 },
@@ -1478,8 +1483,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'id_pma_costos_micro',
-                    dataIndex: 'id_pma_costos_micro',
+                    header: 'id_pma_costos_macro',
+                    dataIndex: 'id_pma_costos_macro',
                     sortable: false,
                     width: 15,
                     hidden: true
@@ -2493,7 +2498,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de planificacionmicro
     addDetallePlanificacionmicro: function () {
         var planificacionmicro = new this.storeDetallePlanificacionmicro.recordType({
-            id_pma_contribuciones_detalle: contribucionSeleccionada,
+            id_pma_contribuciones: contribucionSeleccionada,
             year: ' ',
             so: 1,
             activity: 1,
@@ -2563,7 +2568,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             adjust: 0,
             total_after_adjust: 0,
             total_cost_detail: 0,
-            id_pma_costos_micro: costoMacroSeleccionada,
+            id_pma_costos_macro: costoMacroSeleccionada,
 
         });
         this.gridPlanificacionmicro.stopEditing();
@@ -2601,7 +2606,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addCostoMacro: function () {
         var inspeccion = new this.storeCostoMacro.recordType({
-            id_pma_costos_macro: costoMacroSeleccionada,
+            id_pma_contribuciones_detalle: costoMacroSeleccionada,
             cost_code: 1,
             total: 0,
             doc: 0,
@@ -2664,12 +2669,12 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             id_pma_costos_micro: costoMicroSeleccionada,
             total: 0,
             adjust: 0,
-            comment: '',
             total_adjusted: 0,
-            pr_microcosts: '',
-            sub_pr_microcosts: '',
-            po_microcosts: '',
-            sub_po_microcosts: '',
+            comment: '',
+            pr_microcosts: 0,
+            sub_pr_microcosts: 0,
+            po_microcosts: 0,
+            sub_po_microcosts: 0,
             fecha_registro: (new Date()),
         });
         this.gridPlanificacionmicroDetalle.stopEditing();

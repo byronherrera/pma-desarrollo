@@ -179,7 +179,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'id_pma_contribuciones_detalle', allowBlank: false},
+                {name: 'id_pma_contribuciones', allowBlank: false},
                 {name: 'year', allowBlank: false},
                 {name: 'so', allowBlank: false},
                 {name: 'activity', allowBlank: false},
@@ -216,7 +216,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'id_pma_costos_macro', allowBlank: true},
+                {name: 'id_pma_contribuciones_detalle', allowBlank: true},
                 {name: 'cost_code', allowBlank: true},
                 {name: 'total', allowBlank: true},
                 {name: 'doc', allowBlank: true},
@@ -687,7 +687,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 new Ext.grid.RowNumberer(),
                 {
                     header: 'id_macro',
-                    dataIndex: 'id_pma_costos_macro',
+                    dataIndex: 'id_pma_contribuciones_detalle',
                     hidden: true,
                     width: 80
                 },
@@ -791,8 +791,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'id_pma_contribuciones_detalle',
-                    dataIndex: 'id_pma_contribuciones_detalle',
+                    header: 'id_pma_contribuciones',
+                    dataIndex: 'id_pma_contribuciones',
                     hidden: true,
                     width: 50
                 },
@@ -1320,7 +1320,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             activity: '',
             total_planned: 0,
             //id_cost: '',
-            id_pma_contribuciones_detalle: selectContribuciones
+            id_pma_contribuciones: selectContribuciones
         });
         this.gridDetalleInspeccion.stopEditing();
         this.storeDetalleInspeccion.insert(0, inspeccion);
@@ -1359,7 +1359,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addCostoMacro: function () {
         var inspeccion = new this.storeCostoMacro.recordType({
-            id_pma_costos_macro: select_SO,
+            id_pma_contribuciones_detalle: select_SO,
             cost_code: 1,
             total: 0,
             doc: 0,

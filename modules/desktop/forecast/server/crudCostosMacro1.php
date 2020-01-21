@@ -12,7 +12,7 @@ function selectDetalleInspecciones()
     global $os;
     if (isset($_POST['id'])) {
         $id = (int)$_POST ['id'];
-        $where = " id_pma_costos_macro  = '$id'";
+        $where = " id_pma_contribuciones_detalle  = '$id'";
     }
 
     if (isset($_POST['filterText'])) {
@@ -92,7 +92,7 @@ function insertDetalleInspecciones()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
     $data->id = generaCodigoCostoMacro();
-    // $data->id_pma_costos_macro = generaidpmaCostoMacro();
+    // $data->id_pma_contribuciones_detalle = generaidpmaCostoMacro();
     $data->fecha_registro = date('Y-m-d H:i:s');
     // $data->id_inspeccion = generaNuevoCodigoInspeccion();
     //$data->fecha_recepcion_documento = date('Y-m-d H:i:s');
@@ -136,7 +136,7 @@ function insertDetalleInspecciones()
             "data" => array($data)
         ));
         // para el caso que ya se haya procesado o sea reinspeccion
-        //actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
+        //actualizar_estado_tramite_usado($data->id_pma_contribuciones);
     } else {
         echo json_encode(array(
             "success" => false,
@@ -173,7 +173,7 @@ function generaidpmaCostoMacro()
 
     $usuario = $os->get_member_id();
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id_pma_costos_macro) AS maximo FROM pma_costos_macro";
+    $sql = "SELECT MAX(id_pma_contribuciones_detalle) AS maximo FROM pma_costos_macro";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     if (isset($row['maximo'])) {

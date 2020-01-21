@@ -61,55 +61,6 @@ function generaNuevoCodigoInstruccion()
 }
 
 
-function generaNuevoCodigoConstrucciones()
-{
-    global $os;
-
-    $usuario = $os->get_member_id();
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT COUNT(num_nio) AS cant_nio FROM amc_inspeccion_nio WHERE fecha_ingreso > '" . date("Y") . "-01-01 01:01:01';";
-    $result = $os->db->conn->query($sql);
-    $row1 = $result->fetch(PDO::FETCH_ASSOC);
-
-    $sql = "SELECT COUNT(id_ccf) AS cant_ccf FROM amc_inspeccion_ccf WHERE fecha_recepcion_documento > '" . date("Y") . "-01-01 01:01:01';";
-    $result = $os->db->conn->query($sql);
-    $row2 = $result->fetch(PDO::FETCH_ASSOC);
-
-    if (isset($row1['cant_nio']) || ($row2['cant_ccf'])) {
-        /*
-        if(($row1['maximo_nio'])>($row2['maximo_ccf'])){
-            $nuevoCodigo = $row1['maximo_nio'] + 1;
-        }else{
-            $nuevoCodigo = $row2['maximo_ccf']+ 1;
-        }
-        */
-        $nuevoCodigo = $row1['cant_nio'] + $row2['cant_ccf'] + 1;
-        return $nuevoCodigo;
-    } else {
-        // valor inicial proceso
-        return 134;
-    }
-}
-
-function generaNuevoCodigoControlProgramado()
-{
-    global $os;
-
-    $usuario = $os->get_member_id();
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT COUNT(id) AS cant_cp FROM amc_inspeccion_control_programado WHERE fecha_recepcion_documento > '" . date("Y") . "-01-01 01:01:01';";
-    $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (isset($row['cant_cp'])) {
-        $nuevoCodigo = $row['cant_cp'] + 1;
-        return $nuevoCodigo;
-    } else {
-        // valor inicial proceso
-        return 1;
-    }
-
-}
-
 function regresaNombre($id_dato)
 {
     global $os;
@@ -144,69 +95,26 @@ function regresaEmail($id_dato)
 
 }
 
-function regresaPrefijoUnidad($idUnidad)
-{
-    global $os;
-    $sql = "SELECT prefijo
-            FROM amc_unidades WHERE id = " . $idUnidad;
-    $nombre = $os->db->conn->query($sql);
-    $rownombre = $nombre->fetch(PDO::FETCH_ASSOC);
-
-    if ($rownombre['prefijo'] != NULL)
-        return $rownombre['prefijo'];
-    else
-        return '';
-}
-
-function regresaUnidadSecretariaZonal($idZonal)
-{
-    global $os;
-    $sql = "SELECT id
-            FROM amc_unidades WHERE id_zonal = " . $idZonal . " AND secretaria = 1 ";
-    $nombre = $os->db->conn->query($sql);
-    $rownombre = $nombre->fetch(PDO::FETCH_ASSOC);
-
-    if ($rownombre['id'] != NULL)
-        return $rownombre['id'];
-    else
-        return '';
-}
-
-
-function generaCodigoProcesoDenuncia()
-{
-    global $os;
-
-    $usuario = $os->get_member_id();
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $anio = date('Y');
-    if ($anio == 2019)
-        $sql = "SELECT MAX(codigo_tramite) AS maximo FROM amc_denuncias WHERE  recepcion_documento > '" . $anio . "-01-03 00:00:01'";
-    else
-        $sql = "SELECT MAX(codigo_tramite) AS maximo FROM amc_denuncias WHERE  recepcion_documento > '" . $anio . "-01-01 00:00:01'";
-
-    $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (isset($row['maximo'])) {
-        $nuevoCodogo = $row['maximo'] + 1;
-        return $nuevoCodogo;
-    } else {
-        // valor inicial proceso
-
-        return 1;
-
-    }
-}
-
-
-function calcularContribucionesTotal($id = 0)
+function calcularTotalGrantPlusISC($id)
 {
     // aca el calculo
     global $os;
-    $sql = "SELECT SUM(total) as total
-                FROM pma_contribuciones_detalle where id_pma_contribuciones_detalle = $id ";
-    $result = $os->db->conn->query($sql);
+    $sql = "UPDATE pma_contribuciones SET total_contribution = total_grant + isc  WHERE `id` = $id";
+    $sql = $os->db->conn->prepare($sql);
+    $sql->execute();
+    return 1;
+}
+
+
+function actualizarContribucionesTotal($id = 0)
+{
+    // aca el calculo
+    global $os;
     $total = 0;
+
+    $sql = "SELECT SUM(total) as total
+            FROM pma_contribuciones_detalle where id_pma_contribuciones = $id ";
+    $result = $os->db->conn->query($sql);
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         if (!is_null($row ['total']))
             $total = $row ['total'];
@@ -222,57 +130,22 @@ function calcularContribucionesTotal($id = 0)
     return 1;
 }
 
-function calcularTotalGrantPlusISC($id)
+function actualizaActivitiesTotal($id)
 {
-    // aca el calculo
+
     global $os;
-    $sql = "UPDATE pma_contribuciones SET total_contribution = total_grant + isc  WHERE `id` = $id";
-    $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
-
-    return 1;
-}
-
-function calcularMicroDetailTotal($id)
-{
-    // aca el calculo
-    global $os;
-    $sql = "SELECT SUM(total_adjusted) as total
-             FROM pma_costos_micro_detalle where id_pma_costos_micro = $id";
-    $result = $os->db->conn->query($sql);
-
     $total = 0;
-    $id_pma_contribuciones_detalle = 0;
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (!is_null($row ['total'])) {
-        $total = $row ['total'];
-    }
+    $id_pma_contribuciones = 0;
 
-    //(select id_pma_contribuciones_detalle from pma_costos_micro_detalle  WHERE id = $id) as id_pma_contribuciones_detalle
-
-    $sql = "UPDATE pma_costos_micro SET total_cost_detail = $total  WHERE id = '$id' ";
-    $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
-
-    return $id_pma_contribuciones_detalle;
-}
-
-;
-
-
-function calcularActivitiesTotal($id)
-{
-    // aca el calculo
-    global $os;
     $sql = "SELECT SUM(total_adjusted) as total ,
-            (select id_pma_contribuciones_detalle from pma_contribuciones_detalle WHERE id = $id) as id_pma_contribuciones_detalle
-            FROM pma_costos_macro where id_pma_costos_macro = $id ";
+            (select id_pma_contribuciones from pma_contribuciones_detalle WHERE id = $id) as id_pma_contribuciones
+            FROM pma_costos_macro where id_pma_contribuciones_detalle = $id ";
     $result = $os->db->conn->query($sql);
-    $total = 0;
-    $id_pma_contribuciones_detalle = 0;
+
+
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         if (!is_null($row ['total'])) {
-            $id_pma_contribuciones_detalle = $row ['id_pma_contribuciones_detalle'];
+            $id_pma_contribuciones = $row ['id_pma_contribuciones'];
             $total = $row ['total'];
         }
     }
@@ -281,10 +154,78 @@ function calcularActivitiesTotal($id)
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
-    return $id_pma_contribuciones_detalle;
+    $resultado = array("id_pma_contribuciones" => $id_pma_contribuciones, "total" => $total);
+    return $resultado;
 }
 
-;
+////////////////
+function actualizarMicroTotal($id)
+{
+    global $os;
+    $total = 0;
+    $id_pma_contribuciones_detalle = 0;
+
+    $sql = "SELECT SUM(total_after_adjust) as total
+             FROM pma_costos_micro where id_pma_costos_macro = $id";
+    $result = $os->db->conn->query($sql);
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+    if (!is_null($row ['total'])) {
+        $total = $row ['total'];
+    }
+    $sql = "UPDATE pma_costos_macro SET total_cost_detail = $total  WHERE id = '$id' ";
+    $sql = $os->db->conn->prepare($sql);
+    $sql->execute();
+
+    $sql = "select id_pma_contribuciones_detalle from pma_costos_macro  WHERE id = $id";
+    $result = $os->db->conn->query($sql);
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+    if (!is_null($row ['id_pma_contribuciones_detalle'])) {
+        $id_pma_contribuciones_detalle = $row ['id_pma_contribuciones_detalle'];
+    }
+
+    $resultado = array("id_pma_contribuciones_detalle" => $id_pma_contribuciones_detalle, "total" => $total);
+    return $resultado;
+}
+
+function actualizarMicroDetailTotal($id,  $total_adjusted)
+{
+    global $os;
+    $total = 0;
+    $id_pma_costos_macro = 0;
+
+    $sql = "SELECT SUM(total_adjusted) as total
+             FROM pma_costos_micro_detalle where id_pma_costos_micro = $id AND id <> $id";
+    $result = $os->db->conn->query($sql);
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+    if (!is_null($row ['total'])) {
+        $total = $row ['total'];
+    }
+
+
+    $sql = "select id_pma_costos_macro, total_after_adjust from pma_costos_micro  WHERE id = $id";
+    $result = $os->db->conn->query($sql);
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+    if (!is_null($row ['id_pma_costos_macro'])) {
+        $sql = "SELECT SUM(total_adjusted) as total
+             FROM pma_costos_micro_detalle where id_pma_costos_micro = $id ";
+        $result = $os->db->conn->query($sql);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        if (!is_null($row ['total'])) {
+            $total = $row ['total'];
+        }
+
+        $id_pma_costos_macro = $row ['id_pma_costos_macro'];
+        $total_after_adjust = $row ['total_after_adjust'];
+        if ($total_after_adjust > $total) {
+            $sql = "UPDATE pma_costos_micro SET total_cost_detail = $total  WHERE id = '$id' ";
+            $sql = $os->db->conn->prepare($sql);
+            $sql->execute();
+        }
+    }
+    $resultado = array("id_pma_costos_macro" => $id_pma_costos_macro, "total" => $total, "total_after_adjust" => $total_after_adjust);
+    return $resultado;
+}
+
 
 // funcion usada para generar la busqueda
 function retornaWhereBusqueda($campo, $columnaBusqueda)
@@ -305,9 +246,8 @@ function retornaWhereBusqueda($campo, $columnaBusqueda)
     return $where;
 }
 
-;
 
-function validaRelacion($id,  $idTablaHija = 'id_pma_costos_micro', $tablaHija = 'pma_costos_micro_detalle')
+function validaRelacion($id, $idTablaHija = 'id_pma_costos_macro', $tablaHija = 'pma_costos_micro_detalle')
 {
     global $os;
 

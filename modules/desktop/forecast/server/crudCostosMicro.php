@@ -30,7 +30,7 @@ function selectDetalleInspecciones()
     global $os;
     if (isset($_POST['id'])) {
         $id = (int)$_POST ['id'];
-        $where = " id_pma_costos_micro  = '$id'";
+        $where = " id_pma_costos_macro  = '$id'";
     }
 
     if (isset($_POST['filterText'])) {
@@ -157,7 +157,7 @@ function insertDetalleInspecciones()
             "data" => array($data)
         ));
         // para el caso que ya se haya procesado o sea reinspeccion
-        //actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
+        //actualizar_estado_tramite_usado($data->id_pma_contribuciones);
     } else {
         echo json_encode(array(
             "success" => false,
@@ -242,7 +242,7 @@ function updateDetalleInspecciones()
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_micro actualizado exitosamente" : $sql->errorCode(),
         "message" => $message,
         "data" => $data,
-        "total" => totalCostosMicro ($data->id_pma_costos_micro)
+        "total" => totalCostosMicro ($data->id_pma_costos_macro)
     ));
 
 
@@ -253,7 +253,7 @@ function totalCostosMicro ($id) {
     // aca el calculo
     global $os;
 
-    $sql = "SELECT SUM(total_micro) as total  FROM pma_costos_micro where id_pma_costos_micro = $id ";
+    $sql = "SELECT SUM(total_micro) as total  FROM pma_costos_micro where id_pma_costos_macro = $id ";
     $result = $os->db->conn->query($sql);
     $total = 0;
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {

@@ -25,20 +25,20 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
         // this.select_SO = 0;
 
         //Control en caso de tener asignado el perfil de administrador
-        if (accesosCoordinadorInspeccion && accesosSecretaria && accesosInspectores && accesosSupervision == true) {
+        if (accesosCoordinadorInspeccion && accesosSecretaria && accesosInspectores && accesosSupervision === true) {
             accesosSecretaria = false;
             accesosInspectores = false;
             accesosSupervision = false;
         }
         //Acceso para creación y edición en pestaña Datos inspección
-        if (accesosCoordinadorInspeccion || accesosInspectores == true) {
+        if (accesosCoordinadorInspeccion || accesosInspectores === true) {
             var creacionDatosInspeccion = true;
         } else {
             var creacionDatosInspeccion = false;
         }
 
         //Acceso para creación y edición en pestaña Trámites pendientes
-        if (accesosCoordinadorInspeccion || accesosSecretaria == true) {
+        if (accesosCoordinadorInspeccion || accesosSecretaria === true) {
             var creacionTramites = true;
         } else {
             var creacionTramites = false;
@@ -180,7 +180,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'id_pma_contribuciones_detalle', allowBlank: false},
+                {name: 'id_pma_contribuciones', allowBlank: false},
                 {name: 'year', allowBlank: false},
                 {name: 'so', allowBlank: false},
                 {name: 'activity', allowBlank: false},
@@ -217,7 +217,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'id_pma_costos_macro', allowBlank: true},
+                {name: 'id_pma_contribuciones_detalle', allowBlank: true},
                 {name: 'cost_code', allowBlank: true},
                 {name: 'total', allowBlank: true},
                 {name: 'doc', allowBlank: true},
@@ -247,7 +247,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             //baseParams: {}
             listeners: {
                 exception: function (proxy, response, operation) {
-                    if (operation == 'destroy') {
+                    if (operation === 'destroy') {
                         Ext.Msg.show({
                             title: 'Error'
 //                            , msg: errorJson.msg
@@ -288,7 +288,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
 
                 },
                 exception: function (proxy, response, operation) {
-                    if (operation == 'destroy') {
+                    if (operation === 'destroy') {
                         Ext.Msg.show({
                             title: 'Error'
                             , msg: 'To delete the record, the dependent records must be deleted'
@@ -311,7 +311,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             //baseParams: {}
             listeners: {
                 exception: function (proxy, response, operation) {
-                    if (operation == 'destroy') {
+                    if (operation === 'destroy') {
                         Ext.Msg.show({
                             title: 'Error'
                             , msg: 'To delete the record, the dependent records must be deleted'
@@ -705,7 +705,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             store: this.storeModuloContribution,
 
             viewConfig: {
-                forceFit: winWidth > 1024 ? true : false
+                //forceFit: winWidth > 1024 ? true : false
+                // no funciona con este componente
+                forceFit: true
             },
             sm: new Ext.grid.RowSelectionModel({
                 singleSelect: true,
@@ -756,7 +758,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                 new Ext.grid.RowNumberer(),
                 {
                     header: 'id_macro',
-                    dataIndex: 'id_pma_costos_macro',
+                    dataIndex: 'id_pma_contribuciones_detalle',
                     hidden: true,
                     width: 80
                 },
@@ -827,7 +829,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             listeners: {
                 beforeedit: function (e) {
                     // verficamos que ya no exista el dato
-                    if (e.field == "funcionario_entrega") {
+                    if (e.field === "funcionario_entrega") {
                         if (e.record.get('guia') > 0) {
                             Ext.Msg.show({
                                 title: 'Error '
@@ -860,8 +862,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'id_pma_contribuciones_detalle',
-                    dataIndex: 'id_pma_contribuciones_detalle',
+                    header: 'id_pma_contribuciones',
+                    dataIndex: 'id_pma_contribuciones',
                     hidden: true,
                     width: 50
                 },
@@ -923,7 +925,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             listeners: {
                 beforeedit: function (e) {
                     // verficamos que ya no exista el dato
-                    if (e.field == "funcionario_entrega") {
+                    if (e.field === "funcionario_entrega") {
                         if (e.record.get('guia') > 0) {
                             Ext.Msg.show({
                                 title: 'Error '
@@ -1131,7 +1133,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                                 id: 'west-panel',
                                                 title: 'Activities',
                                                 split: true,
-                                                width: 200,
                                                 width: winWidth * 0.3,
                                                 minSize: 175,
                                                 maxSize: 400,
@@ -1345,7 +1346,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
             fn: function (btn) {
-                if (btn == 'yes') {
+                if (btn === 'yes') {
                     var rows = this.gridModuloContribution.getSelectionModel().getSelections();
                     if (rows.length === 0) {
                         return false;
@@ -1388,8 +1389,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
             fn: function (btn) {
-                if (btn == 'yes') {
-                    var rows = this.gridDetalleInspeccion.getSelectionModel().getSelections();
+                if (btn === 'yes') {
+                    var r=ows = this.gridDetalleInspeccion.getSelectionModel().getSelections();
                     if (rows.length === 0) {
                         return false;
                     }
@@ -1406,7 +1407,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             activity: '',
             total_planned: 0,
             //id_cost: '',
-            id_pma_contribuciones_detalle: selectContribuciones
+            id_pma_contribuciones: selectContribuciones
         });
         this.gridDetalleInspeccion.stopEditing();
         this.storeDetalleInspeccion.insert(0, inspeccion);
@@ -1432,7 +1433,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             buttons: Ext.Msg.YESNO,
             //En caso de presionar el botón SI, se eliminan los datos del registro seleccionado
             fn: function (btn) {
-                if (btn == 'yes') {
+                if (btn === 'yes') {
                     var rows = this.gridCostoMacro.getSelectionModel().getSelections();
                     if (rows.length === 0) {
                         return false;
@@ -1445,7 +1446,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addCostoMacro: function () {
         var inspeccion = new this.storeCostoMacro.recordType({
-            id_pma_costos_macro: select_SO,
+            id_pma_contribuciones_detalle: select_SO,
             cost_code: '',
             total: 0,
             doc: 0,
@@ -1480,7 +1481,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             icon: Ext.Msg.WARNING,
             buttons: Ext.Msg.YESNO,
             fn: function (btn) {
-                if (btn == 'yes') {
+                if (btn === 'yes') {
                     //                window.location.href = 'modules/desktop/inspeccion/server/migrarWings.php';
                     //                setTimeout(function () {
                     //                    AppMsg.setAlert("Alerta ", Ext.getCmp('checkPendientesAprobar').getValue());
@@ -1492,8 +1493,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                             waitMsg: 'Uploading file ...',
                             //params: {data: selectOperativos},
                             success: function (fp, o) {
-
-
                                 Ext.getCmp('fp').getForm().reset();
                             },
                             failure: function (form, action) {
@@ -1506,10 +1505,8 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                                     , buttons: Ext.Msg.OK
                                 });*/
                             }
-
                         });
                     }
-
                 }
             }
         });
@@ -1523,7 +1520,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             icon: Ext.Msg.WARNING,
             buttons: Ext.Msg.YESNO,
             fn: function (btn) {
-                if (btn == 'yes') {
+                if (btn === 'yes') {
 
                     Ext.Ajax.request({
                         url: 'modules/desktop/inspeccion/server/migrarData.php',
@@ -1534,11 +1531,9 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                         },
                         failure: function(response, opts) {
                             console.log('server-side failure with status code ');
-                            alert ("errir")
+                            alert ("error")
                         }
                     });
-
-
                 }
             }
         });

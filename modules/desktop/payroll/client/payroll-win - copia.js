@@ -848,7 +848,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             root: 'data',
             fields: [
                 {name: 'id', allowBlank: true},
-                {name: 'id_pma_costos_micro', allowBlank: true},
+                {name: 'id_pma_costos_macro', allowBlank: true},
                 {name: 'cost_code2', allowBlank: true},
                 {name: 'cost_code3', allowBlank: true},
                 {name: 'glcode', allowBlank: true},
@@ -927,8 +927,8 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             var columns = [
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'id_pma_costos_micro',
-                    dataIndex: 'id_pma_costos_micro',
+                    header: 'id_pma_costos_macro',
+                    dataIndex: 'id_pma_costos_macro',
                     sortable: false,
                     width: 15,
                     hidden: true,
@@ -953,8 +953,8 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     }
                 },
                 {
-                    header: 'id_pma_costos_micro',
-                    dataIndex: 'id_pma_costos_micro',
+                    header: 'id_pma_costos_macro',
+                    dataIndex: 'id_pma_costos_macro',
                     sortable: false,
                     width: 15,
                     hidden: true

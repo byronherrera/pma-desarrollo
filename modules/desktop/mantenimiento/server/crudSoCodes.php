@@ -6,23 +6,11 @@ if (!$os->session_exists()) {
     die('No existe sesión!');
 }
 
-function selectPayroll()
+function selectSoCodes()
 {
     global $os;
 
-    //Se inicializa el parámetro de búsqueda de código trámite
-    $columnaBusqueda = 'pma_payroll.id';
-    if (isset($_POST['filterText'])) {
-        $campo = $_POST['filterText'];
-        $campo = str_replace(" ", "%", $campo);
-        if (isset($_POST['filterField'])) {
-            $columnaBusqueda = $_POST['filterField'];
-        }
-        $where = " WHERE $columnaBusqueda LIKE '%$campo%'";
-    }
-
-
-    //$columnaBusqueda = 'busqueda_todos';
+    $columnaBusqueda = 'busqueda_todos';
     $where = '';
 
     if (isset ($_POST['start']))
@@ -34,28 +22,17 @@ function selectPayroll()
         $limit = $_POST['limit'];
     else
         $limit = 100;
-
-    $orderby = 'ORDER BY CONVERT( id,UNSIGNED INTEGER) ASC';
-    if (isset($_POST['sort'])) {
-        if ($_POST['sort'] == 'id') {
-            $orderby = 'ORDER BY CONVERT( id,UNSIGNED INTEGER) ASC';
-        } else {
-            $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
-        }
-    }
-
+    $orderby = 'ORDER BY id ASC';
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_payroll_employees  $where $orderby LIMIT $start, $limit";
- //echo $sql;
+    $sql = "SELECT * FROM pma_so_categories $where $orderby LIMIT $start, $limit";
     $result = $os->db->conn->query($sql);
-
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $row;
     };
 
-    $sql = "SELECT count(*) AS total FROM pma_payroll_employees $where";
+    $sql = "SELECT count(*) AS total FROM pma_so_categories $where";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     $total = $row['total'];
@@ -67,31 +44,31 @@ function selectPayroll()
     );
 }
 
-
-function insertPayroll()
+function insertSoCodes()
 {
     global $os;
 
+    $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
+
 
     $cadenaDatos = '';
     $cadenaCampos = '';
     foreach ($data as $clave => $valor) {
-        if ($clave != 'id') {
-            $cadenaCampos = $cadenaCampos . $clave . ',';
-            $cadenaDatos = $cadenaDatos . "'" . $valor . "',";
-        }
+        $cadenaCampos = $cadenaCampos . $clave . ',';
+        $cadenaDatos = $cadenaDatos . "'" . $valor . "',";
     }
     $cadenaCampos = substr($cadenaCampos, 0, -1);
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "INSERT INTO pma_payroll_employees($cadenaCampos) VALUES ($cadenaDatos);";
-    $sql = $os->db->conn->prepare($sql);
+    $sql = "INSERT INTO pma_so_categories($cadenaCampos)
+	values($cadenaDatos);";
+     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
     $data->id = $os->db->conn->lastInsertId();
     // genero el nuevo codigo de proceso
+
 
     echo json_encode(array(
         "success" => true,
@@ -100,65 +77,17 @@ function insertPayroll()
     ));
 }
 
-//funcion verifica si el campo HRPosition se va a actualizar con los datos nuevos
-function verificaCambioHRPOSITION($data)
-{
-    global $os;
-    $id = $data->id;
-    // recupero id original,
-    $sql = "SELECT hr_position  FROM  pma_payroll_employees WHERE id = '$id';";
-    $result = $os->db->conn->query($sql);
 
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-
-    // se compara con los campos
-    if ($row['hr_position'] != $data->hr_position)  {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function actualizaDataHR($data)
-{
-    global $os;
-
-    $sql = "SELECT hr_position  FROM  pma_payroll_employees WHERE id = $data->id;";
-    $result = $os->db->conn->query($sql);
-
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-
-    // se compara con los campos
-
-    if ($row['hr_position'] != $data->hr_position)  {
-        return true;
-    } else {
-        return false;
-    }
-};
-
-
-function updatePayroll()
+function updateSoCodes()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
 
-    // if (isset($data->despacho_secretaria)) {
-    //     if (!$data->despacho_secretaria)
-    //         $data->despacho_secretaria = 'false';
-    //     else
-    //         $data->despacho_secretaria = 'true';
-    // }
 
 
     $message = '';
-    // if (isset($data->hr_position)) {
-    //     if (verificaCambioHRPOSITION($data)) {
-    //         print_r($data);
-    //         $data = actualizaDataHR($data);
-    //     }
-    // }
+
 
     // genero el listado de valores a insertar
     $cadenaDatos = '';
@@ -167,16 +96,14 @@ function updatePayroll()
     }
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    $sql = "UPDATE pma_payroll_employees SET  $cadenaDatos  WHERE pma_payroll_employees.id = '$data->id' ";
-    // echo($sql);
+    $sql = "UPDATE pma_so_categories SET  $cadenaDatos  WHERE pma_so_categories.id = '$data->id' ";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_payroll_employees actualizado exitosamente" : $sql->errorCode(),
-        "message" => $message,
-        "data" => $data
+        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_so_categories actualizado exitosamente" : $sql->errorCode(),
+        "message" => $message
     ));
 }
 
@@ -188,7 +115,7 @@ function validarCedulaCorreo($id)
 
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT cedula, email FROM pma_payroll WHERE id = $id";
+    $sql = "SELECT cedula, email FROM pma_so_categories WHERE id = $id";
     $result = $os->db->conn->query($sql);
 
     $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -200,12 +127,12 @@ function validarCedulaCorreo($id)
 }
 
 
-function selectPayrollForm()
+function selectSoCodesForm()
 {
     global $os;
     $id = (int)$_POST ['id'];
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT *, (SELECT numero FROM amc_guias WHERE amc_guias.id = a.guia ) as guianumero, (SELECT COUNT(*) FROM pma_payroll  b WHERE a.cedula = b.cedula and b.cedula <> '') as totaldocumentos FROM pma_payroll as a  WHERE a.id = $id";
+    $sql = "SELECT *, (SELECT numero FROM amc_guias WHERE amc_guias.id = a.guia ) as guianumero, (SELECT COUNT(*) FROM pma_so_categories  b WHERE a.cedula = b.cedula and b.cedula <> '') as totaldocumentos FROM pma_so_categories as a  WHERE a.id = $id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -218,7 +145,7 @@ function selectPayrollForm()
     );
 }
 
-function updatePayrollForm()
+function updateSoCodesForm()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
@@ -227,7 +154,7 @@ function updatePayrollForm()
     $nombre = $_POST["nombre"];
     $nombre_completo = $_POST["nombre_completo"];
     $activo = $_POST["activo"];
-    $orden = $_POST["orden"];
+//    $orden = $_POST["orden"];
 
     if (isset($_POST["reasignacion"])) {
         $reasignacion = $_POST["reasignacion"];
@@ -247,17 +174,17 @@ function updatePayrollForm()
     $nombre = $_POST["nombre"];
     $nombre_completo = $_POST["nombre_completo"];
     $activo = $_POST["activo"];
-    $orden = $_POST["orden"];
+//    $orden = $_POST["orden"];
 
 
     //para el caso de denuncias se valida que exista cedula y correo
 
-    $sql = "UPDATE pma_payroll SET
+    /*codigo_tramite='$codigo_tramite',*/
+    $sql = "UPDATE pma_so_categories SET
             id = '$id',
             nombre = $nombre,
             nombre_completo = $nombre_completo,
-            activo = $activo,
-            orden = $orden
+            activo = $activo 
 
 
           WHERE id = '$id' ";
@@ -269,36 +196,36 @@ function updatePayrollForm()
     ));
 }
 
-function deletePayroll()
+function deleteSoCodes()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM pma_payroll_employees WHERE id = $id";
+    $sql = "DELETE FROM pma_so_categories WHERE id = $id";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_payroll, eliminado exitosamente" : $sql->errorCode()
+        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_so_categories, eliminado exitosamente" : $sql->errorCode()
     ));
 }
 
 switch ($_GET['operation']) {
     case 'select' :
-        selectPayroll();
+        selectSoCodes();
         break;
     case 'insert' :
-        insertPayroll();
+        insertSoCodes();
         break;
     case 'update' :
-        updatePayroll();
+        updateSoCodes();
         break;
     case 'selectForm' :
-        selectPayrollForm();
+        selectSoCodesForm();
         break;
     case 'updateForm' :
-        updatePayrollForm();
+        updateSoCodesForm();
         break;
     case 'delete' :
-        deletePayroll();
+        deleteSoCodes();
         break;
 }

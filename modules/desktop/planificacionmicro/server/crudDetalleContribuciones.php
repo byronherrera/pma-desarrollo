@@ -12,7 +12,7 @@ function selectDetalleInspecciones()
     global $os;
     if (isset($_POST['id'])) {
         $id = (int)$_POST ['id'];
-        $where = " id_pma_contribuciones_detalle  = '$id'";
+        $where = " id_pma_contribuciones  = '$id'";
     }
 
     if (isset($_POST['filterText'])) {
@@ -46,7 +46,7 @@ function calcularTotal($id)
     // aca el calculo
     global $os;
 
-    $sql = "SELECT SUM(total_adjusted) as total  FROM pma_costos_macro where id_pma_costos_macro = $id ";
+    $sql = "SELECT SUM(total_adjusted) as total  FROM pma_costos_macro where id_pma_contribuciones_detalle = $id ";
     $result = $os->db->conn->query($sql);
     $total = 0;
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -155,7 +155,7 @@ function insertDetalleInspecciones()
             "data" => array($data)
         ));
         // para el caso que ya se haya procesado o sea reinspeccion
-        //actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
+        //actualizar_estado_tramite_usado($data->id_pma_contribuciones);
     } else {
         echo json_encode(array(
             "success" => false,

@@ -19,13 +19,10 @@ function calcularTotal($id)
 
         if (!is_null($row ['total']))
             $total = $row ['total'];
-
     }
-
     return $total;
 }
 
-;
 
 function selectDetalleInspecciones()
 {
@@ -35,7 +32,7 @@ function selectDetalleInspecciones()
 
     if (isset($_POST['id'])) {
         $id = (int)$_POST ['id'];
-        $where = " id_pma_costos_micro  = '$id'";
+        $where = " id_pma_costos_macro  = '$id'";
     }
 
     if (isset($_POST['filterText'])) {
@@ -119,7 +116,7 @@ function insertDetalleInspecciones()
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
-    $data->id = generaCodigoProcesoOrdenanza();
+
     // $data->id_inspeccion = generaNuevoCodigoInspeccion();
     //$data->fecha_recepcion_documento = date('Y-m-d H:i:s');
     //genero el listado de nombre de campos
@@ -162,34 +159,13 @@ function insertDetalleInspecciones()
             "data" => array($data)
         ));
         // para el caso que ya se haya procesado o sea reinspeccion
-        //actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
+        //actualizar_estado_tramite_usado($data->id_pma_contribuciones);
     } else {
         echo json_encode(array(
             "success" => false,
             "msg" => $sql->errorCode() . $sql1,
             "data" => array($data)
         ));
-    }
-}
-
-
-function generaCodigoProcesoOrdenanza()
-{
-    global $os;
-
-    $usuario = $os->get_member_id();
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id) AS maximo FROM pma_costos_micro";
-    $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (isset($row['maximo'])) {
-        $nuevoCodogo = $row['maximo'] + 1;
-        return $nuevoCodogo;
-    } else {
-        // valor inicial proceso
-
-        return 1;
-
     }
 }
 
@@ -200,20 +176,10 @@ function updateDetalleInspecciones()
     $data = json_decode($_POST["data"]);
     // calculo el valor de total en base de amount - adjust
     $data->total_after_adjust = $data->total_micro + $data->adjust;
-    // if (isset($data->despacho_secretaria)) {
-    //     if (!$data->despacho_secretaria)
-    //         $data->despacho_secretaria = 'false';
-    //     else
-    //         $data->despacho_secretaria = 'true';
-    // }
+
 
     $message = '';
-    // if (isset($data->id_tipo_documento)) {
-    //     if ($data->id_tipo_documento == '1')
-    //         if (validarCedulaCorreo($data->id)) {
-    //             $message = 'Ingresar número de cédula y correo electrónico';
-    //         }
-    // }
+
 
     // genero el listado de valores a insertar
     $cadenaDatos = '';
@@ -233,22 +199,23 @@ function updateDetalleInspecciones()
     }
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    // cambioEstadoAsignacion ($data->funcionario_entrega, $data->id);
-    // cambioEstadoReasignacion ($data->funcionario_reasignacion, $data->id);
-
     $sql = "UPDATE pma_costos_micro SET  $cadenaDatos  WHERE pma_costos_micro.id = '$data->id' ";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
+    // actualizar el total en el padre
+    $idMicro = actualizarMicroTotal ($data->id_pma_costos_macro);
+
+   // $idActivities = calcularActivitiesTotal($data->id_pma_contribuciones_detalle);
+   // calcularContribucionesTotal($idActivities);
 
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_micro actualizado exitosamente" : $sql->errorCode(),
         "message" => $message,
         "data" => $data,
-        "total" => totalCostosMicro($data->id_pma_costos_micro)
+        "total" => totalCostosMicro($data->id_pma_costos_macro)
     ));
-
 
 }
 
@@ -258,7 +225,7 @@ function totalCostosMicro($id)
     // aca el calculo
     global $os;
 
-    $sql = "SELECT SUM(total_micro) as total  FROM pma_costos_micro where id_pma_costos_micro = $id ";
+    $sql = "SELECT SUM(total_micro) as total  FROM pma_costos_micro where id_pma_costos_macro = $id ";
     $result = $os->db->conn->query($sql);
     $total = 0;
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -267,25 +234,10 @@ function totalCostosMicro($id)
             $total = $row ['total'];
 
     }
-
     return $total;
 }
 
-function cambioEstadoAsignacion($id_asignacion, $idInspeccion)
-{
-    global $os;
-    // en caso de que sea una reasignacion entonces se cambia de estado
-    if (!is_null($id_asignacion) AND $id_asignacion != '') {
 
-        // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
-
-        if (verificaAnteriorReasignacion($id_asignacion, $idInspeccion)) {
-            $sql = "UPDATE `pma_costos_micro` SET `estado_asignacion` = 1 WHERE `id` = $idInspeccion";
-            $sql = $os->db->conn->prepare($sql);
-            $sql->execute();
-        }
-    }
-}
 
 function verificaAnteriorAsignacion($id_reasignacion, $idInspeccion)
 {
@@ -300,22 +252,6 @@ function verificaAnteriorAsignacion($id_reasignacion, $idInspeccion)
         return true;
 }
 
-function cambioEstadoReasignacion($id_reasignacion, $idInspeccion)
-{
-    global $os;
-    // en caso de que sea una reasignacion entonces se cambia de estado
-    if (!is_null($id_reasignacion) AND $id_reasignacion != '') {
-
-        // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
-
-        if (verificaAnteriorReasignacion($id_reasignacion, $idInspeccion)) {
-            $sql = "UPDATE `pma_costos_micro` SET `estado_asignacion` = 3 WHERE `id` = $idInspeccion";
-            $sql = $os->db->conn->prepare($sql);
-            $sql->execute();
-
-        }
-    }
-}
 
 function verificaAnteriorReasignacion($id_reasignacion, $idInspeccion)
 {
@@ -412,7 +348,7 @@ function deleteDetalleInspecciones()
     $id = json_decode(stripslashes($_POST["data"]));
 
     // se valida que no existan registros en la tabla hija
-    if (validaRelacion($id,  'id_pma_costos_micro', 'pma_costos_micro_detalle')) {
+    if (validaRelacion($id,  'id_pma_costos_macro', 'pma_costos_micro_detalle')) {
         $sql = "DELETE FROM pma_costos_micro WHERE id = $id";
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();

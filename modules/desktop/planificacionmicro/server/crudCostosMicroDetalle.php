@@ -7,7 +7,7 @@ if (!$os->session_exists()) {
     die('No existe sesión!');
 }
 
-function insertDetalleInspecciones()
+function insertDetalleMicro()
 {
     global $os;
 
@@ -52,12 +52,7 @@ function insertDetalleInspecciones()
     $data->id = $os->db->conn->lastInsertId();
     // genero el nuevo codigo de proceso
 
-    // actualizar el total en el padre
-    $idMicro = calcularMicroDetailTotal($data->id_pma_costos_micro);
-//    $idMicro = calcularMicroTotal ($data->id_pma_costos_micro);
-
-//    $idActivities = calcularActivitiesTotal ($data->id_pma_costos_micro_detalle);
-//    calcularContribucionesTotal ($idActivities);
+    $idMicro = actualizarMicroDetailTotal($data->id_pma_costos_micro);
 
 
     if ($verificaInsert) {
@@ -67,7 +62,7 @@ function insertDetalleInspecciones()
             "data" => array($data)
         ));
         // para el caso que ya se haya procesado o sea reinspeccion
-        //actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
+        //actualizar_estado_tramite_usado($data->id_pma_contribuciones);
     } else {
         echo json_encode(array(
             "success" => false,
@@ -77,27 +72,7 @@ function insertDetalleInspecciones()
     }
 }
 
-function generaidpmaCostoMacro()
-{
-    global $os;
-
-    $usuario = $os->get_member_id();
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id) AS maximo FROM pma_costos_micro_detalle";
-    $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (isset($row['maximo'])) {
-        $nuevoCodogo = $row['maximo'] + 1;
-        return $nuevoCodogo;
-    } else {
-        // valor inicial proceso
-
-        return 1;
-
-    }
-}
-
-function updateDetalleInspecciones()
+function updateDetalleMicro()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
@@ -124,45 +99,40 @@ function updateDetalleInspecciones()
     }
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
-    $sql = "UPDATE pma_costos_micro_detalle SET  $cadenaDatos  WHERE pma_costos_micro_detalle.id = '$data->id' ";
-
-
-    $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
 
     // actualizar el total en el padre
-    $idMicroDetalle = calcularMicroDetailTotal($data->id_pma_costos_micro);
 
-    $idMicro = calcularMicroTotal($data->id_pma_costos_micro);
+    $MicroDetalle = actualizarMicroDetailTotal($data->id_pma_costos_micro, $data->id, $data->total_adjusted );
+    $Micro = actualizarMicroTotal($MicroDetalle['id_pma_costos_macro']);
+    $Activities = actualizaActivitiesTotal ($Micro['id_pma_contribuciones_detalle']);
+    //actualizarContribucionesTotal ($Activities['id_pma_contribuciones']);
+    //$total_after_adjust
+    if ($MicroDetalle["total_after_adjust"] > $MicroDetalle["total"]) {
+        //si le valor es mas alto
+        $sql = "UPDATE pma_costos_micro_detalle SET  $cadenaDatos  WHERE pma_costos_micro_detalle.id = '$data->id' ";
+        $sql = $os->db->conn->prepare($sql);
 
-    $idActivities = calcularActivitiesTotal ($data->id_pma_costos_micro_detalle);
-//    calcularContribucionesTotal ($idActivities);
+        $sql->execute();
+        echo json_encode(array(
+            "success" => $sql->errorCode() == 0,
+            "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_micro_detalle actualizado exitosamente" : $sql->errorCode(),
+            "message" => $message,
+            "data" => array($data),
+            "totalCostosMicro" => $MicroDetalle['total']
+        ));
+    } else {
+        $limite = $MicroDetalle["total_after_adjust"];
+        echo json_encode(array(
+            "success" => false,
+            "msg" => "Valor total  excede el limite de $limite",
+            "message" => "Valor total excede el limite de $limite",
+            "data" => array($data),
+            "totalCostosMicro" => $MicroDetalle['total']
+        ));
 
-    echo json_encode(array(
-        "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_micro_detalle actualizado exitosamente" : $sql->errorCode(),
-        "message" => $message,
-        "data" => array($data)
-    ));
-
-}
-
-
-function cambioEstadoAsignacion($id_asignacion, $idInspeccion)
-{
-    global $os;
-    // en caso de que sea una reasignacion entonces se cambia de estado
-    if (!is_null($id_asignacion) AND $id_asignacion != '') {
-
-        // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
-
-        if (verificaAnteriorReasignacion($id_asignacion, $idInspeccion)) {
-            $sql = "UPDATE `pma_costos_micro_detalle` SET `estado_asignacion` = 1 WHERE `id` = $idInspeccion";
-            $sql = $os->db->conn->prepare($sql);
-            $sql->execute();
-        }
     }
 }
+
 
 function verificaAnteriorAsignacion($id_reasignacion, $idInspeccion)
 {
@@ -177,56 +147,9 @@ function verificaAnteriorAsignacion($id_reasignacion, $idInspeccion)
         return true;
 }
 
-function cambioEstadoReasignacion($id_reasignacion, $idInspeccion)
-{
-    global $os;
-    // en caso de que sea una reasignacion entonces se cambia de estado
-    if (!is_null($id_reasignacion) AND $id_reasignacion != '') {
 
-        // en caso de que ya exista se consulta si es el mimso dato o uno nuevo
 
-        if (verificaAnteriorReasignacion($id_reasignacion, $idInspeccion)) {
-            $sql = "UPDATE `amc_inspeccion` SET `estado_asignacion` = 3 WHERE `id` = $idInspeccion";
-            $sql = $os->db->conn->prepare($sql);
-            $sql->execute();
-
-        }
-    }
-}
-
-function verificaAnteriorReasignacion($id_reasignacion, $idInspeccion)
-{
-    global $os;
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT funcionario_reasignacion FROM  `amc_inspeccion` WHERE  id = $idInspeccion";
-    $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if ($row['funcionario_reasignacion'] === $id_reasignacion)
-        return false;
-    else
-        return true;
-}
-
-function validarCedulaCorreo($id)
-{
-    // true en caso que no exista ni correo ni cedula
-    // false  en caso que exista correo y cedula
-    //return false;
-
-    global $os;
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT cedula, email FROM pma_costos_micro_detalle WHERE id = $id";
-    $result = $os->db->conn->query($sql);
-
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if ((strlen($row['cedula']) == 0) or (strlen($row['email']) == 0)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function selectDetalleInspecciones()
+function selectDetalleMicro()
 {
     global $os;
     $id = (int)$_POST ['costCodeNuevo2'];
@@ -247,7 +170,7 @@ function selectDetalleInspecciones()
 
 }
 
-function updateDetalleInspeccionesForm()
+function updateDetalleMicroForm()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
@@ -272,8 +195,6 @@ function updateDetalleInspeccionesForm()
             nombre_completo = $nombre_completo,
             activo = $activo,
             orden = $orden
-
-
           WHERE id = '$id' ";
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
@@ -283,7 +204,7 @@ function updateDetalleInspeccionesForm()
     ));
 }
 
-function deleteDetalleInspecciones()
+function deleteDetalleMicro()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
@@ -298,24 +219,24 @@ function deleteDetalleInspecciones()
 
 switch ($_GET['operation']) {
     case 'select' :
-        selectDetalleInspecciones();
+        selectDetalleMicro();
         break;
-    case 'selectTodasInspecciones' :
-        selectDetalleTodasInspecciones();
+    case 'selectTodasMicro' :
+        selectDetalleTodasMicro();
         break;
     case 'insert' :
-        insertDetalleInspecciones();
+        insertDetalleMicro();
         break;
     case 'update' :
-        updateDetalleInspecciones();
+        updateDetalleMicro();
         break;
     case 'selectForm' :
-        selectDetalleInspeccionesForm();
+        selectDetalleMicroForm();
         break;
     case 'updateForm' :
-        updateDetalleInspeccionesForm();
+        updateDetalleMicroForm();
         break;
     case 'delete' :
-        deleteDetalleInspecciones();
+        deleteDetalleMicro();
         break;
 }

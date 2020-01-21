@@ -426,7 +426,7 @@ function deleteDenuncias()
     $id = json_decode(stripslashes($_POST["data"]));
 
     // se valida que no existan registros en la tabla hija
-    if (validaRelacion($id, 'id_pma_contribuciones_detalle', 'pma_contribuciones_detalle')) {
+    if (validaRelacion($id, 'id_pma_contribuciones', 'pma_contribuciones_detalle')) {
         $sql = "DELETE FROM pma_contribuciones WHERE id = $id";
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();

@@ -12,7 +12,7 @@ function selectDetalleInspecciones()
     global $os;
     if (isset($_POST['id'])) {
         $id = (int)$_POST ['id'];
-        $where = " id_pma_costos_macro  = '$id'";
+        $where = " id_pma_contribuciones_detalle  = '$id'";
     }
 
     if (isset($_POST['filterText'])) {
@@ -136,33 +136,13 @@ function insertDetalleInspecciones()
             "data" => array($data)
         ));
         // para el caso que ya se haya procesado o sea reinspeccion
-        //actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
+        //actualizar_estado_tramite_usado($data->id_pma_contribuciones);
     } else {
         echo json_encode(array(
             "success" => false,
             "msg" => $sql->errorCode() . $sql1,
             "data" => array($data)
         ));
-    }
-}
-
-function generaidpmaCostoMacro()
-{
-    global $os;
-
-    $usuario = $os->get_member_id();
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id_pma_costos_macro) AS maximo FROM pma_costos_macro";
-    $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (isset($row['maximo'])) {
-        $nuevoCodogo = $row['maximo'] + 1;
-        return $nuevoCodogo;
-    } else {
-        // valor inicial proceso
-
-        return 1;
-
     }
 }
 
@@ -197,17 +177,17 @@ function updateDetalleInspecciones()
     $sql->execute();
 
     // actualizar el total en el padre
-//    $idMicro = calcularMicroTotal ($data->id_pma_costos_micro);
+//    $idMicro = calcularMicroTotal ($data->id_pma_costos_macro);
 
-    $idActivities = calcularActivitiesTotal($data->id_pma_costos_macro);
-    calcularContribucionesTotal($idActivities);
+    $idActivities = actualizaActivitiesTotal($data->id_pma_contribuciones_detalle);
+    actualizarContribucionesTotal($idActivities);
 
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
         "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_costos_macro actualizado exitosamente" : $sql->errorCode(),
         "message" => $message,
         "data" => array($data),
-        "aa" => $idActivities
+        "idActivities" => $idActivities
     ));
 }
 
@@ -352,7 +332,7 @@ function deleteDetalleInspecciones()
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
 
-    if (validaRelacion($id, 'id_pma_costos_micro', 'pma_costos_micro')) {
+    if (validaRelacion($id, 'id_pma_costos_macro', 'pma_costos_micro')) {
 
         $sql = "DELETE FROM pma_costos_macro WHERE id = $id";
         $sql = $os->db->conn->prepare($sql);

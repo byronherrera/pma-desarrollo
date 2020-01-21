@@ -56,7 +56,7 @@ function insertDetalleInspecciones()
             "data" => array($data)
         ));
         // para el caso que ya se haya procesado o sea reinspeccion
-        //actualizar_estado_tramite_usado($data->id_pma_contribuciones_detalle);
+        //actualizar_estado_tramite_usado($data->id_pma_contribuciones);
     } else {
         echo json_encode(array(
             "success" => false,
@@ -116,11 +116,6 @@ function updateDetalleInspecciones()
     $sql = $os->db->conn->prepare($sql);
     $sql->execute();
 
-    // actualizar el total en el padre
-//    $idMicro = calcularMicroTotal ($data->id_pma_costos_micro);
-
-//    $idActivities = calcularActivitiesTotal ($data->id_pma_costos_micro_detalle);
-//    calcularContribucionesTotal ($idActivities);
 
     echo json_encode(array(
         "success" => $sql->errorCode() == 0,
@@ -212,7 +207,7 @@ function selectDetalleInspecciones()
     $id = (int)$_POST ['id'];
     if ($id != 0) {
         $os->db->conn->query("SET NAMES 'utf8'");
-        $sql = "SELECT * FROM pma_costos_micro_detalle WHERE pma_costos_micro_detalle.id_pma_costos_micro = $id AND is_forecast=1";
+        $sql = "SELECT * FROM pma_costos_micro_detalle WHERE pma_costos_micro_detalle.id_pma_costos_macro = $id AND is_forecast=1";
         // echo $sql;
         $result = $os->db->conn->query($sql);
         $data = array();

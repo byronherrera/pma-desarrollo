@@ -185,7 +185,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'id_pma_contribuciones_detalle', allowBlank: true},
+                {name: 'id_pma_contribuciones', allowBlank: true},
                 {name: 'year', allowBlank: false},
                 //{name: 'id_cost', allowBlank: true},
                 {name: 'so', allowBlank: true},
@@ -275,7 +275,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
             root: 'data',
             fields: [
                 {name: 'id', allowBlank: true},
-                {name: 'id_pma_costos_micro', allowBlank: true},
+                {name: 'id_pma_costos_macro', allowBlank: true},
                 {name: 'cost_code2', allowBlank: true},
                 {name: 'cost_code3', allowBlank: true},
                 {name: 'glcode', allowBlank: true},
@@ -345,7 +345,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
             idProperty: 'id',
             root: 'data',
             fields: [
-                {name: 'id_pma_costos_macro', allowBlank: true},
+                {name: 'id_pma_contribuciones_detalle', allowBlank: true},
                 {name: 'cost_code', allowBlank: true},
                 {name: 'total', allowBlank: true},
                 {name: 'doc', allowBlank: true},
@@ -416,7 +416,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
             root: 'data',
             fields: [
                 {name: 'id', allowBlank: true},
-                {name: 'id_pma_costos_micro', allowBlank: false},
+                {name: 'id_pma_costos_macro', allowBlank: false},
                 {name: 'total', allowBlank: false},
                 {name: 'adjust', allowBlank: false},
                 {name: 'comment', allowBlank: false},
@@ -1082,8 +1082,8 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                     // editor: textField
                 },
                 {
-                    header: 'id_pma_costos_micro',
-                    dataIndex: 'id_pma_costos_micro',
+                    header: 'id_pma_costos_macro',
+                    dataIndex: 'id_pma_costos_macro',
                     hidden: true,
                     width: 80,
                     // editor: textField
@@ -1179,7 +1179,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                 new Ext.grid.RowNumberer(),
                 {
                     header: 'id_macro',
-                    dataIndex: 'id_pma_costos_macro',
+                    dataIndex: 'id_pma_contribuciones_detalle',
                     hidden: true,
                     width: 80,
                     // editor: textField
@@ -1317,8 +1317,8 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
                 new Ext.grid.RowNumberer(),
                 {header: 'Year', dataIndex: 'year', hidden: false, width: 100, editor: textField},
                 {
-                    header: 'id_pma_contribuciones_detalle',
-                    dataIndex: 'id_pma_contribuciones_detalle',
+                    header: 'id_pma_contribuciones',
+                    dataIndex: 'id_pma_contribuciones',
                     hidden: true,
                     width: 100
                 },
@@ -1423,8 +1423,8 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
             columns: [
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'id_pma_costos_micro',
-                    dataIndex: 'id_pma_costos_micro',
+                    header: 'id_pma_costos_macro',
+                    dataIndex: 'id_pma_costos_macro',
                     sortable: false,
                     width: 15,
                     hidden: true
@@ -2422,7 +2422,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de forecast
     addDetalleForecast: function () {
         var forecast = new this.storeDetalleForecast.recordType({
-            id_pma_contribuciones_detalle: contribucionSeleccionada,
+            id_pma_contribuciones: contribucionSeleccionada,
             year: ' ',
             so: 1,
             activity: 1,
@@ -2495,7 +2495,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
             total_micro: 0,
             adjust: 0,
             total_after_adjust: 0,
-            id_pma_costos_micro: costoMacroSeleccionada,
+            id_pma_costos_macro: costoMacroSeleccionada,
 
         });
         this.gridForecast.stopEditing();
@@ -2537,7 +2537,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addCostoMacro: function () {
         var inspeccion = new this.storeCostoMacro.recordType({
-            id_pma_costos_macro: select_SO,
+            id_pma_contribuciones_detalle: select_SO,
             cost_code: 1,
             total: 0,
             doc: 0,
@@ -2601,7 +2601,7 @@ QoDesk.ForecastWindow = Ext.extend(Ext.app.Module, {
     //Función para inserción de registros de detalle de inspeccion
     addMicroDetalle: function () {
         var inspeccion = new this.storeForecastDetalle.recordType({
-            id_pma_costos_micro: costoMicroSeleccionada,
+            id_pma_costos_macro: costoMicroSeleccionada,
             total: 0,
             adjust: 0,
             comment: '',

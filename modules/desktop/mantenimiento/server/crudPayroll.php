@@ -35,7 +35,8 @@ function selectPayroll()
     else
         $limit = 100;
 
-    $orderby = 'ORDER BY CONVERT( id,UNSIGNED INTEGER) ASC';
+    $orderby = 'ORDER BY CONVERT( id, UNSIGNED INTEGER) ASC';
+
     if (isset($_POST['sort'])) {
         if ($_POST['sort'] == 'id') {
             $orderby = 'ORDER BY CONVERT( id,UNSIGNED INTEGER) ASC';
@@ -62,7 +63,9 @@ function selectPayroll()
     echo json_encode(array(
             "total" => $total,
             "success" => true,
-            "data" => $data)
+            "data" => $data,
+            "sql " => $sql
+        )
     );
 }
 
@@ -106,20 +109,6 @@ function updatePayroll()
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
 
-    if (isset($data->despacho_secretaria)) {
-        if (!$data->despacho_secretaria)
-            $data->despacho_secretaria = 'false';
-        else
-            $data->despacho_secretaria = 'true';
-    }
-
-    $message = '';
-    if (isset($data->id_tipo_documento)) {
-        if ($data->id_tipo_documento == '1')
-            if (validarCedulaCorreo($data->id)) {
-                $message = 'Ingresar número de cédula y correo electrónico';
-            }
-    }
 
     // genero el listado de valores a insertar
     $cadenaDatos = '';
@@ -139,24 +128,6 @@ function updatePayroll()
     ));
 }
 
-function validarCedulaCorreo($id)
-{
-    // true en caso que no exista ni correo ni cedula
-    // false  en caso que exista correo y cedula
-    //return false;
-
-    global $os;
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT cedula, email FROM pma_payroll WHERE id = $id";
-    $result = $os->db->conn->query($sql);
-
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if ((strlen($row['cedula']) == 0) or (strlen($row['email']) == 0)) {
-        return true;
-    } else {
-        return false;
-    }
-}
 
 
 function selectPayrollForm()
