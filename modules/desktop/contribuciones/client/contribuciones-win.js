@@ -36,9 +36,9 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         // alert(acceso);
 
         if(acceso){
-          var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 10});
+          var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 12});
         }else{
-          var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: true, maxLength: 10});
+          var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: true, maxLength: 12});
         }
 
         var anio = new Ext.ux.form.SpinnerField({
@@ -166,6 +166,40 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         }
 
         //fin combo GRANT
+        //inicio combo notrelevant
+        storenotrelevant = new Ext.data.JsonStore({
+            root: 'datos',
+            fields: ['id', 'subcategory_name'],
+            autoLoad: true,
+            data: {
+                datos: [
+                    {"id": "1", "subcategory_name": "Yes"},
+                    {"id": "0", "subcategory_name": "No"}
+                ]
+            }
+        });
+
+        var combonotrelevant = new Ext.form.ComboBox({
+            id: 'combonotrelevant',
+            store: storenotrelevant,
+            valueField: 'id',
+            displayField: 'subcategory_name',
+            triggerAction: 'all',
+            mode: 'local'
+        });
+
+
+
+        function costnotrelevant(id) {
+            var index = storenotrelevant.findExact('id', id);
+            if (index > -1) {
+                var record = storenotrelevant.getAt(index);
+                return record.get('subcategory_name');
+            }
+
+        }
+
+        //fin combo GRANT
 
         // inicio ventana contribuciones
         var proxyContribuciones = new Ext.data.HttpProxy({
@@ -226,7 +260,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 {name: 'grant_tod', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_tdd', type: 'date', dateFormat: 'c', allowBlank: true},
                 {name: 'grant_specific', allowBlank: true},
-                {name: 'activity', allowBlank: true},
+                {name: 'notrelevant', allowBlank: true},
                 {name: 'year_contribution', allowBlank: true},
                 {name: 'recepcion_documento', type: 'date', dateFormat: 'c', allowBlank: true}
             ]
@@ -423,6 +457,13 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     width: 28,
                     editor: comboGrant,
                     renderer: costGrant
+                },
+                {
+                    header: 'Not Relevant',
+                    dataIndex: 'notrelevant',
+                    width: 28,
+                    editor: combonotrelevant,
+                    renderer: costnotrelevant
                 },
                 {
                     header: 'Status',
@@ -679,8 +720,8 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     width: 25
                 },
                 {
-                    header: 'Activity',
-                    dataIndex: 'activity',
+                    header: 'Not relevant',
+                    dataIndex: 'notrelevant',
                     sortable: true,
                     width: 22
                 }
@@ -1119,7 +1160,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             total_programmed: 0,
             total_unprogrammed: 0,
             total_contribution: 0,
-            activity: '',
+            notrelevant: 0,
             grant_tod: (new Date()),
             grant_tdd: (new Date()),
             grant_specific: '',

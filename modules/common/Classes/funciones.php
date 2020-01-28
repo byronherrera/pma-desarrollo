@@ -106,11 +106,12 @@ function calcularTotalGrantPlusISC($id)
 }
 
 
-function actualizarContribucionesTotal($id = 0)
+function actualizarContribucionesTotal($data)
 {
     // aca el calculo
     global $os;
     $total = 0;
+    $id = $data['id_pma_contribuciones'];
 
     $sql = "SELECT SUM(total) as total
             FROM pma_contribuciones_detalle where id_pma_contribuciones = $id ";
@@ -206,6 +207,9 @@ function actualizarMicroDetailTotal($id,  $total_adjusted)
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     if (!is_null($row ['id_pma_costos_macro'])) {
+        $id_pma_costos_macro = $row ['id_pma_costos_macro'];
+        $total_after_adjust = $row ['total_after_adjust'];
+
         $sql = "SELECT SUM(total_adjusted) as total
              FROM pma_costos_micro_detalle where id_pma_costos_micro = $id ";
         $result = $os->db->conn->query($sql);
@@ -214,8 +218,6 @@ function actualizarMicroDetailTotal($id,  $total_adjusted)
             $total = $row ['total'];
         }
 
-        $id_pma_costos_macro = $row ['id_pma_costos_macro'];
-        $total_after_adjust = $row ['total_after_adjust'];
         if ($total_after_adjust > $total) {
             $sql = "UPDATE pma_costos_micro SET total_cost_detail = $total  WHERE id = '$id' ";
             $sql = $os->db->conn->prepare($sql);

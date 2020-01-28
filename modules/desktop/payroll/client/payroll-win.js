@@ -289,6 +289,31 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
 
         //fin combo GRANT NUMBER
 
+        storeCOSTPARENTDET2 = new Ext.data.JsonStore({
+            root: 'data',
+            fields: ['id', 'cost'],
+            autoLoad: true,
+            url: 'modules/common/combos/combos.php?tipo=costparent'
+        });
+        var comboCOSTPARENTDET2 = new Ext.form.ComboBox({
+            id: 'comboCOSTPARENTDET2',
+            store: storeCOSTPARENTDET2,
+            valueField: 'id',
+            displayField: 'cost',
+            triggerAction: 'all',
+            mode: 'local'
+        });
+
+        function costparentAdmDet2(id) {
+            var index = storeCOSTPARENTDET2.findExact('id', id);
+            if (index > -1) {
+                var record = storeCOSTPARENTDET2.getAt(index);
+                return record.get('cost');
+            }
+        }
+
+
+
         //inicio combo costCode2
         storeCostCode2 = new Ext.data.JsonStore({
             root: 'data',
@@ -563,7 +588,8 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 {name: 'year', allowBlank: false},
                 {name: 'to_payroll', allowBlank: false},
                 {name: 'so', allowBlank: false},
-                {name: 'activity', allowBlank: false},
+                {name: 'cost_code', allowBlank: false},
+                //{name: 'activity', allowBlank: false},
                 {name: 'grant_number', allowBlank: false},
                 {name: 'starting_month', allowBlank: false},
                 {name: 'end_month', allowBlank: false},
@@ -627,15 +653,6 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 //Definición de campos bdd DetailPayroll
                 new Ext.grid.RowNumberer()
                 , {header: 'ID', dataIndex: 'id', sortable: true, width: 10, hidden: true, editor: textField}
-                , {header: 'SO', dataIndex: 'so', sortable: true, width: 80, editor: comboSO, renderer: costSO}
-                , {
-                    header: 'Activity',
-                    dataIndex: 'activity',
-                    sortable: true,
-                    width: 120,
-                    editor: comboActivities,
-                    renderer: costActivities
-                }
                 , {
                     header: 'Grant',
                     dataIndex: 'grant_number',
@@ -644,6 +661,26 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     editor: comboGrantNumber,
                     renderer: costGrantNumber
                 }
+                , {header: 'SO', dataIndex: 'so', sortable: true, width: 80, editor: comboSO, renderer: costSO}
+                ,
+                {
+                    header: 'Cost Code Macro',
+                    dataIndex: 'cost_code',
+                    sortable: true,
+                    width: 250,
+                    editor: comboCOSTPARENTDET2,
+                    renderer: costparentAdmDet2
+                }
+
+                /*                , {
+                                    header: 'Activity',
+                                    dataIndex: 'activity',
+                                    sortable: true,
+                                    width: 120,
+                                    editor: comboActivities,
+                                    renderer: costActivities
+                                }*/
+
                 , {
                     header: 'Year',
                     dataIndex: 'year',
@@ -1442,12 +1479,6 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                     dataIndex: 'grant_specific',
                     sortable: true,
                     width: 25
-                },
-                {
-                    header: 'Activity',
-                    dataIndex: 'activity',
-                    sortable: true,
-                    width: 22
                 }
             ],
             viewConfig: {
@@ -2031,7 +2062,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             total_grant: 0,
             total_programmed: 0,
             total_unprogrammed: 0,
-            activity: '',
+            cost_code: '',
             grant_tod: (new Date()),
             grant_tdd: (new Date()),
             grant_specific: ' ',
