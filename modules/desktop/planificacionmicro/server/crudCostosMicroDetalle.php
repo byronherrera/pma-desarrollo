@@ -121,9 +121,17 @@ function updateDetalleMicro()
             "totalCostosMicro" => $MicroDetalle['total']
         ));
     } else {
+        //si le valor es mas alto
+        $sql = "UPDATE pma_costos_micro_detalle SET  $cadenaDatos  WHERE pma_costos_micro_detalle.id = '$data->id' ";
+        $sql = $os->db->conn->prepare($sql);
+
+        $sql->execute();
         $limite = $MicroDetalle["total_after_adjust"];
+
+        //todo esto esta mal
+
         echo json_encode(array(
-            "success" => false,
+            "success" => true,
             "msg" => "Valor total  excede el limite de $limite",
             "message" => "Valor total excede el limite de $limite",
             "data" => array($data),

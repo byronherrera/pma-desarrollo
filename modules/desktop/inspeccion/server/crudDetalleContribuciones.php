@@ -191,13 +191,13 @@ function updateDetalleInspecciones()
     // genero el listado de valores a insertar
     $cadenaDatos = '';
     foreach ($data as $clave => $valor) {
-        if (($clave == 'year') OR ($clave == 'total_grant_q1') OR ($clave == 'total_grant_q2') OR ($clave == 'total_grant_q3') OR ($clave == 'total_grant_q4') OR ($clave == 'total_grant_prog_doc') OR ($clave == 'total_grant_prog_dsc') OR ($clave == 'total_pr_po_doc')) {
+        if (($clave == 'total') OR($clave == 'year') OR ($clave == 'total_grant_q1') OR ($clave == 'total_grant_q2') OR ($clave == 'total_grant_q3') OR ($clave == 'total_grant_q4') OR ($clave == 'total_grant_prog_doc') OR ($clave == 'total_grant_prog_dsc') OR ($clave == 'total_pr_po_doc')) {
             if ($valor == '') {
                 $valor = 'NULL';
             }
         }
 
-        if ($valor === 'NULL') {
+        if (($valor === 'NULL') || ($valor === 'null')) {
             $cadenaDatos = $cadenaDatos . $clave . " = " . $valor . " ,";
         } else {
             $cadenaDatos = $cadenaDatos . $clave . " = '" . $valor . "',";

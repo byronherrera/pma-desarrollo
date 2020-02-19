@@ -9,21 +9,21 @@ if (!$os->session_exists()) {
 function selectPayroll()
 {
     global $os;
+    //$columnaBusqueda = 'busqueda_todos';
+    $where = '';
 
     //Se inicializa el parámetro de búsqueda de código trámite
     $columnaBusqueda = 'pma_payroll.id';
     if (isset($_POST['filterText'])) {
         $campo = $_POST['filterText'];
         $campo = str_replace(" ", "%", $campo);
-        if (isset($_POST['filterField'])) {
-            $columnaBusqueda = $_POST['filterField'];
-        }
-        $where = " WHERE $columnaBusqueda LIKE '%$campo%'";
+        $where = " WHERE ( pma_payroll_employees.index_no LIKE '%$campo%' or 
+         pma_payroll_employees.name LIKE '%$campo%' or 
+         pma_payroll_employees.location LIKE '%$campo%' or 
+         pma_payroll_employees.grade LIKE '%$campo%' )  ";
     }
 
 
-    //$columnaBusqueda = 'busqueda_todos';
-    $where = '';
 
     if (isset ($_POST['start']))
         $start = $_POST['start'];
@@ -36,6 +36,7 @@ function selectPayroll()
         $limit = 100;
 
     $orderby = 'ORDER BY CONVERT( id,UNSIGNED INTEGER) ASC';
+
     if (isset($_POST['sort'])) {
         if ($_POST['sort'] == 'id') {
             $orderby = 'ORDER BY CONVERT( id,UNSIGNED INTEGER) ASC';
@@ -45,9 +46,19 @@ function selectPayroll()
     }
 
 
+
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_payroll_employees  $where $orderby LIMIT $start, $limit";
- //echo $sql;
+    $sql = "SELECT pma_payroll_employees.id,
+                    pma_payroll_employees.id_pma_payroll,
+                    pma_payroll_employees.`name`,
+                    pma_payroll_employees.location,
+                    pma_payroll_employees.grade,
+                    pma_payroll_employees.monthly_cost,
+                    pma_payroll_employees.index_no,
+                    pma_payroll_employees.hr_position,
+                    (SELECT SUM(total) FROM pma_payroll_detalle WHERE pma_payroll_detalle.id_pma_payroll = pma_payroll_employees.id)  AS total_cost
+                     FROM pma_payroll_employees  $where $orderby LIMIT $start, $limit";
+   //  echo $sql;
     $result = $os->db->conn->query($sql);
 
     $data = array();
@@ -60,7 +71,14 @@ function selectPayroll()
     $row = $result->fetch(PDO::FETCH_ASSOC);
     $total = $row['total'];
 
+    //$sql = "SELECT SUM(TOTAL) AS totaldetalle FROM pma_payroll_detalle $where";
+    $sql = "SELECT SUM(TOTAL) AS totaldetalle FROM pma_payroll_detalle ";
+    $result = $os->db->conn->query($sql);
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+    $totalDetalle = $row['totaldetalle'];
+
     echo json_encode(array(
+            "totalDetalle" => $totalDetalle,
             "total" => $total,
             "success" => true,
             "data" => $data)
@@ -112,7 +130,7 @@ function verificaCambioHRPOSITION($data)
     $row = $result->fetch(PDO::FETCH_ASSOC);
 
     // se compara con los campos
-    if ($row['hr_position'] != $data->hr_position)  {
+    if ($row['hr_position'] != $data->hr_position) {
         return true;
     } else {
         return false;
@@ -130,12 +148,14 @@ function actualizaDataHR($data)
 
     // se compara con los campos
 
-    if ($row['hr_position'] != $data->hr_position)  {
+    if ($row['hr_position'] != $data->hr_position) {
         return true;
     } else {
         return false;
     }
-};
+}
+
+;
 
 
 function updatePayroll()
@@ -153,12 +173,10 @@ function updatePayroll()
 
 
     $message = '';
-    // if (isset($data->hr_position)) {
-    //     if (verificaCambioHRPOSITION($data)) {
-    //         print_r($data);
-    //         $data = actualizaDataHR($data);
-    //     }
-    // }
+    if ($data->total_cost == '') {
+            calculaTotalCostPayroll ($data->id);
+            $data->total_cost = 0;
+    }
 
     // genero el listado de valores a insertar
     $cadenaDatos = '';
@@ -179,6 +197,11 @@ function updatePayroll()
         "data" => $data
     ));
 }
+
+function calculaTotalCostPayroll ($id ) {
+    return 1;
+}
+
 
 function validarCedulaCorreo($id)
 {

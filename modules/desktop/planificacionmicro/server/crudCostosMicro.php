@@ -22,6 +22,20 @@ function calcularTotal($id)
     }
     return $total;
 }
+function calcularTotalMicroCostDetail($id)
+{
+    // aca el calculo
+    global $os;
+
+    $sql = "SELECT SUM(total_adjusted) as total  FROM pma_costos_micro_detalle where id_pma_costos_micro = $id ";
+    $result = $os->db->conn->query($sql);
+    $total = 0;
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        if (!is_null($row ['total']))
+            $total = $row ['total'];
+    }
+    return $total;
+}
 
 
 function selectDetalleInspecciones()
@@ -32,7 +46,7 @@ function selectDetalleInspecciones()
 
     if (isset($_POST['id'])) {
         $id = (int)$_POST ['id'];
-        $where = " id_pma_costos_macro  = '$id'";
+        $where = "WHERE id_pma_costos_macro  = '$id'";
     }
 
     if (isset($_POST['filterText'])) {
@@ -40,22 +54,21 @@ function selectDetalleInspecciones()
         if (isset($_POST['filterField'])) {
             $columnaBusqueda = $_POST['filterField'];
         }
-        $where = " $columnaBusqueda = '$campo'";
+        $where = "WHERE $columnaBusqueda = '$campo'";
     }
 
     // cambio BH
     $orderby = 'ORDER BY id DESC';
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_costos_micro WHERE $where  $orderby ";
+    $sql = "SELECT * FROM pma_costos_micro  $where  $orderby ";
 
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $total = calcularTotal($row['id']);
+        $total = calcularTotalMicroCostDetail($row['id']);
 
-        // echo $row['id'];
-        $row['total_micro'] = $total;
+        $row['total_cost_detail'] = $total;
         $data[] = $row;
     }
     echo json_encode(array(
@@ -179,7 +192,8 @@ function updateDetalleInspecciones()
 
 
     $message = '';
-
+    $data->glcode1 = $data->glcode;
+    $data->glcode2 = $data->glcode;
 
     // genero el listado de valores a insertar
     $cadenaDatos = '';
@@ -198,6 +212,8 @@ function updateDetalleInspecciones()
 
     }
     $cadenaDatos = substr($cadenaDatos, 0, -1);
+
+    // poner
 
     $sql = "UPDATE pma_costos_micro SET  $cadenaDatos  WHERE pma_costos_micro.id = '$data->id' ";
     $sql = $os->db->conn->prepare($sql);
@@ -348,7 +364,7 @@ function deleteDetalleInspecciones()
     $id = json_decode(stripslashes($_POST["data"]));
 
     // se valida que no existan registros en la tabla hija
-    if (validaRelacion($id,  'id_pma_costos_macro', 'pma_costos_micro_detalle')) {
+    if (validaRelacion($id,  'id_pma_costos_micro', 'pma_costos_micro_detalle')) {
         $sql = "DELETE FROM pma_costos_micro WHERE id = $id";
         $sql = $os->db->conn->prepare($sql);
         $sql->execute();

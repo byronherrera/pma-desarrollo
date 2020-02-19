@@ -197,8 +197,16 @@ function updateDetailPayroll()
     // genero el listado de valores a insertar
     $cadenaDatos = '';
     foreach ($data as $clave => $valor) {
-        $cadenaDatos = $cadenaDatos . $clave . " = '" . $valor . "',";
+        if (($clave == 'cost_code') or ($clave == 'activity')) {
+            if ($valor != '')
+                $cadenaDatos = $cadenaDatos . $clave . " = " . $valor . ",";
+        } else {
+            $cadenaDatos = $cadenaDatos . $clave . " = '" . $valor . "',";
+        }
+
     }
+
+
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
     $sql = "UPDATE pma_payroll_detalle SET  $cadenaDatos  WHERE pma_payroll_detalle.id = '$data->id' ";

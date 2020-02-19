@@ -173,9 +173,9 @@ function actualizarMicroTotal($id)
     if (!is_null($row ['total'])) {
         $total = $row ['total'];
     }
-    $sql = "UPDATE pma_costos_macro SET total_cost_detail = $total  WHERE id = '$id' ";
-    $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
+//    $sql = "UPDATE pma_costos_macro SET total_cost_detail = $total  WHERE id = '$id' ";
+//    $sql = $os->db->conn->prepare($sql);
+//    $sql->execute();
 
     $sql = "select id_pma_contribuciones_detalle from pma_costos_macro  WHERE id = $id";
     $result = $os->db->conn->query($sql);
@@ -188,7 +188,8 @@ function actualizarMicroTotal($id)
     return $resultado;
 }
 
-function actualizarMicroDetailTotal($id,  $total_adjusted)
+//function actualizarMicroDetailTotal($id,  $total_adjusted)
+function actualizarMicroDetailTotal($id)
 {
     global $os;
     $total = 0;

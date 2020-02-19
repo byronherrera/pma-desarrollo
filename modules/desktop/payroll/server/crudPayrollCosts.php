@@ -98,7 +98,7 @@ function selectContribuciones()
     }
 
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT * FROM pma_costos_micro where cost_code2 in (SELECT id FROM `pma_cost_category` WHERE description = 'Staff cost' ) $where $orderby LIMIT $start, $limit";
+    $sql = "SELECT * FROM pma_costos_micro where cost_code2 in (SELECT id FROM `pma_cost_category` WHERE description like 'Staff cost' ) $where $orderby LIMIT $start, $limit";
     // $sql = "SELECT * FROM pma_costos_micro $where LIMIT $start, $limit";
     //$sql = "SELECT * FROM pma_costos_micro LIMIT $start, $limit";
     $result = $os->db->conn->query($sql);

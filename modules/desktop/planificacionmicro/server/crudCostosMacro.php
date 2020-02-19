@@ -7,6 +7,23 @@ if (!$os->session_exists()) {
     die('No existe sesión!');
 }
 
+
+function calcularTotalMicroCost($id)
+{
+    // aca el calculo
+    global $os;
+
+    $sql = "SELECT SUM(total_after_adjust) as total  FROM pma_costos_micro where id_pma_costos_macro = '$id' ";
+    $result = $os->db->conn->query($sql);
+    $total = 0;
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        if (!is_null($row ['total']))
+            $total = $row ['total'];
+    }
+    return $total;
+}
+
+
 function selectDetalleInspecciones()
 {
     global $os;
@@ -31,6 +48,8 @@ function selectDetalleInspecciones()
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $total = calcularTotalMicroCost($row['id']);
+        $row['total_cost_detail'] = $total;
         $data[] = $row;
     }
     echo json_encode(array(

@@ -1,36 +1,33 @@
 {
-  "id": "payroll",
-  "type": "desktop/payroll",
+  "id": "mantenimiento",
+  "type": "desktop/mantenimiento",
   "about": {
     "author": "",
-    "description": "Payroll",
-    "name": "Payroll",
+    "description": "Mantenimiento",
+    "name": "Mantenimiento",
     "url": "",
     "version": "1.0"
   },
   "server": {
     "methods": [
-      { "name": "accesosAdministrador", "description": "Full acceso con vista de todos los tramites" },
-      { "name": "accesosSecretaria", "description": "Full acceso con vista de tramites pendientes" },
-      { "name": "accesosPayroll", "description": "Personal de payroll" }
+      { "name": "accesosAdministrador", "description": "Full acceso" },
+      { "name": "accesosCoordinador", "description": "Full acceso" },
+      { "name": "accesosUsuarios", "description": "Personal institucional" },
+      { "name": "accesosExternos", "description": "Personal externos" }
     ],
-    "class": "QoPayroll",
-    "file": "desktop/payroll/payroll.php"
+    "class": "QoMantenimiento",
+    "file": "desktop/mantenimiento/mantenimiento.php"
   },
   "client": {
-    "class": "QoDesk.PayrollWindow",
+    "class": "QoDesk.MantenimientoWindow",
     "css": [
       {
-        "directory": "desktop/payroll/client/resources/",
+        "directory": "desktop/mantenimiento/client/resources/",
         "files": [ "styles.css" ]
       },
       {
         "directory": "common/libraries/",
         "files": [  "datetime/date-time-ux.css", "Spinner/Spinner.css", "MultiSelect.css"   ]
-      }
-    ,{
-        "directory": "common/libraries/gridfilters/",
-        "files": [  "css/GridFilters.css", "css/RangeMenu.css"    ]
       },
       {
         "directory": "common/libraries/",
@@ -43,8 +40,8 @@
         "files": [ "AppMsg.js","datetime/date-time-ux.js","CheckColumn.js", "Spinner/SpinnerField.js", "Spinner/Spinner.js","MultiSelect.js"  ]
       },
       {
-        "directory": "desktop/payroll/client/",
-        "files": [  "payroll-win.js" ]
+        "directory": "desktop/mantenimiento/client/",
+        "files": [  "mantenimiento-win.js" ]
       },
       {
         "directory": "qwiki/admin/client/",
@@ -54,17 +51,13 @@
         "directory": "qwiki/admin/client/lib/",
         "files": [ "ActiveColumn.js", "ColumnNodeUI.js", "Nav.js", "SearchField.js", "TooltipEditor.js" ]
       }
-    ,{
-        "directory": "common/libraries/gridfilters/",
-        "files": [ "menu/RangeMenu.js", "menu/ListMenu.js", "GridFilters.js", "filter/Filter.js", "filter/StringFilter.js", "filter/DateFilter.js", "filter/ListFilter.js", "filter/NumericFilter.js","filter/BooleanFilter.js" ]
-      }
     ],
     "launcher": {
       "config": {
-        "iconCls": "payroll-icon",
-        "shortcutIconCls": "payroll-shortcut",
-        "text": "Payroll",
-        "tooltip": "<b>Payroll</b>"
+        "iconCls": "mantenimiento-icon",
+        "shortcutIconCls": "mantenimiento-shortcut",
+        "text": "Mantenimiento",
+        "tooltip": "<b>Mantenimiento</b>"
       },
       "paths": {
         "startmenu": "/"

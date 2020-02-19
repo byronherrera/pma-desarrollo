@@ -605,14 +605,6 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     align: 'right'
                 },
                 {
-                    header: 'ISC',
-                    dataIndex: 'isc',
-                    width: 28,
-                    renderer: 'usMoney',
-                    editor: numero,
-                    align: 'right'
-                },
-                {
                     header: 'Total Direct Cost',
                     dataIndex: 'total_grant',
                     width: 35,
@@ -620,6 +612,15 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
                     renderer: 'usMoney',
                     editor: numero,
                 },
+                {
+                    header: 'ISC',
+                    dataIndex: 'isc',
+                    width: 28,
+                    renderer: 'usMoney',
+                    editor: numero,
+                    align: 'right'
+                },
+
                 {
                     header: 'Total contribution',
                     dataIndex: 'total_contribution',
@@ -1406,6 +1407,7 @@ QoDesk.InspeccionWindow = Ext.extend(Ext.app.Module, {
             so: '',
             activity: '',
             total_planned: 0,
+            total: 0,
             //id_cost: '',
             id_pma_contribuciones: selectContribuciones
         });

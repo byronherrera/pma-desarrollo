@@ -78,7 +78,8 @@ function comboCostParent()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id, CONCAT(cost,' - ',description) cost FROM pma_cost_category WHERE active = 1 AND nivel = 1 AND ISNULL(parent)   ORDER BY id";
+    //$sql = "SELECT id, CONCAT( IF (ISNULL(cost), (SELECT b.description FROM pma_cost_category b WHERE b.id = a.parent ) , cost ), ' - ',description) as cost FROM pma_cost_category a WHERE active = 1 AND nivel in (1,2)  ORDER BY id";
+    $sql = "SELECT id, CONCAT(cost,' - ',description) cost FROM pma_cost_category WHERE active = 1 AND nivel in (1,2) AND ISNULL(parent)   ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -110,7 +111,7 @@ function comboSO()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT id,category_name FROM pma_so_categories ORDER BY id";
+    $sql = "SELECT id, CONCAT(category_name,' - ',category_code) AS category_name FROM pma_so_categories ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -132,7 +133,7 @@ function comboActivities()
     else
         $where = '';
 
-    $sql = "SELECT id,subcategory_name FROM pma_activities $where ORDER BY id";
+    $sql = "SELECT id, CONCAT(subcategory_name,' - ',subcategory_code) AS subcategory_name FROM pma_activities $where ORDER BY id";
     // echo ($sql);
     $result = $os->db->conn->query($sql);
     $data = array();

@@ -103,6 +103,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
             return val;
         }
+
         //fin variables visualizacion
 
         //Inicio Combos
@@ -131,6 +132,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         function costStatus(id) {
             return id;
         }
+
         //fin combo Status
 
         //inicio combo grant
@@ -158,6 +160,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         function costGrant(id) {
             return id
         }
+
         //fin combo GRANT
         //fin combos
 
@@ -300,7 +303,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             writer: writerPlanificacionmicro,
             autoSave: true,
             listeners: {
-                exception : function(proxy, response, operation) {
+                exception: function (proxy, response, operation) {
                     if (operation == 'destroy') {
                         Ext.Msg.show({
                             title: 'Error'
@@ -427,7 +430,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 },
                 exception: function (proxy, type, operation, options, response, arg) {
                     if (operation == 'update') {
-                        AppMsg.setAlert("Requisito obligatorio",response.message);
+                        AppMsg.setAlert("Requisito obligatorio", response.message);
                     }
 
                     if (operation == 'create') {
@@ -497,89 +500,65 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         //fin combo COSTPARENTDET
 
+  
         //inicio combo ACTIVITIES
-        // storeSO = new Ext.data.JsonStore({
-        //     root: 'data',
-        //     fields: ['id', 'category_name'],
-        //     autoLoad: true,
-        //     url: 'modules/common/combos/combos.php?tipo=so'
-        // });
-        storeActivities = new Ext.data.JsonStore({
-            root: 'datos',
+        storeActivitiesMic = new Ext.data.JsonStore({
+            root: 'data',
             fields: ['id', 'subcategory_name'],
             autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 1, "subcategory_name": "Activity 1"},
-                    {"id": 2, "subcategory_name": "Activity 3"},
-                    {"id": 3, "subcategory_name": "Activity 4"},
-                    {"id": 4, "subcategory_name": "Activity 5"},
-                    {"id": 5, "subcategory_name": "Activity 6"},
-                    {"id": 6, "subcategory_name": "Activity 7"},
-                    {"id": 7, "subcategory_name": "Activity 8"}
-                ]
-            }
+            url: 'modules/common/combos/combos.php?tipo=activities'
         });
-
-        var comboActivities = new Ext.form.ComboBox({
-            id: 'comboActivities',
-            store: storeActivities,
+        var comboActivitiesMic = new Ext.form.ComboBox({
+            id: 'comboActivitiesMic',
+            store: storeActivitiesMic,
             valueField: 'id',
             displayField: 'subcategory_name',
             triggerAction: 'all',
             mode: 'local'
         });
 
-        function costActivities(id) {
-            var index = storeActivities.find('id', id);
+        function costActivitiesMic(id) {
+            var index = storeActivitiesMic.find('id', id);
             if (index > -1) {
-                var record = storeActivities.getAt(index);
+                var record = storeActivitiesMic.getAt(index);
                 return record.get('subcategory_name');
             }
+
         }
 
-        //fin combo ACTIVITIES
-
+        //fin combo ACTIVITIES 
+        
+        
+        
+        
+        
+        
         //inicio combo SO
-        // storeSO = new Ext.data.JsonStore({
-        //     root: 'data',
-        //     fields: ['id', 'category_name'],
-        //     autoLoad: true,
-        //     url: 'modules/common/combos/combos.php?tipo=so'
-        // });
-        storeSO = new Ext.data.JsonStore({
-            root: 'datos',
+        storeSOMic = new Ext.data.JsonStore({
+            root: 'data',
             fields: ['id', 'category_name'],
             autoLoad: true,
-            data: {
-                datos: [
-                    {"id": 1, "category_name": "SO1"},
-                    {"id": 2, "category_name": "SO2"},
-                    {"id": 3, "category_name": "SO3"},
-                    {"id": 4, "category_name": "SO4"}
-                ]
-            }
+            url: 'modules/common/combos/combos.php?tipo=so'
         });
-        this.storeSO = storeSO
-
         var comboSO = new Ext.form.ComboBox({
             id: 'comboSO',
-            store: storeSO,
+            store: storeSOMic,
             valueField: 'id',
             displayField: 'category_name',
             triggerAction: 'all',
             mode: 'local'
         });
 
-        function costSO(id) {
-            var index = storeSO.find('id', id);
+        function costSOMic(id) {
+            var index = storeSOMic.find('id', id);
             if (index > -1) {
-                var record = storeSO.getAt(index);
+                var record = storeSOMic.getAt(index);
                 return record.get('category_name');
             }
         }
 
         //fin combo SO
+        
 
         //inicio combo costCode2
         storeCostCode2 = new Ext.data.JsonStore({
@@ -770,13 +749,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //fin combo tipo documento  TID
 
 
-
-
-
-
         //fin combo Razon Devolucion
-
-
 
 
         //inicio combo caracter del tramite CDT
@@ -833,8 +806,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 ]
             }
         });
-
-
 
 
         //inicio combo aprobación secretaría inspección
@@ -912,10 +883,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         }
 
 
-
-
-
-
         //inicio combo activo
 
         storeOFAC = new Ext.data.JsonStore({
@@ -946,17 +913,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         });
 
 
-
-
-
-
-/*        //inicio combo PARROQUIA
-        storePARROQUIA = new Ext.data.JsonStore({
-            root: 'data',
-            fields: ['id', 'nombre'],
-            autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=parroquias'
-        });*/
+        /*        //inicio combo PARROQUIA
+                storePARROQUIA = new Ext.data.JsonStore({
+                    root: 'data',
+                    fields: ['id', 'nombre'],
+                    autoLoad: true,
+                    url: 'modules/common/combos/combos.php?tipo=parroquias'
+                });*/
 
         //this.storePARROQUIA = storePARROQUIA;
 
@@ -996,13 +959,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             triggerAction: 'all',
             mode: 'local'
         });
-
-
-
-
-
-
-
 
 
         function caracterTramite(id) {
@@ -1070,13 +1026,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         });*/
 
 
-
-
-
-
-
-
-
         var checkHandler = function (item, checked) {
             if (checked) {
                 var store = this.storeContribuciones;
@@ -1117,13 +1066,15 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         limiteModuloPlanificacionmicro = 100;
         var anchoHelp = 43;
-        var altoHelp = 210;
+        var altoHelp = 208;
 
 
         this.gridPlanificacionmicroDetalle = new Ext.grid.EditorGridPanel({
             id: 'gridPlanificacionmicroDetalle',
             xtype: "grid",
-            height: 200,
+            height: winHeight - altoHelp,
+            //Calculo de tamaño horizontal frame superior de pestaña Trámites pendientes
+            width: winWidth - anchoHelp,
             store: this.storePlanificacionmicroDetalle,
             columns: [
                 new Ext.grid.RowNumberer(),
@@ -1212,7 +1163,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     // })
                 }
             ],
-            viewConfig: {forceFit: true},
+            viewConfig: {forceFit: false},
             sm: new Ext.grid.RowSelectionModel({
                 singleSelect: false,
                 listeners: {
@@ -1236,7 +1187,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 store: this.storePlanificacionmicroDetalle,
                 displayInfo: true,
                 displayMsg: 'Mostrando detalle que mostrar {0} - {1} de {2} PMA',
-                emptyMsg: "No existen nada  que mostrar"
+                emptyMsg: "No micro costs detail to be shown"
             }),
         });
         //fin mantenimiento PlanificacionmicroDetalle
@@ -1317,9 +1268,12 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     rowselect: function (sm, row, rec) {
                         // recuperamos la informacion de personal asignado a ese operativo
                         costoMicroSeleccionada = rec.id;
-                        storePlanificacionmicro.load({
-                            params: {id: rec.id}
-                        });
+
+                        storePlanificacionmicro.baseParams = {
+                            id: costoMicroSeleccionada
+                        };
+                        storePlanificacionmicro.load();
+
                         costoMacroSeleccionada = rec.id;
 
                         // fin actualizar combo
@@ -1397,18 +1351,33 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 125,
                     // editor: comboSO,
-                    renderer: costSO
+                    renderer: costSOMic
                 },
                 {
                     header: 'Activity',
                     dataIndex: 'activity',
                     sortable: true,
                     width: 129,
-                    // editor: comboActivities,
-                    renderer: costActivities
+                    // editor: comboActivitiesMic,
+                    renderer: costActivitiesMic
                 },
-                {header: 'Total Planned', dataIndex: 'total_planned', renderer: 'usMoney', width: 100, align: 'right', editor: textField},
-                {header: 'Total macro', dataIndex: 'total', hidden: false, renderer: valueColor, renderer: 'usMoney', align: 'right', width: 150},
+                {
+                    header: 'Total Planned',
+                    dataIndex: 'total_planned',
+                    renderer: 'usMoney',
+                    width: 100,
+                    align: 'right',
+                    editor: textField
+                },
+                {
+                    header: 'Total macro',
+                    dataIndex: 'total',
+                    hidden: false,
+                    renderer: valueColor,
+                    renderer: 'usMoney',
+                    align: 'right',
+                    width: 150
+                },
 
             ],
             viewConfig: {
@@ -1430,7 +1399,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
                         Ext.getCmp('paso3').expand();
 
-                        Ext.getCmp('paso2').setTitle("Step 2 - Activities - " + costSO(rec.data['so']) + " - " + costActivities(rec.data['activity']) + " - Total: " + Ext.util.Format.usMoney(rec.data['total']));
+                        Ext.getCmp('paso2').setTitle("Step 2 - Activities - " + costSOMic(rec.data['so']) + " - " + costActivitiesMic(rec.data['activity']) + " - Total: " + Ext.util.Format.usMoney(rec.data['total']));
                         Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
 
@@ -1520,7 +1489,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     sortable: true,
                     width: 100,
                     hidden: false,
-                    // editor: comboGLCode,
+                     //editor: comboGLCode,
                     renderer: glcode1
                 },
                 {
@@ -1606,20 +1575,19 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         // rec.data['glcode']=rec.data['cost_code3']
                         costCodeNuevo3 = rec.data['cost_code3'];
                         costoMicroSeleccionada = rec.id;
+
+
                         storeGLCode.load({
                             params: {
                                 costCodeNuevo3: costCodeNuevo3
                             }
                         });
-                        // aca se carga el micro cost detail step 5
-                        // costoMicroSeleccionada = rec.data['id'];
 
 
-                        storePlanificacionmicroDetalle.load({
-                            params: {
-                                costCodeNuevo2: costoMicroSeleccionada
-                            }
-                        });
+                        storePlanificacionmicroDetalle.baseParams = {
+                            costCodeNuevo2: costoMicroSeleccionada
+                        };
+                        storePlanificacionmicroDetalle.load( );
 
                     }
                 }
@@ -1892,7 +1860,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                         else if (diff < intervalo2) {
                             return '<span class="circleBase bluestate"></span>' + value;
                         }
-                        else{
+                        else {
                             return '<span class="circleBase whitestate"></span>' + value;
                         }
                         return value
@@ -2063,7 +2031,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
                         //Ext.getCmp('paso2').expand();
 
-                        Ext.getCmp('paso1').setTitle("Step 1 - Contributions - Grant number: " + rec.data['grant_number'] + " - Total: " + Ext.util.Format.usMoney(rec.data['total_grant']) + " - Total programmed: " + Ext.util.Format.usMoney(rec.data['total_programmed'])+ " - Unprogramed: " + Ext.util.Format.usMoney(rec.data['total_unprogrammed']));
+                        Ext.getCmp('paso1').setTitle("Step 1 - Contributions - Grant number: " + rec.data['grant_number'] + " - Total: " + Ext.util.Format.usMoney(rec.data['total_grant']) + " - Total programmed: " + Ext.util.Format.usMoney(rec.data['total_programmed']) + " - Unprogramed: " + Ext.util.Format.usMoney(rec.data['total_unprogrammed']));
                         Ext.getCmp('paso2').setTitle("Step 2 - Activities");
                         Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs");
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
@@ -2093,7 +2061,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         //Fin formato grid Planificacionmicro
         //Fin ventana planificacionmicro
-
 
 
         //Creación variable ventana
@@ -2151,13 +2118,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                     layout: 'column',
                                     autoScroll: true,
                                     items: [
-                                    //   {
-                                    //     columnWidth: 1,
-                                    //     baseCls: 'x-plain',
-                                    //     bodyStyle: 'padding:0 0 0 0',
-                                    //     items: this.gridPayroll
-                                    // }
-                                  ]
+                                        //   {
+                                        //     columnWidth: 1,
+                                        //     baseCls: 'x-plain',
+                                        //     bodyStyle: 'padding:0 0 0 0',
+                                        //     items: this.gridPayroll
+                                        // }
+                                    ]
                                 },
                                 {
                                     region: 'center',
@@ -2196,31 +2163,31 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                 scope: this,
                                                 text: 'Reload data'
                                             },
-/*
-                                            '-',
-                                            {
-                                                xtype: 'checkbox',
-                                                boxLabel: 'Filter  vvv',
-                                                id: 'checkPendientesAprobar',
-                                                name: 'pendientesAprobar',
-                                                checked: accesosSecretaria,
-                                                inputValue: '1',
-                                                tooltip: 'Reload data',
-                                                //disabled: !acceso,
-                                                cls: 'barramenu',
-                                                handler: function (checkbox, isChecked) {
-                                                    //Ext.getCmp('tb_repoteDenuncias').setDisabled(!this.checked);
-                                                    //Ext.getCmp('tb_seleccionarUnidad').setDisabled(!this.checked);
-                                                    //Ext.getCmp('tb_seleccionarUnidad').getValue();
-                                                    //storeDenuncias.load({params: {noenviados: isChecked}});
-                                                    storeModuloPlanificacionmicro.baseParams = {
-                                                        pendientesAprobar: isChecked
-                                                    };
-                                                    storeModuloPlanificacionmicro.load();
-                                                }
-                                            },
-                                            '-',
-*/
+                                            /*
+                                                                                        '-',
+                                                                                        {
+                                                                                            xtype: 'checkbox',
+                                                                                            boxLabel: 'Filter  vvv',
+                                                                                            id: 'checkPendientesAprobar',
+                                                                                            name: 'pendientesAprobar',
+                                                                                            checked: accesosSecretaria,
+                                                                                            inputValue: '1',
+                                                                                            tooltip: 'Reload data',
+                                                                                            //disabled: !acceso,
+                                                                                            cls: 'barramenu',
+                                                                                            handler: function (checkbox, isChecked) {
+                                                                                                //Ext.getCmp('tb_repoteDenuncias').setDisabled(!this.checked);
+                                                                                                //Ext.getCmp('tb_seleccionarUnidad').setDisabled(!this.checked);
+                                                                                                //Ext.getCmp('tb_seleccionarUnidad').getValue();
+                                                                                                //storeDenuncias.load({params: {noenviados: isChecked}});
+                                                                                                storeModuloPlanificacionmicro.baseParams = {
+                                                                                                    pendientesAprobar: isChecked
+                                                                                                };
+                                                                                                storeModuloPlanificacionmicro.load();
+                                                                                            }
+                                                                                        },
+                                                                                        '-',
+                                            */
                                             '->'
                                             , {
                                                 text: 'Search by:'
@@ -2348,45 +2315,46 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                                                 text: 'Reload data'
                                             }
                                         ]
+                                    }, {
+                                        title: 'Step 5 - Micro Costs Detail',
+                                        border: false,
+                                        autoScroll: true,
+                                        id: 'paso5',
+                                        items: this.gridPlanificacionmicroDetalle,
+                                        tbar: [
+                                            //Definición de botón nuevo
+                                            {
+                                                id: 'btnNuevoMicroDetalle',
+                                                text: 'New',
+                                                scope: this,
+                                                handler: this.addMicroDetalle,
+                                                disabled: false,
+                                                iconCls: 'save-icon'
+                                            },
+                                            '-',
+                                            //Definición de botón Delete
+                                            {
+                                                id: 'btnEliminarMicroDetalle',
+                                                text: "Delete",
+                                                scope: this,
+                                                handler: this.deleteMicroDetalle,
+                                                disabled: false,
+                                                iconCls: 'delete-icon'
+                                            },
+                                            '-',
+                                            //Definición de botón Reload data
+                                            {
+                                                id: 'btnRecargarDatosMicroDetalle',
+                                                iconCls: 'reload-icon',
+
+
+                                                handler: this.requestGridDataMicroDetalle,
+                                                disabled: false,
+                                                scope: this,
+                                                text: 'Reload data'
+                                            }
+                                        ]
                                     }
-                                        , {
-                                            title: 'Step 5 - Micro Costs Detail',
-                                            border: false,
-                                            autoScroll: true,
-                                            id: 'paso5',
-                                            items: this.gridPlanificacionmicroDetalle,
-                                            tbar: [
-                                                //Definición de botón nuevo
-                                                {
-                                                    id: 'btnNuevoMicroDetalle',
-                                                    text: 'New',
-                                                    scope: this,
-                                                    handler: this.addMicroDetalle,
-                                                    disabled: false,
-                                                    iconCls: 'save-icon'
-                                                },
-                                                '-',
-                                                //Definición de botón Delete
-                                                {
-                                                    id: 'btnEliminarMicroDetalle',
-                                                    text: "Delete",
-                                                    scope: this,
-                                                    handler: this.deleteMicroDetalle,
-                                                    disabled: false,
-                                                    iconCls: 'delete-icon'
-                                                },
-                                                '-',
-                                                //Definición de botón Reload data
-                                                {
-                                                    id: 'btnRecargarDatosMicroDetalle',
-                                                    iconCls: 'reload-icon',
-                                                    handler: this.requestGridDataMicroDetalle,
-                                                    disabled: false,
-                                                    scope: this,
-                                                    text: 'Reload data'
-                                                }
-                                            ]
-                                        }
                                     ]
                                 }
                             ]
@@ -2531,6 +2499,9 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
     //Función para actualizar los datos mostrados en pantalla de la pestaña de detalle planificacionmicro
     requestGridDataDetallePlanificacionmicro: function () {
         this.storeDetallePlanificacionmicro.load();
+        console.log(1)
+
+
     },
 
 
@@ -2554,7 +2525,12 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             }
         });
     },
-
+    requestGridDataPlanificacionmicro: function () {
+        this.storePlanificacionmicro.load();
+    },
+    requestGridDataMicroDetalle: function () {
+        this.gridPlanificacionmicroDetalle.load();
+    },
     //Función para inserción de registros de detalle de planificacionmicro
     addPlanificacionmicro: function () {
         var planificacionmicro = new this.storePlanificacionmicro.recordType({
@@ -2569,7 +2545,6 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             total_after_adjust: 0,
             total_cost_detail: 0,
             id_pma_costos_macro: costoMacroSeleccionada,
-
         });
         this.gridPlanificacionmicro.stopEditing();
         this.storePlanificacionmicro.insert(0, planificacionmicro);
