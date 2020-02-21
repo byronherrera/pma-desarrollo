@@ -244,8 +244,7 @@ function retornaWhereBusqueda($campo, $columnaBusqueda)
                                     total_grant LIKE '%$campo%' OR
                                     grant_tod LIKE '%$campo%' OR
                                     grant_tdd LIKE '%$campo%' OR
-                                    grant_specific LIKE '%$campo%' OR
-                                    activity LIKE '%$campo%' ";
+                                    grant_specific LIKE '%$campo%'  ";
     return $where;
 }
 
