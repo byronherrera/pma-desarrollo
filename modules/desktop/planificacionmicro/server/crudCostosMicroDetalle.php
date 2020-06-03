@@ -16,6 +16,7 @@ function insertDetalleMicro()
     $data->fecha_registro = date('Y-m-d H:i:s');
     //genero el listado de nombre de campos
 
+
     $cadenaDatos = '';
     $cadenaCampos = '';
 
@@ -24,11 +25,7 @@ function insertDetalleMicro()
 
     foreach ($data as $clave => $valor) {
 
-        if (($clave == 'funcionario_reasignacion') OR ($clave == 'guia') OR ($clave == 'acta_verificacion') OR ($clave == 'id_zona') OR ($clave == 'id_actividad')) {
-            if ($valor == '') {
-                $valor = 'NULL';
-            }
-        }
+
 
         if ($valor === 'NULL') {
             $cadenaCampos = $cadenaCampos . $clave . ',';

@@ -310,6 +310,33 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
         }
 
         //fin combo GRANT NUMBER
+        //inicio combo GRANT NUMBER
+        storeCostMicroStaffOnly = new Ext.data.JsonStore({
+            root: 'data',
+            fields: ['id', 'data'],
+            autoLoad: true,
+            url: 'modules/common/combos/combos.php?tipo=costMicroStaffOnly'
+        });
+        var comboCostMicroStaffOnly = new Ext.form.ComboBox({
+            id: 'comboCostMicroStaffOnly',
+            store: storeCostMicroStaffOnly,
+            valueField: 'id',
+            displayField: 'data',
+            triggerAction: 'all',
+            mode: 'local'
+        });
+
+        function costMicroStaffOnly(id) {
+            //   var index = storeGrantNumber.findExact('id', id);
+            var index = storeCostMicroStaffOnly.find('id', id);
+            if (index > -1) {
+                var record = storeCostMicroStaffOnly.getAt(index);
+                return record.get('data');
+            }
+
+        }
+
+        //fin combo GRANT NUMBER
 
         storeCOSTPARENTDET2 = new Ext.data.JsonStore({
             root: 'data',
@@ -359,7 +386,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 return record.get('description');
             }
         }
-
+        storeCostCode2.load()
         //fin combo costCode2
 
         //inicio combo costCode3
@@ -608,10 +635,8 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 {name: 'id', allowBlank: false},
                 {name: 'year', allowBlank: false},
                 {name: 'to_payroll', allowBlank: false},
-                {name: 'so', allowBlank: false},
-                {name: 'cost_code', allowBlank: true},
-                {name: 'activity', allowBlank: true},
-                {name: 'grant_number', allowBlank: false},
+
+                {name: 'id_pma_costos_micro', allowBlank: false},
                 {name: 'starting_month', allowBlank: false},
                 {name: 'end_month', allowBlank: false},
                 {name: 'monthly_cost', allowBlank: false},
@@ -662,7 +687,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
         //Inicio formato grid pestaña DetailPayroll
         this.gridDetailPayroll = new Ext.grid.EditorGridPanel({
             id: 'gridDetailPayroll',
-            height: winHeight * 0.5 - 100,
+            height: winHeight * 0.5 - 70,
             store: this.storeDetailPayroll,
             listeners: {
                 beforeedit: function (o) {
@@ -675,31 +700,14 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 new Ext.grid.RowNumberer()
                 , {header: 'ID', dataIndex: 'id', sortable: true, width: 10, hidden: true, editor: textField}
                 , {
-                    header: 'Grant Number',
-                    dataIndex: 'grant_number',
+                    header: 'Costo Micro',
+                    dataIndex: 'id_pma_costos_micro',
                     sortable: true,
                     width: 150,
-                    editor: comboGrantNumber,
-                    renderer: costGrantNumber
+                    editor: comboCostMicroStaffOnly,
+                    renderer: costMicroStaffOnly
                 }
-                , {header: 'SO', dataIndex: 'so', sortable: true, width: 80, editor: comboSO, renderer: costSO}
-                , {
-                    header: 'Activity',
-                    dataIndex: 'activity',
-                    sortable: true,
-                    width: 120,
-                    editor: comboActivities,
-                    renderer: costActivities
-                }
-                ,
-                {
-                    header: 'Cost Code Macro',
-                    dataIndex: 'cost_code',
-                    sortable: true,
-                    width: 250,
-                    editor: comboCOSTPARENTDET2,
-                    renderer: costparentAdmDet2
-                }
+
                 , {
                     header: 'Year',
                     dataIndex: 'year',
@@ -949,8 +957,6 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 {name: 'cost_code2', allowBlank: true},
                 {name: 'cost_code3', allowBlank: true},
                 {name: 'glcode', allowBlank: true},
-                //{name: 'commitment_description', allowBlank: true},
-                //{name: 'gl_description', allowBlank: true},
                 {name: 'cost_code4', allowBlank: true},
                 {name: 'cost_code5', allowBlank: true},
                 {name: 'description_micro', allowBlank: true},
@@ -1050,6 +1056,14 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
             var columns = [
                 new Ext.grid.RowNumberer(),
                 {
+                    header: 'id',
+                    dataIndex: 'id',
+                    sortable: false,
+                    width: 15,
+                    hidden: true
+                },
+
+                {
                     header: 'id_pma_costos_macro',
                     dataIndex: 'id_pma_costos_macro',
                     sortable: false,
@@ -1074,13 +1088,6 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                         }
                         return value
                     }
-                },
-                {
-                    header: 'id_pma_costos_macro',
-                    dataIndex: 'id_pma_costos_macro',
-                    sortable: false,
-                    width: 15,
-                    hidden: true
                 },
                 {
                     header: 'Cost Code nivel 2',
@@ -1193,9 +1200,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                 //para dar color a la fila
                 forceFit: true,
                 getRowClass: function (record, index) {
-
                 },
-
             },
             sm: new Ext.grid.RowSelectionModel(
                 {
@@ -1437,22 +1442,14 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
 
         if (!win) {
 
-
             this.seleccionDepar = 3;
 
             this.formContribucionesDetalle = new Ext.FormPanel({
-//                id: 'formContribucionesDetalle',
                 cls: 'no-border',
                 id: 'formcabeceracontribuciones',
                 items: this.gridContribuciones,
-//                titleCollapse: true,
-//                split: true,
-//                flex: 1,
-//                autoScroll: true,
-//                layout: 'column',
                 layout: 'fit',
-                height: winHeight - 90
-
+                height: winHeight - 91
             });
             this.formConsultaDocumentos = new Ext.FormPanel({
                 layout: 'column',
@@ -1660,7 +1657,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                                     handler: this.deletecontribuciones,
                                     iconCls: 'delete-icon',
                                     //disabled: this.app.isAllowedTo('accesosAdministrador', this.id) ? false : true
-                                    disabled: false
+                                    disabled: !acceso
                                 },
                                 '-',
                                 {
@@ -1694,7 +1691,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                             title: 'Planification',
                             closable: true,
                             // layout: 'fit',
-                            height: winHeight - 65,
+                            height: winHeight - 45,
                             //Llamado a función que arma la tabla de datos
 
 
@@ -1704,7 +1701,6 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                                 id: 'west-panel',
                                 title: 'Payroll List',
                                 // split: true,
-                                width: winWidth - 20,
                                 height: winHeight * 0.5 - 50,
                                 flex: 1,
 
@@ -1766,7 +1762,7 @@ QoDesk.PayrollWindow = Ext.extend(Ext.app.Module, {
                             }, {
                                 title: 'Payroll Detail',
                                 flex: 2,
-                                height: winHeight * 0.5 - 30,
+                                //height: winHeight * 0.5 - 16,
                                 // region: 'center',
                                 items: [
                                     {

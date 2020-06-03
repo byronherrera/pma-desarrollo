@@ -207,6 +207,7 @@ function actualizarMicroDetailTotal($id)
     $sql = "select id_pma_costos_macro, total_after_adjust from pma_costos_micro  WHERE id = $id";
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
+    $total_after_adjust = 0;
     if (!is_null($row ['id_pma_costos_macro'])) {
         $id_pma_costos_macro = $row ['id_pma_costos_macro'];
         $total_after_adjust = $row ['total_after_adjust'];

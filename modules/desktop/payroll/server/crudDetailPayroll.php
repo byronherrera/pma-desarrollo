@@ -203,9 +203,7 @@ function updateDetailPayroll()
         } else {
             $cadenaDatos = $cadenaDatos . $clave . " = '" . $valor . "',";
         }
-
     }
-
 
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
@@ -219,8 +217,77 @@ function updateDetailPayroll()
         "message" => $message,
         "data" => array($data)
     ));
+
+    // ferificar ingreso en costos micro
+    verificaPayrollDetalle_CostosMicro ($data->id);
 }
 
+function buscarPuesto($id) {
+     global $os;
+    if (trim($id) != '') {
+        $os->db->conn->query("SET NAMES 'utf8'");
+        $sql = "SELECT id, 
+                hr_position, 
+                (SELECT hr_position FROM `pma-desarrollo`.`pma_payroll` WHERE `id` = pma_payroll_employees.hr_position LIMIT 1) AS nombre   
+                FROM `pma_payroll_employees` WHERE `id` = '$id'";
+        $nombre = $os->db->conn->query($sql);
+        if ($nombre) {
+            $rownombre = $nombre->fetch(PDO::FETCH_ASSOC);
+            //return $id_dato;
+            return $rownombre['nombre'];
+        } else
+            return '';
+
+    } else
+        return '';
+
+
+};
+
+function verificaPayrollDetalle_CostosMicro ($id) {
+    global $os;
+    $data = json_decode($_POST["data"]);
+
+    $buscarPuesto =  buscarPuesto($data->id_pma_payroll);
+    if (! buscarIdCostosMicroDetalle ($id)) {
+        // no existe registro anterio
+        // se crea uno nuevo en caso que exista definida la columna que indica la cuenta de micro
+
+        $sql = "INSERT INTO  `pma_costos_micro_detalle`(`id_pma_costos_micro`, `total`, `comment`, `total_adjusted`, `fecha_registro`, `id_pma_payroll_detalle`) 
+                VALUES ($data->id_pma_costos_micro, $data->total, 'Staff - $buscarPuesto - $data->year', $data->total, NOW(), '$data->id');";
+
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+
+    } else  {
+
+        $sql = "UPDATE `pma_costos_micro_detalle` 
+                SET `id_pma_costos_micro` = $data->id_pma_costos_micro, `total` = $data->total, `comment` = 'Staff - $buscarPuesto - $data->year' , `total_adjusted` = $data->total, `fecha_registro` = NOW() 
+                WHERE `id_pma_payroll_detalle` = $data->id;";
+
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+
+
+    }
+
+
+}
+
+function buscarIdCostosMicroDetalle ($id) {
+    global $os;
+    // verificamos que no exista otro
+    $sql = "SELECT COUNT(*) AS TOTAL FROM pma_costos_micro_detalle WHERE id_pma_payroll_detalle = $id";
+    $result = $os->db->conn->query($sql);
+
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+
+    if ($row['TOTAL'] == 0) {
+        return false;
+    } else {
+        return true;
+    }
+}
 function verificaMes($mes, $starting_month, $end_month, $monthly_cost)
 {
     if (($starting_month <= $mes) && ($mes <= $end_month)) {

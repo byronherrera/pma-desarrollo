@@ -1,37 +1,34 @@
 {
-  "id": "mantenimiento",
-  "type": "desktop/mantenimiento",
+  "id": "ejecucion",
+  "type": "desktop/ejecucion",
   "about": {
     "author": "",
-    "description": "Mantenimiento",
-    "name": "Mantenimiento",
+    "description": "Ejecucion de Ejecucion.",
+    "name": "Ventana Ejecucion",
     "url": "",
     "version": "1.0"
   },
   "server": {
     "methods": [
       { "name": "accesosAdministrador", "description": "Full acceso" },
-      { "name": "accesosCoordinador", "description": "Full acceso" },
-      { "name": "accesosUsuarios", "description": "Personal institucional" },
-      { "name": "accesosExternos", "description": "Personal externos" }
+      { "name": "accesosSecretaria", "description": "Solo lectura" },
+      { "name": "accesosResolutores", "description": "accesos resolutores solamente sus registros" },
+      { "name": "accesosAdminEjecucion", "description": "accesos resolutores solamente sus registros" }
+
     ],
-    "class": "QoMantenimiento",
-    "file": "desktop/mantenimiento/mantenimiento.php"
+    "class": "QoEjecucion",
+    "file": "desktop/ejecucion/ejecucion.php"
   },
   "client": {
-    "class": "QoDesk.MantenimientoWindow",
+    "class": "QoDesk.EjecucionWindow",
     "css": [
       {
-        "directory": "desktop/mantenimiento/client/resources/",
+        "directory": "desktop/ejecucion/client/resources/",
         "files": [ "styles.css" ]
       },
       {
         "directory": "common/libraries/",
         "files": [  "datetime/date-time-ux.css", "Spinner/Spinner.css", "MultiSelect.css"   ]
-      },
-      {
-        "directory": "common/libraries/",
-        "files": [ "styles.css" ]
       }
     ],
     "javascript": [
@@ -40,8 +37,8 @@
         "files": [ "AppMsg.js","datetime/date-time-ux.js","CheckColumn.js", "Spinner/SpinnerField.js", "Spinner/Spinner.js","MultiSelect.js"  ]
       },
       {
-        "directory": "desktop/mantenimiento/client/",
-        "files": [  "mantenimiento-win.js" ]
+        "directory": "desktop/ejecucion/client/",
+        "files": [  "ejecucion-win.js" ]
       },
       {
         "directory": "qwiki/admin/client/",
@@ -54,10 +51,10 @@
     ],
     "launcher": {
       "config": {
-        "iconCls": "mantenimiento-icon",
-        "shortcutIconCls": "mantenimiento-shortcut",
-        "text": "Mantenimiento",
-        "tooltip": "<b>Mantenimiento</b>"
+        "iconCls": "ejecucion-icon",
+        "shortcutIconCls": "ejecucion-shortcut",
+        "text": "Ejecucion",
+        "tooltip": "<b>Ejecucion</b>"
       },
       "paths": {
         "startmenu": "/"

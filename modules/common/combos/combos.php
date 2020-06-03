@@ -146,6 +146,7 @@ function comboActivities()
     );
 }
 
+
 function comboCostcode2()
 {
     global $os;
@@ -156,7 +157,8 @@ function comboCostcode2()
         $where = '';
 
     // $costCodeNuevo2 =
-    $sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 2 $where ORDER BY id";
+    //$sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 2 $where ORDER BY id";
+    $sql = "SELECT id, CONCAT(description,'-',id) as description FROM pma_cost_category WHERE active = 1 AND nivel = 2 $where ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -178,7 +180,28 @@ function comboCostcode3()
         $where = '';
 
     // $costCodeNuevo2 =
-    $sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 3 $where ORDER BY id";
+    //$sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 3 $where ORDER BY id";
+    $sql = "SELECT id, CONCAT(description, '-' , parent  ) AS description 
+            FROM pma_cost_category WHERE active = 1 AND nivel = 3 $where ORDER BY id";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
+function comboCostcode3Full()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+
+    // $costCodeNuevo2 =
+    //$sql = "SELECT id, description FROM pma_cost_category WHERE active = 1 AND nivel = 3 $where ORDER BY id";
+    $sql = "SELECT id, CONCAT(description, '-' , parent, '-' , id  ) AS description FROM pma_cost_category WHERE active = 1 AND nivel = 3   ORDER BY id";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -209,9 +232,9 @@ function comboGLCode()
 //         $where = " WHERE cost_category = 'FA'" ;
         $cost = recuperaCostCategory($_POST['costCodeNuevo3']);
         $where = " WHERE cost_category = '$cost'";
-     }
+    }
 
-    $sql = "SELECT id, gl_account, gl_description, commitment_description FROM pma_gl_codes $where ORDER BY id";
+    $sql = "SELECT id, gl_account,  gl_description, commitment_description, CONCAT(gl_account,\" - \", gl_description) AS gl_description2 FROM pma_gl_codes $where ORDER BY id";
 
     $result = $os->db->conn->query($sql);
     $data = array();
@@ -223,6 +246,7 @@ function comboGLCode()
             "data" => $data)
     );
 }
+
 function comboCostcode4()
 {
     global $os;
@@ -300,7 +324,7 @@ function comboSecretariaTramites()
 {
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
-  //  $sql = "SELECT id, codigo_tramite as nombre FROM amc_denuncias  ORDER BY id DESC ";
+    //  $sql = "SELECT id, codigo_tramite as nombre FROM amc_denuncias  ORDER BY id DESC ";
     $sql = "SELECT id, CONCAT(codigo_tramite, ' - ', YEAR(recepcion_documento)) as nombre FROM amc_denuncias ORDER BY id DESC";
     $result = $os->db->conn->query($sql);
     $data = array();
@@ -328,6 +352,7 @@ function comboTiposExpedientesInstruccion()
             "data" => $data)
     );
 }
+
 function comboTiposExpedientes()
 {
     global $os;
@@ -343,6 +368,7 @@ function comboTiposExpedientes()
             "data" => $data)
     );
 }
+
 function comboOrdenanzas()
 {
     global $os;
@@ -501,17 +527,18 @@ function comboPersonalOperativos()
             "data" => $data)
     );
 }
+
 function comboPersonalInstruccion()
 {
     global $os;
     $todos = '';
-/*    $todos = " AND (b . qo_groups_id = 8 OR b . qo_groups_id = 9 OR b . qo_groups_id = 1) ";
-    if (isset($_POST['todos'])) {
-        if ($_POST['todos'] == 'true') {
-            $todos = "";
+    /*    $todos = " AND (b . qo_groups_id = 8 OR b . qo_groups_id = 9 OR b . qo_groups_id = 1) ";
+        if (isset($_POST['todos'])) {
+            if ($_POST['todos'] == 'true') {
+                $todos = "";
+            }
         }
-    }
-*/
+    */
 
 // EN CASO QUE SOLO SEA UN USUARIO SOLO MUESTRA EL USUARIO LOGEADO
     if (isset($_POST['accesosOperativos'])) {
@@ -628,7 +655,7 @@ function comboUnidadesTotal()
                 b . id, IF ((SELECT COUNT(*) FROM amc_denuncias as  a WHERE a . reasignacion = b . id AND despacho_secretaria <> 'true' ) = 0,b . nombre,
                 (CONCAT(b . nombre, ' ( ', (SELECT COUNT(*) FROM amc_denuncias as  a WHERE a . reasignacion = b . id AND despacho_secretaria <> 'true' ), ' ) '))) AS nombre
                 FROM amc_unidades b
-                WHERE b . activo = 1 AND id_zonal = " . $zonal_funcionario ."
+                WHERE b . activo = 1 AND id_zonal = " . $zonal_funcionario . "
                  ORDER BY b . id ";
 
     $result = $os->db->conn->query($sql);
@@ -816,6 +843,7 @@ function comboTipoActividad()
             "data" => $data)
     );
 }
+
 function comboTipoControl()
 {
     global $os;
@@ -849,6 +877,41 @@ function comboPersonalDistributivo()
             "data" => $data)
     );
 }
+
+function comboCostMicroStaffOnly()
+{
+
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+
+    $sql = "SELECT cost_code2 AS id, id_pma_costos_macro as parent, cost_code2  FROM pma_costos_micro where cost_code2 in (SELECT id FROM `pma_cost_category` WHERE description like 'Staff cost' ) ORDER BY glcode";
+    //$sql = "SELECT cost_code2 as  id, id_pma_costos_macro as parent, cost_code2  FROM pma_costos_micro where cost_code2 in (SELECT id FROM `pma_cost_category` WHERE description like 'Staff cost' ) ORDER BY glcode";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        // esto es para pedir el padre
+        $id_pma_costos_macro = get_pma_costos_macro ($row['parent'] );
+        $nombreCostoMacro = $id_pma_costos_macro['cost_code'];
+
+        // esto es para pedir el abuelo
+        $id_pma_contribuciones_detalle = get_pma_contribuciones_detalle ($id_pma_costos_macro['id_pma_contribuciones_detalle'] );
+        $nombreContribucionesDetalle = $id_pma_contribuciones_detalle['so'];
+
+        // esto es para pedir el contribucion
+        $id_pma_contribuciones = get_pma_contribuciones ($id_pma_contribuciones_detalle['id_pma_contribuciones'] );
+        $nombreContribuciones = $id_pma_contribuciones['grant_number'];
+
+
+        $row['data'] = $row['id']. "-".  $nombreContribuciones . "-". getCostContribucionesDetalleName ($nombreContribucionesDetalle). "-".  getCostCodeName ($nombreCostoMacro). " - " . getCostCodeName ($row['cost_code2']) ;
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
+
 
 switch ($_GET['tipo']) {
     case 'usuario' :
@@ -921,8 +984,8 @@ switch ($_GET['tipo']) {
         comboPersonalInstruccion();
         break;
     //case 'personalinspeccion' :
-        //comboPersonalInspeccion();
-        //break;
+    //comboPersonalInspeccion();
+    //break;
     case 'cargo' :
         comboCargo();
         break;
@@ -979,11 +1042,17 @@ switch ($_GET['tipo']) {
     case 'hrDescription' :
         comboHRDescription();
         break;
+    case 'costMicroStaffOnly' :
+        comboCostMicroStaffOnly();
+        break;
     case 'costcode2' :
         comboCostcode2();
         break;
     case 'costcode3' :
         comboCostcode3();
+        break;
+    case 'costcode3full' :
+        comboCostcode3Full();
         break;
     case 'costcode4' :
         comboCostcode4();
@@ -996,3 +1065,55 @@ switch ($_GET['tipo']) {
         break;
 
 }
+
+
+function get_pma_costos_macro ($id) {
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT id,	id_pma_contribuciones_detalle, cost_code FROM  pma_costos_macro WHERE id = $id ";
+    $result = $os->db->conn->query($sql);
+
+    $row = $result->fetchAll(PDO::FETCH_ASSOC);
+    return $row[0];
+};
+
+function get_pma_contribuciones_detalle ($id) {
+    //id_pma_contribuciones_detalle
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT id,	id_pma_contribuciones, so, activity FROM  pma_contribuciones_detalle WHERE id = $id ";
+    $result = $os->db->conn->query($sql);
+
+    $row = $result->fetchAll(PDO::FETCH_ASSOC);
+    return $row[0];
+};
+function get_pma_contribuciones ($id) {
+    //id_pma_contribuciones_detalle
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT id,	grant_number  FROM  pma_contribuciones WHERE id = $id ";
+    $result = $os->db->conn->query($sql);
+
+    $row = $result->fetchAll(PDO::FETCH_ASSOC);
+    return $row[0];
+};
+
+function getCostCodeName ($idCostcode) {
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT description FROM  pma_cost_category WHERE id = $idCostcode ";
+    $result = $os->db->conn->query($sql);
+
+    $row = $result->fetchAll(PDO::FETCH_ASSOC);
+    return $row[0]['description'];
+}
+function getCostContribucionesDetalleName ($id) {
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT category_code FROM  pma_so_categories WHERE id = $id ";
+    $result = $os->db->conn->query($sql);
+
+    $row = $result->fetchAll(PDO::FETCH_ASSOC);
+    return $row[0]['category_code'];
+}
+

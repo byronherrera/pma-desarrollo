@@ -5,8 +5,8 @@ var costoMicroSeleccionada = '';
 var maxTotalCostDetail = 0;
 
 QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
-    id: 'moduloPlanificacionmicro',
-    type: 'desktop/moduloPlanificacionmicro',
+    id: 'planificacionmicro',
+    type: 'desktop/planificacionmicro',
 
     init: function () {
         this.launcher = {
@@ -588,6 +588,13 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //fin combo costCode2
 
         //inicio combo costCode3
+        storeCostCode3Full = new Ext.data.JsonStore({
+            root: 'data',
+            fields: ['id', 'description'],
+            autoLoad: true,
+            url: 'modules/common/combos/combos.php?tipo=costcode3full'
+        });
+
         storeCostCode3 = new Ext.data.JsonStore({
             root: 'data',
             fields: ['id', 'description'],
@@ -599,15 +606,15 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             id: 'comboCostCode3',
             store: storeCostCode3,
             valueField: 'id',
-            displayField: 'description',
+            displayField:  'description' ,
             triggerAction: 'all',
             mode: 'local'
         });
 
         function costCode3(id) {
-            var index = storeCostCode3.findExact('id', id);
+            var index = storeCostCode3Full.findExact('id', id);
             if (index > -1) {
-                var record = storeCostCode3.getAt(index);
+                var record = storeCostCode3Full.getAt(index);
                 return record.get('description');
             }
         }
@@ -617,7 +624,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
         //inicio combo glcode
         storeGLCode = new Ext.data.JsonStore({
             root: 'data',
-            fields: ['id', 'commitment_description', 'gl_account', 'gl_description'],
+            fields: ['id', 'commitment_description', 'gl_account', 'gl_description', 'gl_description2'],
             autoLoad: true,
             url: 'modules/common/combos/combos.php?tipo=glcode'
         });
@@ -626,7 +633,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
             id: 'comboGLCode',
             store: storeGLCode,
             valueField: 'id',
-            displayField: 'gl_description',
+            displayField: 'gl_description2',
             triggerAction: 'all',
             mode: 'local'
         });
@@ -1066,7 +1073,7 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
 
         limiteModuloPlanificacionmicro = 100;
         var anchoHelp = 43;
-        var altoHelp = 208;
+        var altoHelp = 220;
 
 
         this.gridPlanificacionmicroDetalle = new Ext.grid.EditorGridPanel({
@@ -1267,28 +1274,35 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 listeners: {
                     rowselect: function (sm, row, rec) {
                         // recuperamos la informacion de personal asignado a ese operativo
+                        costoMacroSeleccionada = rec.id;
                         costoMicroSeleccionada = rec.id;
 
-                        storePlanificacionmicro.baseParams = {
-                            id: costoMicroSeleccionada
-                        };
-                        storePlanificacionmicro.load();
-
-                        costoMacroSeleccionada = rec.id;
-
-                        // fin actualizar combo
-                        Ext.getCmp('paso4').expand();
-                        Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs - " + costparentAdmDet(rec.data['cost_code']) + " - Total: " + Ext.util.Format.usMoney(rec.data['total_adjusted']));
-                        Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
-
-                        // actualizamos el combo box
+                        // actualizamos el combo boxluego de actualizar
                         costCodeNuevo2 = rec.data['cost_code'];
                         comboCostCode2.clearValue();
                         storeCostCode2.load({
                             params: {
                                 costCodeNuevo2: costCodeNuevo2
+                            },
+                            callback: function(records, operation, success) {
+                                if (success == true) {
+                                    // create a checkbox for each task
+                                    storePlanificacionmicro.baseParams = {
+                                        id: costoMicroSeleccionada
+                                    };
+                                    storePlanificacionmicro.load();
+                                } else {
+                                    // the store didn't load, deal with it
+                                    console.log ("Error ")
+
+                                }
                             }
                         });
+                        // fin actualizar combo
+                        Ext.getCmp('paso4').expand();
+                        Ext.getCmp('paso3').setTitle("Step 3 - Macro Costs - " + costparentAdmDet(rec.data['cost_code']) + " - Total: " + Ext.util.Format.usMoney(rec.data['total_adjusted']));
+                        Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs");
+
 
                     }
                 }
@@ -1570,24 +1584,28 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                 singleSelect: false,
                 listeners: {
                     rowselect: function (sm, row, rec) {
-                        //storePlanificacionmicrodetSimple.load({params: {filterField: 'guia', filterText: rec.get("numero")}})
+
                         Ext.getCmp('paso4').setTitle("Step 4 - Micro Costs- " + costCode2(rec.data['cost_code2']) + " - Total: " + Ext.util.Format.usMoney(rec.data['total_after_adjust']));
-                        // rec.data['glcode']=rec.data['cost_code3']
+
                         costCodeNuevo3 = rec.data['cost_code3'];
-                        costoMicroSeleccionada = rec.id;
+                        costoMicroSeleccionada = rec.data['cost_code2'];
 
-
-                        storeGLCode.load({
-                            params: {
-                                costCodeNuevo3: costCodeNuevo3
-                            }
-                        });
-
-
+                        // carga los combos en base del item seleccionado
                         storePlanificacionmicroDetalle.baseParams = {
                             costCodeNuevo2: costoMicroSeleccionada
                         };
                         storePlanificacionmicroDetalle.load( );
+
+                        storeGLCode.baseParams = {
+                            costCodeNuevo3: costCodeNuevo3
+                        };
+                        storeGLCode.load();
+
+                        storeCostCode3.baseParams = {
+                            costCodeNuevo3: costoMicroSeleccionada
+                        };
+                        storeCostCode3.load();
+                        // TODO en caso que cost nivel 3 no tenga datos .. borrar toda la fila
 
                     }
                 }
@@ -1883,7 +1901,8 @@ QoDesk.PlanificacionmicroWindow = Ext.extend(Ext.app.Module, {
                     header: 'Donor',
                     dataIndex: 'donor',
                     width: 28,
-                    editor: textField
+                    editor: textField,
+                    hidden: true
                 },
                 {
                     header: 'Year',
