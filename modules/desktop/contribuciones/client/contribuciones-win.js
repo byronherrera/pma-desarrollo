@@ -27,18 +27,29 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         var intervalo1 = 30;
         var intervalo2 = 90;
 
-        //incio variables visualizacion
-        if(acceso){
-          var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
-        }else{
-          var textField = new Ext.form.TextField({allowBlank: false, readOnly: true});
-        }
-        // alert(acceso);
 
-        if(acceso){
-          var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 12});
-        }else{
-          var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: true, maxLength: 12});
+        function formatPrice(value) {
+
+            if ((value == '') || (value === null) || (value == 0))
+                return '';
+            if (typeof value !== 'undefined') {
+                numero = parseFloat(value).toFixed(2);
+                return '$' + Ext.util.Format.number(numero, '0,000.00') ;
+            } else
+                return '';
+        };
+
+        //incio variables visualizacion
+        if (acceso) {
+            var textField = new Ext.form.TextField({allowBlank: false, readOnly: false});
+        } else {
+            var textField = new Ext.form.TextField({allowBlank: false, readOnly: true});
+        }
+
+        if (acceso) {
+            var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: false, maxLength: 12});
+        } else {
+            var textField10 = new Ext.form.TextField({allowBlank: false, readOnly: true, maxLength: 12});
         }
 
         var anio = new Ext.ux.form.SpinnerField({
@@ -189,7 +200,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
         });
 
 
-
         function costnotrelevant(id) {
             var index = storenotrelevant.findExact('id', id);
             if (index > -1) {
@@ -211,13 +221,13 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             },
             listeners: {
                 write: function (proxy, action, result, res, rs) {
-                  // storeContribucionesr.load();
-                 /* if (action = 'update') {
-                      storeContribuciones.load();
-                    }
-                  if (action = 'insert') {
-                      storeContribuciones.load();
-                    }*/
+                    // storeContribucionesr.load();
+                    /* if (action = 'update') {
+                         storeContribuciones.load();
+                       }
+                     if (action = 'insert') {
+                         storeContribuciones.load();
+                       }*/
                     if (typeof res.message !== 'undefined') {
                         /*if (res.message != '') {
                             AppMsg.setAlert(AppMsg.STATUS_NOTICE, res.message);
@@ -279,18 +289,27 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             remoteSort: true,
             baseParams: {},
             listeners: {
-            exception : function(proxy, response, operation) {
-                if (operation == 'destroy') {
-                    Ext.Msg.show({
-                        title: 'Error'
-                        , msg: 'To delete the record, the dependent records must be deleted'
-                        , modal: true
-                        , icon: Ext.Msg.ERROR
-                        , buttons: Ext.Msg.OK
-                    });
+                load: function (store, records, success) {
+                    mensaje = Ext.getCmp('totalContribuciones');
+                    mensaje.setText('Grant : ' + formatPrice(storeContribuciones.reader.jsonData['total_grant']) +
+                        ', Programmed : ' + formatPrice(storeContribuciones.reader.jsonData['total_programmed']) +
+                        ', Unprogrammed : ' + formatPrice(storeContribuciones.reader.jsonData['total_unprogrammed']) )
+                },
+                exception: function (proxy, response, operation) {
+                    if (operation == 'destroy') {
+                        Ext.Msg.show({
+                            title: 'Error'
+                            , msg: 'To delete the record, the dependent records must be deleted'
+                            , modal: true
+                            , icon: Ext.Msg.ERROR
+                            , buttons: Ext.Msg.OK
+                        });
+                    } else
+                    {
+                        alert("Error con los datos!");
+                    }
                 }
             }
-        }
         });
         storeContribuciones = this.storeContribuciones;
         limitecontribuciones = 100;
@@ -343,39 +362,53 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             var columns = [
                 new Ext.grid.RowNumberer(),
                 {
-                    header: 'Grant Number',
-                    dataIndex: 'grant_number',
-                    id: 'grant_number',
-                    width: 38,
-                    editor: textField10,
+                    header: 'Alert',
+                    dataIndex: 'id_contribucion',
+                    // id: 'id_contribucion',
+                    width: 12,
+                    // editor: textField10,
                     renderer: function (value, metaData, record, row, col, store, gridView) {
                         // si estado es cerrado retorna amarillo
-                       recuperaEstado = record.get('estado');
-                        if (recuperaEstado === 'Closed') {
-                            return '<span class="circleBase goldstate"></span>' + value;
-                        }
+                        recuperaEstado = record.get('estado');
+                        // grant_number = record.get('grant_number');
+                        // alert('ps',this);
+                        // if (grant_number.length > 10) {
+                        //     alert('ps',grant_number.length);
+                        // }
                         // si la fecha esta proxima a su vencimiento 30 dias
                         fecha_actual = new Date();
                         var diff = Math.abs(record.get('grant_tdd') - fecha_actual) / 3600000 / 24;
+
+                        if (recuperaEstado === 'Closed') {
+                            return '<span class="circleBase goldstate"></span>';
+                        }
+
                         // regresa diff en dias
-                        if (diff < intervalo1) {
-                            return '<span class="circleBase redstate"></span>' + value;
+                        else if (diff < intervalo1) {
+                            return '<span class="circleBase redstate"></span>';
                         }
                         // si la fecha esta proxima a su vencimiento 60 dias
-                        if (diff < intervalo2) {
-                            return '<span class="circleBase bluestate"></span>' + value;
+                        else if (diff < intervalo2) {
+                            return '<span class="circleBase bluestate"></span>';
+                        }
+                        else {
+                            return '<span class="circleBase whitestate"></span>';
                         }
                         return value
                     }
                 },
                 {
+                    header: 'Grant Number',
+                    dataIndex: 'grant_number',
+                    id: 'grant_number',
+                    width: 38,
+                    editor: textField10,
+                },
+                {
                     header: 'CRN',
                     dataIndex: 'crn',
                     width: 28,
-                    editor: function(){
-                      if(!acceso)
-                        return textField
-                    }
+                    editor: textField
                 },
                 {
                     header: 'Fund',
@@ -399,7 +432,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 {
                     header: 'Total Direct Cost',
                     dataIndex: 'total_grant',
-                    width: 28,
+                    width: 35,
                     align: 'right',
                     renderer: 'usMoney',
                     editor: numero,
@@ -412,33 +445,34 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     editor: numero,
                     align: 'right'
                 },
+
                 {
                     header: 'Total contribution',
                     dataIndex: 'total_contribution',
                     sortable: true,
-                    width: 28,
+                    width: 35,
                     renderer: 'usMoney',
-                    //editor: numero,
+                    // editor: numero,
                     align: 'right'
                 },
                 {
                     header: 'Programmed',
                     dataIndex: 'total_programmed',
-                    width: 28,
+                    width: 35,
                     renderer: 'usMoney',
                     align: 'right'
                 },
                 {
                     header: 'Unprogrammed',
                     dataIndex: 'total_unprogrammed',
-                    width: 28,
+                    width: 35,
                     renderer: 'usMoney',
                     align: 'right'
                 },
                 {
                     header: 'Grant TOD',
                     dataIndex: 'grant_tod',
-                    width: 40,
+                    width: 28,
                     renderer: Ext.util.Format.dateRenderer('Y-m-d'),
                     editor: fecha,
                     align: 'right'
@@ -446,7 +480,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 {
                     header: 'Grant TDD',
                     dataIndex: 'grant_tdd',
-                    width: 40,
+                    width: 28,
                     renderer: Ext.util.Format.dateRenderer('Y-m-d'),
                     editor: fecha,
                     align: 'right'
@@ -457,13 +491,6 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                     width: 28,
                     editor: comboGrant,
                     renderer: costGrant
-                },
-                {
-                    header: 'Not Relevant',
-                    dataIndex: 'notrelevant',
-                    width: 28,
-                    editor: combonotrelevant,
-                    renderer: costnotrelevant
                 },
                 {
                     header: 'Status',
@@ -993,7 +1020,11 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                       id: 'tb_repoteContribuciones',
                                       disabled: true
                                   },*/
-                                '-',
+                                '-',{
+                                    text: 'Totales:'
+                                    , xtype: 'tbtext',
+                                    id: 'totalContribuciones'
+                                },
                                 '->'
                                 , {
                                     text: 'Search by:'

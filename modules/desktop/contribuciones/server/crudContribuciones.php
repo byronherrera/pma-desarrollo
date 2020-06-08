@@ -107,38 +107,32 @@ function selectContribuciones()
         $data[] = $row;
     };
 
-    // $sql = "SELECT count(*) AS total FROM pma_contribuciones $where";
-    $sql = "SELECT count(*) AS total FROM pma_contribuciones $where";
+    //$sql = "SELECT count(*) AS total,  SUM(*) AS total FROM pma_contribuciones $where";
+    $sql = "SELECT
+                count( * ) AS total,
+                SUM( total_grant ) AS total_grant,
+                SUM( total_programmed ) AS total_programmed,
+                SUM( total_unprogrammed ) AS total_unprogrammed 
+            FROM
+        	pma_contribuciones $where";
+
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     $total = $row['total'];
+    $total_grant = $row['total_grant'];
+    $total_programmed = $row['total_programmed'];
+    $total_unprogrammed = $row['total_unprogrammed'];
 
     echo json_encode(array(
             "total" => $total,
+            "total_grant" => $total_grant,
+            "total_programmed" => $total_programmed,
+            "total_unprogrammed" => $total_unprogrammed,
             "success" => true,
             "data" => $data)
     );
 }
 
-function generaCodigoProcesoContribuciones()
-{
-    global $os;
-
-    $usuario = $os->get_member_id();
-    $os->db->conn->query("SET NAMES 'utf8'");
-    $sql = "SELECT MAX(id) AS maximo FROM pma_contribuciones";
-    $result = $os->db->conn->query($sql);
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    if (isset($row['maximo'])) {
-        $nuevoCodogo = $row['maximo'] + 1;
-        return $nuevoCodogo;
-    } else {
-        // valor inicial proceso
-
-        return 1;
-
-    }
-}
 
 function insertDenuncias()
 {
@@ -148,14 +142,13 @@ function insertDenuncias()
     $data = json_decode(stripslashes($_POST["data"]));
 
     $data->total_contribution = $data->total_grant + $data->isc;
-    $data->total_unprogrammed = $data->total_grant;
+    $data->total_unprogrammed =  $data->total_grant;
 
     // $data->despacho_secretaria = 'false';
-    $data->id = generaCodigoProcesoContribuciones();
+    //$data->id = generaCodigoProcesoContribuciones();
     // $data->id_persona = $os->get_member_id();
     // $data->id_zonal_origen = $os->get_zonal_id();
     //genero el listado de nombre de campos
-
 
     $cadenaDatos = '';
     $cadenaCampos = '';
@@ -200,8 +193,6 @@ function insertDenuncias()
         "data" => array($data),
         "message" => $message
     ));
-
-
 }
 
 
@@ -233,7 +224,7 @@ function updateDenuncias()
 
     // genero el listado de valores a insertar
     $data->total_contribution = $data->total_grant + $data->isc;
-    $data->total_unprogrammed = $data->total_grant;
+    $data->total_unprogrammed =  $data->total_grant;
 
     $cadenaDatos = '';
     foreach ($data as $clave => $valor) {
@@ -279,24 +270,7 @@ function updateDenuncias()
     // }
 }
 
-// function validarCedulaCorreo($id)
-// {
-//     // true en caso que no exista ni correo ni cedula
-//     // false  en caso que exista correo y cedula
-//     //return false;
-//
-//     global $os;
-//     $os->db->conn->query("SET NAMES 'utf8'");
-//     $sql = "SELECT cedula, email, id_tipo FROM amc_denuncias WHERE id = $id";
-//     $result = $os->db->conn->query($sql);
-//
-//     $row = $result->fetch(PDO::FETCH_ASSOC);
-//     if ((strlen($row['cedula']) == 0) or (strlen($row['email']) == 0) or (strlen($row['id_tipo']) == 0)) {
-//         return true;
-//     } else {
-//         return false;
-//     }
-// }
+
 
 
 function selectContribucionesForm()
@@ -365,31 +339,7 @@ function updateDenunciasForm()
     }
 
 
-    //para el caso de denuncias se valida que exista cedula y correo
-    /* if ($id_tipo_documento == 1) {
-         // se valida que se envio cedula, email
-         $error = false;
-         $msjError = '';
-         if (!isset ($cedula) or $cedula == '') {
-             $error = true;
-             $msjError = 'Falta cédula. ' . $msjError;
-         }
-         if (!isset ($email) or $email == '') {
-             $error = true;
-             $msjError = $msjError . 'Falta email';
-         }
 
-         if ($error) {
-             echo json_encode(array(
-                 "success" => false,
-                 "msg" => $msjError
-             ));
-             return;
-         }
-
-     }*/
-
-    /*codigo_tramite='$codigo_tramite',*/
     $sql = "UPDATE amc_denuncias SET
             id_persona = '$id_persona',
             recepcion_documento = '$recepcion_documento',

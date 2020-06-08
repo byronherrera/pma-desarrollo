@@ -19,7 +19,7 @@ function selectContribuciones()
         $columnaBusqueda = $_POST['filterField'];
     }
     if (isset($_POST['filterText'])) {
-        $where =  retornaWhereBusqueda($_POST['filterText'], $columnaBusqueda);
+        $where = retornaWhereBusqueda($_POST['filterText'], $columnaBusqueda);
     }
 
 
@@ -33,82 +33,89 @@ function selectContribuciones()
     else
         $limit = 100;
 
-    $orderby = '';
-     if (isset($_POST['sort'])) {
-         $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
-     }
+    $orderby = 'ORDER BY id DESC';
+    if (isset($_POST['sort'])) {
+        $orderby = 'ORDER BY ' . $_POST['sort'] . ' ' . $_POST['dir'];
+    }
 
-    // para los reportes
-    // if (isset($_POST['busqueda_tipo_documento']) and ($_POST['busqueda_tipo_documento'] != '')) {
-    //     $tipo = $_POST['busqueda_tipo_documento'];
-    //     if ($where == '') {
-    //         $where = "WHERE id_tipo_documento = $tipo ";
-    //     } else {
-    //         $where = $where . " AND id_tipo_documento = $tipo ";
-    //     }
-    // }
-    // if (isset($_POST['busqueda_institucion']) and ($_POST['busqueda_institucion'] != '')) {
-    //     $tipo = $_POST['busqueda_institucion'];
-    //     if ($where == '') {
-    //         $where = "WHERE institucion = '$tipo' ";
-    //     } else {
-    //         $where = $where . " AND institucion = '$tipo' ";
-    //     }
-    // }
-    // if (isset($_POST['busqueda_caracter_tramite']) and ($_POST['busqueda_caracter_tramite'] != '')) {
-    //     $tipo = $_POST['busqueda_caracter_tramite'];
-    //     if ($where == '') {
-    //         $where = "WHERE id_caracter_tramite = '$tipo' ";
-    //     } else {
-    //         $where = $where . " AND id_caracter_tramite = '$tipo' ";
-    //     }
-    // }
-    //
-    // if (isset($_POST['busqueda_guia']) and ($_POST['busqueda_guia'] != '')) {
-    //     $tipo = $_POST['busqueda_guia'];
-    //     if ($where == '') {
-    //         $where = "WHERE guia = '$tipo' ";
-    //     } else {
-    //         $where = $where . " AND guia = '$tipo' ";
-    //     }
-    // }
-    //
-    // if (isset($_POST['busqueda_reasignacion']) and ($_POST['busqueda_reasignacion'] != '')) {
-    //     $tipo = $_POST['busqueda_reasignacion'];
-    //     if ($where == '') {
-    //         $where = "WHERE reasignacion in ($tipo) ";
-    //     } else {
-    //         $where = $where . " AND reasignacion in ($tipo) ";
-    //     }
-    // }
-    //
-    //
-    // if (isset($_POST['busqueda_fecha_inicio']) and ($_POST['busqueda_fecha_inicio'] != '')) {
-    //     $fechainicio = $_POST['busqueda_fecha_inicio'];
-    //     if (isset($_POST['busqueda_fecha_fin']) and ($_POST['busqueda_fecha_fin'] != '')) {
-    //         $fechafin = $_POST['busqueda_fecha_fin'];
-    //     } else {
-    //         $fechafin = date("Y-m-d H:i:s");;
-    //     }
-    //
-    //     if ($where == '') {
-    //         $where = "WHERE recepcion_documento between '$fechainicio' and '$fechafin'  ";
-    //     } else {
-    //         $where = $where . " AND recepcion_documento between '$fechainicio' and '$fechafin' ";
-    //     }
-    // }
+//     para los reportes
+    if (isset($_POST['busqueda_tipo_documento']) and ($_POST['busqueda_tipo_documento'] != '')) {
+        $tipo = $_POST['busqueda_tipo_documento'];
+        if ($where == '') {
+            $where = "WHERE estado = '$tipo' ";
+        } else {
+            $where = $where . " AND estado = '$tipo' ";
+        }
+    }
+    if (isset($_POST['busqueda_institucion']) and ($_POST['busqueda_institucion'] != '')) {
+        $tipo = $_POST['busqueda_institucion'];
+        if ($where == '') {
+            $where = "WHERE donor = '$tipo' ";
+        } else {
+            $where = $where . " AND donor = '$tipo' ";
+        }
+    }
+    if (isset($_POST['busqueda_caracter_tramite']) and ($_POST['busqueda_caracter_tramite'] != '')) {
+        $tipo = $_POST['busqueda_caracter_tramite'];
+        if ($where == '') {
+            $where = "WHERE year_contribution = '$tipo' ";
+        } else {
+            $where = $where . " AND year_contribution = '$tipo' ";
+        }
+    }
+
+    if (isset($_POST['busqueda_guia']) and ($_POST['busqueda_guia'] != '')) {
+        $tipo = $_POST['busqueda_guia'];
+        if ($where == '') {
+            $where = "WHERE grant_specific = '$tipo' ";
+        } else {
+            $where = $where . " AND grant_specific = '$tipo' ";
+        }
+    }
+
+    if (isset($_POST['busqueda_reasignacion']) and ($_POST['busqueda_reasignacion'] != '')) {
+        $tipo = $_POST['busqueda_reasignacion'];
+        if ($where == '') {
+            $where = "WHERE reasignacion in ($tipo) ";
+        } else {
+            $where = $where . " AND reasignacion in ($tipo) ";
+        }
+    }
+
+    if (isset($_POST['busqueda_fecha_inicio']) and ($_POST['busqueda_fecha_inicio'] != '')) {
+        $fechainicio = $_POST['busqueda_fecha_inicio'];
+        if (isset($_POST['busqueda_fecha_fin']) and ($_POST['busqueda_fecha_fin'] != '')) {
+            $fechafin = $_POST['busqueda_fecha_fin'];
+        } else {
+            $fechafin = date("Y-m-d");;
+        }
+        if ($where == '') {
+            $where = "WHERE grant_tod between '$fechainicio' and '$fechafin'  ";
+        } else {
+            $where = $where . " AND grant_tod between '$fechainicio' and '$fechafin' ";
+
+        }
+    }
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $sql = "SELECT * FROM pma_contribuciones $where $orderby LIMIT $start, $limit";
-//    $sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
-
+    // $sql = "SELECT * FROM pma_contribuciones $where LIMIT $start, $limit";
+    //$sql = "SELECT * FROM pma_contribuciones LIMIT $start, $limit";
     $result = $os->db->conn->query($sql);
     $data = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $data[] = $row;
     };
 
-    $sql = "SELECT count(*) AS total FROM pma_contribuciones $where";
+    //$sql = "SELECT count(*) AS total,  SUM(*) AS total FROM pma_contribuciones $where";
+    $sql = "SELECT
+                count( * ) AS total,
+                SUM( total_grant ) AS total_grant,
+                SUM( total_programmed ) AS total_programmed,
+                SUM( total_unprogrammed ) AS total_unprogrammed 
+            FROM
+        	pma_contribuciones $where";
+
     $result = $os->db->conn->query($sql);
     $row = $result->fetch(PDO::FETCH_ASSOC);
     $total = $row['total'];
@@ -127,8 +134,12 @@ function insertDenuncias()
 
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode(stripslashes($_POST["data"]));
+
+    $data->total_contribution = $data->total_grant + $data->isc;
+    $data->total_unprogrammed =  $data->total_grant;
+
     // $data->despacho_secretaria = 'false';
-    // $data->codigo_tramite = generaCodigoProcesoDenuncia();
+    //$data->id = generaCodigoProcesoContribuciones();
     // $data->id_persona = $os->get_member_id();
     // $data->id_zonal_origen = $os->get_zonal_id();
     //genero el listado de nombre de campos
@@ -147,9 +158,10 @@ function insertDenuncias()
     $sql = "INSERT INTO pma_contribuciones($cadenaCampos)
 	values($cadenaDatos);";
     $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
+    $success = $sql->execute();
 
     $data->id = $os->db->conn->lastInsertId();
+    // $data->id = $os->db->conn->generaCodigoProcesoContribuciones();
     // genero el nuevo codigo de proceso
 
     $message = '';
@@ -163,21 +175,19 @@ function insertDenuncias()
     //             $message = 'Falta cedula / email / tipo';
     //         }
     //     } else {
-            $success = true;
-            $message = 'Datos ok';
-        // }
+    //         $success = true;
+    //         $message = 'Datos ok';
+    //     }
     // }
 
+    // $success = true;
     echo json_encode(array(
         "success" => $success,
         "msg" => $sql->errorCode() == 0 ? $message : $sql->errorCode(),
         "data" => array($data),
         "message" => $message
     ));
-
-
 }
-
 
 
 function updateDenuncias()
@@ -185,6 +195,7 @@ function updateDenuncias()
     global $os;
     $os->db->conn->query("SET NAMES 'utf8'");
     $data = json_decode($_POST["data"]);
+    $data->total_contribution = $data->isc + $data->total_grant;
     //
     // if (isset($data->despacho_secretaria)) {
     //     if (!$data->despacho_secretaria)
@@ -201,16 +212,18 @@ function updateDenuncias()
     //         }
     // }
 
-
-    $data->total_contribution = $data->total_grant + $data->isc;
-    $data->total_unprogrammed =  $data->total_grant;
+    //if ($data->id_ordenanza == NULL)
+    //   unset($data->id_ordenanza);
 
 
     // genero el listado de valores a insertar
+    $data->total_contribution = $data->total_grant + $data->isc;
+    $data->total_unprogrammed =  $data->total_grant;
+
     $cadenaDatos = '';
     foreach ($data as $clave => $valor) {
         if ($valor != '')
-        $cadenaDatos = $cadenaDatos . $clave . " = '" . $valor . "',";
+            $cadenaDatos = $cadenaDatos . $clave . " = '" . $valor . "',";
     }
     $cadenaDatos = substr($cadenaDatos, 0, -1);
 
@@ -233,15 +246,15 @@ function updateDenuncias()
     // }
 
     // if ($grabar) {
-        $sql = "UPDATE pma_contribuciones SET  $cadenaDatos  WHERE pma_contribuciones.id = '$data->id' ";
-        $sql = $os->db->conn->prepare($sql);
-        $sql->execute();
-        echo json_encode(array(
-            "success" => $sql->errorCode() == 0,
-            "msg" => $sql->errorCode() == 0 ? $message : $sql->errorCode(),
-            "message" => $message,
-            "data" => array($data)
-        ));
+    $sql = "UPDATE pma_contribuciones SET  $cadenaDatos  WHERE pma_contribuciones.id = '$data->id' ";
+    $sql = $os->db->conn->prepare($sql);
+    $sql->execute();
+    echo json_encode(array(
+        "success" => $sql->errorCode() == 0,
+        "msg" => $sql->errorCode() == 0 ? $message : $sql->errorCode(),
+        "message" => $message,
+        "data" => array($data)
+    ));
     // } else {
     //     echo json_encode(array(
     //         "success" => false,
@@ -250,6 +263,7 @@ function updateDenuncias()
     //     ));
     // }
 }
+
 
 
 
@@ -319,32 +333,8 @@ function updateDenunciasForm()
     }
 
 
-    //para el caso de denuncias se valida que exista cedula y correo
-    /* if ($id_tipo_documento == 1) {
-         // se valida que se envio cedula, email
-         $error = false;
-         $msjError = '';
-         if (!isset ($cedula) or $cedula == '') {
-             $error = true;
-             $msjError = 'Falta cédula. ' . $msjError;
-         }
-         if (!isset ($email) or $email == '') {
-             $error = true;
-             $msjError = $msjError . 'Falta email';
-         }
 
-         if ($error) {
-             echo json_encode(array(
-                 "success" => false,
-                 "msg" => $msjError
-             ));
-             return;
-         }
-
-     }*/
-
-    /*codigo_tramite='$codigo_tramite',*/
-    $sql = "UPDATE pma_contribuciones SET
+    $sql = "UPDATE amc_denuncias SET
             id_persona = '$id_persona',
             recepcion_documento = '$recepcion_documento',
             id_tipo_documento = '$id_tipo_documento',
@@ -378,13 +368,24 @@ function deleteDenuncias()
 {
     global $os;
     $id = json_decode(stripslashes($_POST["data"]));
-    $sql = "DELETE FROM pma_contribuciones WHERE id = $id";
-    $sql = $os->db->conn->prepare($sql);
-    $sql->execute();
-    echo json_encode(array(
-        "success" => $sql->errorCode() == 0,
-        "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_contribuciones, eliminado exitosamente" : $sql->errorCode()
-    ));
+
+    // se valida que no existan registros en la tabla hija
+    if (validaRelacion($id, 'id_pma_contribuciones', 'pma_contribuciones_detalle')) {
+        $sql = "DELETE FROM pma_contribuciones WHERE id = $id";
+        $sql = $os->db->conn->prepare($sql);
+        $sql->execute();
+        echo json_encode(array(
+            "success" => $sql->errorCode() == 0,
+            "msg" => $sql->errorCode() == 0 ? "Ubicación en pma_contribuciones, eliminado exitosamente" : $sql->errorCode()
+        ));
+
+    } else {
+        echo json_encode(array(
+            "success" => false,
+            "msg" => "Error tiene detalle",
+            "message" => "Error tiene detalle"
+        ));
+    }
 }
 
 switch ($_GET['operation']) {
