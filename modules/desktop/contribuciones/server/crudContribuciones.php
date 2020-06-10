@@ -39,24 +39,24 @@ function selectContribuciones()
     }
 
 //     para los reportes
-    if (isset($_POST['busqueda_tipo_documento']) and ($_POST['busqueda_tipo_documento'] != '')) {
-        $tipo = $_POST['busqueda_tipo_documento'];
+    if (isset($_POST['busqueda_grant_number']) and ($_POST['busqueda_grant_number'] != '')) {
+        $tipo = $_POST['busqueda_grant_number'];
         if ($where == '') {
-            $where = "WHERE estado = '$tipo' ";
+            $where = "WHERE grant_number = '$tipo' ";
         } else {
-            $where = $where . " AND estado = '$tipo' ";
+            $where = $where . " AND grant_number = '$tipo' ";
         }
     }
-    if (isset($_POST['busqueda_institucion']) and ($_POST['busqueda_institucion'] != '')) {
-        $tipo = $_POST['busqueda_institucion'];
+    if (isset($_POST['busqueda_crn']) and ($_POST['busqueda_crn'] != '')) {
+        $tipo = $_POST['busqueda_crn'];
         if ($where == '') {
-            $where = "WHERE donor = '$tipo' ";
+            $where = "WHERE crn = '$tipo' ";
         } else {
-            $where = $where . " AND donor = '$tipo' ";
+            $where = $where . " AND crn = '$tipo' ";
         }
     }
-    if (isset($_POST['busqueda_caracter_tramite']) and ($_POST['busqueda_caracter_tramite'] != '')) {
-        $tipo = $_POST['busqueda_caracter_tramite'];
+    if (isset($_POST['busqueda_year_contribution']) and ($_POST['busqueda_year_contribution'] != '')) {
+        $tipo = $_POST['busqueda_year_contribution'];
         if ($where == '') {
             $where = "WHERE year_contribution = '$tipo' ";
         } else {
@@ -64,23 +64,7 @@ function selectContribuciones()
         }
     }
 
-    if (isset($_POST['busqueda_guia']) and ($_POST['busqueda_guia'] != '')) {
-        $tipo = $_POST['busqueda_guia'];
-        if ($where == '') {
-            $where = "WHERE grant_specific = '$tipo' ";
-        } else {
-            $where = $where . " AND grant_specific = '$tipo' ";
-        }
-    }
 
-    if (isset($_POST['busqueda_reasignacion']) and ($_POST['busqueda_reasignacion'] != '')) {
-        $tipo = $_POST['busqueda_reasignacion'];
-        if ($where == '') {
-            $where = "WHERE reasignacion in ($tipo) ";
-        } else {
-            $where = $where . " AND reasignacion in ($tipo) ";
-        }
-    }
 
     if (isset($_POST['busqueda_fecha_inicio']) and ($_POST['busqueda_fecha_inicio'] != '')) {
         $fechainicio = $_POST['busqueda_fecha_inicio'];

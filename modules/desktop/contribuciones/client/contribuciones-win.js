@@ -103,22 +103,18 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             root: 'data',
             fields: ['nombre'],
             autoLoad: true,
-            url: 'modules/common/combos/combos.php?tipo=donor'
+            url: 'modules/common/combos/combos.php?tipo=crn'
         });
 
-        var comboINST = new Ext.form.ComboBox({
-            id: 'comboINST',
-            store: storeINST,
-            valueField: 'nombre',
-            displayField: 'nombre',
-            triggerAction: 'all',
-            mode: 'local',
-            allowBlank: false
+        //inicio combo instituciones INST
+        storegrant_number = new Ext.data.JsonStore({
+            root: 'data',
+            fields: ['nombre'],
+            autoLoad: true,
+            url: 'modules/common/combos/combos.php?tipo=grant_number'
         });
 
-        function listadoInstituciones(id) {
-            return id;
-        }
+
 
         //fin combo instituciones INST
 
@@ -521,15 +517,13 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
             loadMask: true,
             plugins: [filters],
             autoExpandColumn: 'id',
-            height: 495,
+  //          height: 495,
             store: this.storeContribuciones,
             viewConfig: {
                 //para dar color a la fila
                 forceFit: true,
                 getRowClass: function (record, index) {
-
                 },
-
             },
             sm: new Ext.grid.RowSelectionModel(
                 {
@@ -655,7 +649,7 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
 
         this.gridDocumentosReporte = new Ext.grid.EditorGridPanel({
 
-            height: desktop.getWinHeight() - 215,
+            height: desktop.getWinHeight() - 195,
             autoScroll: true,
             store: this.storeDocumentosReporte,
 
@@ -767,11 +761,12 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                 pageSize: 100,
                 store: this.storeDocumentosReporte,
                 displayInfo: true,
-                displayMsg: 'Mostrando guías {0} - {1} of {2}',
+                displayMsg: 'Showing contributions  {0} - {1} of {2} ',
                 emptyMsg: "No contributions to be shown"
             }),
         });
         // fin datastore and datagrid in Guia
+
 
 
         var win = desktop.getWindow('layout-win');
@@ -824,15 +819,16 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                                 submitFormat: 'Y-m-d',
                             },
                             {
+
                                 xtype: 'combo',
-                                fieldLabel: 'Estado',
-                                id: 'busqueda_tipo_documento',
-                                name: 'busqueda_tipo_documento',
-                                hiddenName: 'busqueda_tipo_documento',
+                                fieldLabel: 'Grant Number',
+                                id: 'busqueda_grant_number',
+                                name: 'busqueda_grant_number',
+                                hiddenName: 'busqueda_grant_number',
 
                                 anchor: '95%',
-                                store: storeGrant,
-                                valueField: 'id',
+                                store: storegrant_number,
+                                valueField: 'nombre',
                                 displayField: 'nombre',
                                 typeAhead: true,
                                 triggerAction: 'all',
@@ -846,10 +842,10 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                         items: [
                             {
                                 xtype: 'combo',
-                                fieldLabel: 'Donor',
-                                id: 'busqueda_institucion',
-                                name: 'busqueda_institucion',
-                                hiddenName: 'busqueda_institucion',
+                                fieldLabel: 'CRN',
+                                id: 'busqueda_crn',
+                                name: 'busqueda_crn',
+                                hiddenName: 'busqueda_crn',
                                 anchor: '95%',
 
                                 store: storeINST,
@@ -862,10 +858,10 @@ QoDesk.ContribucionesWindow = Ext.extend(Ext.app.Module, {
                             {
                                 xtype: 'combo',
                                 fieldLabel: 'Year Contributión',
-                                id: 'busqueda_caracter_tramite',
-                                name: 'busqueda_caracter_tramite',
+                                id: 'busqueda_year_contribution',
+                                name: 'busqueda_year_contribution',
                                 anchor: '95%',
-                                hiddenName: 'busqueda_caracter_tramite',
+                                hiddenName: 'busqueda_year_contribution',
 
                                 store: storeCDT,
                                 valueField: 'nombre',

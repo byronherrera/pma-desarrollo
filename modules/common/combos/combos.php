@@ -773,6 +773,37 @@ function comboDonor()
             "data" => $data)
     );
 }
+function comboCrn()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT DISTINCT crn AS nombre FROM pma_contribuciones WHERE length(crn) > 0 ORDER BY crn";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
+
+function combogrant_number()
+{
+    global $os;
+    $os->db->conn->query("SET NAMES 'utf8'");
+    $sql = "SELECT DISTINCT grant_number AS nombre FROM pma_contribuciones WHERE length(grant_number) > 0 ORDER BY grant_number";
+    $result = $os->db->conn->query($sql);
+    $data = array();
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    echo json_encode(array(
+            "success" => true,
+            "data" => $data)
+    );
+}
 
 function comboYearContribution()
 {
@@ -1003,6 +1034,12 @@ switch ($_GET['tipo']) {
 
     case 'donor' :
         comboDonor();
+        break;
+    case 'crn' :
+        comboCrn();
+        break;
+    case 'grant_number' :
+        combogrant_number();
         break;
 
     case 'yearcontribution' :
